@@ -1,6 +1,6 @@
 --- 
-title: "YOUR TITLE HERE"
-author: "YOUR NAME HERE"
+title: "Supervised Classification with Google Earth Engine"
+author: "Celio Sousa"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
