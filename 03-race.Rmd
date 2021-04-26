@@ -1,1 +1,1 @@
-# A caucus-race and a long tale
+# Supervised Classification of Landsat 8 OLI Imagery
