@@ -54,6 +54,43 @@
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
 
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -101,8 +138,21 @@
 <p>Objective: Provide functions and lines of code to assist the user to prepare, process and analyze Landsat 8/7 data for classification purposes.</p>
 <div id="cloud-and-cloud-shadow-masking" class="section level2">
 <h2><span class="header-section-number">2.1</span> Cloud and cloud shadow masking</h2>
+<p>Section Snapshot at GEE: <span target="_blank"><a href="https://code.earthengine.google.com/cd7747671a8a2d411ae86afd1aebf084" class="uri">https://code.earthengine.google.com/cd7747671a8a2d411ae86afd1aebf084</a></span></p>
 <p>This section demonstrates a way of masking clouds and cloud shadow pixels from Landsat 8/7 Surface Reflectance data based on file metadata. This function was created based on the documentation available for Landsat 8/7. Values for pixel bit and pixel band were found here: <span target="_blank"><a href="https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1-level-1-quality-assessment-band?qt-science_support_page_related_con=0#qt-science_support_page_related_con" class="uri">https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1-level-1-quality-assessment-band?qt-science_support_page_related_con=0#qt-science_support_page_related_con</a></span></p>
 <p>Then use this function</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">function</span> <span class="kw">maskL8sr</span>(image) {
+  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="co">#Bits 3 and 5 are cloud shadow and cloud, respectively.</span>
+<span class="st">  </span>var cloudShadowBitMask =<span class="st"> </span><span class="kw">ee.Number</span>(<span class="dv">2</span>)<span class="kw">.pow</span>(<span class="dv">3</span>)<span class="kw">.int</span>();
+  var cloudsBitMask =<span class="st"> </span><span class="kw">ee.Number</span>(<span class="dv">2</span>)<span class="kw">.pow</span>(<span class="dv">5</span>)<span class="kw">.int</span>();
+  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="co">#Get the pixel QA band.</span>
+<span class="st">  </span>var qa =<span class="st"> </span><span class="kw">image.select</span>(<span class="st">&#39;pixel_qa&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="co">#Both flags should be set to zero, indicating clear conditions.</span>
+<span class="st">  </span>var mask =<span class="st"> </span><span class="kw">qa.bitwiseAnd</span>(cloudShadowBitMask)<span class="kw">.eq</span>(<span class="dv">0</span>)
+      <span class="kw">.and</span>(<span class="kw">qa.bitwiseAnd</span>(cloudsBitMask)<span class="kw">.eq</span>(<span class="dv">0</span>));
+  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="co">#Return the masked image, scaled to [0, 1].</span>
+<span class="st">  </span>return <span class="kw">image.updateMask</span>(mask)<span class="kw">.divide</span>(<span class="dv">10000</span>)<span class="kw">.copyProperties</span>(image, [<span class="st">&quot;system:time_start&quot;</span>]);
+}</code></pre></div>
 
 </div>
 </div>

@@ -11,15 +11,15 @@ This section demonstrates a way of masking clouds and cloud shadow pixels from L
 Then use this function
 ```{r eval=FALSE}
 function maskL8sr(image) {
-  // Bits 3 and 5 are cloud shadow and cloud, respectively.
+  // #Bits 3 and 5 are cloud shadow and cloud, respectively.
   var cloudShadowBitMask = ee.Number(2).pow(3).int();
   var cloudsBitMask = ee.Number(2).pow(5).int();
-  // Get the pixel QA band.
+  // #Get the pixel QA band.
   var qa = image.select('pixel_qa');
-  // Both flags should be set to zero, indicating clear conditions.
+  // #Both flags should be set to zero, indicating clear conditions.
   var mask = qa.bitwiseAnd(cloudShadowBitMask).eq(0)
       .and(qa.bitwiseAnd(cloudsBitMask).eq(0));
-  // Return the masked image, scaled to [0, 1].
+  // #Return the masked image, scaled to [0, 1].
   return image.updateMask(mask).divide(10000).copyProperties(image, ["system:time_start"]);
 }
 ```
