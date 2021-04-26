@@ -1,4 +1,4 @@
 introduction-and-overview
 auxiliary-functions
 cloud-and-cloud-shadow-masking
-a-caucus-race-and-a-long-tale
+supervised-classification-of-landsat-8-oli-imagery

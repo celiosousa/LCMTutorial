@@ -3,3 +3,7 @@
 Objective: Provide functions and lines of code to assist the user to prepare, process and analyze Landsat 8/7 data for classification purposes.
 
 ## Cloud and cloud shadow masking
+
+This section demonstrates a way of masking clouds and cloud shadow pixels from Landsat 8/7 Surface Reflectance data based on file metadata. This function was created based on the documentation available for Landsat 8/7. Values for pixel bit and pixel band were found here: [https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1-level-1-quality-assessment-band?qt-science_support_page_related_con=0#qt-science_support_page_related_con]{target="_blank"}
+
+Then use this function
