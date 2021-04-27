@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa" />
 
 
-<meta name="date" content="2021-04-26" />
+<meta name="date" content="2021-04-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -112,6 +112,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction and Overview</a></li>
 <li class="chapter" data-level="2" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html"><i class="fa fa-check"></i><b>2</b> Auxiliary functions</a><ul>
 <li class="chapter" data-level="2.1" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#cloud-and-cloud-shadow-masking"><i class="fa fa-check"></i><b>2.1</b> Cloud and cloud shadow masking</a></li>
+<li class="chapter" data-level="2.2" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#spectral-indices"><i class="fa fa-check"></i><b>2.2</b> Spectral Indices</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html"><i class="fa fa-check"></i><b>3</b> Supervised Classification of Landsat 8 OLI Imagery</a></li>
 <li class="divider"></li>
@@ -138,8 +139,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Objective: Provide functions and lines of code to assist the user to prepare, process and analyze Landsat 8/7 data for classification purposes.</p>
 <div id="cloud-and-cloud-shadow-masking" class="section level2">
 <h2><span class="header-section-number">2.1</span> Cloud and cloud shadow masking</h2>
-<p>[<strong>Section Snapshot at GEE</strong>] (<a href="https://code.earthengine.google.com/cd7747671a8a2d411ae86afd1aebf084" class="uri">https://code.earthengine.google.com/cd7747671a8a2d411ae86afd1aebf084</a>){target=&quot;_blank&quot;}</p>
-<p>This section demonstrates a way of masking clouds and cloud shadow pixels from Landsat 8/7 Surface Reflectance data based on file metadata. This function was created based on the documentation available for Landsat 8/7. Values for pixel bit and pixel band were found [<strong>here.</strong>] (<a href="https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1-level-1-quality-assessment-band?qt-science_support_page_related_con=0#qt-science_support_page_related_con" class="uri">https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1-level-1-quality-assessment-band?qt-science_support_page_related_con=0#qt-science_support_page_related_con</a>){target=&quot;_blank&quot;}</p>
+<p><a href="https://code.earthengine.google.com/cd7747671a8a2d411ae86afd1aebf084" target="_blank"><em>Section Snapshot at GEE</em></a></p>
+<p>This section demonstrates a way of masking clouds and cloud shadow pixels from Landsat 8/7 Surface Reflectance data based on file metadata. This function was created based on the documentation available for Landsat 8/7. Values for pixel bit and pixel band were found <a href="https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1-level-1-quality-assessment-band?qt-science_support_page_related_con=0#qt-science_support_page_related_con" target="_blank"><em>here.</em></a></p>
 <p>Then use this function</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">function</span> <span class="kw">maskL8sr</span>(image) {
   <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="co">#Bits 3 and 5 are cloud shadow and cloud, respectively.</span>
@@ -153,6 +154,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
   <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="co">#Return the masked image, scaled to [0, 1].</span>
 <span class="st">  </span>return <span class="kw">image.updateMask</span>(mask)<span class="kw">.divide</span>(<span class="dv">10000</span>)<span class="kw">.copyProperties</span>(image, [<span class="st">&quot;system:time_start&quot;</span>]);
 }</code></pre></div>
+</div>
+<div id="spectral-indices" class="section level2">
+<h2><span class="header-section-number">2.2</span> Spectral Indices</h2>
+<p>This section demonstrates how to calculate and add spectral indices to each scene of a Landsat 8/7 image collection. The function below calculates and add spectral indices to an image collection taking into account Landsat 8 spectral bands (Table 1):</p>
 
 </div>
 </div>
