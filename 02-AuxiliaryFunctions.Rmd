@@ -21,7 +21,7 @@ function maskL8sr(image) {
       .and(qa.bitwiseAnd(cloudsBitMask).eq(0));
   // #Return the masked image, scaled to [0, 1].
   return image.updateMask(mask).divide(10000).copyProperties(image, ["system:time_start"]);
-}
+};
 ```
 
 ## Spectral Indices
@@ -61,4 +61,8 @@ var addIndicesL8 = function(img) {
     .addBands(ratio46)
     .addBands(gcvi);
 };
+```
+
+```{r my-fig, echo=FALSE, message=FALSE}
+knitr::include_graphics("images/AttentionL7Bands.PNG")
 ```
