@@ -63,6 +63,6 @@ var addIndicesL8 = function(img) {
 };
 ```
 
-```{r my-fig, echo=FALSE, message=FALSE}
+```{r my-fig2, echo=FALSE, message=FALSE}
 knitr::include_graphics("images/AttentionL7Bands.PNG")
 ```
