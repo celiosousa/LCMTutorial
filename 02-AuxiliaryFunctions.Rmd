@@ -63,8 +63,12 @@ var addIndicesL8 = function(img) {
 };
 ```
 
-Note that the function above shows several ways of doing band math operations. First, normalized difference indices can be calculated using ___.normalizedDifference___. For more intricate xpressions, You can use the expression format as shown with the Green Chlorophyll Vegetation Index example.
+Note that the function above shows several ways of doing band math operations. First, normalized difference indices can be calculated using `r .normalizedDifference`. For more intricate xpressions, You can use the expression format as shown with the Green Chlorophyll Vegetation Index example.
 
 ```{r my-fig2, echo=FALSE, message=FALSE}
 knitr::include_graphics("images/AttentionL7Bands.PNG")
+```
+
+```{r my-fig3,  fig.cap="Landsat 7 ETM+ spectral bands", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/TableBandsL7.PNG")
 ```
