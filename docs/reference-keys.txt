@@ -1,5 +1,7 @@
+fig:my-fig4
 introduction-and-overview
 auxiliary-functions
 cloud-and-cloud-shadow-masking
 spectral-indices
+compositing
 supervised-classification-of-landsat-8-oli-imagery

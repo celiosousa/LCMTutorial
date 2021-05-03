@@ -1,3 +1,23 @@
 # Supervised Classification of Landsat 8 OLI Imagery
 
-Testing
+Objectives:
+
+- Use the cloud-masking function (See Chapter 2's [Cloud and cloud shadow masking] section) to mask clouds on Landsat 8 Imagery;
+- To produce a cloud-free composite mosaic using the median reducer ([Compositing]), and;
+- To classify the cloud-free composite mosaic of Landsat 8 scenes using Random Forest.
+
+## Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2018
+
+We will start by [*opening a new code editor page*](https://code.earthengine.google.com/){target="_blank"}
+
+###	Temporal and spatial parameters for compositing
+In this example, we are going to create a 2020 annual composite. For this, let’s create three objects `(var)`: `year`, `startDay` and `endDay`.
+
+```{r eval=FALSE}
+var year = 2020; //# Year
+var startDay = (year)+'-01-01'; //# beginning of date filter | month-day
+var endDay = (year)+'-12-30'; //# end of date filter | month-day
+```
+
+Additionally, We need to define an area of interest for the composite. Google Earth Engine allows you to import your own shapefiles of your area of interest (through the *New* button in the Assets tab) as well as to direcly create your geometry in the code editor.
+

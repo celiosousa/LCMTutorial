@@ -1,6 +1,6 @@
 # Auxiliary functions
 
-Objective: Provide functions and lines of code to assist the user to prepare, process and analyze Landsat 8/7 data for classification purposes.
+Objective: Here we aim to provide the initial functions and lines of code to assist the user to prepare, process and analyze Landsat 8/7 data for classification purposes.
 
 ## Cloud and cloud shadow masking
 
@@ -28,7 +28,7 @@ function maskL8sr(image) {
 
 This section demonstrates how to calculate and add spectral indices to each scene of a Landsat 8 image collection. The function below calculates and add spectral indices to an image collection taking into account the Landsat 8 spectral bands and their respective wavelengths:
 
-```{r my-fig,  fig.cap="Landsat 8 OLI spectral bands", echo=FALSE, message=FALSE}
+```{r my-fig,  echo=FALSE, message=FALSE}
 knitr::include_graphics("images/TableBandsL8.PNG")
 ```
 
@@ -63,12 +63,28 @@ var addIndicesL8 = function(img) {
 };
 ```
 
-Note that the function above shows several ways of doing band math operations. First, normalized difference indices can be calculated using ```{r ().normalizedDifference}```. For more intricate xpressions, You can use the expression format as shown with the Green Chlorophyll Vegetation Index example.
+Note that the function above shows several ways of doing band math operations. First, normalized difference indices can be calculated using `img.normalizedDifference`. For more intricate expressions, You can use the expression format as shown with the Green Chlorophyll Vegetation Index example.
 
 ```{r my-fig2, echo=FALSE, message=FALSE}
 knitr::include_graphics("images/AttentionL7Bands.PNG")
 ```
 
-```{r my-fig3,  fig.cap="Landsat 7 ETM+ spectral bands", echo=FALSE, message=FALSE}
+```{r my-fig3, echo=FALSE, message=FALSE}
 knitr::include_graphics("images/TableBandsL7.PNG")
+```
+
+## Compositing
+
+[*Section Snapshot at GEE*](https://code.earthengine.google.com/2e97616e22317b07d3885130a5af7e1e){target="_blank"}
+
+In the previous sections, we learn two useful functions: cloud masking and spectral indices calculation. In this section, we will learn about compositing and mosaicking Landsat scenes. In the next chapter, we will use all three functions covered in here to produce a cloud-free mosaic of Landsat 8 scenes and how to perform a random forest classification. 
+
+You can composite any object containing an image collection using on a per-pixel, per- band basis using `.median()` or using quality bands such as ‘NDVI’ with `.qualityMosaic(‘NDVI’)`. The `.median()` will composite all the images in the collection to a single image using the median values of each band, at the pixel level; `.qualityMosaic(‘NDVI’)` will composite all the images in the collection and set each pixel in the composite based on which image in the collection has a maximum value for the specified band, in this case NDVI.
+
+Although there are different methods for compositing, the median composite method is the state of the art in Google Earth Engine and it has been widely used in classification and change analysis studies. For instance, it was used in a [recent publication](https://doi.org/10.1016/j.jag.2018.11.014){target="_blank"} of September 2019 mapping cropland extent over southeast and northeast Asia using Landsat 8 and GEE. Median was also the compositing method chosen in [this study](https://doi.org/10.1016/j.rse.2017.05.025){target="_blank"} to showcase GEE’s array-based computational approach. The authors of this [study](https://doi.org/10.3390/rs8080681){target="_blank"} mapping land cover change in Namibia also used median composities in their analysis. The same approach was used [here](https://doi.org/10.1080/2150704X.2016.1182659){target="_blank"} to produce a land cover map for the entire Southeast Asia and [here](https://doi.org/10.1371/journal.pone.0184926){target="_blank"} to map land cover and land cover change over continental Africa. 
+
+Additionally, methods such as maximum NDVI would present issues, especially over cloudy areas. As you composite using maximum values of NDVI, water bodies will be completely covered by clouds in the resulting composite as clouds have slightly higher NDVI than water. A second cleaning or compositing procedure would be necessary to avoid this issue over water bodies, which in this case is not ideal.
+
+```{r my-fig4, fig.cap="Median (left) and Maximum NDVI (Greenest Pixel) (right) composites of Landsat 8 images over Lake Piso in Liberia. Clouds have slightly higher NDVI than water. Therefore, cloudy pixels over water bodies often occur with this compositing method.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/CompositesEx.PNG")
 ```
