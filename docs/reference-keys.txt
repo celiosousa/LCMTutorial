@@ -5,3 +5,5 @@ cloud-and-cloud-shadow-masking
 spectral-indices
 compositing
 supervised-classification-of-landsat-8-oli-imagery
+example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2018
+temporal-and-spatial-parameters-for-compositing

@@ -115,7 +115,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="2.2" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#spectral-indices"><i class="fa fa-check"></i><b>2.2</b> Spectral Indices</a></li>
 <li class="chapter" data-level="2.3" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#compositing"><i class="fa fa-check"></i><b>2.3</b> Compositing</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html"><i class="fa fa-check"></i><b>3</b> Supervised Classification of Landsat 8 OLI Imagery</a></li>
+<li class="chapter" data-level="3" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html"><i class="fa fa-check"></i><b>3</b> Supervised Classification of Landsat 8 OLI Imagery</a><ul>
+<li class="chapter" data-level="3.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2018"><i class="fa fa-check"></i><b>3.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2018</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#temporal-and-spatial-parameters-for-compositing"><i class="fa fa-check"></i><b>3.1.1</b> Temporal and spatial parameters for compositing</a></li>
+</ul></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 </ul>
@@ -143,7 +147,20 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>To produce a cloud-free composite mosaic using the median reducer (<a href="auxiliary-functions.html#compositing">Compositing</a>), and;</li>
 <li>To classify the cloud-free composite mosaic of Landsat 8 scenes using Random Forest.</li>
 </ul>
+<div id="example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2018" class="section level2">
+<h2><span class="header-section-number">3.1</span> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2018</h2>
+<p>We will start by <a href="https://code.earthengine.google.com/" target="_blank">opening a new code editor page</a></p>
+<div id="temporal-and-spatial-parameters-for-compositing" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> Temporal and spatial parameters for compositing</h3>
+<p>In this example, we are going to create a 2020 annual composite. For this, let’s create three objects <code>(var)</code>: <code>year</code>, <code>startDay</code> and <code>endDay</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var year =<span class="st"> </span><span class="dv">2020</span>; <span class="op">/</span><span class="er">/</span><span class="co"># Year</span>
+var startDay =<span class="st"> </span>(year)<span class="op">+</span><span class="st">&#39;-01-01&#39;</span>; <span class="op">/</span><span class="er">/</span><span class="co"># beginning of date filter | month-day</span>
+var endDay =<span class="st"> </span>(year)<span class="op">+</span><span class="st">&#39;-12-30&#39;</span>; <span class="op">/</span><span class="er">/</span><span class="co"># end of date filter | month-day</span></code></pre></div>
+<p>Additionally, we need to define an area of interest for the composite. Google Earth Engine allows you to import your own shapefiles of your area of interest (through the <em>New</em> button in the Assets tab) as well as to direcly create your geometry in the code editor.</p>
+<p><img src="images/CreatingGEOM.PNG" width="1687" /></p>
 
+</div>
+</div>
 </div>
             </section>
 
