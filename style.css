@@ -28,3 +28,8 @@ pre code {
     top:0px;
     font-size: 45px;
  }
+
+div.FOO {
+  font-weight: bold;
+  color: black;
+}
