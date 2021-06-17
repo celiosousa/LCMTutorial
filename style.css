@@ -14,7 +14,7 @@ pre code {
 }
 
 .rmdcomment {
-  padding: 1em 1em 1em 6em;
+  padding: 1em 1em 1em 5em;
   margin-bottom: 0px;
   background: #DEEDF0;
   position:center;
@@ -26,7 +26,7 @@ pre code {
     left:10px;
     position:absolute;
     top:0px;
-    font-size: 50px;
+    font-size: 45px;
  }
 
 div.FOO {
