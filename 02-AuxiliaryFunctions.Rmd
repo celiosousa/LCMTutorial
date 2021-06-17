@@ -69,6 +69,12 @@ Note that the function above shows several ways of doing band math operations. F
 knitr::include_graphics("images/AttentionL7Bands.PNG")
 ```
 
+```{block, type='caution'}
+__IMPORTANT:__ The function above is also applicable to Landsat 7 image collections. However, be mindful that these sensors have slightly different bands and wavelengths. Therefore, the name of the bands on the above function for each spectral index will not match Landsat 7’s spectral bands. Make sure to select the appropriate Landsat 7 spectral band for each spectral index. Use Table 2 for reference.
+
+```
+
+
 ```{r my-fig3, echo=FALSE, message=FALSE}
 knitr::include_graphics("images/TableBandsL7.PNG")
 ```
