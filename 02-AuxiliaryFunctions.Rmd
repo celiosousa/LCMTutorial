@@ -3,8 +3,9 @@
 Objective: Here we aim to provide the initial functions and lines of code to assist the user to prepare, process and analyze Landsat 8/7 data for classification purposes.
 
 ## Cloud and cloud shadow masking
-
+```{block, type='rmdcomment'}
 [*Section Snapshot at GEE*](https://code.earthengine.google.com/cd7747671a8a2d411ae86afd1aebf084){target="_blank"}
+```
 
 This section demonstrates a way of masking clouds and cloud shadow pixels from Landsat 8/7 Surface Reflectance data based on file metadata. This function was created based on the documentation available for Landsat 8/7. Values for pixel bit and pixel band were found [*here.*](https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1-level-1-quality-assessment-band?qt-science_support_page_related_con=0#qt-science_support_page_related_con){target="_blank"}
 
@@ -80,8 +81,9 @@ knitr::include_graphics("images/TableBandsL7.PNG")
 ```
 
 ## Compositing
-
+```{block, type='rmdcomment'}
 [*Section Snapshot at GEE*](https://code.earthengine.google.com/2e97616e22317b07d3885130a5af7e1e){target="_blank"}
+```
 
 In the previous sections, we learn two useful functions: cloud masking and spectral indices calculation. In this section, we will learn about compositing and mosaicking Landsat scenes. In the next chapter, we will use all three functions covered in here to produce a cloud-free mosaic of Landsat 8 scenes and how to perform a random forest classification. 
 
