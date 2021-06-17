@@ -17,7 +17,7 @@ pre code {
   padding: 1em 1em 1em 6em;
   margin-bottom: 0px;
   background: #DEEDF0;
-  position:relative;
+  position:center;
 }
 
 .rmdcomment:before {
