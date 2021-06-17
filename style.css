@@ -15,7 +15,7 @@ pre code {
 
 .rmdcomment {
   padding: 1em 1em 1em 4em;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
   background: #DEEDF0;
   position:relative;
 }
@@ -25,7 +25,7 @@ pre code {
     font-family: FontAwesome;
     left:10px;
     position:absolute;
-    top:5px;
+    top:0px;
     font-size: 45px;
  }
 
