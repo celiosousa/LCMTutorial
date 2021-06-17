@@ -29,6 +29,11 @@ pre code {
     font-size: 45px;
  }
 
+div.FOO {
+  font-weight: bold;
+  color: black;
+}
+
 .caution {
   padding: 1em 1em 1em 4em;
   margin-bottom: 5px;
