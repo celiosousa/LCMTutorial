@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa" />
 
 
-<meta name="date" content="2021-06-17" />
+<meta name="date" content="2021-06-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -147,7 +147,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Objective: Here we aim to provide the initial functions and lines of code to assist the user to prepare, process and analyze Landsat 8/7 data for classification purposes.</p>
 <div id="cloud-and-cloud-shadow-masking" class="section level2">
 <h2><span class="header-section-number">2.1</span> Cloud and cloud shadow masking</h2>
-<p><a href="https://code.earthengine.google.com/cd7747671a8a2d411ae86afd1aebf084" target="_blank"><em>Section Snapshot at GEE</em></a></p>
+<div class="rmdcomment">
+<p>
+<a href="https://code.earthengine.google.com/cd7747671a8a2d411ae86afd1aebf084" target="_blank"><em>Section Snapshot at GEE</em></a>
+</p>
+</div>
 <p>This section demonstrates a way of masking clouds and cloud shadow pixels from Landsat 8/7 Surface Reflectance data based on file metadata. This function was created based on the documentation available for Landsat 8/7. Values for pixel bit and pixel band were found <a href="https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1-level-1-quality-assessment-band?qt-science_support_page_related_con=0#qt-science_support_page_related_con" target="_blank"><em>here.</em></a></p>
 <p>The cloud masking function is as follows:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">function</span> <span class="kw">maskL8sr</span>(image) {
@@ -206,7 +210,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="compositing" class="section level2">
 <h2><span class="header-section-number">2.3</span> Compositing</h2>
-<p><a href="https://code.earthengine.google.com/2e97616e22317b07d3885130a5af7e1e" target="_blank"><em>Section Snapshot at GEE</em></a></p>
+<div class="rmdcomment">
+<p>
+<a href="https://code.earthengine.google.com/2e97616e22317b07d3885130a5af7e1e" target="_blank"><em>Section Snapshot at GEE</em></a>
+</p>
+</div>
 <p>In the previous sections, we learn two useful functions: cloud masking and spectral indices calculation. In this section, we will learn about compositing and mosaicking Landsat scenes. In the next chapter, we will use all three functions covered in here to produce a cloud-free mosaic of Landsat 8 scenes and how to perform a random forest classification.</p>
 <p>You can composite any object containing an image collection using on a per-pixel, per- band basis using <code>.median()</code> or using quality bands such as ‘NDVI’ with <code>.qualityMosaic(‘NDVI’)</code>. The <code>.median()</code> will composite all the images in the collection to a single image using the median values of each band, at the pixel level; <code>.qualityMosaic(‘NDVI’)</code> will composite all the images in the collection and set each pixel in the composite based on which image in the collection has a maximum value for the specified band, in this case NDVI.</p>
 <p>Although there are different methods for compositing, the median composite method is the state of the art in Google Earth Engine and it has been widely used in classification and change analysis studies. For instance, it was used in a <a href="https://doi.org/10.1016/j.jag.2018.11.014" target="_blank">recent publication</a> of September 2019 mapping cropland extent over southeast and northeast Asia using Landsat 8 and GEE. Median was also the compositing method chosen in <a href="https://doi.org/10.1016/j.rse.2017.05.025" target="_blank">this study</a> to showcase GEE’s array-based computational approach. The authors of this <a href="https://doi.org/10.3390/rs8080681" target="_blank">study</a> mapping land cover change in Namibia also used median composities in their analysis. The same approach was used <a href="https://doi.org/10.1080/2150704X.2016.1182659" target="_blank">here</a> to produce a land cover map for the entire Southeast Asia and <a href="https://doi.org/10.1371/journal.pone.0184926" target="_blank">here</a> to map land cover and land cover change over continental Africa.</p>
