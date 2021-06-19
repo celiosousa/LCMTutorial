@@ -1,28 +1,56 @@
----
-title: "04-PostClassification"
-output: html_document
----
+# Post-classification
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+Objectives: We aim to provide useful post-classification steps for corrections and general improvement of a random forest classification output. 
+
+## Re-classification ##
+
+Classification outputs often times will need some degree of correction or adjustment. Some of these corrections and adjustments include, for example, the Correction for missclassification erros in specific areas and changing class labels (pixel values) or class order. In this section we will explore the function `remap`. This function maps from input values to output values, represented by two parallel lists: one includes the original number classes and their value; the other represents which class (or classes) is being remapped and to what it is being remapped to. 
+To ilustrate this concept, consider the following example:
+
+- The previously produced land cover map of Greater Cairo includes four classes: Water (pixel value = 0), Cropland / Cultivated Areas (pixel value = 1), Sand and bare areas (pixel value = 2) and Built-up and Urban Areas (pixel value = 3) (List 1). If any of these classe values needs to be changed, the new value for that class is placed in the List 2, in the position of the class that needs changing (Figure 4.1).
+
+```{r my-remap,  fig.cap="The `remap` function for the land cover classification of the Greater Cairo. ", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/remap.png")
 ```
 
-## R Markdown
+To test this function, start by [opening a new code editor page](https://code.earthengine.google.com/){target="_blank"} and importing one of the classification assets you used [in the previous chapter][Example 2: 2000 - 2020 Map-to-Map change of greater Cairo and Giza area, Egypt]. In this example, we will importe the latest land cover map from the year 2020 as a variable called `Cairo2020` and we will add it to the map editor using the same color scheme from `paletteMAP` used in the previous chapter:
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r eval=FALSE}
+var Cairo2020 = ee.Image("users/celiohelder/TutorialAssets/Cairo2020");
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+var paletteMAP = [
+  '#0040ff',  #// Water
+  '#00ab0c',  #// Croplands / Cultivated Areas
+  '#fbf2ad',  #// Sand and bare areas
+  '#878587',  #// Built-up and Urban Areas
+];
 
-```{r cars}
-summary(cars)
+Map.addLayer(Cairo2020, {min: 0, max: 3, palette:paletteMAP}, 'Cairo2000');
 ```
 
-## Including Plots
+Now, let's consider the following scenarios:
 
-You can also embed plots, for example:
+### Scenario 1
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+- A new version of the `Cairo2020` map where *__Sand and bare areas (pixel value = 2)__* and *__Built-up and Urban Areas (pixel value = 3)__* switch orders in the final map. In this case, we can use the `remap` function to change the pixel value of *Built-up and Urban Areas* to __2__ and *Sand and bare areas* to __3__ in their respective position on list 2 (Figure 4.1):
+
+```{r my-remap2,  fig.cap="Sand (2) and Cities (3) changing orders in the image output using `.remap` ", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/remap2.png")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+As a guide, use the figure above to create a new variable `CairoV1` with the new order for the classes using `remap`:
+```{r eval=FALSE}
+var CairoV1 = Cairo2020.remap([0,1,2,3],[0,1,3,2])
+```
+
+Add the `CairoV1` to the the map using the original color scheme `paletteMAP`:
+
+```{r eval=FALSE}
+Map.addLayer(CairoV1, {min: 0, max: 3, palette:paletteMAP}, 'Cairo V1');
+```
+
+```{r my-CairoV1,  fig.cap="`Cairo2020` and `CairoV1` maps using the original `paletteMap`. Note that Sand and bare areas and Built-up and Urban areas switched colors as we switched their order.  ", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/CairoV1.png")
+```
+
+## Map spatial smoothing ##

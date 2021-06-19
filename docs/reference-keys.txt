@@ -16,6 +16,9 @@ fig:my-strat
 fig:my-matrix
 fig:my-change
 fig:my-areas
+fig:my-remap
+fig:my-remap2
+fig:my-CairoV1
 introduction-and-overview
 auxiliary-functions
 cloud-and-cloud-shadow-masking
@@ -27,3 +30,7 @@ temporal-and-spatial-parameters-for-compositing
 landsat-8-pre-classification-steps
 supervised-classification-with-random-forest
 example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt
+post-classification
+re-classification
+scenario-1
+map-spatial-smoothing

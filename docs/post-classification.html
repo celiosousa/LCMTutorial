@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Supervised Classification with Google Earth Engine</title>
-  <meta name="description" content="Supervised Classification with Google Earth Engine" />
+  <title>Chapter 4 Post-classification | Supervised Classification with Google Earth Engine</title>
+  <meta name="description" content="Chapter 4 Post-classification | Supervised Classification with Google Earth Engine" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Supervised Classification with Google Earth Engine" />
+  <meta property="og:title" content="Chapter 4 Post-classification | Supervised Classification with Google Earth Engine" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Supervised Classification with Google Earth Engine" />
+  <meta name="twitter:title" content="Chapter 4 Post-classification | Supervised Classification with Google Earth Engine" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
+<link rel="prev" href="supervised-classification-of-landsat-8-oli-imagery.html"/>
 
-<link rel="next" href="auxiliary-functions.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -148,22 +148,68 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Supervised Classification with Google Earth Engine</h1>
-<p class="author"><em>Celio Sousa</em></p>
-<p class="date" style="margin-top: 1.5em;"><em>2021-06-19</em></p>
+<div id="post-classification" class="section level1">
+<h1><span class="header-section-number">Chapter 4</span> Post-classification</h1>
+<p>Objectives: We aim to provide useful post-classification steps for corrections and general improvement of a random forest classification output.</p>
+<div id="re-classification" class="section level2">
+<h2><span class="header-section-number">4.1</span> Re-classification</h2>
+<p>Classification outputs often times will need some degree of correction or adjustment. Some of these corrections and adjustments include, for example, the Correction for missclassification erros in specific areas and changing class labels (pixel values) or class order. In this section we will explore the function <code>remap</code>. This function maps from input values to output values, represented by two parallel lists: one includes the original number classes and their value; the other represents which class (or classes) is being remapped and to what it is being remapped to. To ilustrate this concept, consider the following example:</p>
+<ul>
+<li>The previously produced land cover map of Greater Cairo includes four classes: Water (pixel value = 0), Cropland / Cultivated Areas (pixel value = 1), Sand and bare areas (pixel value = 2) and Built-up and Urban Areas (pixel value = 3) (List 1). If any of these classe values needs to be changed, the new value for that class is placed in the List 2, in the position of the class that needs changing (Figure 4.1).</li>
+</ul>
+<div class="figure"><span id="fig:my-remap"></span>
+<img src="images/remap.PNG" alt="The `remap` function for the land cover classification of the Greater Cairo. " width="881" />
+<p class="caption">
+Figure 4.1: The <code>remap</code> function for the land cover classification of the Greater Cairo.
+</p>
 </div>
-<div id="introduction-and-overview" class="section level1">
-<h1><span class="header-section-number">Chapter 1</span> Introduction and Overview</h1>
+<p>To test this function, start by <a href="https://code.earthengine.google.com/" target="_blank">opening a new code editor page</a> and importing one of the classification assets you used <a href="supervised-classification-of-landsat-8-oli-imagery.html#example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt">in the previous chapter</a>. In this example, we will importe the latest land cover map from the year 2020 as a variable called <code>Cairo2020</code> and we will add it to the map editor using the same color scheme from <code>paletteMAP</code> used in the previous chapter:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var Cairo2020 =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&quot;users/celiohelder/TutorialAssets/Cairo2020&quot;</span>);
 
+var paletteMAP =<span class="st"> </span>[
+  <span class="st">&#39;#0040ff&#39;</span>,  <span class="co">#// Water</span>
+  <span class="st">&#39;#00ab0c&#39;</span>,  <span class="co">#// Croplands / Cultivated Areas</span>
+  <span class="st">&#39;#fbf2ad&#39;</span>,  <span class="co">#// Sand and bare areas</span>
+  <span class="st">&#39;#878587&#39;</span>,  <span class="co">#// Built-up and Urban Areas</span>
+];
+
+<span class="kw">Map.addLayer</span>(Cairo2020, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo2000&#39;</span>);</code></pre></div>
+<p>Now, let's consider the following scenarios:</p>
+<div id="scenario-1" class="section level3">
+<h3><span class="header-section-number">4.1.1</span> Scenario 1</h3>
+<ul>
+<li>A new version of the <code>Cairo2020</code> map where <em><strong>Sand and bare areas (pixel value = 2)</strong></em> and <em><strong>Built-up and Urban Areas (pixel value = 3)</strong></em> switch orders in the final map. In this case, we can use the <code>remap</code> function to change the pixel value of <em>Built-up and Urban Areas</em> to <strong>2</strong> and <em>Sand and bare areas</em> to <strong>3</strong> in their respective position on list 2 (Figure 4.1):</li>
+</ul>
+<div class="figure"><span id="fig:my-remap2"></span>
+<img src="images/remap2.PNG" alt="Sand (2) and Cities (3) changing orders in the image output using `.remap` " width="877" />
+<p class="caption">
+Figure 4.2: Sand (2) and Cities (3) changing orders in the image output using <code>.remap</code>
+</p>
+</div>
+<p>As a guide, use the figure above to create a new variable <code>CairoV1</code> with the new order for the classes using <code>remap</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var CairoV1 =<span class="st"> </span><span class="kw">Cairo2020.remap</span>([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>])</code></pre></div>
+<p>Add the <code>CairoV1</code> to the the map using the original color scheme <code>paletteMAP</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(CairoV1, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo V1&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:my-CairoV1"></span>
+<img src="images/CairoV1.png" alt="`Cairo2020` and `CairoV1` maps using the original `paletteMap`. Note that Sand and bare areas and Built-up and Urban areas switched colors as we switched their order.  " width="816" />
+<p class="caption">
+Figure 4.3: <code>Cairo2020</code> and <code>CairoV1</code> maps using the original <code>paletteMap</code>. Note that Sand and bare areas and Built-up and Urban areas switched colors as we switched their order.
+</p>
+</div>
+</div>
+</div>
+<div id="map-spatial-smoothing" class="section level2">
+<h2><span class="header-section-number">4.2</span> Map spatial smoothing</h2>
+
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
+<a href="supervised-classification-of-landsat-8-oli-imagery.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="auxiliary-functions.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -195,7 +241,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/celiosousa/LCMTutorial/edit/master/index.Rmd",
+"link": "https://github.com/celiosousa/LCMTutorial/edit/master/04-PostClassification.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -203,7 +249,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/celiosousa/LCMTutorial/blob/master/index.Rmd",
+"link": "https://github.com/celiosousa/LCMTutorial/blob/master/04-PostClassification.Rmd",
 "text": null
 },
 "download": null,
