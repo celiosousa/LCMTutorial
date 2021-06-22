@@ -25,7 +25,7 @@ function maskL8sr(image) {
 };
 ```
 
-## Spectral Indices
+## Spectral indices
 
 This section demonstrates how to calculate and add spectral indices to each scene of a Landsat 8 image collection. The function below calculates and add spectral indices to an image collection taking into account the Landsat 8 spectral bands and their respective wavelengths:
 

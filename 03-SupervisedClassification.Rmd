@@ -1,4 +1,4 @@
-# Supervised Classification of Landsat 8 OLI Imagery
+# Supervised classification of Landsat 8 OLI imagery
 
 Objectives:
 
@@ -372,7 +372,7 @@ After following the 4 steps above, you should achieve a similar output as before
 knitr::include_graphics("images/2000.PNG")
 ```
 
-Export this new classification to you assets. Next, [open a new code editor page](https://code.earthengine.google.com/){target="_blank"} and add the classification exports to this scripts by clicking the *__Import into script__* button (blue arrow) for both classification assets in the Assets tab as shown in the figure 3.12:
+Export this new classification to you assets. Next, [open a new code editor page](https://code.earthengine.google.com/){target="_blank"} and add the classification exports to this script by clicking the *__Import into script__* button (blue arrow) for both classification assets in the Assets tab as shown in the figure 3.12:
 
 ```{r my-imports,   fig.cap="Assets tab with classification maps.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/imports.PNG")

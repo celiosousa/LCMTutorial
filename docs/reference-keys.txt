@@ -23,6 +23,10 @@ fig:my-remap3
 fig:my-CairoV2
 fig:my-where
 fig:my-regionwhere
+fig:my-cairov3
+fig:my-focal
+fig:my-smooth1
+fig:my-smooth2
 introduction-and-overview
 auxiliary-functions
 cloud-and-cloud-shadow-masking
@@ -34,7 +38,7 @@ temporal-and-spatial-parameters-for-compositing
 landsat-8-pre-classification-steps
 supervised-classification-with-random-forest
 example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt
-post-classification
+post-classification-processing
 re-classification
 scenario-1
 scenario-2

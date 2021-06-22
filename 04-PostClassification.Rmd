@@ -1,4 +1,4 @@
-# Post-classification
+# Post-classification processing
 
 Objectives: We aim to provide useful post-classification steps for corrections and general improvement of a random forest classification output. 
 
@@ -29,6 +29,10 @@ Map.addLayer(Cairo2020, {min: 0, max: 3, palette:paletteMAP}, 'Cairo2000');
 ```
 
 Now, let's consider the following scenarios:
+
+```{block, type='rmdcomment'}
+Access the full scrip for the three scenarios [here.](https://code.earthengine.google.com/a2e86da139ffccfdeaeda582355932a0){target="_blank"}
+```
 
 ### Scenario 1
 
@@ -112,10 +116,90 @@ Now, using `.where` create a new map `CairoV3` following the formula seen on Fig
 
 ```{r eval=FALSE}
 var CairoV3 = Cairo2020.where(region,substitute);
-
 Map.addLayer(CairoV3, {min: 0, max: 3, palette:paletteMAP}, 'Cairo V3');
+```
+
+```{r my-cairov3,  fig.cap="`CairoV3` showing the pixels of Cropland/Cultivated Areas remapped as Built-up and Urban Areas within `aoi`.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/CairoV3.png")
 ```
 
 Notice that every pixel of *__Cropland/Cultivated Areas__* (green, pixel value = 2) within the `aoi` in `Cairo2020` is now remapped to *__Built-up and Urban Areas__* (grey, pixel value = 3) in `CairoV3`.
 
 ## Map spatial smoothing ##
+
+Spatial smoothing is another post-classification procedure to enhance the quality of a land cover classification output. A common issue that arises from the pixel-based classification of fine/medium spatial resolution imagery is the “salt-and-pepper” effect. This happens when individual pixels are classified differently from their neighbors, creating speckles of isolated pixels of different classes. There are several ways to minimize this issue, such as:
+
+- image pre-processing, such as low-pass filter and texture analysis;
+- contextual classification, and;
+- post-classification processing, such as median and mode filtering.
+
+In this section, we will focus on a post-classification technique to reduce the salt and pepper effect and edge roughness of land cover maps using focal median filtering (`ee.Image.focal_median`).
+
+First, [open a new code editor page](https://code.earthengine.google.com/){target="_blank"} and add one the classification exports to this script by clicking the *__Import into script__* button (blue arrow) for the classification asset of your choosing. For this example, we will use `Cairo2020`.
+
+```{r eval=FALSE}
+// Color palette for the original map
+var paletteMAP = [
+  '#0040ff',  // Water
+  '#00ab0c',  // Croplands / Cultivated Areas
+  '#fbf2ad',  // Sand and bare areas
+  '#878587',  // Built-up and Urban Areas
+];
+
+Map.setCenter(31.42217, 29.99157,10); // Set the center over Cairo
+Map.addLayer(Cairo2020, {min: 0, max: 3, palette:paletteMAP}, 'Cairo2000');
+```
+
+Next, we will apply the `.focal_median` function to `Cairo2020`. This function is a simple sliding-window spatial filter that replaces the center value (or class) in the window with the median of all the pixel values in the window. The window, or kernel, is usually square but can be any shape. The `focal_median` function usually is expressed as:
+
+```{r my-focal,  fig.cap="`.focal_median` spatial filter.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/focal.png")
+```
+
+In the function above, the `radius` parameter specifies the number of pixels from the center that the kernel will cover. This radius value can be expressed as number of pixels or meters. The `kernelType` specifies the type of kernel to use. For instance, consider the example below:
+
+- Either `.focal_median(1, 'square', 'pixels')` or `.focal_median(30, 'square', 'meters')` will produce a 3x3 pixel sliding-window, as you are specifing 1 pixel (or 30 meters which is equal to one Landsat pixel) in each direction from the center pixel. Similarly, a `radius` of 2 pixels or 60 meters will produce a 5x5 sliding-window: a center pixel plus 2 pixels in each direction. 
+
+Following Figure 9 and the example above, apply the `.focal_median` filtering with two `radius` sizes (30 and 60 meters) to `Cairo2020`, add `Cairo30` and `Cairo60` to the map editor and compare the results:
+
+```{r eval=FALSE}
+var Cairo30 = Cairo2020.focal_median(1,'square', 'pixels');
+var Cairo60 = Cairo2020.focal_median(30,'square', 'meters');
+#// Add the new maps to the map editor
+Map.addLayer(Cairo30, {min: 0, max: 3, palette:paletteMAP}, 'Cairo 3x3');
+Map.addLayer(Cairo60, {min: 0, max: 3, palette:paletteMAP}, 'Cairo 5x5');
+```
+
+```{r my-smooth1,  fig.cap="`Cairo2020` processed with `.focal_median` spatial filter with 3x3 and 5x5 pixels square kernels.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/cairosmooth1.png")
+```
+
+```{block, type='caution'}
+__IMPORTANT:__ The *.focal_median(1, 'square', 'pixels')* and *.focal_median(30, 'square', 'meters')* will only achieve the intended final result if you reproject it back to the original scale and projection from the original map.
+```
+
+Note that this technique while effective in removing the "salt-and-pepper" effect from the original map, it creates edges that are not in the same resolution and projection as the original map. Therefore, creating fairly rounded boundaries for the classes. This is not ideal as it is usually intended for these maps to keep the same resolution as the original map, as well as to preserve the boundaries between classes. To account for this issue, you can reproject this output back the original scale so it is formed by 30 x 30 meter pixels.
+
+To do that, simply use `.reproject(projection.atScale(scale))` within the `.focal_median` filter. The `.reproject` function will take two arguments: projection and scale. You can extract this information from the original map with `.projection()` and `.nominalScale()`:
+
+```{r eval=FALSE}
+var prj = Cairo2020.projection();
+var scale = prj.nominalScale();
+```
+
+Then, re-aply the `.focal_median` filter with `.reproject(projection.atScale(scale))`:
+
+```{r eval=FALSE}
+var Cairo30 = Cairo2020.focal_median(1,'square', 'pixels')
+                       .reproject(prj.atScale(scale));
+                       
+var Cairo60 = Cairo2020.focal_median(30,'square', 'meters');
+                       .reproject(prj.atScale(scale));
+```
+
+```{r my-smooth2,  fig.cap="`Cairo2020` processed with `.focal_median` spatial filter with 3x3 and 5x5 pixels square kernels. Note that the function was reprojected to match `Cairo2020`'s projection and scale", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/cairosmooth2.png")
+```
+
+Note that even though the boundaries of the classes are smoother, they are formed by the 30 x 30 meter pixels. 
+Usually, a `radius` of 1 (3x3 square window) removes most of the salt-and-pepper effect, smoothens the boundaries in between classes while preserving the overall shape of the classes.

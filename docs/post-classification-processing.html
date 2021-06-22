@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Post-classification | Supervised Classification with Google Earth Engine</title>
-  <meta name="description" content="Chapter 4 Post-classification | Supervised Classification with Google Earth Engine" />
+  <title>Chapter 4 Post-classification Processing | Supervised Classification with Google Earth Engine</title>
+  <meta name="description" content="Chapter 4 Post-classification Processing | Supervised Classification with Google Earth Engine" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 4 Post-classification | Supervised Classification with Google Earth Engine" />
+  <meta property="og:title" content="Chapter 4 Post-classification Processing | Supervised Classification with Google Earth Engine" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Post-classification | Supervised Classification with Google Earth Engine" />
+  <meta name="twitter:title" content="Chapter 4 Post-classification Processing | Supervised Classification with Google Earth Engine" />
   
   
   
@@ -123,13 +123,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="3.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>3.2</b> Example 2: 2000 - 2020 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="post-classification.html"><a href="post-classification.html"><i class="fa fa-check"></i><b>4</b> Post-classification</a><ul>
-<li class="chapter" data-level="4.1" data-path="post-classification.html"><a href="post-classification.html#re-classification"><i class="fa fa-check"></i><b>4.1</b> Re-classification</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="post-classification.html"><a href="post-classification.html#scenario-1"><i class="fa fa-check"></i><b>4.1.1</b> Scenario 1</a></li>
-<li class="chapter" data-level="4.1.2" data-path="post-classification.html"><a href="post-classification.html#scenario-2"><i class="fa fa-check"></i><b>4.1.2</b> Scenario 2</a></li>
-<li class="chapter" data-level="4.1.3" data-path="post-classification.html"><a href="post-classification.html#scenario-3"><i class="fa fa-check"></i><b>4.1.3</b> Scenario 3</a></li>
+<li class="chapter" data-level="4" data-path="post-classification-processing.html"><a href="post-classification-processing.html"><i class="fa fa-check"></i><b>4</b> Post-classification Processing</a><ul>
+<li class="chapter" data-level="4.1" data-path="post-classification-processing.html"><a href="post-classification-processing.html#re-classification"><i class="fa fa-check"></i><b>4.1</b> Re-classification</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-1"><i class="fa fa-check"></i><b>4.1.1</b> Scenario 1</a></li>
+<li class="chapter" data-level="4.1.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-2"><i class="fa fa-check"></i><b>4.1.2</b> Scenario 2</a></li>
+<li class="chapter" data-level="4.1.3" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-3"><i class="fa fa-check"></i><b>4.1.3</b> Scenario 3</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="post-classification.html"><a href="post-classification.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>4.2</b> Map spatial smoothing</a></li>
+<li class="chapter" data-level="4.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>4.2</b> Map spatial smoothing</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -150,8 +150,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="post-classification" class="section level1">
-<h1><span class="header-section-number">Chapter 4</span> Post-classification</h1>
+<div id="post-classification-processing" class="section level1">
+<h1><span class="header-section-number">Chapter 4</span> Post-classification Processing</h1>
 <p>Objectives: We aim to provide useful post-classification steps for corrections and general improvement of a random forest classification output.</p>
 <div id="re-classification" class="section level2">
 <h2><span class="header-section-number">4.1</span> Re-classification</h2>
@@ -177,6 +177,11 @@ var paletteMAP =<span class="st"> </span>[
 
 <span class="kw">Map.addLayer</span>(Cairo2020, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo2000&#39;</span>);</code></pre></div>
 <p>Now, let's consider the following scenarios:</p>
+<div class="rmdcomment">
+<p>
+Access the full scrip for the three scenarios <a href="https://code.earthengine.google.com/a2e86da139ffccfdeaeda582355932a0" target="_blank">here.</a>
+</p>
+</div>
 <div id="scenario-1" class="section level3">
 <h3><span class="header-section-number">4.1.1</span> Scenario 1</h3>
 <p>A new version of the <code>Cairo2020</code> map where <em><strong>Sand and bare areas (pixel value = 2)</strong></em> and <em><strong>Built-up and Urban Areas (pixel value = 3)</strong></em> switch orders in the final map. In this case, we can use the <code>remap</code> function to change the pixel value of <em>Built-up and Urban Areas</em> to <strong>2</strong> and <em>Sand and bare areas</em> to <strong>3</strong> in their respective position on list 2 (Figure 2):</p>
@@ -255,6 +260,69 @@ Figure 4.8: <code>CairoV3</code> showing the pixels of Cropland/Cultivated Areas
 </div>
 <div id="map-spatial-smoothing" class="section level2">
 <h2><span class="header-section-number">4.2</span> Map spatial smoothing</h2>
+<p>Spatial smoothing is another post-classification procedure to enhance the quality of a land cover classification output. A common issue that arises from the pixel-based classification of fine/medium spatial resolution imagery is the “salt-and-pepper” effect. This happens when individual pixels are classified differently from their neighbors, creating speckles of isolated pixels of different classes. There are several ways to minimize this issue, such as:</p>
+<ul>
+<li>image pre-processing, such as low-pass filter and texture analysis;</li>
+<li>contextual classification, and;</li>
+<li>post-classification processing, such as median and mode filtering.</li>
+</ul>
+<p>In this section, we will focus on a post-classification technique to reduce the salt and pepper effect and edge roughness of land cover maps using focal median filtering (<code>ee.Image.focal_median</code>).</p>
+<p>First, <a href="https://code.earthengine.google.com/" target="_blank">open a new code editor page</a> and add one the classification exports to this script by clicking the <em><strong>Import into script</strong></em> button (blue arrow) for the classification asset of your choosing. For this example, we will use <code>Cairo2020</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">/</span><span class="er">/</span><span class="st"> </span>Color palette <span class="cf">for</span> the original map
+var paletteMAP =<span class="st"> </span>[
+  <span class="st">&#39;#0040ff&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Water
+  <span class="st">&#39;#00ab0c&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Croplands <span class="op">/</span><span class="st"> </span>Cultivated Areas
+  <span class="st">&#39;#fbf2ad&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Sand and bare areas
+  <span class="st">&#39;#878587&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Built<span class="op">-</span>up and Urban Areas
+];
+
+<span class="kw">Map.setCenter</span>(<span class="fl">31.42217</span>, <span class="fl">29.99157</span>,<span class="dv">10</span>); <span class="op">/</span><span class="er">/</span><span class="st"> </span>Set the center over Cairo
+<span class="kw">Map.addLayer</span>(Cairo2020, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo2000&#39;</span>);</code></pre></div>
+<p>Next, we will apply the <code>.focal_median</code> function to <code>Cairo2020</code>. This function is a simple sliding-window spatial filter that replaces the center value (or class) in the window with the median of all the pixel values in the window. The window, or kernel, is usually square but can be any shape. The <code>focal_median</code> function usually is expressed as:</p>
+<div class="figure"><span id="fig:my-focal"></span>
+<img src="images/focal.PNG" alt="`.focal_median` spatial filter." width="1015" />
+<p class="caption">
+Figure 4.9: <code>.focal_median</code> spatial filter.
+</p>
+</div>
+<p>In the function above, the <code>radius</code> parameter specifies the number of pixels from the center that the kernel will cover. This radius value can be expressed as number of pixels or meters. The <code>kernelType</code> specifies the type of kernel to use. For instance, consider the example below:</p>
+<ul>
+<li>Either <code>.focal_median(1, 'square', 'pixels')</code> or <code>.focal_median(30, 'square', 'meters')</code> will produce a 3x3 pixel sliding-window, as you are specifing 1 pixel (or 30 meters which is equal to one Landsat pixel) in each direction from the center pixel. Similarly, a <code>radius</code> of 2 pixels or 60 meters will produce a 5x5 sliding-window: a center pixel plus 2 pixels in each direction.</li>
+</ul>
+<p>Following Figure 9 and the example above, apply the <code>.focal_median</code> filtering with two <code>radius</code> sizes (30 and 60 meters) to <code>Cairo2020</code>, add <code>Cairo30</code> and <code>Cairo60</code> to the map editor and compare the results:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var Cairo30 =<span class="st"> </span><span class="kw">Cairo2020.focal_median</span>(<span class="dv">1</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;pixels&#39;</span>);
+var Cairo60 =<span class="st"> </span><span class="kw">Cairo2020.focal_median</span>(<span class="dv">30</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;meters&#39;</span>);
+<span class="co">#// Add the new maps to the map editor</span>
+<span class="kw">Map.addLayer</span>(Cairo30, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo 3x3&#39;</span>);
+<span class="kw">Map.addLayer</span>(Cairo60, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo 5x5&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:my-smooth1"></span>
+<img src="images/cairosmooth1.png" alt="`Cairo2020` processed with `.focal_median` spatial filter with 3x3 and 5x5 pixels square kernels." width="1234" />
+<p class="caption">
+Figure 4.10: <code>Cairo2020</code> processed with <code>.focal_median</code> spatial filter with 3x3 and 5x5 pixels square kernels.
+</p>
+</div>
+<div class="caution">
+<p>
+<strong>IMPORTANT:</strong> The <em>.focal_median(1, 'square', 'pixels')</em> and <em>.focal_median(30, 'square', 'meters')</em> will only achieve the intended final result if you reproject it back to the original scale and projection from the original map.
+</p>
+</div>
+<p>Note that this technique while effective in removing the &quot;salt-and-pepper&quot; effect from the original map, it creates edges that are not in the same resolution and projection as the original map. Therefore, creating fairly rounded boundaries for the classes. This is not ideal as it is usually intended for these maps to keep the same resolution as the original map, as well as to preserve the boundaries between classes. To account for this issue, you can reproject this output back the original scale so it is formed by 30 x 30 meter pixels.</p>
+<p>To do that, simply use <code>.reproject(projection.atScale(scale))</code> within the <code>.focal_median</code> filter. The <code>.reproject</code> function will take two arguments: projection and scale. You can extract this information from the original map with <code>.projection()</code> and <code>.nominalScale()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var prj =<span class="st"> </span><span class="kw">Cairo2020.projection</span>();
+var scale =<span class="st"> </span><span class="kw">prj.nominalScale</span>();</code></pre></div>
+<p>Then, re-aply the <code>.focal_median</code> filter with <code>.reproject(projection.atScale(scale))</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var Cairo30 =<span class="st"> </span><span class="kw">Cairo2020.focal_median</span>(<span class="dv">1</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;pixels&#39;</span>)
+                       <span class="kw">.reproject</span>(<span class="kw">prj.atScale</span>(scale));
+                       
+var Cairo60 =<span class="st"> </span><span class="kw">Cairo2020.focal_median</span>(<span class="dv">30</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;meters&#39;</span>);
+                       <span class="kw">.reproject</span>(<span class="kw">prj.atScale</span>(scale));</code></pre></div>
+<div class="figure"><span id="fig:my-smooth2"></span>
+<img src="images/cairosmooth2.png" alt="`Cairo2020` processed with `.focal_median` spatial filter with 3x3 and 5x5 pixels square kernels. Note that the function was reprojected to match `Cairo2020`'s projection and scale" width="1234" />
+<p class="caption">
+Figure 4.11: <code>Cairo2020</code> processed with <code>.focal_median</code> spatial filter with 3x3 and 5x5 pixels square kernels. Note that the function was reprojected to match <code>Cairo2020</code>'s projection and scale
+</p>
+</div>
+<p>Note that even though the boundaries of the classes are smoother, they are formed by the 30 x 30 meter pixels. Usually, a <code>radius</code> of 1 (3x3 square window) removes most of the salt-and-pepper effect, smoothens the boundaries in between classes while preserving the overall shape of the classes.</p>
 
 </div>
 </div>
