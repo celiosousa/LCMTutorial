@@ -363,7 +363,7 @@ c)	The `collection` object will have the Landsat 7 `'LANDSAT/LE07/C01/T1_SR'` im
 d)	Repeat the training sample selection (See [Sample sets][Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2020] from previous example) to make sure the samples reflect the correct land cover class for the L7 composite in the year 2000.
 
 ```{block, type='rmdcomment'}
-You can access the edited script for four steps above [*here.*](https://code.earthengine.google.com/dd0d6a609d2eb5346f33b91d967a30b9){target="_blank"}
+You can access the edited script for four steps above [here.](https://code.earthengine.google.com/dd0d6a609d2eb5346f33b91d967a30b9){target="_blank"}
 ```
 
 After following the 4 steps above, you should achieve a similar output as before:

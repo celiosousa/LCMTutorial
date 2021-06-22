@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa" />
 
 
-<meta name="date" content="2021-06-19" />
+<meta name="date" content="2021-06-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -126,6 +126,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4" data-path="post-classification.html"><a href="post-classification.html"><i class="fa fa-check"></i><b>4</b> Post-classification</a><ul>
 <li class="chapter" data-level="4.1" data-path="post-classification.html"><a href="post-classification.html#re-classification"><i class="fa fa-check"></i><b>4.1</b> Re-classification</a><ul>
 <li class="chapter" data-level="4.1.1" data-path="post-classification.html"><a href="post-classification.html#scenario-1"><i class="fa fa-check"></i><b>4.1.1</b> Scenario 1</a></li>
+<li class="chapter" data-level="4.1.2" data-path="post-classification.html"><a href="post-classification.html#scenario-2"><i class="fa fa-check"></i><b>4.1.2</b> Scenario 2</a></li>
+<li class="chapter" data-level="4.1.3" data-path="post-classification.html"><a href="post-classification.html#scenario-3"><i class="fa fa-check"></i><b>4.1.3</b> Scenario 3</a></li>
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="post-classification.html"><a href="post-classification.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>4.2</b> Map spatial smoothing</a></li>
 </ul></li>
@@ -155,7 +157,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">4.1</span> Re-classification</h2>
 <p>Classification outputs often times will need some degree of correction or adjustment. Some of these corrections and adjustments include, for example, the Correction for missclassification erros in specific areas and changing class labels (pixel values) or class order. In this section we will explore the function <code>remap</code>. This function maps from input values to output values, represented by two parallel lists: one includes the original number classes and their value; the other represents which class (or classes) is being remapped and to what it is being remapped to. To ilustrate this concept, consider the following example:</p>
 <ul>
-<li>The previously produced land cover map of Greater Cairo includes four classes: Water (pixel value = 0), Cropland / Cultivated Areas (pixel value = 1), Sand and bare areas (pixel value = 2) and Built-up and Urban Areas (pixel value = 3) (List 1). If any of these classe values needs to be changed, the new value for that class is placed in the List 2, in the position of the class that needs changing (Figure 4.1).</li>
+<li>The previously produced land cover map of Greater Cairo includes four classes: Water (pixel value = 0), Cropland / Cultivated Areas (pixel value = 1), Sand and bare areas (pixel value = 2) and Built-up and Urban Areas (pixel value = 3) (List 1). If any of these class values needs to be changed, the new value for that class is placed in the <em>List 2</em>, in the position of the class that needs changing (Figure 1).</li>
 </ul>
 <div class="figure"><span id="fig:my-remap"></span>
 <img src="images/remap.PNG" alt="The `remap` function for the land cover classification of the Greater Cairo. " width="881" />
@@ -177,17 +179,15 @@ var paletteMAP =<span class="st"> </span>[
 <p>Now, let's consider the following scenarios:</p>
 <div id="scenario-1" class="section level3">
 <h3><span class="header-section-number">4.1.1</span> Scenario 1</h3>
-<ul>
-<li>A new version of the <code>Cairo2020</code> map where <em><strong>Sand and bare areas (pixel value = 2)</strong></em> and <em><strong>Built-up and Urban Areas (pixel value = 3)</strong></em> switch orders in the final map. In this case, we can use the <code>remap</code> function to change the pixel value of <em>Built-up and Urban Areas</em> to <strong>2</strong> and <em>Sand and bare areas</em> to <strong>3</strong> in their respective position on list 2 (Figure 4.1):</li>
-</ul>
+<p>A new version of the <code>Cairo2020</code> map where <em><strong>Sand and bare areas (pixel value = 2)</strong></em> and <em><strong>Built-up and Urban Areas (pixel value = 3)</strong></em> switch orders in the final map. In this case, we can use the <code>remap</code> function to change the pixel value of <em>Built-up and Urban Areas</em> to <strong>2</strong> and <em>Sand and bare areas</em> to <strong>3</strong> in their respective position on list 2 (Figure 2):</p>
 <div class="figure"><span id="fig:my-remap2"></span>
 <img src="images/remap2.PNG" alt="Sand (2) and Cities (3) changing orders in the image output using `.remap` " width="877" />
 <p class="caption">
 Figure 4.2: Sand (2) and Cities (3) changing orders in the image output using <code>.remap</code>
 </p>
 </div>
-<p>As a guide, use the figure above to create a new variable <code>CairoV1</code> with the new order for the classes using <code>remap</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var CairoV1 =<span class="st"> </span><span class="kw">Cairo2020.remap</span>([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>])</code></pre></div>
+<p>As a guide, the figure above can be used to create a new variable <code>CairoV1</code> with the new order for the classes using <code>remap</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var CairoV1 =<span class="st"> </span><span class="kw">Cairo2020.remap</span>([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>]);</code></pre></div>
 <p>Add the <code>CairoV1</code> to the the map using the original color scheme <code>paletteMAP</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(CairoV1, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo V1&#39;</span>);</code></pre></div>
 <div class="figure"><span id="fig:my-CairoV1"></span>
@@ -196,6 +196,56 @@ Figure 4.2: Sand (2) and Cities (3) changing orders in the image output using <c
 Figure 4.3: <code>Cairo2020</code> and <code>CairoV1</code> maps using the original <code>paletteMap</code>. Note that Sand and bare areas and Built-up and Urban areas switched colors as we switched their order.
 </p>
 </div>
+</div>
+<div id="scenario-2" class="section level3">
+<h3><span class="header-section-number">4.1.2</span> Scenario 2</h3>
+<p>A new version of the <code>Cairo2020</code> map where <em><strong>Sand and bare areas (pixel value = 2)</strong></em> and <em><strong>Built-up and Urban Areas (pixel value = 3)</strong></em> are merged into a new class called <em><strong>Barren land and Articicial Surfaces (pixel value = 2)</strong></em>. Note that this new class can assume any value when merging, as long as both classes have the same value:</p>
+<div class="figure"><span id="fig:my-remap3"></span>
+<img src="images/remap3.PNG" alt="Sand and bare areas merging with Built-up and Urban area into a new class value (2). New classes can assume any value when merging, as long as these values are the same for both classes." width="874" />
+<p class="caption">
+Figure 4.4: Sand and bare areas merging with Built-up and Urban area into a new class value (2). New classes can assume any value when merging, as long as these values are the same for both classes.
+</p>
+</div>
+<p>For this example, keep the value <em><strong>2</strong></em> for this new class following Figure 4 and create a new variable <code>CairoV2</code> for the new map:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var CairoV2 =<span class="st"> </span><span class="kw">Cairo2020.remap</span>([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>]);</code></pre></div>
+<p>Similarly, Add the <code>CairoV2</code> to the the map using the original color scheme <code>paletteMAP</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(CairoV2, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">2</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo V1&#39;</span>);</code></pre></div>
+<p>Note that the <code>min</code> and <code>max</code> range of values changed from 0-3 (4 classes) to 0-2 (three classes). Even if the original range was mainted, <code>Map.addLayer</code> would only map the color scheme to the first three values of<code>Cairov2</code> (0, 1 and 2). However, it is always good practice to set the <code>min</code> and <code>max</code> range of values to match the actual number of classes. Alternatively, you can also edit the color palette to have the same number of colors as the number of classes in your map:</p>
+<div class="figure"><span id="fig:my-CairoV2"></span>
+<img src="images/CairoV2.png" alt="`Cairo2020` and `CairoV2` maps using the original `paletteMap`. Note that *Sand and bare areas* and *Built-up and Urban areas* have the same color as they were merged under the same pixel value (2)." width="816" />
+<p class="caption">
+Figure 4.5: <code>Cairo2020</code> and <code>CairoV2</code> maps using the original <code>paletteMap</code>. Note that <em>Sand and bare areas</em> and <em>Built-up and Urban areas</em> have the same color as they were merged under the same pixel value (2).
+</p>
+</div>
+</div>
+<div id="scenario-3" class="section level3">
+<h3><span class="header-section-number">4.1.3</span> Scenario 3</h3>
+<p>A new version of the <code>Cairo2020</code> map where only a portion of it is remapped to a given class. This scenario is one of the most commonly used post-classification procedure where the goal is to remap specific areas to fix for classification errors. To ilustrate, consider the following example:</p>
+<ul>
+<li>Upon close inspection, the <code>Cairo2020</code> map showed some cropland/cultivated areas within zones of dense urbanization. A team on the ground went to the area and confirmed that is indeed dense urbanization and no agricultural land was found in that area. Therefore, that portion of the map needs to be rectified in order to reflect the actual land cover. In this case, the <code>.where</code> function is used. This function performs conditional replacement of values, following the formula <code>input.where(test,value)</code>. For each pixel in each band of <code>input</code>, if the corresponding pixel in <code>test</code> is nonzero, Google Earth Engine will output the corresponding pixel in <code>value</code>, otherwise it will output the <code>input</code> pixel. Translating this function to this example, <code>input</code> is the land cover map in which we aim to perform the reclassification - in this case <code>Cairo2020</code>; <code>test</code> is the area or region of the map <code>value</code> will take place, and; <code>value</code> is the correct classification that will be included in the final map (Figure 6):</li>
+</ul>
+<div class="figure"><span id="fig:my-where"></span>
+<img src="images/WhereFunction.PNG" alt=" The `.where` function applied to this example." width="899" />
+<p class="caption">
+Figure 4.6:  The <code>.where</code> function applied to this example.
+</p>
+</div>
+In your own version of <code>Cairo2020</code> map, create an new geometry over an area of your interest and name it <code>aoi</code>:
+<div class="figure"><span id="fig:my-regionwhere"></span>
+<img src="images/RegionWhere.png" alt="A geometry over an area of `Cairo2020` highlighting cultivated areas next to urbanization." width="692" />
+<p class="caption">
+Figure 4.7: A geometry over an area of <code>Cairo2020</code> highlighting cultivated areas next to urbanization.
+</p>
+</div>
+<p>The function <code>.where</code> only uses images as <code>test</code>. Therefore, using the geometry/feature <code>aoi</code> is not allowed. An easy and effective way to go around this rule is to create an image with <code>ee.Image()</code> and clip it for the region of interest:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var region =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>)<span class="kw">.clip</span>(aoi);</code></pre></div>
+<p>The function above will create an image of 30 m pixels with value of 1 and will clip it for the area of interest <code>aoi</code>. Next, using the same approach from <em>Scenario 1</em> and <em>2</em>, create a new version of <code>Cairo2020</code> called <code>subistitute</code>, where the <em><strong>Cropland/Cultivated Areas</strong></em> class is remapped to <em><strong>Built-up and Urban Areas</strong></em>: the position 2 on list 2 (belonging to agricultural/cultivated areas) receives the value <em><strong>3</strong></em> from <em><strong>Built-up and Urban Areas</strong></em> on list 1:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var substitute =<span class="st"> </span><span class="kw">Cairo2020.remap</span>([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],[<span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">3</span>]);</code></pre></div>
+<p>Now, using <code>.where</code> create a new map <code>CairoV3</code> following the formula seen on Figure 6 and add it to the map editor:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var CairoV3 =<span class="st"> </span><span class="kw">Cairo2020.where</span>(region,substitute);
+
+<span class="kw">Map.addLayer</span>(CairoV3, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo V3&#39;</span>);</code></pre></div>
+<p>Notice that every pixel of <em><strong>Cropland/Cultivated Areas</strong></em> (green, pixel value = 2) within the <code>aoi</code> in <code>Cairo2020</code> is now remapped to <em><strong>Built-up and Urban Areas</strong></em> (grey, pixel value = 3) in <code>CairoV3</code>.</p>
 </div>
 </div>
 <div id="map-spatial-smoothing" class="section level2">

@@ -19,6 +19,10 @@ fig:my-areas
 fig:my-remap
 fig:my-remap2
 fig:my-CairoV1
+fig:my-remap3
+fig:my-CairoV2
+fig:my-where
+fig:my-regionwhere
 introduction-and-overview
 auxiliary-functions
 cloud-and-cloud-shadow-masking
@@ -33,4 +37,6 @@ example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt
 post-classification
 re-classification
 scenario-1
+scenario-2
+scenario-3
 map-spatial-smoothing
