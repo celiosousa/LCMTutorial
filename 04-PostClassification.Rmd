@@ -203,3 +203,7 @@ knitr::include_graphics("images/cairosmooth2.png")
 
 Note that even though the boundaries of the classes are smoother, they are formed by the 30 x 30 meter pixels. 
 Usually, a `radius` of 1 (3x3 square window) removes most of the salt-and-pepper effect, smoothens the boundaries in between classes while preserving the overall shape of the classes.
+
+```{block, type='rmdcomment'}
+Access the full scrip for this section [here.](https://code.earthengine.google.com/b5d782ff5849d59af760e62e85065909){target="_blank"}
+```
