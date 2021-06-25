@@ -267,7 +267,6 @@ var testAccuracy = validation.errorMatrix('landcover', 'classification');
 
 print('Validation error matrix RF: ', testAccuracy);
 print('Validation overall accuracy RF: ', testAccuracy.accuracy());
-});
 ```
 
 Now, you can classify the `composite` using the Random Forest model `classifier`:

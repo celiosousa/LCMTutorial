@@ -27,6 +27,8 @@ fig:my-cairov3
 fig:my-focal
 fig:my-smooth1
 fig:my-smooth2
+fig:my-borders
+fig:my-mask
 introduction-and-overview
 auxiliary-functions
 cloud-and-cloud-shadow-masking
@@ -44,3 +46,6 @@ scenario-1
 scenario-2
 scenario-3
 map-spatial-smoothing
+country-specific-analyses
+mangrove-mapping-in-guinea---west-africa
+masking

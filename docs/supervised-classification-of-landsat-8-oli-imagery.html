@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa" />
 
 
-<meta name="date" content="2021-06-22" />
+<meta name="date" content="2021-06-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -130,6 +130,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.1.3" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-3"><i class="fa fa-check"></i><b>4.1.3</b> Scenario 3</a></li>
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>4.2</b> Map spatial smoothing</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html"><i class="fa fa-check"></i><b>5</b> Country-specific analyses</a><ul>
+<li class="chapter" data-level="5.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#mangrove-mapping-in-guinea---west-africa"><i class="fa fa-check"></i><b>5.1</b> Mangrove mapping in Guinea - West Africa</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#masking"><i class="fa fa-check"></i><b>5.1.1</b> Masking</a></li>
+</ul></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -355,8 +360,7 @@ Figure 3.9: Sample sets size for this example. Note that the number will vary ba
 var testAccuracy =<span class="st"> </span><span class="kw">validation.errorMatrix</span>(<span class="st">&#39;landcover&#39;</span>, <span class="st">&#39;classification&#39;</span>);
 
 <span class="kw">print</span>(<span class="st">&#39;Validation error matrix RF: &#39;</span>, testAccuracy);
-<span class="kw">print</span>(<span class="st">&#39;Validation overall accuracy RF: &#39;</span>, <span class="kw">testAccuracy.accuracy</span>());
-<span class="er">})</span>;</code></pre></div>
+<span class="kw">print</span>(<span class="st">&#39;Validation overall accuracy RF: &#39;</span>, <span class="kw">testAccuracy.accuracy</span>());</code></pre></div>
 <p>Now, you can classify the <code>composite</code> using the Random Forest model <code>classifier</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var classifiedrf =<span class="st"> </span><span class="kw">composite.select</span>(bands)         <span class="co">#// select the predictors</span>
                             <span class="kw">.classify</span>(classifier); <span class="co">#// apply the Random Forest</span></code></pre></div>

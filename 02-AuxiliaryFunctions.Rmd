@@ -1,6 +1,8 @@
 # Auxiliary functions
 
-Objective: Here we aim to provide the initial functions and lines of code to assist the user to prepare, process and analyze Landsat 8/7 data for classification purposes.
+Objective:
+
+- To provide the initial functions and lines of code to assist the user to prepare, process and analyze Landsat 8/7 data for classification purposes.
 
 ## Cloud and cloud shadow masking
 ```{block, type='rmdcomment'}

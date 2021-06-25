@@ -1,6 +1,8 @@
 # Post-classification processing
 
-Objectives: We aim to provide useful post-classification steps for corrections and general improvement of a random forest classification output. 
+Objective: 
+
+- To provide useful post-classification steps for corrections and general improvement of a random forest classification output. 
 
 ## Re-classification ##
 

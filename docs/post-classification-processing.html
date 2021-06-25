@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa" />
 
 
-<meta name="date" content="2021-06-22" />
+<meta name="date" content="2021-06-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="supervised-classification-of-landsat-8-oli-imagery.html"/>
-
+<link rel="next" href="country-specific-analyses.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -131,6 +131,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>4.2</b> Map spatial smoothing</a></li>
 </ul></li>
+<li class="chapter" data-level="5" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html"><i class="fa fa-check"></i><b>5</b> Country-specific analyses</a><ul>
+<li class="chapter" data-level="5.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#mangrove-mapping-in-guinea---west-africa"><i class="fa fa-check"></i><b>5.1</b> Mangrove mapping in Guinea - West Africa</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#masking"><i class="fa fa-check"></i><b>5.1.1</b> Masking</a></li>
+</ul></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 </ul>
@@ -152,7 +157,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="post-classification-processing" class="section level1">
 <h1><span class="header-section-number">Chapter 4</span> Post-classification processing</h1>
-<p>Objectives: We aim to provide useful post-classification steps for corrections and general improvement of a random forest classification output.</p>
+<p>Objective:</p>
+<ul>
+<li>To provide useful post-classification steps for corrections and general improvement of a random forest classification output.</li>
+</ul>
 <div id="re-classification" class="section level2">
 <h2><span class="header-section-number">4.1</span> Re-classification</h2>
 <p>Classification outputs often times will need some degree of correction or adjustment. Some of these corrections and adjustments include, for example, the Correction for missclassification erros in specific areas and changing class labels (pixel values) or class order. In this section we will explore the function <code>remap</code>. This function maps from input values to output values, represented by two parallel lists: one includes the original number classes and their value; the other represents which class (or classes) is being remapped and to what it is being remapped to. To ilustrate this concept, consider the following example:</p>
@@ -323,6 +331,11 @@ Figure 4.11: <code>Cairo2020</code> processed with <code>.focal_median</code> sp
 </p>
 </div>
 <p>Note that even though the boundaries of the classes are smoother, they are formed by the 30 x 30 meter pixels. Usually, a <code>radius</code> of 1 (3x3 square window) removes most of the salt-and-pepper effect, smoothens the boundaries in between classes while preserving the overall shape of the classes.</p>
+<div class="rmdcomment">
+<p>
+Access the full scrip for this section <a href="https://code.earthengine.google.com/b5d782ff5849d59af760e62e85065909" target="_blank">here.</a>
+</p>
+</div>
 
 </div>
 </div>
@@ -331,8 +344,8 @@ Figure 4.11: <code>Cairo2020</code> processed with <code>.focal_median</code> sp
           </div>
         </div>
       </div>
-<a href="supervised-classification-of-landsat-8-oli-imagery.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="supervised-classification-of-landsat-8-oli-imagery.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="country-specific-analyses.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

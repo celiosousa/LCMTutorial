@@ -1,1 +1,125 @@
+# Country-specific analyses
 
+In this chapter we will explore examples of class-specific classification using previously used functions as well as useful land cover classification-based analysis.
+
+Objectives:
+
+- To classify a cloud-free composite mosaic of Landsat 8 scenes for single class mapping in countries of interest in West Africa;
+- To introduce the use of other datasets in the classification workflow.
+
+## Mangrove mapping in Guinea - West Africa
+
+In this example, we will use the codes from the previous chapters and adapt portions of them for mangrove mapping in Guinea, in West Africa. We will also introduce the use of other datasets for masking and sample selection to assist in the classification workflow.
+
+Start by [opening a new code editor page](https://code.earthengine.google.com/){target="_blank"} and
+by defining the spatial and temporal parameters of the composite you wish to classify, just like the other examples. For the temporal parameters, let’s use an annual 2020 composite:
+
+```{r eval=FALSE}
+var year = 2020; #// Year
+var startDay = (year)+'-01-01'; #// beginning of date filter | month-day
+var endDay = (year)+'-12-30';   #// end of date filter | month-day
+```
+
+For the spatial parameters, you can use the *Large Scale International Boundary (LSIB)* dataset and select Guinea’s national border. First, load the dataset into an object `countries` using the `ee.FeatureCollection` container and the feature collection ID `'USDOS/LSIB/2013'`. Secondly, filter the dataset using `.filterMetadata` and select Guinea from the list of countries and storing it in `aoi`:
+
+```{r eval=FALSE}
+var countries = ee.FeatureCollection('USDOS/LSIB/2013');
+var nationalborder = countries.filterMetadata('name' , 'equals', 'GUINEA');
+```
+
+```{block, type='rmdcomment'}
+Note that you can select a any country border by filtering *'USDOS/LSIB/2013'* dataset by using *.filterMetadata('name' , 'equals', 'NAME OF THE COUNTRY IN CAPITAL LETTERS')*. 
+```
+
+Alternatively, you can use any previously uploaded Guinea's boundary datasets available [here.](https://code.earthengine.google.com/16fbfeb335381c203fed98eb81712dda){target="_blank"} Select a dataset from the list, copy its Asset ID and load it with `ee.FeatureCollection` into `aoi`. 
+
+```{r my-borders,  fig.cap="Examples of Guinea's administrative borders.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/borders.png")
+```
+
+In this example, we aim to map of Guinea's mangroves. Therefore, we chose `prefecures5k` as it emcompasses the entirety of Guinea's coast:
+
+```{r eval=FALSE}
+var aoi = ee.FeatureCollection('users/celiohelder/Guinea/Borders/CoastalPrefectures5k');
+```
+
+```{block, type='caution'}
+*__Important__*: All these datasets were made available through our collaboration with the Guinea and the World Bank and they were modified with a GIS software for the sole purpose of this exercise. You can upload any geographical dataset (both raster or shapefile) into GEE with the *__NEW__* button in the Assets table. 
+```
+
+As auxiliary functions for cloud masking and spectral index calculation, we will use the same functions provided in [Chapter 2][Auxiliary functions]:
+
+```{r eval=FALSE}
+var maskL8sr = function (image) {
+  var cloudShadowBitMask = 1 << 3;
+  var cloudsBitMask = 1 << 5;
+  var qa = image.select('pixel_qa');
+  var mask = qa.bitwiseAnd(cloudShadowBitMask).eq(0)
+      .and(qa.bitwiseAnd(cloudsBitMask).eq(0));
+  return image.updateMask(mask).divide(10000)
+      .select("B[0-9]*")
+      .copyProperties(image, ["system:time_start"]);
+};
+
+var addIndicesL8 = function(img) {
+  #// NDVI (Normalized Difference Vegetation Index)
+  var ndvi = img.normalizedDifference(['B5','B4']).rename('NDVI');
+  #// NDMI (Normalized Difference Mangrove Index - Shi et al 2016 )
+  var ndmi = img.normalizedDifference(['B7','B3']).rename('NDMI');
+  #// MNDWI (Modified Normalized Difference Water Index - Hanqiu Xu, 2006)
+  var mndwi = img.normalizedDifference(['B3','B6']).rename('MNDWI');
+  #// SR (Simple Ratio)
+  var sr = img.select('B5').divide(img.select('B4')).rename('SR');
+  #// Band Ratio 6/5
+  var ratio65 = img.select('B6').divide(img.select('B5')).rename('R65');
+  #// Band Ratio 4/6
+  var ratio46 = img.select('B4').divide(img.select('B6')).rename('R46');
+  #// GCVI (Green Chlorophyll Vegetation Index)
+  var gcvi = img.expression('(NIR/GREEN)-1',{
+    'NIR':img.select('B5'),
+    'GREEN':img.select('B3')
+  }).rename('GCVI');
+
+   return img
+    .addBands(ndvi) // This will add each spectral index to each Landsat scene
+    .addBands(ndmi)
+    .addBands(mndwi)
+    .addBands(sr)
+    .addBands(ratio65)
+    .addBands(ratio46)
+    .addBands(gcvi);
+};
+```
+
+### Masking
+
+In this example, we will focus on mangrove mapping. Therefore, other known classes can be masked from the analysis.
+
+- *__Water mask__*
+
+The objective of this mask is to remove water pixels from the Landsat composite as we are only focusing on Mangroves. We will create a water mask using the JRC’s Global Surface Water dataset:
+
+```{r eval=FALSE}
+var globalwater = ee.Image('JRC/GSW1_0/GlobalSurfaceWater');
+```
+
+The Global Water Dataset `'JRC/GSW1_0/GlobalSurfaceWater'` has different bands: one of them is the frequency with which water was present (`'occurrence'`). This band shows how many times (expressed as %) a given pixel was classified as water relative to the total time span of the dataset. Let’s isolate the `'occurrence'` band from the globalwater object:
+
+```{r eval=FALSE}
+var occurence = globalwater.select('occurrence'); #// Select the occurrence band
+```
+
+Masks are composed by zeros and non-zero values. When you set or apply a mask to an image, the output image will keep its original values where the mask has non-zero values and pixels will be masked where the mask has zeros:
+
+```{r my-mask,  fig.cap="Masking procedure. In this figure, the mask was applied to the raster image generating a resulting output image where pixels are visible only where the correspondent mask pixel has non-zero values.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/maskexample.png")
+```
+
+For this example, we want to create a water mask. Thus, for it to be effective, the water mask has to have zero where there is water and non-zero values for non-water pixels. Consequently, when we apply this mask to a Landsat image, pixels of water will be invisible (transparent) while all the other pixels will remain visible in the composite. For the mask using the JRC Global Water Dataset, we want to make sure we are selecting permanent water. We want to filter the dataset for water pixels that occurred more than 50% of the time over the 35 years time spam for this dataset. You can be more or less restrictive by changing the 50% threshold.
+
+```{r eval=FALSE}
+var waterMask = occurrence.lt(50)     #// Selects lower than 50% 
+                          .unmask(1); #// set other areas to 1
+```
+
+Note that `.lt(50)` was used to select pixels from `occurrence` that are smaller than 50%. Automatically, the values above 50% will be set to 0 which is what is needed for this mask. In this particular case, we use .unmask(1) to set to 1(or unmask) all the other areas that were originally masked in the JRC Global Water dataset. 
