@@ -103,7 +103,7 @@ The objective of this mask is to remove water pixels from the Landsat composite 
 var globalwater = ee.Image('JRC/GSW1_0/GlobalSurfaceWater');
 ```
 
-The Global Water Dataset `'JRC/GSW1_0/GlobalSurfaceWater'` has different bands: one of them is the frequency with which water was present (`'occurrence'`). This band shows how many times (expressed as %) a given pixel was classified as water relative to the total time span of the dataset. Let’s isolate the `'occurrence'` band from the globalwater object:
+The Global Water Dataset `'JRC/GSW1_0/GlobalSurfaceWater'` has different bands: one of them `'occurrence'`. This band shows how many times (expressed as %) a given pixel was classified as water relative to the total time span of the dataset. Let’s isolate the `'occurrence'` band from the globalwater object:
 
 ```{r eval=FALSE}
 var occurence = globalwater.select('occurrence'); #// Select the occurrence band
@@ -111,15 +111,71 @@ var occurence = globalwater.select('occurrence'); #// Select the occurrence band
 
 Masks are composed by zeros and non-zero values. When you set or apply a mask to an image, the output image will keep its original values where the mask has non-zero values and pixels will be masked where the mask has zeros:
 
-```{r my-mask,  fig.cap="Masking procedure. In this figure, the mask was applied to the raster image generating a resulting output image where pixels are visible only where the correspondent mask pixel has non-zero values.", echo=FALSE, message=FALSE}
+```{r my-mask,  fig.cap="Masking procedure. In this figure, the mask was applied to the raster image generating an output image where pixels are visible only where the correspondent mask pixel has non-zero values.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/maskexample.png")
 ```
 
-For this example, we want to create a water mask. Thus, for it to be effective, the water mask has to have zero where there is water and non-zero values for non-water pixels. Consequently, when we apply this mask to a Landsat image, pixels of water will be invisible (transparent) while all the other pixels will remain visible in the composite. For the mask using the JRC Global Water Dataset, we want to make sure we are selecting permanent water. We want to filter the dataset for water pixels that occurred more than 50% of the time over the 35 years time spam for this dataset. You can be more or less restrictive by changing the 50% threshold.
+For this example, we want to create a water mask. Thus, the water mask has to have zeros where there is water and non-zero values for non-water pixels. Consequently, when we apply this mask to a Landsat image, pixels of water will be invisible (transparent) while all the other pixels will remain visible in the composite. For the mask using the JRC Global Water dataset, make sure you are selecting "permanent" water. One way of doing this is by filtering the dataset for water pixels that occurred more than 50% of the time over the 35 years time spam for this dataset. You can be more or less restrictive with the water extent by changing the 50% threshold.
 
 ```{r eval=FALSE}
 var waterMask = occurrence.lt(50)     #// Selects lower than 50% 
-                          .unmask(1); #// set other areas to 1
+                          .unmask(1); #// unmkask all other areas and set the values to 1
 ```
 
-Note that `.lt(50)` was used to select pixels from `occurrence` that are smaller than 50%. Automatically, the values above 50% will be set to 0 which is what is needed for this mask. In this particular case, we use .unmask(1) to set to 1(or unmask) all the other areas that were originally masked in the JRC Global Water dataset. 
+Note that `.lt(50)` was used to select pixels from `occurrence` that are smaller than 50%. Automatically, the values above 50% will be set to 0 which is what is needed for this mask. In this particular case, we use .unmask(1) to set to 1(or unmask) all the other areas that were originally masked in the JRC Global Water dataset.
+
+```{r my-watermask,  fig.cap="Global water mask produced with JRC’s Global Surface Water dataset and Guinea's coastal prefectures (`aoi`) in red for reference. You can add this mask to the map editor (and clip for `aoi`) using *Map.addLayer(waterMask.clip(aoi), {}, 'Water Mask')*. Areas in black (0) will be masked in the composite while areas in white (1) will remain.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/watermask.png")
+```
+
+- *__Elevation mask__*
+
+The purpose of this mask is to further remove pixels that are unlikely to be mangrove based on altitude values. Generally, mangroves will occur near shore where elevation and slope are relatively low. Similar to the water mask, we will create a mask using the SRTM Elevation Data:
+
+```{r eval=FALSE}
+var srtm = ee.Image('USGS/SRTMGL1_003');
+```
+
+Similarly to the previous dataset, select the band of interest by using `.select`. The altitude values for the SRTM dataset are stored in the elevation band `'elevation'`. Create a mask `elevMask` where pixels that have elevation values greater than 25 meters are removed. For that, you select everything that is *__lower__* than (`.lte`) 25 meters; any other value above 25 meters will be set to 0 automatically.
+
+```{r eval=FALSE}
+var elevation = srtm.select('elevation');
+var elevMask = elevation.lte(25);
+```
+
+```{r my-elevmask,  fig.cap="Global elevation (> 25 m) mask produced with the Shuttle Radar Topography Mission dataset and Guinea's coastal prefectures (`aoi`) in red for reference. You can add this mask to the map editor (and clip for `aoi`) using *Map.addLayer(elevMask.clip(aoi), {}, 'Elevation Mask')*. Areas in black (0) will be masked in the composite while areas in white (1) will remain.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/elevmask.PNG")
+```
+
+###	Landsat 8 Image Collection and Cloud-free Mosaic
+
+Similarly to the examples from [Chapter 3][Supervised classification of Landsat 8 OLI imagery], load the Landsat 8 Surface Reflectance data archive into an object `collection` by using the container `ee.ImageCollection` and the collection ID `'LANDSAT/LC08/C01/T1_SR'`. Secondly, filter this image collection for the temporal parameters by using the container `.filterDate`. Finally, map the cloud-masking and spectral indices functions to the collection:
+
+```{r eval=FALSE}
+var collection = ee.ImageCollection('LANDSAT/LC08/C01/T1_SR')
+    .filterDate(startDay, endDay)
+    .map(maskL8sr)
+    .map(addIndicesL8);
+```
+
+In an object called `composite`, reduce `collection` using the container `.median()`. Next, mask the composite using the masks `waterMask` and `elevMask` using `.mask()` for the first mask and then `.updateMask()` for the second. This container is necessary as we are *__updating__* the raster that will have been masked (by the first mask).  
+
+```{r my-updatemask,  fig.cap="Output raster from .`mask()` and `.updateMask()` of a previously masked input raster. `.updateMask()` will only mask areas that have not been masked previously; if `.mask()` is used for a second mask, areas that have been previously invisible (i.e masked) will then assume the values of the mask used.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/updateMask.png")
+```
+
+```{block, type='rmdcomment'}
+As a rule of thumb: the *first* mask applied to the raster is done by *.mask()* and then use *.updateMask()* for any subsequent masks.
+```
+
+Finally, clip the composite to our area of interest `aoi` using the container clip:
+
+```{r eval=FALSE}
+var composite = collection
+                .median()
+                .mask(waterMask) #//
+                .updateMask(elevMask)
+                .clip(aoi);
+```
+
+

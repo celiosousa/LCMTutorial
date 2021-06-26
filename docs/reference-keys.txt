@@ -29,6 +29,9 @@ fig:my-smooth1
 fig:my-smooth2
 fig:my-borders
 fig:my-mask
+fig:my-watermask
+fig:my-elevmask
+fig:my-updatemask
 introduction-and-overview
 auxiliary-functions
 cloud-and-cloud-shadow-masking
@@ -49,3 +52,4 @@ map-spatial-smoothing
 country-specific-analyses
 mangrove-mapping-in-guinea---west-africa
 masking
+landsat-8-image-collection-and-cloud-free-mosaic

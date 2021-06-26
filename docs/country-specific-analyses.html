@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa" />
 
 
-<meta name="date" content="2021-06-25" />
+<meta name="date" content="2021-06-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -134,6 +134,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html"><i class="fa fa-check"></i><b>5</b> Country-specific analyses</a><ul>
 <li class="chapter" data-level="5.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#mangrove-mapping-in-guinea---west-africa"><i class="fa fa-check"></i><b>5.1</b> Mangrove mapping in Guinea - West Africa</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#masking"><i class="fa fa-check"></i><b>5.1.1</b> Masking</a></li>
+<li class="chapter" data-level="5.1.2" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#landsat-8-image-collection-and-cloud-free-mosaic"><i class="fa fa-check"></i><b>5.1.2</b> Landsat 8 Image Collection and Cloud-free Mosaic</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -175,7 +176,7 @@ var endDay =<span class="st"> </span>(year)<span class="op">+</span><span class=
 var nationalborder =<span class="st"> </span><span class="kw">countries.filterMetadata</span>(<span class="st">&#39;name&#39;</span> , <span class="st">&#39;equals&#39;</span>, <span class="st">&#39;GUINEA&#39;</span>);</code></pre></div>
 <div class="rmdcomment">
 <p>
-Note that you can select a any country border by filtering <code>'USDOS/LSIB/2013'</code> dataset by using <code>.filterMetadata('name' , 'equals', 'NAME OF THE COUNTRY IN CAPITAL LETTERS')</code>.
+Note that you can select a any country border by filtering <em>'USDOS/LSIB/2013'</em> dataset by using <em>.filterMetadata('name' , 'equals', 'NAME OF THE COUNTRY IN CAPITAL LETTERS')</em>.
 </p>
 </div>
 <p>Alternatively, you can use any previously uploaded Guinea's boundary datasets available <a href="https://code.earthengine.google.com/16fbfeb335381c203fed98eb81712dda" target="_blank">here.</a> Select a dataset from the list, copy its Asset ID and load it with <code>ee.FeatureCollection</code> into <code>aoi</code>.</p>
@@ -240,19 +241,65 @@ var addIndicesL8 =<span class="st"> </span><span class="cf">function</span>(img)
 </ul>
 <p>The objective of this mask is to remove water pixels from the Landsat composite as we are only focusing on Mangroves. We will create a water mask using the JRC’s Global Surface Water dataset:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var globalwater =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;JRC/GSW1_0/GlobalSurfaceWater&#39;</span>);</code></pre></div>
-<p>The Global Water Dataset <code>'JRC/GSW1_0/GlobalSurfaceWater'</code> has different bands: one of them is the frequency with which water was present (<code>'occurrence'</code>). This band shows how many times (expressed as %) a given pixel was classified as water relative to the total time span of the dataset. Let’s isolate the <code>'occurrence'</code> band from the globalwater object:</p>
+<p>The Global Water Dataset <code>'JRC/GSW1_0/GlobalSurfaceWater'</code> has different bands: one of them <code>'occurrence'</code>. This band shows how many times (expressed as %) a given pixel was classified as water relative to the total time span of the dataset. Let’s isolate the <code>'occurrence'</code> band from the globalwater object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var occurence =<span class="st"> </span><span class="kw">globalwater.select</span>(<span class="st">&#39;occurrence&#39;</span>); <span class="co">#// Select the occurrence band</span></code></pre></div>
 <p>Masks are composed by zeros and non-zero values. When you set or apply a mask to an image, the output image will keep its original values where the mask has non-zero values and pixels will be masked where the mask has zeros:</p>
 <div class="figure"><span id="fig:my-mask"></span>
-<img src="images/maskexample.png" alt="Masking procedure. In this figure, the mask was applied to the raster image generating a resulting output image where pixels are visible only where the correspondent mask pixel has non-zero values." width="1164" />
+<img src="images/maskexample.png" alt="Masking procedure. In this figure, the mask was applied to the raster image generating an output image where pixels are visible only where the correspondent mask pixel has non-zero values." width="1164" />
 <p class="caption">
-Figure 5.2: Masking procedure. In this figure, the mask was applied to the raster image generating a resulting output image where pixels are visible only where the correspondent mask pixel has non-zero values.
+Figure 5.2: Masking procedure. In this figure, the mask was applied to the raster image generating an output image where pixels are visible only where the correspondent mask pixel has non-zero values.
 </p>
 </div>
-<p>For this example, we want to create a water mask. Thus, for it to be effective, the water mask has to have zero where there is water and non-zero values for non-water pixels. Consequently, when we apply this mask to a Landsat image, pixels of water will be invisible (transparent) while all the other pixels will remain visible in the composite. For the mask using the JRC Global Water Dataset, we want to make sure we are selecting permanent water. We want to filter the dataset for water pixels that occurred more than 50% of the time over the 35 years time spam for this dataset. You can be more or less restrictive by changing the 50% threshold.</p>
+<p>For this example, we want to create a water mask. Thus, the water mask has to have zeros where there is water and non-zero values for non-water pixels. Consequently, when we apply this mask to a Landsat image, pixels of water will be invisible (transparent) while all the other pixels will remain visible in the composite. For the mask using the JRC Global Water dataset, make sure you are selecting &quot;permanent&quot; water. One way of doing this is by filtering the dataset for water pixels that occurred more than 50% of the time over the 35 years time spam for this dataset. You can be more or less restrictive with the water extent by changing the 50% threshold.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var waterMask =<span class="st"> </span><span class="kw">occurrence.lt</span>(<span class="dv">50</span>)     <span class="co">#// Selects lower than 50% </span>
-                          <span class="kw">.unmask</span>(<span class="dv">1</span>); <span class="co">#// set other areas to 1</span></code></pre></div>
+                          <span class="kw">.unmask</span>(<span class="dv">1</span>); <span class="co">#// unmkask all other areas and set the values to 1</span></code></pre></div>
 <p>Note that <code>.lt(50)</code> was used to select pixels from <code>occurrence</code> that are smaller than 50%. Automatically, the values above 50% will be set to 0 which is what is needed for this mask. In this particular case, we use .unmask(1) to set to 1(or unmask) all the other areas that were originally masked in the JRC Global Water dataset.</p>
+<div class="figure"><span id="fig:my-watermask"></span>
+<img src="images/watermask.png" alt="Global water mask produced with JRC’s Global Surface Water dataset and Guinea's coastal prefectures (`aoi`) in red for reference. You can add this mask to the map editor (and clip for `aoi`) using *Map.addLayer(waterMask.clip(aoi), {}, 'Water Mask')*. Areas in black (0) will be masked in the composite while areas in white (1) will remain." width="1033" />
+<p class="caption">
+Figure 5.3: Global water mask produced with JRC’s Global Surface Water dataset and Guinea's coastal prefectures (<code>aoi</code>) in red for reference. You can add this mask to the map editor (and clip for <code>aoi</code>) using <em>Map.addLayer(waterMask.clip(aoi), {}, 'Water Mask')</em>. Areas in black (0) will be masked in the composite while areas in white (1) will remain.
+</p>
+</div>
+<ul>
+<li><em><strong>Elevation mask</strong></em></li>
+</ul>
+<p>The purpose of this mask is to further remove pixels that are unlikely to be mangrove based on altitude values. Generally, mangroves will occur near shore where elevation and slope are relatively low. Similar to the water mask, we will create a mask using the SRTM Elevation Data:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var srtm =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;USGS/SRTMGL1_003&#39;</span>);</code></pre></div>
+<p>Similarly to the previous dataset, select the band of interest by using <code>.select</code>. The altitude values for the SRTM dataset are stored in the elevation band <code>'elevation'</code>. Create a mask <code>elevMask</code> where pixels that have elevation values greater than 25 meters are removed. For that, you select everything that is <em><strong>lower</strong></em> than (<code>.lte</code>) 25 meters; any other value above 25 meters will be set to 0 automatically.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var elevation =<span class="st"> </span><span class="kw">srtm.select</span>(<span class="st">&#39;elevation&#39;</span>);
+var elevMask =<span class="st"> </span><span class="kw">elevation.lte</span>(<span class="dv">25</span>);</code></pre></div>
+<div class="figure"><span id="fig:my-elevmask"></span>
+<img src="images/elevmask.PNG" alt="Global elevation (&gt; 25 m) mask produced with the Shuttle Radar Topography Mission dataset and Guinea's coastal prefectures (`aoi`) in red for reference. You can add this mask to the map editor (and clip for `aoi`) using *Map.addLayer(elevMask.clip(aoi), {}, 'Elevation Mask')*. Areas in black (0) will be masked in the composite while areas in white (1) will remain." width="1056" />
+<p class="caption">
+Figure 5.4: Global elevation (&gt; 25 m) mask produced with the Shuttle Radar Topography Mission dataset and Guinea's coastal prefectures (<code>aoi</code>) in red for reference. You can add this mask to the map editor (and clip for <code>aoi</code>) using <em>Map.addLayer(elevMask.clip(aoi), {}, 'Elevation Mask')</em>. Areas in black (0) will be masked in the composite while areas in white (1) will remain.
+</p>
+</div>
+</div>
+<div id="landsat-8-image-collection-and-cloud-free-mosaic" class="section level3">
+<h3><span class="header-section-number">5.1.2</span> Landsat 8 Image Collection and Cloud-free Mosaic</h3>
+<p>Similarly to the examples from <a href="supervised-classification-of-landsat-8-oli-imagery.html#supervised-classification-of-landsat-8-oli-imagery">Chapter 3</a>, load the Landsat 8 Surface Reflectance data archive into an object <code>collection</code> by using the container <code>ee.ImageCollection</code> and the collection ID <code>'LANDSAT/LC08/C01/T1_SR'</code>. Secondly, filter this image collection for the temporal parameters by using the container <code>.filterDate</code>. Finally, map the cloud-masking and spectral indices functions to the collection:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var collection =<span class="st"> </span><span class="kw">ee.ImageCollection</span>(<span class="st">&#39;LANDSAT/LC08/C01/T1_SR&#39;</span>)
+    <span class="kw">.filterDate</span>(startDay, endDay)
+    <span class="kw">.map</span>(maskL8sr)
+    <span class="kw">.map</span>(addIndicesL8);</code></pre></div>
+<p>In an object called <code>composite</code>, reduce <code>collection</code> using the container <code>.median()</code>. Next, mask the composite using the masks <code>waterMask</code> and <code>elevMask</code> using <code>.mask()</code> for the first mask and then <code>.updateMask()</code> for the second. This container is necessary as we are <em><strong>updating</strong></em> the raster that will have been masked (by the first mask).</p>
+<div class="figure"><span id="fig:my-updatemask"></span>
+<img src="images/updatemask.png" alt="Output raster from .`mask()` and `.updateMask()` of a previously masked input raster. `.updateMask()` will only mask areas that have not been masked previously; if `.mask()` is used for a second mask, areas that have been previously invisible (i.e masked) will then assume the values of the mask used." width="1164" />
+<p class="caption">
+Figure 5.5: Output raster from .<code>mask()</code> and <code>.updateMask()</code> of a previously masked input raster. <code>.updateMask()</code> will only mask areas that have not been masked previously; if <code>.mask()</code> is used for a second mask, areas that have been previously invisible (i.e masked) will then assume the values of the mask used.
+</p>
+</div>
+<div class="rmdcomment">
+<p>
+As a rule of thumb: the <em>first</em> mask applied to the raster is done by <code>.mask()</code> and then use <code>.updateMask()</code> for any subsequent masks.
+</p>
+</div>
+<p>Finally, clip the composite to our area of interest <code>aoi</code> using the container clip:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var composite =<span class="st"> </span>collection
+                <span class="kw">.median</span>()
+                <span class="kw">.mask</span>(waterMask) <span class="co">#//</span>
+                <span class="kw">.updateMask</span>(elevMask)
+                <span class="kw">.clip</span>(aoi);</code></pre></div>
 
 </div>
 </div>
