@@ -32,6 +32,7 @@ fig:my-mask
 fig:my-watermask
 fig:my-elevmask
 fig:my-updatemask
+fig:my-strata
 introduction-and-overview
 auxiliary-functions
 cloud-and-cloud-shadow-masking
@@ -53,3 +54,4 @@ country-specific-analyses
 mangrove-mapping-in-guinea---west-africa
 masking
 landsat-8-image-collection-and-cloud-free-mosaic
+supervised-classification-with-random-forest-1

@@ -32,6 +32,7 @@ knitr::include_graphics("images/CairoGEOM1.png")
 ```
 
 Now, let's create an object `var aoi` that will contain the geometry `AreaOfInterest`:
+
 ```{r eval=FALSE}
 var aoi = AreaOfInterest;
 ```

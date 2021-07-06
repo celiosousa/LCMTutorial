@@ -173,9 +173,111 @@ Finally, clip the composite to our area of interest `aoi` using the container cl
 ```{r eval=FALSE}
 var composite = collection
                 .median()
-                .mask(waterMask) #//
-                .updateMask(elevMask)
+                .mask(waterMask) #// mask the composite
+                .updateMask(elevMask) #// update the mask
                 .clip(aoi);
 ```
 
+```{r my-indent, echo=FALSE, message=FALSE}
+knitr::include_graphics("images/indent.PNG")
+```
 
+### Supervised Classification with Random Forest
+
+- *__Strata for Sample Selection__*
+
+As shown in the previous examples, the first step to perform a supervised classification is to select the training samples. One way of selecting the training samples for the Random Forest classifier was shown in the training sample selection section of [chapter 3][Supervised classification of Landsat 8 OLI imagery]. Alternatively, you can automatically select random points based on a stratification map using `.stratifiedSample`. In this case, the stratification map will have two classes: Mangroves and Non-mangroves.
+You can create a mangrove stratum for sample selection using available mangrove datasets, such as:
+
+- Global Mangrove Forest Distribution dataset (raster) for the year 2000, available through Google Earth Engine (`ee.ImageCollection('LANDSAT/MANGROVE_FORESTS')`), or;
+- The latest global Mangrove Extent from the [Global Mangrove Watch](https://www.globalmangrovewatch.org/country/GIN?map=eyJiYXNlbWFwIjoibGlnaHQiLCJ2aWV3cG9ydCI6eyJsYXRpdHVkZSI6OS45NDcyMTU4OTUwNDI0NzIsImxvbmdpdHVkZSI6LTE1Ljk0Njk3MjgyMzgwNzMzOCwiem9vbSI6Ni4xMzk0MjcyMjU1NDAzMjcsImJlYXJpbmciOjAsInBpdGNoIjowfX0%3D){target="_blank"}, available for download [here.](https://data.unep-wcmc.org/datasets/45){target="_blank"}
+- Or any other dataset that you may have available;
+
+a) *Mangroves*: For this example, we will use the GMW Global mangrove extent dataset that was previously downloaded and added as an asset to Google Earth Engine. First, load the mangrove extent shapefile into a object `dataset`:
+
+```{r eval=FALSE}
+var dataset = ee.FeatureCollection('users/celiohelder/Guinea/Mangroves2016');
+```
+
+To create the mangrove stratification class, simply create an image with `ee.Image(1)` and clip it using `dataset`:
+
+```{r eval = FALSE}
+var mangrove = ee.Image(1).clip(dataset);
+```
+
+b) *Non-mangroves*: Using `.where`, create an image of zeros where two (2) will be added where there is a pixel from the `composite`:
+
+```{r eval = FALSE}
+var nonmangrove = ee.Image(0).where(composite.select('B1'),2).selfMask() 
+#// use selfMask() to eliminate mask itselt and eliminate the zeros
+```
+
+Finally, to create `strata`, set this image's pixels to 1 where there is pixels of the mangrove stratum and use `.rename` to rename it to `'landcover`.
+
+```{r eval = FALSE}
+var strata = nonmangrove.where(mangrove,1).rename('landcover');
+```
+
+The object `strata` is an image with one band called `'landcover'`. It is good practice to rename this band to something easy to remember because `.stratifiedSample` requires the image and the band name with which the samples will be stratified.
+
+Add `strata` to the map editor to visualize:
+
+```{r eval = FALSE}
+Map.addLayer (strata, {palette:['#B3E283','#E8E46E'], min:1, max:2}, 'Strata')
+```
+
+```{r my-strata,  fig.cap="Stratification map `strata` showing GMW's 2016 Mangrove extent (`landcover:1`) and non-mangrove areas (`landcover:2`). The `.stratifiedSample` function generates a set of random points to each of these classes.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/strata.png")
+```
+
+- *__Random training sample selection__*
+
+Now that you have the stratification map `strata` for mangroves and all other areas, use `.stratifiedSample` function below to select 1000 points (`classPoints`) for each of the two classes (`classValues`):
+
+```{r eval = FALSE}
+var stratified = strata.addBands(ee.Image.pixelLonLat()).stratifiedSample({
+      numPoints: 1,
+      classBand: 'landcover',
+      scale: 30,
+      region: coastalprefectures,
+      classValues:[1,2],       #// The classes from strata that points will be selected from
+      classPoints:[1000,1000]  #// number of points per class. 
+    }).map(function(f) {       #// set these points to geometry and get their coordinates
+       return f.setGeometry(ee.Geometry.Point([f.get('longitude'), f.get('latitude')]))
+    });
+```
+
+The function above includes:
+
+a) `.addBands(ee.Image.pixelLonLat())` to add a band to `strata` that will have the latitude and longitude for each pixel;
+b) `numPoints` is the default number of points to sample in each class in `strata`. If `numPoints` is set to 2000, 1000 points will be selected for each of the two classes in `strata`. This, however, can be overridden for specific classes using the `classValues` and `classPoints` properties. In this case, these properties allow which classes you want to use from your stratification map and how many points for each of these classes you want to select.
+c) `classBand: 'landcover'` to define the band from `strata` that will be used to select the random samples;
+d) `scale` sets the scale to 30 meters to match Landsat nominal spatial resolution;
+e) The rest of the function will set these points to geometry and get their lat/long coordinates.
+
+You can use the function below to colorize these point samples based on a color palette for visualization. First, the color pallete for this particular case will be slightly different that the color palettes that have been used throught this tutorial so far: it will be created as a `ee.List` of colors including a null color:
+
+```{r eval = FALSE}
+var paletteSamples = ee.List([
+  'FFFFFF',  #// NULL
+  '01937C',  #// Mangrove
+  'B6C867',  #// Non-Mangrove
+ ]);
+```
+
+Then, `features` will include the colorized version of `stratified` based on the function:
+
+```{r eval = FALSE}
+var features = stratified.map(function(f) {
+  var landcover = f.get('landcover');
+  return ee.Feature(ee.Geometry.Point([f.get('longitude'), f.get('latitude')]), f.toDictionary()).set({style: {color: paletteSamples.get(landcover) }}); 
+});
+```
+
+Add `features` to the map editor using `Map.addLayer` and `.style` following the formula below:
+
+```{r eval = FALSE}
+Map.addLayer(features.style({styleProperty: "style"}),{}, 'Samples/Location');
+```
+
+Remember, these steps are not necessary to the classification workflow. However, it allows you to visualize the selected samples with a color palette of your choice.

@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa" />
 
 
-<meta name="date" content="2021-06-26" />
+<meta name="date" content="2021-06-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -135,6 +135,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#mangrove-mapping-in-guinea---west-africa"><i class="fa fa-check"></i><b>5.1</b> Mangrove mapping in Guinea - West Africa</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#masking"><i class="fa fa-check"></i><b>5.1.1</b> Masking</a></li>
 <li class="chapter" data-level="5.1.2" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#landsat-8-image-collection-and-cloud-free-mosaic"><i class="fa fa-check"></i><b>5.1.2</b> Landsat 8 Image Collection and Cloud-free Mosaic</a></li>
+<li class="chapter" data-level="5.1.3" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#supervised-classification-with-random-forest-1"><i class="fa fa-check"></i><b>5.1.3</b> Supervised Classification with Random Forest</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -291,15 +292,72 @@ Figure 5.5: Output raster from .<code>mask()</code> and <code>.updateMask()</cod
 </div>
 <div class="rmdcomment">
 <p>
-As a rule of thumb: the <em>first</em> mask applied to the raster is done by <code>.mask()</code> and then use <code>.updateMask()</code> for any subsequent masks.
+As a rule of thumb: the <em>first</em> mask applied to the raster is done by <em>.mask()</em> and then use <em>.updateMask()</em> for any subsequent masks.
 </p>
 </div>
 <p>Finally, clip the composite to our area of interest <code>aoi</code> using the container clip:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var composite =<span class="st"> </span>collection
                 <span class="kw">.median</span>()
-                <span class="kw">.mask</span>(waterMask) <span class="co">#//</span>
-                <span class="kw">.updateMask</span>(elevMask)
+                <span class="kw">.mask</span>(waterMask) <span class="co">#// mask the composite</span>
+                <span class="kw">.updateMask</span>(elevMask) <span class="co">#// update the mask</span>
                 <span class="kw">.clip</span>(aoi);</code></pre></div>
+<p><img src="images/indent.PNG" width="1696" /></p>
+</div>
+<div id="supervised-classification-with-random-forest-1" class="section level3">
+<h3><span class="header-section-number">5.1.3</span> Supervised Classification with Random Forest</h3>
+<ul>
+<li><em><strong>Strata for Sample Selection</strong></em></li>
+</ul>
+<p>As shown in the previous examples, the first step to perform a supervised classification is to select the training samples. One way of selecting the training samples for the Random Forest classifier was shown in the training sample selection section of <a href="supervised-classification-of-landsat-8-oli-imagery.html#supervised-classification-of-landsat-8-oli-imagery">chapter 3</a>. Alternatively, you can automatically select random points based on a stratification map using <code>.stratifiedSample</code>. In this case, the stratification map will have two classes: Mangroves and Non-mangroves. You can create a mangrove stratum for sample selection using available mangrove datasets, such as:</p>
+<ul>
+<li>Global Mangrove Forest Distribution dataset (raster) for the year 2000, available through Google Earth Engine (<code>ee.ImageCollection('LANDSAT/MANGROVE_FORESTS')</code>), or;</li>
+<li>The latest global Mangrove Extent from the <a href="https://www.globalmangrovewatch.org/country/GIN?map=eyJiYXNlbWFwIjoibGlnaHQiLCJ2aWV3cG9ydCI6eyJsYXRpdHVkZSI6OS45NDcyMTU4OTUwNDI0NzIsImxvbmdpdHVkZSI6LTE1Ljk0Njk3MjgyMzgwNzMzOCwiem9vbSI6Ni4xMzk0MjcyMjU1NDAzMjcsImJlYXJpbmciOjAsInBpdGNoIjowfX0%3D" target="_blank">Global Mangrove Watch</a>, available for download <a href="https://data.unep-wcmc.org/datasets/45" target="_blank">here.</a></li>
+<li>Or any other dataset that you may have available;</li>
+</ul>
+<ol style="list-style-type: lower-alpha">
+<li><em>Mangroves</em>: For this example, we will use the GMW Global mangrove extent dataset that was previously downloaded and added as an asset to Google Earth Engine. First, load the mangrove extent shapefile into a object <code>dataset</code>:</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var dataset =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/celiohelder/Guinea/Mangroves2016&#39;</span>);</code></pre></div>
+<p>To create the mangrove stratification class, simply create an image with <code>ee.Image(1)</code> and clip it using <code>dataset</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var mangrove =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>)<span class="kw">.clip</span>(dataset);</code></pre></div>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><em>Non-mangroves</em>: Using <code>.where</code>, create an image of zeros where two (2) will be added where there is a pixel from the <code>composite</code>:</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var nonmangrove =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">0</span>)<span class="kw">.where</span>(<span class="kw">composite.select</span>(<span class="st">&#39;B1&#39;</span>),<span class="dv">2</span>)<span class="kw">.selfMask</span>() 
+<span class="co">#// use selfMask() to eliminate mask itselt and eliminate the zeros</span></code></pre></div>
+<p>Finally, to create <code>strata</code>, set this image's pixels to 1 where there is pixels of the mangrove stratum and use <code>.rename</code> to rename it to <code>'landcover</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var strata =<span class="st"> </span><span class="kw">nonmangrove.where</span>(mangrove,<span class="dv">1</span>)<span class="kw">.rename</span>(<span class="st">&#39;landcover&#39;</span>);</code></pre></div>
+<p>The object <code>strata</code> is an image with one band called <code>'landcover'</code>. It is good practice to rename this band to something easy to remember because <code>.stratifiedSample</code> requires the image and the band name with which the samples will be stratified.</p>
+<p>Add <code>strata</code> to the map editor to visualize:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span> (strata, {palette<span class="op">:</span>[<span class="st">&#39;#B3E283&#39;</span>,<span class="st">&#39;#E8E46E&#39;</span>], min<span class="op">:</span><span class="dv">1</span>, max<span class="op">:</span><span class="dv">2</span>}, <span class="st">&#39;Strata&#39;</span>)</code></pre></div>
+<div class="figure"><span id="fig:my-strata"></span>
+<img src="images/strata.png" alt="Stratification map `strata` showing GMW's 2016 Mangrove extent (`landcover:1`) and non-mangrove areas (`landcover:2`). The `.stratifiedSample` function generates a set of random points to each of these classes." width="886" />
+<p class="caption">
+Figure 5.6: Stratification map <code>strata</code> showing GMW's 2016 Mangrove extent (<code>landcover:1</code>) and non-mangrove areas (<code>landcover:2</code>). The <code>.stratifiedSample</code> function generates a set of random points to each of these classes.
+</p>
+</div>
+<ul>
+<li><em><strong>Random training sample selection</strong></em></li>
+</ul>
+<p>Now that you have the stratification map <code>strata</code> for mangroves and all other areas, use <code>.stratifiedSample</code> function below to select 1000 points (<code>classPoints</code>) for each of the two classes (<code>classValues</code>):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var stratified =<span class="st"> </span><span class="kw">strata.addBands</span>(<span class="kw">ee.Image.pixelLonLat</span>())<span class="kw">.stratifiedSample</span>({
+      numPoints<span class="op">:</span><span class="st"> </span><span class="dv">1</span>,
+      classBand<span class="op">:</span><span class="st"> &#39;landcover&#39;</span>,
+      scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>,
+      region<span class="op">:</span><span class="st"> </span>coastalprefectures,
+      classValues<span class="op">:</span>[<span class="dv">1</span>,<span class="dv">2</span>],       <span class="co">#// The classes from strata that points will be selected from</span>
+      classPoints<span class="op">:</span>[<span class="dv">1000</span>,<span class="dv">1000</span>]  <span class="co">#// number of points per class. </span>
+    })<span class="kw">.map</span>(<span class="cf">function</span>(f) {       <span class="co">#// set these points to geometry and get their coordinates</span>
+       return <span class="kw">f.setGeometry</span>(<span class="kw">ee.Geometry.Point</span>([<span class="kw">f.get</span>(<span class="st">&#39;longitude&#39;</span>), <span class="kw">f.get</span>(<span class="st">&#39;latitude&#39;</span>)]))
+    });</code></pre></div>
+<p>The function above includes:</p>
+<ol style="list-style-type: lower-alpha">
+<li><code>.addBands(ee.Image.pixelLonLat())</code> to add a band to <code>strata</code> that will have the latitude and longitude for each pixel;</li>
+<li><code>numPoints</code> is the default number of points to sample in each class in <code>strata</code>. If <code>numPoints</code> is set to 2000, 1000 points will be selected for each of the two classes in <code>strata</code>. This, however, can be overridden for specific classes using the <code>classValues</code> and <code>classPoints</code> properties. In this case, these properties allow which classes you want to use from your stratification map and how many points for each of these classes you want to select.</li>
+<li><code>classBand: 'landcover'</code> to define the band from <code>strata</code> that will be used to select the random samples;</li>
+<li><code>scale</code> sets the scale to 30 meters to match Landsat nominal spatial resolution;</li>
+<li>The rest of the function will set these points to geometry and get their lat/long coordinates.</li>
+</ol>
 
 </div>
 </div>
