@@ -195,7 +195,7 @@ Then, re-aply the `.focal_median` filter with `.reproject(projection.atScale(sca
 var Cairo30 = Cairo2020.focal_median(1,'square', 'pixels')
                        .reproject(prj.atScale(scale));
                        
-var Cairo60 = Cairo2020.focal_median(30,'square', 'meters');
+var Cairo60 = Cairo2020.focal_median(30,'square', 'meters')
                        .reproject(prj.atScale(scale));
 ```
 

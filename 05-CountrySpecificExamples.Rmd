@@ -281,3 +281,7 @@ Map.addLayer(features.style({styleProperty: "style"}),{}, 'Samples/Location');
 ```
 
 Remember, these steps are not necessary to the classification workflow. However, it allows you to visualize the selected samples with a color palette of your choice.
+
+```{r my-stratatification,  fig.cap="Stratified random samples. The `.stratifiedSample` function generates a set of random points to each of these strata.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/StratifiedSampleGuinea.PNG")
+```

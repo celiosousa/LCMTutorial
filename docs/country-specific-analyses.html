@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa" />
 
 
-<meta name="date" content="2021-06-28" />
+<meta name="date" content="2021-10-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -358,6 +358,20 @@ Figure 5.6: Stratification map <code>strata</code> showing GMW's 2016 Mangrove e
 <li><code>scale</code> sets the scale to 30 meters to match Landsat nominal spatial resolution;</li>
 <li>The rest of the function will set these points to geometry and get their lat/long coordinates.</li>
 </ol>
+<p>You can use the function below to colorize these point samples based on a color palette for visualization. First, the color pallete for this particular case will be slightly different that the color palettes that have been used throught this tutorial so far: it will be created as a <code>ee.List</code> of colors including a null color:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var paletteSamples =<span class="st"> </span><span class="kw">ee.List</span>([
+  <span class="st">&#39;FFFFFF&#39;</span>,  <span class="co">#// NULL</span>
+  <span class="st">&#39;01937C&#39;</span>,  <span class="co">#// Mangrove</span>
+  <span class="st">&#39;B6C867&#39;</span>,  <span class="co">#// Non-Mangrove</span>
+ ]);</code></pre></div>
+<p>Then, <code>features</code> will include the colorized version of <code>stratified</code> based on the function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var features =<span class="st"> </span><span class="kw">stratified.map</span>(<span class="cf">function</span>(f) {
+  var landcover =<span class="st"> </span><span class="kw">f.get</span>(<span class="st">&#39;landcover&#39;</span>);
+  return <span class="kw">ee.Feature</span>(<span class="kw">ee.Geometry.Point</span>([<span class="kw">f.get</span>(<span class="st">&#39;longitude&#39;</span>), <span class="kw">f.get</span>(<span class="st">&#39;latitude&#39;</span>)]), <span class="kw">f.toDictionary</span>())<span class="kw">.set</span>({style<span class="op">:</span><span class="st"> </span>{color<span class="op">:</span><span class="st"> </span><span class="kw">paletteSamples.get</span>(landcover) }}); 
+});</code></pre></div>
+<p>Add <code>features</code> to the map editor using <code>Map.addLayer</code> and <code>.style</code> following the formula below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(<span class="kw">features.style</span>({styleProperty<span class="op">:</span><span class="st"> &quot;style&quot;</span>}),{}, <span class="st">&#39;Samples/Location&#39;</span>);</code></pre></div>
+<p>Remember, these steps are not necessary to the classification workflow. However, it allows you to visualize the selected samples with a color palette of your choice.</p>
 
 </div>
 </div>

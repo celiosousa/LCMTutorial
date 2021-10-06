@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa" />
 
 
-<meta name="date" content="2021-06-28" />
+<meta name="date" content="2021-10-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -324,7 +324,7 @@ var scale =<span class="st"> </span><span class="kw">prj.nominalScale</span>();<
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var Cairo30 =<span class="st"> </span><span class="kw">Cairo2020.focal_median</span>(<span class="dv">1</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;pixels&#39;</span>)
                        <span class="kw">.reproject</span>(<span class="kw">prj.atScale</span>(scale));
                        
-var Cairo60 =<span class="st"> </span><span class="kw">Cairo2020.focal_median</span>(<span class="dv">30</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;meters&#39;</span>);
+var Cairo60 =<span class="st"> </span><span class="kw">Cairo2020.focal_median</span>(<span class="dv">30</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;meters&#39;</span>)
                        <span class="kw">.reproject</span>(<span class="kw">prj.atScale</span>(scale));</code></pre></div>
 <div class="figure"><span id="fig:my-smooth2"></span>
 <img src="images/cairosmooth2.png" alt="`Cairo2020` processed with `.focal_median` spatial filter with 3x3 and 5x5 pixels square kernels. Note that the function was reprojected to match `Cairo2020`'s projection and scale" width="1234" />
