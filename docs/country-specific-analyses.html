@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa" />
 
 
-<meta name="date" content="2021-10-06" />
+<meta name="date" content="2021-10-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -372,6 +372,25 @@ Figure 5.6: Stratification map <code>strata</code> showing GMW's 2016 Mangrove e
 <p>Add <code>features</code> to the map editor using <code>Map.addLayer</code> and <code>.style</code> following the formula below:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(<span class="kw">features.style</span>({styleProperty<span class="op">:</span><span class="st"> &quot;style&quot;</span>}),{}, <span class="st">&#39;Samples/Location&#39;</span>);</code></pre></div>
 <p>Remember, these steps are not necessary to the classification workflow. However, it allows you to visualize the selected samples with a color palette of your choice.</p>
+<div class="figure"><span id="fig:my-stratatification"></span>
+<img src="images/StratifiedSampleGuinea.PNG" alt="Stratified random samples. The `.stratifiedSample` function generates a set of random points to each of these strata." width="859" />
+<p class="caption">
+Figure 5.7: Stratified random samples. The <code>.stratifiedSample</code> function generates a set of random points to each of these strata.
+</p>
+</div>
+<ul>
+<li><em><strong>Classification</strong></em></li>
+</ul>
+<p>In this example, we will create two mangrove extent maps using two sets of samples: <code>samplesAutomatic</code>, which will include the points automatically created with <code>stratified</code> and <code>samplesManual</code>. To create <code>manualpoints</code>, use the same geometry drawing process described in <a href="country-specific-analyses.html#supervised-classification-with-random-forest-1">Chapter 3</a>. Draw the geometries <code>MangroveTraining</code> and <code>NonMangroveTraining</code> and use <code>.merge</code> to create <code>manualpoints</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var manualpoints =<span class="st"> </span><span class="kw">MangroveTraining.merge</span>(NonMangroveTraining);</code></pre></div>
+<p>As seen in previous chapters, we first select the predictors to assign to each sample point in the sample set. For this example, let’s create an object <code>var bands</code> with three spectral bands (<code>'B5'</code>,<code>'B6'</code>,<code>'B7'</code>) and four spectral indices (<code>'NDVI'</code>,<code>'MNDWI'</code>,<code>'SR'</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var bands =<span class="st"> </span>[<span class="st">&#39;B5&#39;</span>,<span class="st">&#39;B6&#39;</span>,<span class="st">&#39;B7&#39;</span>,<span class="st">&#39;NDVI&#39;</span>,<span class="st">&#39;MNDWI&#39;</span>,<span class="st">&#39;SR&#39;</span>];</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var samplesAutomatic =<span class="st"> </span><span class="kw">composite.select</span>(bands)<span class="kw">.sampleRegions</span>({
+  collection<span class="op">:</span><span class="st"> </span>stratified,
+  properties<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;landcover&#39;</span>],
+  scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>,
+  geometries<span class="op">:</span><span class="st"> </span>true,
+});</code></pre></div>
 
 </div>
 </div>

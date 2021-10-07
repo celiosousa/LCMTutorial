@@ -33,6 +33,7 @@ fig:my-watermask
 fig:my-elevmask
 fig:my-updatemask
 fig:my-strata
+fig:my-stratatification
 introduction-and-overview
 auxiliary-functions
 cloud-and-cloud-shadow-masking

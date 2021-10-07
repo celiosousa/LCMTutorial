@@ -285,3 +285,52 @@ Remember, these steps are not necessary to the classification workflow. However,
 ```{r my-stratatification,  fig.cap="Stratified random samples. The `.stratifiedSample` function generates a set of random points to each of these strata.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/StratifiedSampleGuinea.PNG")
 ```
+
+- *__Classification__*
+
+As seen in previous chapters, we first select the predictors to assign to each sample point in the sample set. For this example, let’s create an object `var bands` with three spectral bands (`'B5'`,`'B6'`,`'B7'`) and four spectral indices (`'NDVI'`,`'MNDWI'`,`'SR'`).
+
+```{r eval=FALSE}
+var bands = ['B5','B6','B7','NDVI','MNDWI','SR'];
+```
+
+In this example, we will create two mangrove extent maps using two sets of samples: `samplesAutomatic`, which will include the points automatically created with `stratified` and `samplesManual`. To create `manualpoints`, use the same geometry drawing process described in [chapter 3][Supervised classification of Landsat 8 OLI imagery]. Draw the geometries `MangroveTraining` and `NonMangroveTraining` and use `.merge` to create `manualpoints`.
+
+```{r eval=FALSE}
+var manualpoints = MangroveTraining.merge(NonMangroveTraining);
+```
+
+Create the `samplesAutomatic` and `samplesManual` training sets by overlaying `stratified` and `manualpoints` with the Landsat composite to extract the `bands` predictors using the functions below:
+
+```{r eval=FALSE}
+var samplesAutomatic = composite.select(bands).sampleRegions({
+  collection: stratified,   // Automatically created sample points
+  properties: ['landcover'],
+  scale: 30,
+  geometries: true,
+});
+```
+
+```{r eval=FALSE}
+var samplesManual = composite.select(bands).sampleRegions({
+  collection: manualpoints,       // Manually selected geometries
+  properties: ['landcover'], 
+  scale: 30,
+  geometries: true,
+});
+```
+
+A third sample set (`groundtruth`) will be used to illusrate a validation process for both mangrove extent maps. First, load a pre-selected set of samples using `ee.FeatureCollection` then create `samplesgroundtruth` similarly to the previous two set of samples:
+
+```{r eval=FALSE}
+var groundtruth = ee.FeatureCollection('users/celiohelder/TutorialAssets/GroundTruth');
+```
+
+```{r eval=FALSE}
+var samplesgroundtruth = composite.select(bands).sampleRegions({
+  collection: groundtruth,       // Set of geometries selected in 4.1
+  properties: ['landcover'], // Label from each geometry
+  scale: 30,
+  geometries: true,
+});
+```
