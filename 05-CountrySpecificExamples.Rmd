@@ -328,9 +328,77 @@ var groundtruth = ee.FeatureCollection('users/celiohelder/TutorialAssets/GroundT
 
 ```{r eval=FALSE}
 var samplesgroundtruth = composite.select(bands).sampleRegions({
-  collection: groundtruth,       // Set of geometries selected in 4.1
-  properties: ['landcover'], // Label from each geometry
+  collection: groundtruth,       // Set of geometries pre-selected
+  properties: ['landcover'],
   scale: 30,
   geometries: true,
 });
+```
+
+Next, train two Random Forest classifiers using both `samplesAutomatic` and `samplesManual` training samples. In this example, we will use 200 trees and 5 predictors tested at each tree node:
+
+```{r eval=FALSE}
+var RandomForest1 = ee.Classifier.smileRandomForest(200,5).train({
+  features: samplesAutomatic, 
+  classProperty: 'landcover', 
+  inputProperties: bands
+});
+
+var RandomForest2 = ee.Classifier.smileRandomForest(200,5).train({
+  features: samplesManual, 
+  classProperty: 'landcover', 
+  inputProperties: bands
+});
+```
+
+Finally, classify the `composite` into two mangrove extent maps using the trained classifiers and add the outputs to the map editor using a color palette of your choice:
+
+```{r eval=FALSE}
+// Classify the Landsat 8 Composite using the two classifiers to produce 2 land cover maps
+
+var classifiedrf1 = composite.select(bands)           // select the predictors
+                            .classify(RandomForest1); // apply the Random Forest trained with the automatically selected samples
+
+var classifiedrf2 = composite.select(bands)           // select the predictors
+                            .classify(RandomForest2); // apply the Random Forest classifier trained with mannually selected samples
+
+// Color palette for the classification outputs
+var paletteMAP = [
+  '01937C', // Mangrove
+  'B6C867', // Non-Mangrove
+];
+
+// Add the classifications to the map editor
+Map.addLayer (classifiedrf1, {min: 1, max: 2, palette:paletteMAP}, 'Classification Automatic Samples');
+Map.addLayer (classifiedrf2, {min: 1, max: 2, palette:paletteMAP}, 'Classification Manual Samples');
+```
+
+```{r my-classficationmangrove,  fig.cap="Random forest classification outputs. Each map was produced using two different set of samples.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/classoutput.png")
+```
+
+- *__Validation__*
+
+For the validation of the two mangrove extent maps we will use `.classify` and `.errorMatrix`. `.classify` will classify the ground truth samples with the trained random forest classifiers 1 and 2; `.errorMatrix` will compare the result of this classification with their own class label: 
+
+```{r eval=FALSE}
+var validation1 = samplesgroundtruth.classify(RandomForest1);
+var validation2 = samplesgroundtruth.classify(RandomForest2);
+var testAccuracy1 = validation1.errorMatrix('landcover', 'classification');
+var testAccuracy2 = validation2.errorMatrix('landcover', 'classification');
+```
+
+You can print the error matrices along with the overall accuracy and Kappa values to the console using `.accuracy()` and `kappa()`:
+
+```{r eval=FALSE}
+print('Overall Accuracy Map 1: ', testAccuracy1.accuracy());
+print('Overall Accuracy Map 2: ', testAccuracy2.accuracy());
+print('Kappa: ', testAccuracy1.kappa());
+print('Kappa: ', testAccuracy2.kappa());
+print('Validation error matrix Map1: ', testAccuracy1);
+print('Validation error matrix Map2: ', testAccuracy2);
+```
+
+```{r my-results,  fig.cap="Validation results for this example. Ground truth data (in this context it refers to independent samples) were used to calculate the overall accuracy and kappa values.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/ResultsGuinea.png")
 ```

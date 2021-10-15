@@ -381,16 +381,88 @@ Figure 5.7: Stratified random samples. The <code>.stratifiedSample</code> functi
 <ul>
 <li><em><strong>Classification</strong></em></li>
 </ul>
-<p>In this example, we will create two mangrove extent maps using two sets of samples: <code>samplesAutomatic</code>, which will include the points automatically created with <code>stratified</code> and <code>samplesManual</code>. To create <code>manualpoints</code>, use the same geometry drawing process described in <a href="country-specific-analyses.html#supervised-classification-with-random-forest-1">Chapter 3</a>. Draw the geometries <code>MangroveTraining</code> and <code>NonMangroveTraining</code> and use <code>.merge</code> to create <code>manualpoints</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var manualpoints =<span class="st"> </span><span class="kw">MangroveTraining.merge</span>(NonMangroveTraining);</code></pre></div>
 <p>As seen in previous chapters, we first select the predictors to assign to each sample point in the sample set. For this example, let’s create an object <code>var bands</code> with three spectral bands (<code>'B5'</code>,<code>'B6'</code>,<code>'B7'</code>) and four spectral indices (<code>'NDVI'</code>,<code>'MNDWI'</code>,<code>'SR'</code>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var bands =<span class="st"> </span>[<span class="st">&#39;B5&#39;</span>,<span class="st">&#39;B6&#39;</span>,<span class="st">&#39;B7&#39;</span>,<span class="st">&#39;NDVI&#39;</span>,<span class="st">&#39;MNDWI&#39;</span>,<span class="st">&#39;SR&#39;</span>];</code></pre></div>
+<p>In this example, we will create two mangrove extent maps using two sets of samples: <code>samplesAutomatic</code>, which will include the points automatically created with <code>stratified</code> and <code>samplesManual</code>. To create <code>manualpoints</code>, use the same geometry drawing process described in <a href="supervised-classification-of-landsat-8-oli-imagery.html#supervised-classification-of-landsat-8-oli-imagery">chapter 3</a>. Draw the geometries <code>MangroveTraining</code> and <code>NonMangroveTraining</code> and use <code>.merge</code> to create <code>manualpoints</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var manualpoints =<span class="st"> </span><span class="kw">MangroveTraining.merge</span>(NonMangroveTraining);</code></pre></div>
+<p>Create the <code>samplesAutomatic</code> and <code>samplesManual</code> training sets by overlaying <code>stratified</code> and <code>manualpoints</code> with the Landsat composite to extract the <code>bands</code> predictors using the functions below:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var samplesAutomatic =<span class="st"> </span><span class="kw">composite.select</span>(bands)<span class="kw">.sampleRegions</span>({
-  collection<span class="op">:</span><span class="st"> </span>stratified,
+  collection<span class="op">:</span><span class="st"> </span>stratified,   <span class="op">/</span><span class="er">/</span><span class="st"> </span>Automatically created sample points
   properties<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;landcover&#39;</span>],
   scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>,
   geometries<span class="op">:</span><span class="st"> </span>true,
 });</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var samplesManual =<span class="st"> </span><span class="kw">composite.select</span>(bands)<span class="kw">.sampleRegions</span>({
+  collection<span class="op">:</span><span class="st"> </span>manualpoints,       <span class="op">/</span><span class="er">/</span><span class="st"> </span>Manually selected geometries
+  properties<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;landcover&#39;</span>], 
+  scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>,
+  geometries<span class="op">:</span><span class="st"> </span>true,
+});</code></pre></div>
+<p>A third sample set (<code>groundtruth</code>) will be used to illusrate a validation process for both mangrove extent maps. First, load a pre-selected set of samples using <code>ee.FeatureCollection</code> then create <code>samplesgroundtruth</code> similarly to the previous two set of samples:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var groundtruth =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/celiohelder/TutorialAssets/GroundTruth&#39;</span>);</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var samplesgroundtruth =<span class="st"> </span><span class="kw">composite.select</span>(bands)<span class="kw">.sampleRegions</span>({
+  collection<span class="op">:</span><span class="st"> </span>groundtruth,       <span class="op">/</span><span class="er">/</span><span class="st"> </span>Set of geometries pre<span class="op">-</span>selected
+  properties<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;landcover&#39;</span>],
+  scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>,
+  geometries<span class="op">:</span><span class="st"> </span>true,
+});</code></pre></div>
+<p>Next, train two Random Forest classifiers using both <code>samplesAutomatic</code> and <code>samplesManual</code> training samples. In this example, we will use 200 trees and 5 predictors tested at each tree node:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var RandomForest1 =<span class="st"> </span><span class="kw">ee.Classifier.smileRandomForest</span>(<span class="dv">200</span>,<span class="dv">5</span>)<span class="kw">.train</span>({
+  features<span class="op">:</span><span class="st"> </span>samplesAutomatic, 
+  classProperty<span class="op">:</span><span class="st"> &#39;landcover&#39;</span>, 
+  inputProperties<span class="op">:</span><span class="st"> </span>bands
+});
+
+var RandomForest2 =<span class="st"> </span><span class="kw">ee.Classifier.smileRandomForest</span>(<span class="dv">200</span>,<span class="dv">5</span>)<span class="kw">.train</span>({
+  features<span class="op">:</span><span class="st"> </span>samplesManual, 
+  classProperty<span class="op">:</span><span class="st"> &#39;landcover&#39;</span>, 
+  inputProperties<span class="op">:</span><span class="st"> </span>bands
+});</code></pre></div>
+<p>Finally, classify the <code>composite</code> into two mangrove extent maps using the trained classifiers and add the outputs to the map editor using a color palette of your choice:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">/</span><span class="er">/</span><span class="st"> </span>Classify the Landsat <span class="dv">8</span> Composite using the two classifiers to produce <span class="dv">2</span> land cover maps
+
+var classifiedrf1 =<span class="st"> </span><span class="kw">composite.select</span>(bands)           <span class="op">/</span><span class="er">/</span><span class="st"> </span>select the predictors
+                            <span class="kw">.classify</span>(RandomForest1); <span class="op">/</span><span class="er">/</span><span class="st"> </span>apply the Random Forest trained with the automatically selected samples
+
+var classifiedrf2 =<span class="st"> </span><span class="kw">composite.select</span>(bands)           <span class="op">/</span><span class="er">/</span><span class="st"> </span>select the predictors
+                            <span class="kw">.classify</span>(RandomForest2); <span class="op">/</span><span class="er">/</span><span class="st"> </span>apply the Random Forest classifier trained with mannually selected samples
+
+<span class="op">/</span><span class="er">/</span><span class="st"> </span>Color palette <span class="cf">for</span> the classification outputs
+var paletteMAP =<span class="st"> </span>[
+  <span class="st">&#39;01937C&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Mangrove
+  <span class="st">&#39;B6C867&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Non<span class="op">-</span>Mangrove
+];
+
+<span class="op">/</span><span class="er">/</span><span class="st"> </span>Add the classifications to the map editor
+<span class="kw">Map.addLayer</span> (classifiedrf1, {min<span class="op">:</span><span class="st"> </span><span class="dv">1</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">2</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Classification Automatic Samples&#39;</span>);
+<span class="kw">Map.addLayer</span> (classifiedrf2, {min<span class="op">:</span><span class="st"> </span><span class="dv">1</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">2</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Classification Manual Samples&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:my-classficationmangrove"></span>
+<img src="images/classoutput.png" alt="Random forest classification outputs. Each map was produced using two different set of samples." width="860" />
+<p class="caption">
+Figure 5.8: Random forest classification outputs. Each map was produced using two different set of samples.
+</p>
+</div>
+<ul>
+<li><em><strong>Validation</strong></em></li>
+</ul>
+<p>For the validation of the two mangrove extent maps we will use <code>.classify</code> and <code>.errorMatrix</code>. <code>.classify</code> will classify the ground truth samples with the trained random forest classifiers 1 and 2; <code>.errorMatrix</code> will compare the result of this classification with their own class label:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var validation1 =<span class="st"> </span><span class="kw">samplesgroundtruth.classify</span>(RandomForest1);
+var validation2 =<span class="st"> </span><span class="kw">samplesgroundtruth.classify</span>(RandomForest2);
+var testAccuracy1 =<span class="st"> </span><span class="kw">validation1.errorMatrix</span>(<span class="st">&#39;landcover&#39;</span>, <span class="st">&#39;classification&#39;</span>);
+var testAccuracy2 =<span class="st"> </span><span class="kw">validation2.errorMatrix</span>(<span class="st">&#39;landcover&#39;</span>, <span class="st">&#39;classification&#39;</span>);</code></pre></div>
+<p>You can print the error matrices along with the overall accuracy and Kappa values to the console using <code>.accuracy()</code> and <code>kappa()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="st">&#39;Overall Accuracy Map 1: &#39;</span>, <span class="kw">testAccuracy1.accuracy</span>());
+<span class="kw">print</span>(<span class="st">&#39;Overall Accuracy Map 2: &#39;</span>, <span class="kw">testAccuracy2.accuracy</span>());
+<span class="kw">print</span>(<span class="st">&#39;Kappa: &#39;</span>, <span class="kw">testAccuracy1.kappa</span>());
+<span class="kw">print</span>(<span class="st">&#39;Kappa: &#39;</span>, <span class="kw">testAccuracy2.kappa</span>());
+<span class="kw">print</span>(<span class="st">&#39;Validation error matrix Map1: &#39;</span>, testAccuracy1);
+<span class="kw">print</span>(<span class="st">&#39;Validation error matrix Map2: &#39;</span>, testAccuracy2);</code></pre></div>
+<div class="figure"><span id="fig:my-results"></span>
+<img src="images/ResultsGuinea.PNG" alt="Validation results for this example. Ground truth data (in this context it refers to independent samples) were used to calculate the overall accuracy and kappa values." width="420" />
+<p class="caption">
+Figure 5.9: Validation results for this example. Ground truth data (in this context it refers to independent samples) were used to calculate the overall accuracy and kappa values.
+</p>
+</div>
 
 </div>
 </div>

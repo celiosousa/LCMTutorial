@@ -34,6 +34,8 @@ fig:my-elevmask
 fig:my-updatemask
 fig:my-strata
 fig:my-stratatification
+fig:my-classficationmangrove
+fig:my-results
 introduction-and-overview
 auxiliary-functions
 cloud-and-cloud-shadow-masking
