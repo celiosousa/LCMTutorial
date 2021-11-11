@@ -226,7 +226,7 @@ Add `strata` to the map editor to visualize:
 Map.addLayer (strata, {palette:['#B3E283','#E8E46E'], min:1, max:2}, 'Strata')
 ```
 
-```{r my-strata,  fig.cap="Stratification map `strata` showing GMW's 2016 Mangrove extent (`landcover:1`) and non-mangrove areas (`landcover:2`). The `.stratifiedSample` function generates a set of random points to each of these classes.", echo=FALSE, message=FALSE}
+```{r my-strata,  fig.cap="Stratification map `strata` showing Global Mangrove Watch's 2016 Mangrove extent (`landcover:1`) and non-mangrove areas (`landcover:2`). The `.stratifiedSample` function generates a set of random points to each of these classes.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/strata.png")
 ```
 
