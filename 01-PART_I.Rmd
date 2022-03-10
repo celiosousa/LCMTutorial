@@ -1,1 +1,15 @@
-# pART I
+# Part 1 - Basics & Fundamentals
+
+## Programming and Remote Sensing Basics 
+
+### Remote Sensing Language
+
+### Google Earth Engine API and Java Script
+
+### Exploring Image and Image Collection
+
+## Image Manipulation
+
+### Band Math and VI Calculation
+
+### Thresholds and Masks

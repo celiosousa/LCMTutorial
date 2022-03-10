@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine</title>
-  <meta name="description" content="Chapter 3 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <title>Chapter 4 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine</title>
+  <meta name="description" content="Chapter 4 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 3 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine" />
+  <meta property="og:title" content="Chapter 4 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine" />
+  <meta name="twitter:title" content="Chapter 4 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine" />
   
   
   
@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa" />
 
 
-<meta name="date" content="2021-12-27" />
+<meta name="date" content="2022-03-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,9 +33,7 @@
   
 <link rel="prev" href="auxiliary-functions.html"/>
 <link rel="next" href="post-classification-processing.html"/>
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -51,73 +49,47 @@
 
 
 
+
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
 
@@ -138,39 +110,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction and overview</a></li>
-<li class="chapter" data-level="2" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html"><i class="fa fa-check"></i><b>2</b> Auxiliary functions</a>
-<ul>
-<li class="chapter" data-level="2.1" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#cloud-and-cloud-shadow-masking"><i class="fa fa-check"></i><b>2.1</b> Cloud and cloud shadow masking</a></li>
-<li class="chapter" data-level="2.2" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#spectral-indices"><i class="fa fa-check"></i><b>2.2</b> Spectral indices</a></li>
-<li class="chapter" data-level="2.3" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#compositing"><i class="fa fa-check"></i><b>2.3</b> Compositing</a></li>
+<li class="chapter" data-level="2" data-path="part-i.html"><a href="part-i.html"><i class="fa fa-check"></i><b>2</b> pART I</a></li>
+<li class="chapter" data-level="3" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html"><i class="fa fa-check"></i><b>3</b> Auxiliary functions</a><ul>
+<li class="chapter" data-level="3.1" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#cloud-and-cloud-shadow-masking"><i class="fa fa-check"></i><b>3.1</b> Cloud and cloud shadow masking</a></li>
+<li class="chapter" data-level="3.2" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#spectral-indices"><i class="fa fa-check"></i><b>3.2</b> Spectral indices</a></li>
+<li class="chapter" data-level="3.3" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#compositing"><i class="fa fa-check"></i><b>3.3</b> Compositing</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html"><i class="fa fa-check"></i><b>3</b> Supervised classification of Landsat 8 OLI imagery</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020"><i class="fa fa-check"></i><b>3.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2020</a>
-<ul>
-<li class="chapter" data-level="3.1.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#temporal-and-spatial-parameters-for-compositing"><i class="fa fa-check"></i><b>3.1.1</b> Temporal and spatial parameters for compositing</a></li>
-<li class="chapter" data-level="3.1.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#landsat-8-pre-classification-steps"><i class="fa fa-check"></i><b>3.1.2</b> Landsat 8 Pre-classification steps</a></li>
-<li class="chapter" data-level="3.1.3" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#supervised-classification-with-random-forest"><i class="fa fa-check"></i><b>3.1.3</b> Supervised Classification with Random Forest</a></li>
+<li class="chapter" data-level="4" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html"><i class="fa fa-check"></i><b>4</b> Supervised classification of Landsat 8 OLI imagery</a><ul>
+<li class="chapter" data-level="4.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020"><i class="fa fa-check"></i><b>4.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2020</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#temporal-and-spatial-parameters-for-compositing"><i class="fa fa-check"></i><b>4.1.1</b> Temporal and spatial parameters for compositing</a></li>
+<li class="chapter" data-level="4.1.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#landsat-8-pre-classification-steps"><i class="fa fa-check"></i><b>4.1.2</b> Landsat 8 Pre-classification steps</a></li>
+<li class="chapter" data-level="4.1.3" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#supervised-classification-with-random-forest"><i class="fa fa-check"></i><b>4.1.3</b> Supervised Classification with Random Forest</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>3.2</b> Example 2: 2000 - 2020 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
+<li class="chapter" data-level="4.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>4.2</b> Example 2: 2000 - 2020 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="post-classification-processing.html"><a href="post-classification-processing.html"><i class="fa fa-check"></i><b>4</b> Post-classification processing</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="post-classification-processing.html"><a href="post-classification-processing.html#re-classification"><i class="fa fa-check"></i><b>4.1</b> Re-classification</a>
-<ul>
-<li class="chapter" data-level="4.1.1" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-1"><i class="fa fa-check"></i><b>4.1.1</b> Scenario 1</a></li>
-<li class="chapter" data-level="4.1.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-2"><i class="fa fa-check"></i><b>4.1.2</b> Scenario 2</a></li>
-<li class="chapter" data-level="4.1.3" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-3"><i class="fa fa-check"></i><b>4.1.3</b> Scenario 3</a></li>
+<li class="chapter" data-level="5" data-path="post-classification-processing.html"><a href="post-classification-processing.html"><i class="fa fa-check"></i><b>5</b> Post-classification processing</a><ul>
+<li class="chapter" data-level="5.1" data-path="post-classification-processing.html"><a href="post-classification-processing.html#re-classification"><i class="fa fa-check"></i><b>5.1</b> Re-classification</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-1"><i class="fa fa-check"></i><b>5.1.1</b> Scenario 1</a></li>
+<li class="chapter" data-level="5.1.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-2"><i class="fa fa-check"></i><b>5.1.2</b> Scenario 2</a></li>
+<li class="chapter" data-level="5.1.3" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-3"><i class="fa fa-check"></i><b>5.1.3</b> Scenario 3</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>4.2</b> Map spatial smoothing</a></li>
+<li class="chapter" data-level="5.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>5.2</b> Map spatial smoothing</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html"><i class="fa fa-check"></i><b>5</b> Country-specific analyses</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#mangrove-mapping-in-guinea---west-africa"><i class="fa fa-check"></i><b>5.1</b> Mangrove mapping in Guinea - West Africa</a>
-<ul>
-<li class="chapter" data-level="5.1.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#masking"><i class="fa fa-check"></i><b>5.1.1</b> Masking</a></li>
-<li class="chapter" data-level="5.1.2" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#landsat-8-image-collection-and-cloud-free-mosaic"><i class="fa fa-check"></i><b>5.1.2</b> Landsat 8 Image Collection and Cloud-free Mosaic</a></li>
-<li class="chapter" data-level="5.1.3" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#supervised-classification-with-random-forest-1"><i class="fa fa-check"></i><b>5.1.3</b> Supervised Classification with Random Forest</a></li>
+<li class="chapter" data-level="6" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html"><i class="fa fa-check"></i><b>6</b> Country-specific analyses</a><ul>
+<li class="chapter" data-level="6.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#mangrove-mapping-in-guinea---west-africa"><i class="fa fa-check"></i><b>6.1</b> Mangrove mapping in Guinea - West Africa</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#masking"><i class="fa fa-check"></i><b>6.1.1</b> Masking</a></li>
+<li class="chapter" data-level="6.1.2" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#landsat-8-image-collection-and-cloud-free-mosaic"><i class="fa fa-check"></i><b>6.1.2</b> Landsat 8 Image Collection and Cloud-free Mosaic</a></li>
+<li class="chapter" data-level="6.1.3" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#supervised-classification-with-random-forest-1"><i class="fa fa-check"></i><b>6.1.3</b> Supervised Classification with Random Forest</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -192,96 +158,96 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="supervised-classification-of-landsat-8-oli-imagery" class="section level1" number="3">
-<h1><span class="header-section-number">Chapter 3</span> Supervised classification of Landsat 8 OLI imagery</h1>
+<div id="supervised-classification-of-landsat-8-oli-imagery" class="section level1">
+<h1><span class="header-section-number">Chapter 4</span> Supervised classification of Landsat 8 OLI imagery</h1>
 <p>Objectives:</p>
 <ul>
-<li>Use the cloud-masking function (See Chapter 2’s <a href="auxiliary-functions.html#cloud-and-cloud-shadow-masking">Cloud and cloud shadow masking</a> section) to mask clouds on Landsat 8 Imagery;</li>
+<li>Use the cloud-masking function (See Chapter 2's <a href="auxiliary-functions.html#cloud-and-cloud-shadow-masking">Cloud and cloud shadow masking</a> section) to mask clouds on Landsat 8 Imagery;</li>
 <li>To produce a cloud-free composite mosaic using the median reducer (<a href="auxiliary-functions.html#compositing">Compositing</a>), and;</li>
 <li>To classify the cloud-free composite mosaic of Landsat 8 scenes using Random Forest.</li>
 </ul>
-<div id="example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2020</h2>
+<div id="example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020" class="section level2">
+<h2><span class="header-section-number">4.1</span> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2020</h2>
 <p>We will start by <a href="https://code.earthengine.google.com/" target="_blank">opening a new code editor page</a></p>
-<div id="temporal-and-spatial-parameters-for-compositing" class="section level3" number="3.1.1">
-<h3><span class="header-section-number">3.1.1</span> Temporal and spatial parameters for compositing</h3>
+<div id="temporal-and-spatial-parameters-for-compositing" class="section level3">
+<h3><span class="header-section-number">4.1.1</span> Temporal and spatial parameters for compositing</h3>
 <p>In this example, we are going to create a 2020 annual composite. For this, let’s create three objects <code>(var)</code>: <code>year</code>, <code>startDay</code> and <code>endDay</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb3-1" aria-hidden="true" tabindex="-1"></a>var year <span class="ot">=</span> <span class="dv">2020</span>; <span class="sc">/</span><span class="er">/</span><span class="co"># Year</span></span>
-<span id="cb3-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb3-2" aria-hidden="true" tabindex="-1"></a>var startDay <span class="ot">=</span> (year)<span class="sc">+</span><span class="st">&#39;-01-01&#39;</span>; <span class="sc">/</span><span class="er">/</span><span class="co"># beginning of date filter | month-day</span></span>
-<span id="cb3-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb3-3" aria-hidden="true" tabindex="-1"></a>var endDay <span class="ot">=</span> (year)<span class="sc">+</span><span class="st">&#39;-12-30&#39;</span>; <span class="sc">/</span><span class="er">/</span><span class="co"># end of date filter | month-day</span></span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var year =<span class="st"> </span><span class="dv">2020</span>; <span class="op">/</span><span class="er">/</span><span class="co"># Year</span>
+var startDay =<span class="st"> </span>(year)<span class="op">+</span><span class="st">&#39;-01-01&#39;</span>; <span class="op">/</span><span class="er">/</span><span class="co"># beginning of date filter | month-day</span>
+var endDay =<span class="st"> </span>(year)<span class="op">+</span><span class="st">&#39;-12-30&#39;</span>; <span class="op">/</span><span class="er">/</span><span class="co"># end of date filter | month-day</span></code></pre></div>
 <p>Additionally, we need to define an area of interest for the composite. Google Earth Engine allows you to import your own shapefiles of your area of interest (through the <em>New</em> button in the Assets tab) as well as to direcly create your geometry in the code editor.</p>
-<p><img src="images/CreatingGEOM.PNG" /><!-- --></p>
+<p><img src="images/CreatingGEOM.PNG" width="1687" /></p>
 <p>For this example, draw a rectangle around the metropolitan area of Cairo, Egypt (Figure 3.1):</p>
-<div class="figure"><span style="display:block;" id="fig:my-figGEOMEgypt"></span>
-<img src="images/CairoGEOM1.png" alt="Geometry drawn over the Greater Cairo area"  />
+<div class="figure"><span id="fig:my-figGEOMEgypt"></span>
+<img src="images/CairoGEOM1.png" alt="Geometry drawn over the Greater Cairo area" width="1526" />
 <p class="caption">
-Figure 3.1: Geometry drawn over the Greater Cairo area
+Figure 4.1: Geometry drawn over the Greater Cairo area
 </p>
 </div>
-<p>Now, let’s create an object <code>var aoi</code> that will contain the geometry <code>AreaOfInterest</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb4-1" aria-hidden="true" tabindex="-1"></a>var aoi <span class="ot">=</span> AreaOfInterest;</span></code></pre></div>
+<p>Now, let's create an object <code>var aoi</code> that will contain the geometry <code>AreaOfInterest</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var aoi =<span class="st"> </span>AreaOfInterest;</code></pre></div>
 </div>
-<div id="landsat-8-pre-classification-steps" class="section level3" number="3.1.2">
-<h3><span class="header-section-number">3.1.2</span> Landsat 8 Pre-classification steps</h3>
+<div id="landsat-8-pre-classification-steps" class="section level3">
+<h3><span class="header-section-number">4.1.2</span> Landsat 8 Pre-classification steps</h3>
 <ul>
 <li><strong>Auxiliary Functions</strong></li>
 </ul>
 <p>In this step, we will used the functions from Chapter 2 to create a cloud-free mosaic of Landsat scenes over our area of interest. First, the function <code>maskL8sr</code> will be used to mask all clouds and cloud shadows from the Landsat scenes:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb5-1" aria-hidden="true" tabindex="-1"></a>var maskL8sr <span class="ot">=</span> <span class="cf">function</span> (image) {</span>
-<span id="cb5-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># Bits 3 and 5 are cloud shadow and cloud, respectively.</span></span>
-<span id="cb5-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb5-3" aria-hidden="true" tabindex="-1"></a>  var cloudShadowBitMask <span class="ot">=</span> <span class="dv">1</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="dv">3</span>;</span>
-<span id="cb5-4"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb5-4" aria-hidden="true" tabindex="-1"></a>  var cloudsBitMask <span class="ot">=</span> <span class="dv">1</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="dv">5</span>;</span>
-<span id="cb5-5"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># Get the pixel QA band.</span></span>
-<span id="cb5-6"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb5-6" aria-hidden="true" tabindex="-1"></a>  var qa <span class="ot">=</span> <span class="fu">image.select</span>(<span class="st">&#39;pixel_qa&#39;</span>);</span>
-<span id="cb5-7"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># Both flags should be set to zero, indicating clear conditions.</span></span>
-<span id="cb5-8"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb5-8" aria-hidden="true" tabindex="-1"></a>  var mask <span class="ot">=</span> <span class="fu">qa.bitwiseAnd</span>(cloudShadowBitMask)<span class="fu">.eq</span>(<span class="dv">0</span>)</span>
-<span id="cb5-9"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb5-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">.and</span>(<span class="fu">qa.bitwiseAnd</span>(cloudsBitMask)<span class="fu">.eq</span>(<span class="dv">0</span>));</span>
-<span id="cb5-10"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># Return the masked image, scaled to reflectance, without the QA bands.</span></span>
-<span id="cb5-11"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb5-11" aria-hidden="true" tabindex="-1"></a>  return <span class="fu">image.updateMask</span>(mask)<span class="fu">.divide</span>(<span class="dv">10000</span>)</span>
-<span id="cb5-12"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb5-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">.select</span>(<span class="st">&quot;B[0-9]*&quot;</span>)</span>
-<span id="cb5-13"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb5-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">.copyProperties</span>(image, [<span class="st">&quot;system:time_start&quot;</span>]);</span>
-<span id="cb5-14"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb5-14" aria-hidden="true" tabindex="-1"></a>};</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var maskL8sr =<span class="st"> </span><span class="cf">function</span> (image) {
+  <span class="op">/</span><span class="er">/</span><span class="co"># Bits 3 and 5 are cloud shadow and cloud, respectively.</span>
+<span class="st">  </span>var cloudShadowBitMask =<span class="st"> </span><span class="dv">1</span> <span class="op">&lt;</span><span class="er">&lt;</span><span class="st"> </span><span class="dv">3</span>;
+  var cloudsBitMask =<span class="st"> </span><span class="dv">1</span> <span class="op">&lt;</span><span class="er">&lt;</span><span class="st"> </span><span class="dv">5</span>;
+  <span class="op">/</span><span class="er">/</span><span class="co"># Get the pixel QA band.</span>
+<span class="st">  </span>var qa =<span class="st"> </span><span class="kw">image.select</span>(<span class="st">&#39;pixel_qa&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="co"># Both flags should be set to zero, indicating clear conditions.</span>
+<span class="st">  </span>var mask =<span class="st"> </span><span class="kw">qa.bitwiseAnd</span>(cloudShadowBitMask)<span class="kw">.eq</span>(<span class="dv">0</span>)
+      <span class="kw">.and</span>(<span class="kw">qa.bitwiseAnd</span>(cloudsBitMask)<span class="kw">.eq</span>(<span class="dv">0</span>));
+  <span class="op">/</span><span class="er">/</span><span class="co"># Return the masked image, scaled to reflectance, without the QA bands.</span>
+<span class="st">  </span>return <span class="kw">image.updateMask</span>(mask)<span class="kw">.divide</span>(<span class="dv">10000</span>)
+      <span class="kw">.select</span>(<span class="st">&quot;B[0-9]*&quot;</span>)
+      <span class="kw">.copyProperties</span>(image, [<span class="st">&quot;system:time_start&quot;</span>]);
+};</code></pre></div>
 <p>Second, for a Random Forest type classifier, predictor variables must be used. Usually, different spectral indices are good predictors for the Random Forest Model. The function <code>addIndicesL8</code> below can be used to calculate several spectral indices and add them to each scene of the Landsat image collection:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-1" aria-hidden="true" tabindex="-1"></a>var addIndicesL8 <span class="ot">=</span> <span class="cf">function</span>(img) {</span>
-<span id="cb6-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># NDVI (Normalized Difference Vegetation Index)</span></span>
-<span id="cb6-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  var ndvi <span class="ot">=</span> <span class="fu">img.normalizedDifference</span>([<span class="st">&#39;B5&#39;</span>,<span class="st">&#39;B4&#39;</span>])<span class="fu">.rename</span>(<span class="st">&#39;NDVI&#39;</span>);</span>
-<span id="cb6-4"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># NDMI (Normalized Difference Mangrove Index - Shi et al 2016 )</span></span>
-<span id="cb6-5"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-5" aria-hidden="true" tabindex="-1"></a>  var ndmi <span class="ot">=</span> <span class="fu">img.normalizedDifference</span>([<span class="st">&#39;B7&#39;</span>,<span class="st">&#39;B3&#39;</span>])<span class="fu">.rename</span>(<span class="st">&#39;NDMI&#39;</span>);</span>
-<span id="cb6-6"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># MNDWI (Modified Normalized Difference Water Index - Hanqiu Xu, 2006)</span></span>
-<span id="cb6-7"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-7" aria-hidden="true" tabindex="-1"></a>  var mndwi <span class="ot">=</span> <span class="fu">img.normalizedDifference</span>([<span class="st">&#39;B3&#39;</span>,<span class="st">&#39;B6&#39;</span>])<span class="fu">.rename</span>(<span class="st">&#39;MNDWI&#39;</span>);</span>
-<span id="cb6-8"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># SR (Simple Ratio)</span></span>
-<span id="cb6-9"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-9" aria-hidden="true" tabindex="-1"></a>  var sr <span class="ot">=</span> <span class="fu">img.select</span>(<span class="st">&#39;B5&#39;</span>)<span class="fu">.divide</span>(<span class="fu">img.select</span>(<span class="st">&#39;B4&#39;</span>))<span class="fu">.rename</span>(<span class="st">&#39;SR&#39;</span>);</span>
-<span id="cb6-10"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># Band Ratio 6/5</span></span>
-<span id="cb6-11"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-11" aria-hidden="true" tabindex="-1"></a>  var ratio65 <span class="ot">=</span> <span class="fu">img.select</span>(<span class="st">&#39;B6&#39;</span>)<span class="fu">.divide</span>(<span class="fu">img.select</span>(<span class="st">&#39;B5&#39;</span>))<span class="fu">.rename</span>(<span class="st">&#39;R65&#39;</span>);</span>
-<span id="cb6-12"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># Band Ratio 4/6</span></span>
-<span id="cb6-13"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-13" aria-hidden="true" tabindex="-1"></a>  var ratio46 <span class="ot">=</span> <span class="fu">img.select</span>(<span class="st">&#39;B4&#39;</span>)<span class="fu">.divide</span>(<span class="fu">img.select</span>(<span class="st">&#39;B6&#39;</span>))<span class="fu">.rename</span>(<span class="st">&#39;R46&#39;</span>);</span>
-<span id="cb6-14"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># GCVI (Green Chlorophyll Vegetation Index)</span></span>
-<span id="cb6-15"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-15" aria-hidden="true" tabindex="-1"></a>  var gcvi <span class="ot">=</span> <span class="fu">img.expression</span>(<span class="st">&#39;(NIR/GREEN)-1&#39;</span>,{</span>
-<span id="cb6-16"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;NIR&#39;</span><span class="sc">:</span><span class="fu">img.select</span>(<span class="st">&#39;B5&#39;</span>),</span>
-<span id="cb6-17"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;GREEN&#39;</span><span class="sc">:</span><span class="fu">img.select</span>(<span class="st">&#39;B3&#39;</span>)</span>
-<span id="cb6-18"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-18" aria-hidden="true" tabindex="-1"></a>  })<span class="fu">.rename</span>(<span class="st">&#39;GCVI&#39;</span>);</span>
-<span id="cb6-19"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-19" aria-hidden="true" tabindex="-1"></a>   return img</span>
-<span id="cb6-20"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.addBands</span>(ndvi) <span class="sc">/</span><span class="er">/</span> This will add each spectral index to each Landsat scene</span>
-<span id="cb6-21"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.addBands</span>(ndmi)</span>
-<span id="cb6-22"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.addBands</span>(mndwi)</span>
-<span id="cb6-23"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.addBands</span>(sr)</span>
-<span id="cb6-24"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.addBands</span>(ratio65)</span>
-<span id="cb6-25"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.addBands</span>(ratio46)</span>
-<span id="cb6-26"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.addBands</span>(gcvi);</span>
-<span id="cb6-27"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb6-27" aria-hidden="true" tabindex="-1"></a>};</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var addIndicesL8 =<span class="st"> </span><span class="cf">function</span>(img) {
+  <span class="op">/</span><span class="er">/</span><span class="co"># NDVI (Normalized Difference Vegetation Index)</span>
+<span class="st">  </span>var ndvi =<span class="st"> </span><span class="kw">img.normalizedDifference</span>([<span class="st">&#39;B5&#39;</span>,<span class="st">&#39;B4&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;NDVI&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="co"># NDMI (Normalized Difference Mangrove Index - Shi et al 2016 )</span>
+<span class="st">  </span>var ndmi =<span class="st"> </span><span class="kw">img.normalizedDifference</span>([<span class="st">&#39;B7&#39;</span>,<span class="st">&#39;B3&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;NDMI&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="co"># MNDWI (Modified Normalized Difference Water Index - Hanqiu Xu, 2006)</span>
+<span class="st">  </span>var mndwi =<span class="st"> </span><span class="kw">img.normalizedDifference</span>([<span class="st">&#39;B3&#39;</span>,<span class="st">&#39;B6&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;MNDWI&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="co"># SR (Simple Ratio)</span>
+<span class="st">  </span>var sr =<span class="st"> </span><span class="kw">img.select</span>(<span class="st">&#39;B5&#39;</span>)<span class="kw">.divide</span>(<span class="kw">img.select</span>(<span class="st">&#39;B4&#39;</span>))<span class="kw">.rename</span>(<span class="st">&#39;SR&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="co"># Band Ratio 6/5</span>
+<span class="st">  </span>var ratio65 =<span class="st"> </span><span class="kw">img.select</span>(<span class="st">&#39;B6&#39;</span>)<span class="kw">.divide</span>(<span class="kw">img.select</span>(<span class="st">&#39;B5&#39;</span>))<span class="kw">.rename</span>(<span class="st">&#39;R65&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="co"># Band Ratio 4/6</span>
+<span class="st">  </span>var ratio46 =<span class="st"> </span><span class="kw">img.select</span>(<span class="st">&#39;B4&#39;</span>)<span class="kw">.divide</span>(<span class="kw">img.select</span>(<span class="st">&#39;B6&#39;</span>))<span class="kw">.rename</span>(<span class="st">&#39;R46&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="co"># GCVI (Green Chlorophyll Vegetation Index)</span>
+<span class="st">  </span>var gcvi =<span class="st"> </span><span class="kw">img.expression</span>(<span class="st">&#39;(NIR/GREEN)-1&#39;</span>,{
+    <span class="st">&#39;NIR&#39;</span><span class="op">:</span><span class="kw">img.select</span>(<span class="st">&#39;B5&#39;</span>),
+    <span class="st">&#39;GREEN&#39;</span><span class="op">:</span><span class="kw">img.select</span>(<span class="st">&#39;B3&#39;</span>)
+  })<span class="kw">.rename</span>(<span class="st">&#39;GCVI&#39;</span>);
+   return img
+    <span class="kw">.addBands</span>(ndvi) <span class="op">/</span><span class="er">/</span><span class="st"> </span>This will add each spectral index to each Landsat scene
+    <span class="kw">.addBands</span>(ndmi)
+    <span class="kw">.addBands</span>(mndwi)
+    <span class="kw">.addBands</span>(sr)
+    <span class="kw">.addBands</span>(ratio65)
+    <span class="kw">.addBands</span>(ratio46)
+    <span class="kw">.addBands</span>(gcvi);
+};</code></pre></div>
 <ul>
 <li><strong>Landsat 8 image collection and cloud free-mosaic</strong></li>
 </ul>
 <p>In this section we will load the Landsat 8 Surface Reflectance data archive into an object <code>var collection</code> by using the container <code>ee.ImageCollection</code> and the collection ID <code>'LANDSAT/LC08/C01/T1_SR'</code>. Secondly, we will filter this image collection so it only contains the Landsat scenes acquired within the period we selected previously (see Section <a href="supervised-classification-of-landsat-8-oli-imagery.html#temporal-and-spatial-parameters-for-compositing">Temporal and spatial parameters for compositing</a>) by using the container <code>filterDate</code>. Finally, we will map the cloud-masking and spectral indices functions (<a href="supervised-classification-of-landsat-8-oli-imagery.html#landsat-8-pre-classification-steps">Landsat 8 Pre-classification steps</a>) to the collection:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb7-1" aria-hidden="true" tabindex="-1"></a>var collection <span class="ot">=</span> <span class="fu">ee.ImageCollection</span>(<span class="st">&#39;LANDSAT/LC08/C01/T1_SR&#39;</span>) <span class="sc">/</span><span class="er">/</span><span class="co"># Load the Landsat 8 SR Collection</span></span>
-<span id="cb7-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.filterDate</span>(startDay, endDay) <span class="sc">/</span><span class="er">/</span><span class="co"># Filter the scenes based on the time period selected</span></span>
-<span id="cb7-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.map</span>(maskL8sr)                <span class="sc">/</span><span class="er">/</span><span class="co"># Masks for clouds and cloud-shadows using the function we created</span></span>
-<span id="cb7-4"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.map</span>(addIndicesL8);           <span class="sc">/</span><span class="er">/</span><span class="co"># Add the indices using the function we created</span></span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var collection =<span class="st"> </span><span class="kw">ee.ImageCollection</span>(<span class="st">&#39;LANDSAT/LC08/C01/T1_SR&#39;</span>) <span class="op">/</span><span class="er">/</span><span class="co"># Load the Landsat 8 SR Collection</span>
+<span class="st">    </span><span class="kw">.filterDate</span>(startDay, endDay) <span class="op">/</span><span class="er">/</span><span class="co"># Filter the scenes based on the time period selected</span>
+<span class="st">    </span><span class="kw">.map</span>(maskL8sr)                <span class="op">/</span><span class="er">/</span><span class="co"># Masks for clouds and cloud-shadows using the function we created</span>
+<span class="st">    </span><span class="kw">.map</span>(addIndicesL8);           <span class="op">/</span><span class="er">/</span><span class="co"># Add the indices using the function we created</span></code></pre></div>
 <p>The object <code>collection</code> will now contain <strong><em>all</em></strong> the Landsat 8 scenes from January to December for the year 2020. Each scene in this collection is masked for clouds and cloud shadows and will have additional bands for each spectral index included in the <code>addIndicesL8</code> function.</p>
 <p>Next, we will reduce this image collection into a composite. This can be done by a single median composite on a per-pixel, per- band basis using <code>.median()</code> or using quality bands such as ‘NDVI’ with <code>.qualityMosaic(‘NDVI’)</code> (See <a href="auxiliary-functions.html#compositing">Compositing</a> for more information). In an object called <code>var composite</code>, let’s reduce the collection using the container <code>.median()</code> and clip the composite to our area of interest <code>aoi</code> using the container <code>.clip</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb8-1" aria-hidden="true" tabindex="-1"></a>var composite <span class="ot">=</span> collection</span>
-<span id="cb8-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb8-2" aria-hidden="true" tabindex="-1"></a>                <span class="fu">.median</span>()   <span class="sc">/</span><span class="er">/</span><span class="co"># Uses the median reducer</span></span>
-<span id="cb8-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb8-3" aria-hidden="true" tabindex="-1"></a>                <span class="fu">.clip</span>(aoi); <span class="sc">/</span><span class="er">/</span><span class="co"># Clips the composite to our area of interest</span></span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var composite =<span class="st"> </span>collection
+                <span class="kw">.median</span>()   <span class="op">/</span><span class="er">/</span><span class="co"># Uses the median reducer</span>
+<span class="st">                </span><span class="kw">.clip</span>(aoi); <span class="op">/</span><span class="er">/</span><span class="co"># Clips the composite to our area of interest</span></code></pre></div>
 <p>Now, the object <code>composite</code> will contain a single multi-band image that is clipped to our area of interest <code>aoi</code>. We can add this composite layer to the map by using <code>Map.addLayer</code>. The arguments for <code>Map.addLayer</code> container are (but not limited to):</p>
 <ul>
 <li>The object you want to display;</li>
@@ -289,190 +255,186 @@ Figure 3.1: Geometry drawn over the Greater Cairo area
 <li>A name for the layer of your choosing.</li>
 </ul>
 <p>In this example, we are displaying a Landsat composite. Thus, let’s add to the map a real color image called <code>'Composite'</code> by selecting the bands <code>'B4'</code>, <code>'B3'</code>, <code>'B2'</code> to display in the RGB channels and the setting the minimum and maximum values to <code>0</code> and <code>0.3</code>:</p>
-<p><img src="images/MapCenter.PNG" /><!-- --></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span><span class="co"># Display the results.</span></span>
-<span id="cb9-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Map.centerObject</span>(aoi,<span class="dv">9</span>); <span class="sc">/</span><span class="er">/</span><span class="co"># Set the map center to match the location of aoi</span></span>
-<span id="cb9-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Map.addLayer</span>(composite, {bands<span class="sc">:</span> [<span class="st">&#39;B4&#39;</span>, <span class="st">&#39;B3&#39;</span>, <span class="st">&#39;B2&#39;</span>], min<span class="sc">:</span> <span class="dv">0</span>, max<span class="sc">:</span> <span class="fl">0.3</span>}, <span class="st">&#39;Composite&#39;</span>);</span></code></pre></div>
+<p><img src="images/MapCenter.PNG" width="1628" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">/</span><span class="er">/</span><span class="co"># Display the results.</span>
+<span class="kw">Map.centerObject</span>(aoi,<span class="dv">9</span>); <span class="op">/</span><span class="er">/</span><span class="co"># Set the map center to match the location of aoi</span>
+<span class="kw">Map.addLayer</span>(composite, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;B4&#39;</span>, <span class="st">&#39;B3&#39;</span>, <span class="st">&#39;B2&#39;</span>], min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="fl">0.3</span>}, <span class="st">&#39;Composite&#39;</span>);</code></pre></div>
 <p>Click Run (or use Ctrl+Enter). You should see something like this:</p>
-<div class="figure"><span style="display:block;" id="fig:my-figCompL8"></span>
-<img src="images/CompositeL8.PNG" alt="Landsat median composite for the area of interested displayed with a real color composition (RGB 432)"  />
+<div class="figure"><span id="fig:my-figCompL8"></span>
+<img src="images/CompositeL8.PNG" alt="Landsat median composite for the area of interested displayed with a real color composition (RGB 432)" width="1420" />
 <p class="caption">
-Figure 3.2: Landsat median composite for the area of interested displayed with a real color composition (RGB 432)
+Figure 4.2: Landsat median composite for the area of interested displayed with a real color composition (RGB 432)
 </p>
 </div>
 <p>You can customize the composite visualization parameters by clicking on the settings icon (gear ⚙) next to the layer name (in this example: Composite. You can also toggle in between map and Google Earth imagery by using the buttons <em><strong>Map</strong></em> and <em><strong>Satellite</strong></em> as seen in Figure 3.3.</p>
-<div class="figure"><span style="display:block;" id="fig:my-figLayer"></span>
-<img src="images/LayerSet.PNG" alt="Layer settings."  />
+<div class="figure"><span id="fig:my-figLayer"></span>
+<img src="images/LayerSet.PNG" alt="Layer settings." width="1176" />
 <p class="caption">
-Figure 3.3: Layer settings.
+Figure 4.3: Layer settings.
 </p>
 </div>
 </div>
-<div id="supervised-classification-with-random-forest" class="section level3" number="3.1.3">
-<h3><span class="header-section-number">3.1.3</span> Supervised Classification with Random Forest</h3>
+<div id="supervised-classification-with-random-forest" class="section level3">
+<h3><span class="header-section-number">4.1.3</span> Supervised Classification with Random Forest</h3>
 <ul>
 <li><strong>Training sample selection</strong></li>
 </ul>
-<p>For this example, let’s classify the ‘composite’ into four classes: <em>water</em>, <em>agricultural land</em>, <em>sand and bare areas</em> and <em>urbanization</em>. The first step is to create the training samples set to use into the Random Forest Model.</p>
-<p>Step 1 - In the Geometry Imports, click <em><strong>+new layer</strong></em> and make four sets of geometries, each set will represent samples from the classes ‘water’, ‘cropland’, ‘sand’ and ‘urban’.</p>
-<div class="figure"><span style="display:block;" id="fig:my-figGeom"></span>
-<img src="images/Geometries.PNG" alt="Geometry sets to hold samples for each of the four classes."  />
+<p>For this example, let’s classify the 'composite' into four classes: <em>water</em>, <em>agricultural land</em>, <em>sand and bare areas</em> and <em>urbanization</em>. The first step is to create the training samples set to use into the Random Forest Model.</p>
+<p>Step 1 - In the Geometry Imports, click <em><strong>+new layer</strong></em> and make four sets of geometries, each set will represent samples from the classes 'water', 'cropland', 'sand' and 'urban'.</p>
+<div class="figure"><span id="fig:my-figGeom"></span>
+<img src="images/Geometries.PNG" alt="Geometry sets to hold samples for each of the four classes." width="1550" />
 <p class="caption">
-Figure 3.4: Geometry sets to hold samples for each of the four classes.
+Figure 4.4: Geometry sets to hold samples for each of the four classes.
 </p>
 </div>
-<p>Step 2 - For each geometry in the list, clicking on the settings icon (gear ): name them accordingly using the ‘Name’ box, choose a color for it using the color picker and import each geometry as <em>FeatureCollection</em>. Add a property called <em>landcover</em> by clicking on the <em><strong>+ Property</strong></em> and set a consecutive integer starting from 0 or 1 for each of the classes. You should achieve something similar to this:</p>
-<div class="figure"><span style="display:block;" id="fig:my-figGeom2"></span>
-<img src="images/Geometries2.PNG" alt="Geometries used to create the training sample sets."  />
+<p>Step 2 - For each geometry in the list, clicking on the settings icon (gear ): name them accordingly using the 'Name' box, choose a color for it using the color picker and import each geometry as <em>FeatureCollection</em>. Add a property called <em>landcover</em> by clicking on the <em><strong>+ Property</strong></em> and set a consecutive integer starting from 0 or 1 for each of the classes. You should achieve something similar to this:</p>
+<div class="figure"><span id="fig:my-figGeom2"></span>
+<img src="images/Geometries2.PNG" alt="Geometries used to create the training sample sets." width="830" />
 <p class="caption">
-Figure 3.5: Geometries used to create the training sample sets.
+Figure 4.5: Geometries used to create the training sample sets.
 </p>
 </div>
 <p>Your Geometry Imports should look like this:</p>
-<div class="figure"><span style="display:block;" id="fig:my-figGeom3"></span>
-<img src="images/Geo3.PNG" alt="Geometry Imports after creating geometry sets to hold training samples"  />
+<div class="figure"><span id="fig:my-figGeom3"></span>
+<img src="images/Geo3.PNG" alt="Geometry Imports after creating geometry sets to hold training samples" width="994" />
 <p class="caption">
-Figure 3.6: Geometry Imports after creating geometry sets to hold training samples
+Figure 4.6: Geometry Imports after creating geometry sets to hold training samples
 </p>
 </div>
 <p>Start selecting samples by clicking on the ‘Water’ geometry in the Geometry Imports. Choose the point drawing tool and place some points along the River Nile:</p>
-<p><img src="images/advantage.PNG" /><!-- --></p>
+<p><img src="images/advantage.PNG" width="1695" /></p>
 <p>Instead of single points (i.e pixels), we can also use polygons containing a variable number of relatively homogenous pixels of a given land cover class. Switch to the polygon drawing tool and draw a few polygons over the River Nile:</p>
-<div class="figure"><span style="display:block;" id="fig:my-figNile"></span>
-<img src="images/Nile.PNG" alt="Sample points and polygons for the Water class"  />
+<div class="figure"><span id="fig:my-figNile"></span>
+<img src="images/Nile.PNG" alt="Sample points and polygons for the Water class" width="1152" />
 <p class="caption">
-Figure 3.7: Sample points and polygons for the Water class
+Figure 4.7: Sample points and polygons for the Water class
 </p>
 </div>
-<p><img src="images/advantage2.PNG" /><!-- --></p>
-<p>Once you finish selecting samples, click the <em><strong>Exit</strong></em> button on the polygon editor dialogue box .
-Repeat the process for each of the other class. Make sure you select samples that are representative of each land cover class by selecting points and polygons of homogenous pixels (Figure 3.8).</p>
-<div class="figure"><span style="display:block;" id="fig:my-figAllSamples"></span>
-<img src="images/AllSamples.PNG" alt="Example of sample points and polygons for ‘Water’ (blue), ‘Cropland’ (yellow), ‘Urban’ (red) and ‘Sand’ (pink). Each pixel within the polygons will be used as training inputs for the RF classifier."  />
+<p><img src="images/advantage2.PNG" width="1698" /></p>
+<p>Once you finish selecting samples, click the <em><strong>Exit</strong></em> button on the polygon editor dialogue box . Repeat the process for each of the other class. Make sure you select samples that are representative of each land cover class by selecting points and polygons of homogenous pixels (Figure 3.8).</p>
+<div class="figure"><span id="fig:my-figAllSamples"></span>
+<img src="images/AllSamples.PNG" alt="Example of sample points and polygons for ‘Water’ (blue), ‘Cropland’ (yellow), ‘Urban’ (red) and ‘Sand’ (pink). Each pixel within the polygons will be used as training inputs for the RF classifier." width="1370" />
 <p class="caption">
-Figure 3.8: Example of sample points and polygons for ‘Water’ (blue), ‘Cropland’ (yellow), ‘Urban’ (red) and ‘Sand’ (pink). Each pixel within the polygons will be used as training inputs for the RF classifier.
+Figure 4.8: Example of sample points and polygons for ‘Water’ (blue), ‘Cropland’ (yellow), ‘Urban’ (red) and ‘Sand’ (pink). Each pixel within the polygons will be used as training inputs for the RF classifier.
 </p>
 </div>
 <p>After selecting the samples, we will merge all the geometries together into an object var classes using the <code>.merge</code> container:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb10-1" aria-hidden="true" tabindex="-1"></a>var classes <span class="ot">=</span> <span class="fu">Water.merge</span>(Cropland)</span>
-<span id="cb10-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb10-2" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">.merge</span>(Sand)</span>
-<span id="cb10-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb10-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">.merge</span>(Urban);</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var classes =<span class="st"> </span><span class="kw">Water.merge</span>(Cropland)
+                   <span class="kw">.merge</span>(Sand)
+                   <span class="kw">.merge</span>(Urban);</code></pre></div>
 <ul>
 <li><strong>Sample sets</strong></li>
 </ul>
 <p>In this section, we will create the training (and testing) sample sets to be used in the classification with Random Forest. First, we will select the predictors to assign to each sample point in the sample sets. For this example, let’s create an object <code>var bands</code> with three spectral bands (<code>'B5'</code>,<code>'B6'</code>,<code>'B7'</code>) and four spectral indices (<code>'NDVI'</code>,<code>'MNDWI'</code>,<code>'SR'</code>,<code>'GCVI'</code>).</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb11-1" aria-hidden="true" tabindex="-1"></a>var bands <span class="ot">=</span> [<span class="st">&#39;B5&#39;</span>,<span class="st">&#39;B6&#39;</span>,<span class="st">&#39;B7&#39;</span>,<span class="st">&#39;NDVI&#39;</span>,<span class="st">&#39;MNDWI&#39;</span>,<span class="st">&#39;SR&#39;</span>,<span class="st">&#39;GCVI&#39;</span>];</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var bands =<span class="st"> </span>[<span class="st">&#39;B5&#39;</span>,<span class="st">&#39;B6&#39;</span>,<span class="st">&#39;B7&#39;</span>,<span class="st">&#39;NDVI&#39;</span>,<span class="st">&#39;MNDWI&#39;</span>,<span class="st">&#39;SR&#39;</span>,<span class="st">&#39;GCVI&#39;</span>];</code></pre></div>
 <p>Next, we will sample the Landsat pixels by overlaying the geometries with the composite using the code below:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb12-1" aria-hidden="true" tabindex="-1"></a>var samples <span class="ot">=</span> <span class="fu">composite.select</span>(bands)<span class="fu">.sampleRegions</span>({</span>
-<span id="cb12-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb12-2" aria-hidden="true" tabindex="-1"></a>  collection<span class="sc">:</span> classes,       <span class="co">#// Set of geometries ~classes~ created in the previous</span></span>
-<span id="cb12-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb12-3" aria-hidden="true" tabindex="-1"></a>  properties<span class="sc">:</span> [<span class="st">&#39;landcover&#39;</span>], <span class="co">#// Label from each geometry from the feature property</span></span>
-<span id="cb12-4"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb12-4" aria-hidden="true" tabindex="-1"></a>  scale<span class="sc">:</span> <span class="dv">30</span>                  <span class="co">#// Make each sample the same size as Landsat pixel</span></span>
-<span id="cb12-5"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb12-5" aria-hidden="true" tabindex="-1"></a>})<span class="fu">.randomColumn</span>(<span class="st">&#39;random&#39;</span>);   <span class="co">#// creates a column with random numbers for the next step</span></span></code></pre></div>
-<p>In the <code>sample</code> object we have just created, each sample will include a column with the values from the object <code>bands</code> inherited from the composite and a column with their respective class label. Optionally, you can perform an accuracy assessment of the classifier by taking advantage of the identifiers assigned to the samples by the <code>.randomColumn('random')</code> within <code>samples</code>.
-For this example, we will randomly partition the sample set into <code>training</code> (80% of the samples) and <code>testing</code> (20% of the samples) samples using the code below:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb13-1" aria-hidden="true" tabindex="-1"></a>var split <span class="ot">=</span> <span class="fl">0.8</span>; <span class="co">#// Roughly 80% for training, 20% for testing.</span></span>
-<span id="cb13-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb13-2" aria-hidden="true" tabindex="-1"></a>var training <span class="ot">=</span> <span class="fu">samples.filter</span>(<span class="fu">ee.Filter.lt</span>(<span class="st">&#39;random&#39;</span>, split));</span>
-<span id="cb13-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb13-3" aria-hidden="true" tabindex="-1"></a>var testing <span class="ot">=</span> <span class="fu">samples.filter</span>(<span class="fu">ee.Filter.gte</span>(<span class="st">&#39;random&#39;</span>, split));</span></code></pre></div>
-<p><img src="images/Tip%20-%20Print.PNG" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var samples =<span class="st"> </span><span class="kw">composite.select</span>(bands)<span class="kw">.sampleRegions</span>({
+  collection<span class="op">:</span><span class="st"> </span>classes,       <span class="co">#// Set of geometries ~classes~ created in the previous</span>
+  properties<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;landcover&#39;</span>], <span class="co">#// Label from each geometry from the feature property</span>
+  scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>                  <span class="co">#// Make each sample the same size as Landsat pixel</span>
+})<span class="kw">.randomColumn</span>(<span class="st">&#39;random&#39;</span>);   <span class="co">#// creates a column with random numbers for the next step</span></code></pre></div>
+<p>In the <code>sample</code> object we have just created, each sample will include a column with the values from the object <code>bands</code> inherited from the composite and a column with their respective class label. Optionally, you can perform an accuracy assessment of the classifier by taking advantage of the identifiers assigned to the samples by the <code>.randomColumn('random')</code> within <code>samples</code>. For this example, we will randomly partition the sample set into <code>training</code> (80% of the samples) and <code>testing</code> (20% of the samples) samples using the code below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var split =<span class="st"> </span><span class="fl">0.8</span>; <span class="co">#// Roughly 80% for training, 20% for testing.</span>
+var training =<span class="st"> </span><span class="kw">samples.filter</span>(<span class="kw">ee.Filter.lt</span>(<span class="st">&#39;random&#39;</span>, split));
+var testing =<span class="st"> </span><span class="kw">samples.filter</span>(<span class="kw">ee.Filter.gte</span>(<span class="st">&#39;random&#39;</span>, split));</code></pre></div>
+<p><img src="images/Tip%20-%20Print.PNG" width="1644" /></p>
 <p>For your information, you can inspect the size (Figure 3.9) of the samples, training and testing objects using the code below:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&#39;Samples n =&#39;</span>, <span class="fu">samples.aggregate_count</span>(<span class="st">&#39;.all&#39;</span>));</span>
-<span id="cb14-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&#39;Training n =&#39;</span>, <span class="fu">training.aggregate_count</span>(<span class="st">&#39;.all&#39;</span>));</span>
-<span id="cb14-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&#39;Testing n =&#39;</span>, <span class="fu">testing.aggregate_count</span>(<span class="st">&#39;.all&#39;</span>));</span></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:my-fig39"></span>
-<img src="images/Figure39.PNG" alt="Sample sets size for this example. Note that the number will vary based on the number of geometries (polygons and points) and the sample split value"  />
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="st">&#39;Samples n =&#39;</span>, <span class="kw">samples.aggregate_count</span>(<span class="st">&#39;.all&#39;</span>));
+<span class="kw">print</span>(<span class="st">&#39;Training n =&#39;</span>, <span class="kw">training.aggregate_count</span>(<span class="st">&#39;.all&#39;</span>));
+<span class="kw">print</span>(<span class="st">&#39;Testing n =&#39;</span>, <span class="kw">testing.aggregate_count</span>(<span class="st">&#39;.all&#39;</span>));</code></pre></div>
+<div class="figure"><span id="fig:my-fig39"></span>
+<img src="images/Figure39.PNG" alt="Sample sets size for this example. Note that the number will vary based on the number of geometries (polygons and points) and the sample split value" width="817" />
 <p class="caption">
-Figure 3.9: Sample sets size for this example. Note that the number will vary based on the number of geometries (polygons and points) and the sample split value
+Figure 4.9: Sample sets size for this example. Note that the number will vary based on the number of geometries (polygons and points) and the sample split value
 </p>
 </div>
 <ul>
 <li><strong>Classification</strong></li>
 </ul>
-<p>Next, we will train a Random Forest classifier using the training sample set <code>training</code>. The Random Forest classifier <code>ee.Classifier.smileRandomForest</code> has several user-defined parameters. However, two of them are the most usually defined: the number of trees in the ensemble (a.k.a ‘forest’) and the number of predictors to randomly tested at each tree. Note:<strong>Higher number of trees and number of predictors tested at each node do not mean better performance and overall accuracy</strong>.
-For this example, let’s use <code>100</code> trees and <code>5</code> randomly selected predictors to use in each tree in a Random Forest model called <code>classifier</code>:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb15-1" aria-hidden="true" tabindex="-1"></a>var classifier <span class="ot">=</span> <span class="fu">ee.Classifier.smileRandomForest</span>(<span class="dv">100</span>,<span class="dv">5</span>)<span class="fu">.train</span>({</span>
-<span id="cb15-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb15-2" aria-hidden="true" tabindex="-1"></a>  features<span class="sc">:</span> <span class="fu">training.select</span>([<span class="st">&#39;B5&#39;</span>,<span class="st">&#39;B6&#39;</span>,<span class="st">&#39;B7&#39;</span>,<span class="st">&#39;NDVI&#39;</span>,<span class="st">&#39;MNDWI&#39;</span>,<span class="st">&#39;SR&#39;</span>,<span class="st">&#39;GCVI&#39;</span>, <span class="st">&#39;landcover&#39;</span>]), <span class="co">#// training</span></span>
-<span id="cb15-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb15-3" aria-hidden="true" tabindex="-1"></a>  classProperty<span class="sc">:</span> <span class="st">&#39;landcover&#39;</span>, </span>
-<span id="cb15-4"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb15-4" aria-hidden="true" tabindex="-1"></a>  inputProperties<span class="sc">:</span> bands</span>
-<span id="cb15-5"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb15-5" aria-hidden="true" tabindex="-1"></a>});</span></code></pre></div>
+<p>Next, we will train a Random Forest classifier using the training sample set <code>training</code>. The Random Forest classifier <code>ee.Classifier.smileRandomForest</code> has several user-defined parameters. However, two of them are the most usually defined: the number of trees in the ensemble (a.k.a ‘forest’) and the number of predictors to randomly tested at each tree. Note:<strong>Higher number of trees and number of predictors tested at each node do not mean better performance and overall accuracy</strong>. For this example, let’s use <code>100</code> trees and <code>5</code> randomly selected predictors to use in each tree in a Random Forest model called <code>classifier</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var classifier =<span class="st"> </span><span class="kw">ee.Classifier.smileRandomForest</span>(<span class="dv">100</span>,<span class="dv">5</span>)<span class="kw">.train</span>({
+  features<span class="op">:</span><span class="st"> </span><span class="kw">training.select</span>([<span class="st">&#39;B5&#39;</span>,<span class="st">&#39;B6&#39;</span>,<span class="st">&#39;B7&#39;</span>,<span class="st">&#39;NDVI&#39;</span>,<span class="st">&#39;MNDWI&#39;</span>,<span class="st">&#39;SR&#39;</span>,<span class="st">&#39;GCVI&#39;</span>, <span class="st">&#39;landcover&#39;</span>]), <span class="co">#// training</span>
+  classProperty<span class="op">:</span><span class="st"> &#39;landcover&#39;</span>, 
+  inputProperties<span class="op">:</span><span class="st"> </span>bands
+});</code></pre></div>
 <p>In the <code>features</code> argument of the code above, make sure to select the predictors you want to use from the sample set (in this example, <code>training</code>) to train the model. Most importantly, you must include the class property (<code>classProperty</code>) in which the class label is stored (in this example <code>'landcover'</code>).</p>
 <p>You can assess the accuracy of the Random Forest model using the testing samples and print the results to the console using the code below:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb16-1" aria-hidden="true" tabindex="-1"></a>var validation <span class="ot">=</span> <span class="fu">testing.classify</span>(classifier);</span>
-<span id="cb16-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb16-2" aria-hidden="true" tabindex="-1"></a>var testAccuracy <span class="ot">=</span> <span class="fu">validation.errorMatrix</span>(<span class="st">&#39;landcover&#39;</span>, <span class="st">&#39;classification&#39;</span>);</span>
-<span id="cb16-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&#39;Validation error matrix RF: &#39;</span>, testAccuracy);</span>
-<span id="cb16-5"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&#39;Validation overall accuracy RF: &#39;</span>, <span class="fu">testAccuracy.accuracy</span>());</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var validation =<span class="st"> </span><span class="kw">testing.classify</span>(classifier);
+var testAccuracy =<span class="st"> </span><span class="kw">validation.errorMatrix</span>(<span class="st">&#39;landcover&#39;</span>, <span class="st">&#39;classification&#39;</span>);
+
+<span class="kw">print</span>(<span class="st">&#39;Validation error matrix RF: &#39;</span>, testAccuracy);
+<span class="kw">print</span>(<span class="st">&#39;Validation overall accuracy RF: &#39;</span>, <span class="kw">testAccuracy.accuracy</span>());</code></pre></div>
 <p>Now, you can classify the <code>composite</code> using the Random Forest model <code>classifier</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb17-1" aria-hidden="true" tabindex="-1"></a>var classifiedrf <span class="ot">=</span> <span class="fu">composite.select</span>(bands)         <span class="co">#// select the predictors</span></span>
-<span id="cb17-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb17-2" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">.classify</span>(classifier); <span class="co">#// apply the Random Forest</span></span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var classifiedrf =<span class="st"> </span><span class="kw">composite.select</span>(bands)         <span class="co">#// select the predictors</span>
+                            <span class="kw">.classify</span>(classifier); <span class="co">#// apply the Random Forest</span></code></pre></div>
 <p>For visualization of the resulting classification output, let’s first create a color palette object <code>paletteMAP</code> with colors for each class of the map and a legend object <code>legend</code>. The order of the colors in the palette will follow the order of the classes:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-1" aria-hidden="true" tabindex="-1"></a>var paletteMAP <span class="ot">=</span> [</span>
-<span id="cb18-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;#0040ff&#39;</span>,  <span class="co">#// Water (Class value 0)</span></span>
-<span id="cb18-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;#00ab0c&#39;</span>,  <span class="co">#// Croplands / Cultivated Areas (Class value 1)</span></span>
-<span id="cb18-4"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;#fbf2ad&#39;</span>,  <span class="co">#// Sand and bare areas (Class value 2)</span></span>
-<span id="cb18-5"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;#878587&#39;</span>,  <span class="co">#// Built-up and Urban Areas (Class value 3)</span></span>
-<span id="cb18-6"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-6" aria-hidden="true" tabindex="-1"></a>];</span>
-<span id="cb18-7"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-8"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-8" aria-hidden="true" tabindex="-1"></a>var legend <span class="ot">=</span> <span class="fu">ui.Panel</span>({</span>
-<span id="cb18-9"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-9" aria-hidden="true" tabindex="-1"></a>  style<span class="sc">:</span> {</span>
-<span id="cb18-10"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-10" aria-hidden="true" tabindex="-1"></a>    position<span class="sc">:</span> <span class="st">&#39;bottom-left&#39;</span>, <span class="co">#// Position in the map</span></span>
-<span id="cb18-11"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-11" aria-hidden="true" tabindex="-1"></a>    padding<span class="sc">:</span> <span class="st">&#39;8px 15px&#39;</span>      <span class="co">#// Padding (border) size</span></span>
-<span id="cb18-12"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-12" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb18-13"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-13" aria-hidden="true" tabindex="-1"></a>});</span>
-<span id="cb18-14"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-14" aria-hidden="true" tabindex="-1"></a>var makeRow <span class="ot">=</span> <span class="cf">function</span>(color, name) {</span>
-<span id="cb18-15"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">#// Create the label that is actually the colored boxes that represent each class</span></span>
-<span id="cb18-16"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-16" aria-hidden="true" tabindex="-1"></a>  var colorBox <span class="ot">=</span> <span class="fu">ui.Label</span>({</span>
-<span id="cb18-17"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-17" aria-hidden="true" tabindex="-1"></a>    style<span class="sc">:</span> {</span>
-<span id="cb18-18"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-18" aria-hidden="true" tabindex="-1"></a>      backgroundColor<span class="sc">:</span> <span class="st">&#39;#&#39;</span> <span class="sc">+</span> color,</span>
-<span id="cb18-19"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-19" aria-hidden="true" tabindex="-1"></a>      <span class="co">#// Use padding to give the label color box height and width.</span></span>
-<span id="cb18-20"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-20" aria-hidden="true" tabindex="-1"></a>      padding<span class="sc">:</span> <span class="st">&#39;8px&#39;</span>, </span>
-<span id="cb18-21"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-21" aria-hidden="true" tabindex="-1"></a>      margin<span class="sc">:</span> <span class="st">&#39;0 0 4px 0&#39;</span></span>
-<span id="cb18-22"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-22" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb18-23"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-23" aria-hidden="true" tabindex="-1"></a>  });</span>
-<span id="cb18-24"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-24" aria-hidden="true" tabindex="-1"></a>  <span class="co">#// Create the label filled with the description text.</span></span>
-<span id="cb18-25"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-25" aria-hidden="true" tabindex="-1"></a>  var description <span class="ot">=</span> <span class="fu">ui.Label</span>({</span>
-<span id="cb18-26"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-26" aria-hidden="true" tabindex="-1"></a>    value<span class="sc">:</span> name,</span>
-<span id="cb18-27"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-27" aria-hidden="true" tabindex="-1"></a>    style<span class="sc">:</span> {margin<span class="sc">:</span> <span class="st">&#39;0 0 4px 6px&#39;</span>}</span>
-<span id="cb18-28"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-28" aria-hidden="true" tabindex="-1"></a>  });</span>
-<span id="cb18-29"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-29" aria-hidden="true" tabindex="-1"></a>  return <span class="fu">ui.Panel</span>({</span>
-<span id="cb18-30"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-30" aria-hidden="true" tabindex="-1"></a>    widgets<span class="sc">:</span> [colorBox, description],</span>
-<span id="cb18-31"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-31" aria-hidden="true" tabindex="-1"></a>    layout<span class="sc">:</span> <span class="fu">ui.Panel.Layout.Flow</span>(<span class="st">&#39;horizontal&#39;</span>)</span>
-<span id="cb18-32"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-32" aria-hidden="true" tabindex="-1"></a>  });</span>
-<span id="cb18-33"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-33" aria-hidden="true" tabindex="-1"></a>};</span>
-<span id="cb18-34"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-34" aria-hidden="true" tabindex="-1"></a><span class="fu">legend.add</span>(<span class="fu">makeRow</span>(<span class="st">&#39;0040ff&#39;</span>, <span class="st">&#39;Water&#39;</span>));</span>
-<span id="cb18-35"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-35" aria-hidden="true" tabindex="-1"></a><span class="fu">legend.add</span>(<span class="fu">makeRow</span>(<span class="st">&#39;00ab0c&#39;</span>, <span class="st">&#39;Croplands / Cultivated areas&#39;</span>));</span>
-<span id="cb18-36"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-36" aria-hidden="true" tabindex="-1"></a><span class="fu">legend.add</span>(<span class="fu">makeRow</span>(<span class="st">&#39;fbf2ad&#39;</span>, <span class="st">&#39;Sand and bare areas&#39;</span>));</span>
-<span id="cb18-37"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb18-37" aria-hidden="true" tabindex="-1"></a><span class="fu">legend.add</span>(<span class="fu">makeRow</span>(<span class="st">&#39;878587&#39;</span>, <span class="st">&#39;Artificial Surfaces&#39;</span>));</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var paletteMAP =<span class="st"> </span>[
+  <span class="st">&#39;#0040ff&#39;</span>,  <span class="co">#// Water (Class value 0)</span>
+  <span class="st">&#39;#00ab0c&#39;</span>,  <span class="co">#// Croplands / Cultivated Areas (Class value 1)</span>
+  <span class="st">&#39;#fbf2ad&#39;</span>,  <span class="co">#// Sand and bare areas (Class value 2)</span>
+  <span class="st">&#39;#878587&#39;</span>,  <span class="co">#// Built-up and Urban Areas (Class value 3)</span>
+];
+
+var legend =<span class="st"> </span><span class="kw">ui.Panel</span>({
+  style<span class="op">:</span><span class="st"> </span>{
+    position<span class="op">:</span><span class="st"> &#39;bottom-left&#39;</span>, <span class="co">#// Position in the map</span>
+    padding<span class="op">:</span><span class="st"> &#39;8px 15px&#39;</span>      <span class="co">#// Padding (border) size</span>
+  }
+});
+var makeRow =<span class="st"> </span><span class="cf">function</span>(color, name) {
+  <span class="co">#// Create the label that is actually the colored boxes that represent each class</span>
+  var colorBox =<span class="st"> </span><span class="kw">ui.Label</span>({
+    style<span class="op">:</span><span class="st"> </span>{
+      backgroundColor<span class="op">:</span><span class="st"> &#39;#&#39;</span> <span class="op">+</span><span class="st"> </span>color,
+      <span class="co">#// Use padding to give the label color box height and width.</span>
+      padding<span class="op">:</span><span class="st"> &#39;8px&#39;</span>, 
+      margin<span class="op">:</span><span class="st"> &#39;0 0 4px 0&#39;</span>
+    }
+  });
+  <span class="co">#// Create the label filled with the description text.</span>
+  var description =<span class="st"> </span><span class="kw">ui.Label</span>({
+    value<span class="op">:</span><span class="st"> </span>name,
+    style<span class="op">:</span><span class="st"> </span>{margin<span class="op">:</span><span class="st"> &#39;0 0 4px 6px&#39;</span>}
+  });
+  return <span class="kw">ui.Panel</span>({
+    widgets<span class="op">:</span><span class="st"> </span>[colorBox, description],
+    layout<span class="op">:</span><span class="st"> </span><span class="kw">ui.Panel.Layout.Flow</span>(<span class="st">&#39;horizontal&#39;</span>)
+  });
+};
+<span class="kw">legend.add</span>(<span class="kw">makeRow</span>(<span class="st">&#39;0040ff&#39;</span>, <span class="st">&#39;Water&#39;</span>));
+<span class="kw">legend.add</span>(<span class="kw">makeRow</span>(<span class="st">&#39;00ab0c&#39;</span>, <span class="st">&#39;Croplands / Cultivated areas&#39;</span>));
+<span class="kw">legend.add</span>(<span class="kw">makeRow</span>(<span class="st">&#39;fbf2ad&#39;</span>, <span class="st">&#39;Sand and bare areas&#39;</span>));
+<span class="kw">legend.add</span>(<span class="kw">makeRow</span>(<span class="st">&#39;878587&#39;</span>, <span class="st">&#39;Artificial Surfaces&#39;</span>));</code></pre></div>
 <p>Now, add the classification <code>classifiedrf</code> to the map using <code>Map.addLayer</code>: set the <code>min: 0</code> (first class), <code>max: 3</code> (last class), add the color palette <code>paletteMAP</code> and a name for the layer <code>'name'</code>. Finally, add the <code>legend</code> to the map using <code>Map.add</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Map.addLayer</span> (classifiedrf, {min<span class="sc">:</span> <span class="dv">0</span>, max<span class="sc">:</span> <span class="dv">3</span>, palette<span class="sc">:</span>paletteMAP}, <span class="st">&#39;Classification&#39;</span>);</span>
-<span id="cb19-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Map.add</span> (legend);</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span> (classifiedrf, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Classification&#39;</span>);
+<span class="kw">Map.add</span> (legend);</code></pre></div>
 <p>Click <em><strong>Run</strong></em> (or ctrl+Enter). After several seconds, you should see something similar to the figure below:</p>
-<div class="figure"><span style="display:block;" id="fig:my-2020"></span>
-<img src="images/2020.PNG" alt="Random Forest classification output for 2020"  />
+<div class="figure"><span id="fig:my-2020"></span>
+<img src="images/2020.PNG" alt="Random Forest classification output for 2020" width="1090" />
 <p class="caption">
-Figure 3.10: Random Forest classification output for 2020
+Figure 4.10: Random Forest classification output for 2020
 </p>
 </div>
 <p>Finally, export your classification output as a Google Earth Engine asset using the <code>Export.image.toAsset</code> function:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Export.image.toAsset</span>({</span>
-<span id="cb20-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb20-2" aria-hidden="true" tabindex="-1"></a>  image<span class="sc">:</span> classifiedrf,                  <span class="co">#// Classification you want to export</span></span>
-<span id="cb20-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb20-3" aria-hidden="true" tabindex="-1"></a>  description<span class="sc">:</span> <span class="st">&#39;ClassificationOutput&#39;</span>,  <span class="co">#// Name showing on the task list (no space allowed)</span></span>
-<span id="cb20-4"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb20-4" aria-hidden="true" tabindex="-1"></a>  assetId<span class="sc">:</span> <span class="st">&#39;Cairo2020&#39;</span>,                 <span class="co">#// Asset name (No spaces allowed)</span></span>
-<span id="cb20-5"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb20-5" aria-hidden="true" tabindex="-1"></a>  scale<span class="sc">:</span> <span class="dv">30</span>,                            <span class="co">#// Scale (30m Landsat)</span></span>
-<span id="cb20-6"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb20-6" aria-hidden="true" tabindex="-1"></a>  region<span class="sc">:</span> AreaOfInterest,               <span class="co">#// Region that you want to export - requires a geometry</span></span>
-<span id="cb20-7"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb20-7" aria-hidden="true" tabindex="-1"></a>  maxPixels<span class="sc">:</span><span class="fl">1e12</span>                        <span class="co">#// Default: if the export exceeds 1e8 = error!</span></span>
-<span id="cb20-8"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb20-8" aria-hidden="true" tabindex="-1"></a>});</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Export.image.toAsset</span>({
+  image<span class="op">:</span><span class="st"> </span>classifiedrf,                  <span class="co">#// Classification you want to export</span>
+  description<span class="op">:</span><span class="st"> &#39;ClassificationOutput&#39;</span>,  <span class="co">#// Name showing on the task list (no space allowed)</span>
+  assetId<span class="op">:</span><span class="st"> &#39;Cairo2020&#39;</span>,                 <span class="co">#// Asset name (No spaces allowed)</span>
+  scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>,                            <span class="co">#// Scale (30m Landsat)</span>
+  region<span class="op">:</span><span class="st"> </span>AreaOfInterest,               <span class="co">#// Region that you want to export - requires a geometry</span>
+  maxPixels<span class="op">:</span><span class="fl">1e12</span>                        <span class="co">#// Default: if the export exceeds 1e8 = error!</span>
+});</code></pre></div>
 <p>Running the code above will create the exporting task named <em><strong>ClassificationOutput</strong></em> in the task manager tab. Click <em><strong>Run</strong></em> at this task to start exporting your classification.</p>
 </div>
 </div>
-<div id="example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> Example 2: 2000 - 2020 Map-to-Map change of greater Cairo and Giza area, Egypt</h2>
+<div id="example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt" class="section level2">
+<h2><span class="header-section-number">4.2</span> Example 2: 2000 - 2020 Map-to-Map change of greater Cairo and Giza area, Egypt</h2>
 <div class="rmdcomment">
 <p>
 Access the full scrip for this example <a href="https://code.earthengine.google.com/db8f334899c54ce9c6009fb3b56fc653" target="_blank">here.</a>
 </p>
 </div>
-<p>In this example, we will use the codes from <a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020">Example 1</a> to create a land cover classification for the year 2000 period. In this case, we have to use the Landsat 7 ETM+ image collection instead, as Landsat 8 OLI is only available after April 2013.
-Following are the changes to be made on the codes from <a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020">Example 1</a>:</p>
+<p>In this example, we will use the codes from <a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020">Example 1</a> to create a land cover classification for the year 2000 period. In this case, we have to use the Landsat 7 ETM+ image collection instead, as Landsat 8 OLI is only available after April 2013. Following are the changes to be made on the codes from <a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020">Example 1</a>:</p>
 <ol style="list-style-type: lower-alpha">
 <li>The <code>year</code> object will have a value of <code>2000</code>;</li>
 <li>The <code>addIndicesL8</code> function will have different names for the spectral bands. See <a href="auxiliary-functions.html#spectral-indices">Section 2 from Chapter 2</a>;</li>
@@ -485,71 +447,69 @@ You can access the edited script for four steps above <a href="https://code.eart
 </p>
 </div>
 <p>After following the 4 steps above, you should achieve a similar output as before:</p>
-<div class="figure"><span style="display:block;" id="fig:my-2000"></span>
-<img src="images/2000.PNG" alt="Random Forest classification output for 2000"  />
+<div class="figure"><span id="fig:my-2000"></span>
+<img src="images/2000.PNG" alt="Random Forest classification output for 2000" width="1131" />
 <p class="caption">
-Figure 3.11: Random Forest classification output for 2000
+Figure 4.11: Random Forest classification output for 2000
 </p>
 </div>
 <p>Export this new classification to you assets. Next, <a href="https://code.earthengine.google.com/" target="_blank">open a new code editor page</a> and add the classification exports to this script by clicking the <em><strong>Import into script</strong></em> button (blue arrow) for both classification assets in the Assets tab as shown in the figure 3.12:</p>
-<div class="figure"><span style="display:block;" id="fig:my-imports"></span>
-<img src="images/imports.png" alt="Assets tab with classification maps."  />
+<div class="figure"><span id="fig:my-imports"></span>
+<img src="images/imports.png" alt="Assets tab with classification maps." width="736" />
 <p class="caption">
-Figure 3.12: Assets tab with classification maps.
+Figure 4.12: Assets tab with classification maps.
 </p>
 </div>
 <p>Rename each import by clicking on their names at the <em><strong>Imports</strong></em> header:</p>
-<div class="figure"><span style="display:block;" id="fig:my-importsHead"></span>
-<img src="images/importHead.PNG" alt="Imports header."  />
+<div class="figure"><span id="fig:my-importsHead"></span>
+<img src="images/importHead.PNG" alt="Imports header." width="1124" />
 <p class="caption">
-Figure 3.13: Imports header.
+Figure 4.13: Imports header.
 </p>
 </div>
 <p>Alternatively, you can import assets to your scripts by using <code>ee.Image</code> and their respective asset directory:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb21-1" aria-hidden="true" tabindex="-1"></a>var Cairo2000 <span class="ot">=</span> <span class="fu">ee.Image</span>(<span class="st">&quot;users/celiohelder/TutorialAssets/Cairo2000&quot;</span>);</span>
-<span id="cb21-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb21-2" aria-hidden="true" tabindex="-1"></a>var Cairo2020 <span class="ot">=</span> <span class="fu">ee.Image</span>(<span class="st">&quot;users/celiohelder/TutorialAssets/Cairo2020&quot;</span>);</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var Cairo2000 =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&quot;users/celiohelder/TutorialAssets/Cairo2000&quot;</span>);
+var Cairo2020 =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&quot;users/celiohelder/TutorialAssets/Cairo2020&quot;</span>);</code></pre></div>
 <p>Add <code>Cairo2000</code> and <code>Cairo2020</code> to the map using the code below:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb22-1" aria-hidden="true" tabindex="-1"></a>var paletteMAP <span class="ot">=</span> [</span>
-<span id="cb22-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;#0040ff&#39;</span>,  <span class="co">#// Water - pixel value = 0</span></span>
-<span id="cb22-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;#00ab0c&#39;</span>,  <span class="co">#// Croplands / Cultivated Areas - pixel value = 1</span></span>
-<span id="cb22-4"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;#fbf2ad&#39;</span>,  <span class="co">#// Sand and bare areas - pixel value = 2</span></span>
-<span id="cb22-5"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;#878587&#39;</span>,  <span class="co">#// Built-up and Urban Areas - pixel value = 3</span></span>
-<span id="cb22-6"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb22-6" aria-hidden="true" tabindex="-1"></a>];</span>
-<span id="cb22-7"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-8"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">Map.addLayer</span>(Cairo2000, {min<span class="sc">:</span> <span class="dv">0</span>, max<span class="sc">:</span> <span class="dv">3</span>, palette<span class="sc">:</span>paletteMAP}, <span class="st">&#39;Cairo2000&#39;</span>);</span>
-<span id="cb22-9"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="fu">Map.addLayer</span>(Cairo2018, {min<span class="sc">:</span> <span class="dv">0</span>, max<span class="sc">:</span> <span class="dv">3</span>, palette<span class="sc">:</span>paletteMAP}, <span class="st">&#39;Cairo2018&#39;</span>);</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var paletteMAP =<span class="st"> </span>[
+  <span class="st">&#39;#0040ff&#39;</span>,  <span class="co">#// Water - pixel value = 0</span>
+  <span class="st">&#39;#00ab0c&#39;</span>,  <span class="co">#// Croplands / Cultivated Areas - pixel value = 1</span>
+  <span class="st">&#39;#fbf2ad&#39;</span>,  <span class="co">#// Sand and bare areas - pixel value = 2</span>
+  <span class="st">&#39;#878587&#39;</span>,  <span class="co">#// Built-up and Urban Areas - pixel value = 3</span>
+];
+
+<span class="kw">Map.addLayer</span>(Cairo2000, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo2000&#39;</span>);
+<span class="kw">Map.addLayer</span>(Cairo2018, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo2018&#39;</span>);</code></pre></div>
 <p>You can examine both layers on the map and try to identify areas where classes have changed in the 21 years period. However, we can use a transition error matrix to quickly quantify these changes. This matrix can be used to assess how much each class has changed and to what they have changed based on sampling design of your choosing. To do that, start by stacking both maps <code>Cairo2000</code> and <code>Cairo2020</code> into a single object <code>stackedClassifications</code> and rename Cairo2000 and Cairo2020 as <code>'before'</code> and <code>'later'</code>, respectively:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb23-1" aria-hidden="true" tabindex="-1"></a>var stackedClassifications <span class="ot">=</span> <span class="fu">Cairo2018.rename</span>(<span class="st">&#39;later&#39;</span>)<span class="fu">.addBands</span>(<span class="fu">Cairo2000.rename</span>(<span class="st">&#39;before&#39;</span>));</span></code></pre></div>
-<p>Next, create a testing sample set with 500 points for each class using a stratified random sampling design.
-In this sampling design each class has the same weight. Therefore, the same number of points will be placed in each class, regardless of its relative extent. This is important to consider as some classes may have very small area extent to be captured by a random sampling design. In this example, water bodies is relatively small compared to the other three land cover class. Thus, a stratified sampling design will ensure that this class will have the same number of points.
-Once the points are placed, they will inherit the class label (pixel value) from <code>Cairo2000</code> (<code>'before'</code>):</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb24-1" aria-hidden="true" tabindex="-1"></a>var sample <span class="ot">=</span> <span class="fu">stackedClassifications.stratifiedSample</span>({</span>
-<span id="cb24-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb24-2" aria-hidden="true" tabindex="-1"></a>numPoints<span class="sc">:</span> <span class="dv">500</span>,        <span class="co">#// Number of points you want to select by each class</span></span>
-<span id="cb24-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb24-3" aria-hidden="true" tabindex="-1"></a>classBand<span class="sc">:</span> <span class="st">&quot;before&quot;</span>,   <span class="co">#// Map you want the points to inherit the class labels from</span></span>
-<span id="cb24-4"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb24-4" aria-hidden="true" tabindex="-1"></a>scale<span class="sc">:</span> <span class="dv">30</span>,             <span class="co">#// Alsways remember to set the scale to match Landsat nomimal spatial resolution</span></span>
-<span id="cb24-5"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb24-5" aria-hidden="true" tabindex="-1"></a>geometries<span class="sc">:</span> true</span>
-<span id="cb24-6"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb24-6" aria-hidden="true" tabindex="-1"></a>});</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var stackedClassifications =<span class="st"> </span><span class="kw">Cairo2018.rename</span>(<span class="st">&#39;later&#39;</span>)<span class="kw">.addBands</span>(<span class="kw">Cairo2000.rename</span>(<span class="st">&#39;before&#39;</span>));</code></pre></div>
+<p>Next, create a testing sample set with 500 points for each class using a stratified random sampling design. In this sampling design each class has the same weight. Therefore, the same number of points will be placed in each class, regardless of its relative extent. This is important to consider as some classes may have very small area extent to be captured by a random sampling design. In this example, water bodies is relatively small compared to the other three land cover class. Thus, a stratified sampling design will ensure that this class will have the same number of points. Once the points are placed, they will inherit the class label (pixel value) from <code>Cairo2000</code> (<code>'before'</code>):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var sample =<span class="st"> </span><span class="kw">stackedClassifications.stratifiedSample</span>({
+numPoints<span class="op">:</span><span class="st"> </span><span class="dv">500</span>,        <span class="co">#// Number of points you want to select by each class</span>
+classBand<span class="op">:</span><span class="st"> &quot;before&quot;</span>,   <span class="co">#// Map you want the points to inherit the class labels from</span>
+scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>,             <span class="co">#// Alsways remember to set the scale to match Landsat nomimal spatial resolution</span>
+geometries<span class="op">:</span><span class="st"> </span>true
+});</code></pre></div>
 <p>Then add the samples to the map. You should see something similar to figure 3.14:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Map.addLayer</span>(sample, {}, <span class="st">&#39;Stratified samples&#39;</span>);</span></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:my-strat"></span>
-<img src="images/stratsample.PNG" alt="2000 stratified random samples - 500 points by class."  />
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(sample, {}, <span class="st">&#39;Stratified samples&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:my-strat"></span>
+<img src="images/stratsample.PNG" alt="2000 stratified random samples - 500 points by class." width="1122" />
 <p class="caption">
-Figure 3.14: 2000 stratified random samples - 500 points by class.
+Figure 4.14: 2000 stratified random samples - 500 points by class.
 </p>
 </div>
 <p>Next, create a transition matrix using the samples above. This matrix will show how many of these 500 remained the same land cover class 20 years later (<code>Cairo2018</code>) and how many of them changed to a given class. You can use <code>.accuracy()</code> to calculate the % of these samples remained unchanged between the two periods:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb26-1" aria-hidden="true" tabindex="-1"></a>var transitionMatrix <span class="ot">=</span> <span class="fu">sample.errorMatrix</span>({</span>
-<span id="cb26-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb26-2" aria-hidden="true" tabindex="-1"></a>  actual<span class="sc">:</span> <span class="st">&#39;before&#39;</span>,  <span class="co">#// Cairo 2000 - rows</span></span>
-<span id="cb26-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb26-3" aria-hidden="true" tabindex="-1"></a>  predicted<span class="sc">:</span> <span class="st">&#39;later&#39;</span> <span class="co">#// Cairo 2020 – columns</span></span>
-<span id="cb26-4"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb26-4" aria-hidden="true" tabindex="-1"></a>});</span>
-<span id="cb26-5"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-6"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&#39;Transition Matrix&#39;</span>, transitionMatrix);</span>
-<span id="cb26-7"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&#39;% of Unchanged Samples: &#39;</span>, <span class="fu">transitionMatrix.accuracy</span>());</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var transitionMatrix =<span class="st"> </span><span class="kw">sample.errorMatrix</span>({
+  actual<span class="op">:</span><span class="st"> &#39;before&#39;</span>,  <span class="co">#// Cairo 2000 - rows</span>
+  predicted<span class="op">:</span><span class="st"> &#39;later&#39;</span> <span class="co">#// Cairo 2020 – columns</span>
+});
+
+<span class="kw">print</span>(<span class="st">&#39;Transition Matrix&#39;</span>, transitionMatrix);
+<span class="kw">print</span>(<span class="st">&#39;% of Unchanged Samples: &#39;</span>, <span class="kw">transitionMatrix.accuracy</span>());</code></pre></div>
 <p>The matrix will be printed to the <em><strong>Console</strong></em> tab. The code above should produce something similar to Figure 3.15:</p>
-<div class="figure"><span style="display:block;" id="fig:my-matrix"></span>
-<img src="images/matrix.PNG" alt="Transition matrix based on the 2000 samples"  />
+<div class="figure"><span id="fig:my-matrix"></span>
+<img src="images/matrix.PNG" alt="Transition matrix based on the 2000 samples" width="470" />
 <p class="caption">
-Figure 3.15: Transition matrix based on the 2000 samples
+Figure 4.15: Transition matrix based on the 2000 samples
 </p>
 </div>
 <p>In the transition matrix above you can draw information about how many samples transitioned to each class from 2000 to 2020. For example, from the 500 samples of agriculture class (pixel value 1), 1 was classified (or ‘transitioned’) to water, 70 to sand and 106 to urban areas in 2020. Overall, 78% of these samples remained unchanged.</p>
@@ -557,40 +517,40 @@ Figure 3.15: Transition matrix based on the 2000 samples
 <li><strong>Cropland area expansion and conversion in the Nile Delta from 2000-2020</strong></li>
 </ul>
 <p>Another quick analysis that can be done with land cover class maps in two points in time is highlighting areas in which a particular class has changed. In this example, we will assess the cultivated/cropland change between the 2000 and 2020. First, isolate the agricultural land class (pixel value <code>1</code>) from both years into separate objects <code>crop2000</code> and <code>crop2020</code>. Secondly, we calculate the change by simply subtracting both objects:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb27-1" aria-hidden="true" tabindex="-1"></a>var crop2000 <span class="ot">=</span> <span class="fu">Cairo2000.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="fu">.eq</span>(<span class="dv">1</span>);</span>
-<span id="cb27-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb27-2" aria-hidden="true" tabindex="-1"></a>var crop2020 <span class="ot">=</span> <span class="fu">Cairo2020.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="fu">.eq</span>(<span class="dv">1</span>);</span>
-<span id="cb27-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">#// Calculate the change by subtracting the two objects</span></span>
-<span id="cb27-4"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb27-4" aria-hidden="true" tabindex="-1"></a>var change <span class="ot">=</span> <span class="fu">crop2020.subtract</span>(crop2000);</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var crop2000 =<span class="st"> </span><span class="kw">Cairo2000.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>);
+var crop2020 =<span class="st"> </span><span class="kw">Cairo2020.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>);
+<span class="co">#// Calculate the change by subtracting the two objects</span>
+var change =<span class="st"> </span><span class="kw">crop2020.subtract</span>(crop2000);</code></pre></div>
 <p>By default, the new objects <code>crop2000</code> and <code>crop2020</code> will have values of 1 where the <code>'classification'</code> has the label equals (<code>.eq</code>) to 1 (agriculture) in the land cover map. This will be the case regardless of the label value. Thus, the object <code>change</code> will have values of <code>-1</code>, <code>0</code> and <code>1</code>, that represents loss/conversion, no change and gains, respectively:</p>
 <p><code>-1</code> = No crops in 2020 - crops in 2000 (0 - 1 = -1);</p>
 <p><code>0</code> = crops in 2020 - crops in 2000 (1 - 1 = 0);</p>
 <p><code>1</code> = crops in 2020 - no crops in 2000 (1 - 0 = 1)</p>
 <p>Add <code>change</code> to the map. Optionally, add a legend to the map using the code from <a href="country-specific-analyses.html#supervised-classification-with-random-forest-1">Example 1</a></p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb28-1" aria-hidden="true" tabindex="-1"></a>var paletteCHANGE <span class="ot">=</span> [</span>
-<span id="cb28-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;red&#39;</span>,    <span class="sc">/</span><span class="er">/</span> Loss<span class="sc">/</span>conversion</span>
-<span id="cb28-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;white&#39;</span>,  <span class="sc">/</span><span class="er">/</span> No Change</span>
-<span id="cb28-4"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;green&#39;</span>,  <span class="sc">/</span><span class="er">/</span> Gain<span class="sc">/</span>Expansion</span>
-<span id="cb28-5"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb28-5" aria-hidden="true" tabindex="-1"></a>];</span>
-<span id="cb28-6"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-7"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">Map.addLayer</span>(change, {palette<span class="sc">:</span> paletteCHANGE}, <span class="st">&#39;Change 2000-2018&#39;</span>)</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var paletteCHANGE =<span class="st"> </span>[
+  <span class="st">&#39;red&#39;</span>,    <span class="op">/</span><span class="er">/</span><span class="st"> </span>Loss<span class="op">/</span>conversion
+  <span class="st">&#39;white&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>No Change
+  <span class="st">&#39;green&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Gain<span class="op">/</span>Expansion
+];
+
+<span class="kw">Map.addLayer</span>(change, {palette<span class="op">:</span><span class="st"> </span>paletteCHANGE}, <span class="st">&#39;Change 2000-2018&#39;</span>)</code></pre></div>
 <p>The resulting change map will look similar to Figure 3.16:</p>
-<div class="figure"><span style="display:block;" id="fig:my-change"></span>
-<img src="images/matrix.PNG" alt="2000-2020 Change Map. Conversion/loss west of the Nile Delta are likely due to harvest while the circle shaped areas in the center of the delta are related to expansion of cities and villages."  />
+<div class="figure"><span id="fig:my-change"></span>
+<img src="images/matrix.PNG" alt="2000-2020 Change Map. Conversion/loss west of the Nile Delta are likely due to harvest while the circle shaped areas in the center of the delta are related to expansion of cities and villages." width="470" />
 <p class="caption">
-Figure 3.16: 2000-2020 Change Map. Conversion/loss west of the Nile Delta are likely due to harvest while the circle shaped areas in the center of the delta are related to expansion of cities and villages.
+Figure 4.16: 2000-2020 Change Map. Conversion/loss west of the Nile Delta are likely due to harvest while the circle shaped areas in the center of the delta are related to expansion of cities and villages.
 </p>
 </div>
 <p>You can calculate the area of expansion/conversion by isolating the pixels of gain/loss from the <code>change</code> into <code>gain</code> and <code>loss</code>. Then, calculate the area of each pixel using <code>ee.Image.pixelArea</code> and multiplying by the count of pixels in gain and loss using <code>multiply</code>. The default unit is square meters (m²). You can use <code>.divide()</code> to transform into square kilometers (<code>.divide(1000000)</code>) or hectares (<code>.divide(10000)</code>)</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb29-1" aria-hidden="true" tabindex="-1"></a>var gain <span class="ot">=</span> <span class="fu">change.eq</span>(<span class="dv">1</span>);  <span class="sc">/</span><span class="er">/</span> Isolate the gain pixels from the change</span>
-<span id="cb29-2"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb29-2" aria-hidden="true" tabindex="-1"></a>var loss <span class="ot">=</span> <span class="fu">change.eq</span>(<span class="sc">-</span><span class="dv">1</span>); <span class="sc">/</span><span class="er">/</span> Isolate the loss pixels from the change</span>
-<span id="cb29-3"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span><span class="er">/</span> Calculate the area of each pixel</span>
-<span id="cb29-5"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb29-5" aria-hidden="true" tabindex="-1"></a>var gainArea <span class="ot">=</span> <span class="fu">gain.multiply</span>(<span class="fu">ee.Image.pixelArea</span>()<span class="fu">.divide</span>(<span class="dv">1000000</span>));</span>
-<span id="cb29-6"><a href="supervised-classification-of-landsat-8-oli-imagery.html#cb29-6" aria-hidden="true" tabindex="-1"></a>var lossArea <span class="ot">=</span> <span class="fu">loss.multiply</span>(<span class="fu">ee.Image.pixelArea</span>()<span class="fu">.divide</span>(<span class="dv">1000000</span>));</span></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:my-areas"></span>
-<img src="images/areas.PNG" alt="Cultivated area gains and losses in the 2000-2020 period."  />
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var gain =<span class="st"> </span><span class="kw">change.eq</span>(<span class="dv">1</span>);  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Isolate the gain pixels from the change
+var loss =<span class="st"> </span><span class="kw">change.eq</span>(<span class="op">-</span><span class="dv">1</span>); <span class="op">/</span><span class="er">/</span><span class="st"> </span>Isolate the loss pixels from the change
+
+<span class="op">/</span><span class="er">/</span><span class="st"> </span>Calculate the area of each pixel
+var gainArea =<span class="st"> </span><span class="kw">gain.multiply</span>(<span class="kw">ee.Image.pixelArea</span>()<span class="kw">.divide</span>(<span class="dv">1000000</span>));
+var lossArea =<span class="st"> </span><span class="kw">loss.multiply</span>(<span class="kw">ee.Image.pixelArea</span>()<span class="kw">.divide</span>(<span class="dv">1000000</span>));</code></pre></div>
+<div class="figure"><span id="fig:my-areas"></span>
+<img src="images/areas.PNG" alt="Cultivated area gains and losses in the 2000-2020 period." width="539" />
 <p class="caption">
-Figure 3.17: Cultivated area gains and losses in the 2000-2020 period.
+Figure 4.17: Cultivated area gains and losses in the 2000-2020 period.
 </p>
 </div>
 
@@ -606,6 +566,7 @@ Figure 3.17: Cultivated area gains and losses in the 2000-2020 period.
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -645,10 +606,6 @@ gitbook.start({
 "text": null
 },
 "download": null,
-"search": {
-"engine": "fuse",
-"options": null
-},
 "toc": {
 "collapse": "subsection"
 }

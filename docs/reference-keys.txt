@@ -37,6 +37,7 @@ fig:my-stratatification
 fig:my-classficationmangrove
 fig:my-results
 introduction-and-overview
+part-i
 auxiliary-functions
 cloud-and-cloud-shadow-masking
 spectral-indices

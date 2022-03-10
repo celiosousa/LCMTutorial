@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 Auxiliary functions | Supervised Classification with Google Earth Engine</title>
-  <meta name="description" content="Chapter 2 Auxiliary functions | Supervised Classification with Google Earth Engine" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <title>Chapter 3 Auxiliary functions | Supervised Classification with Google Earth Engine</title>
+  <meta name="description" content="Chapter 3 Auxiliary functions | Supervised Classification with Google Earth Engine" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 2 Auxiliary functions | Supervised Classification with Google Earth Engine" />
+  <meta property="og:title" content="Chapter 3 Auxiliary functions | Supervised Classification with Google Earth Engine" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 Auxiliary functions | Supervised Classification with Google Earth Engine" />
+  <meta name="twitter:title" content="Chapter 3 Auxiliary functions | Supervised Classification with Google Earth Engine" />
   
   
   
@@ -24,18 +24,16 @@
 <meta name="author" content="Celio Sousa" />
 
 
-<meta name="date" content="2021-12-27" />
+<meta name="date" content="2022-03-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
+<link rel="prev" href="part-i.html"/>
 <link rel="next" href="supervised-classification-of-landsat-8-oli-imagery.html"/>
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -51,73 +49,47 @@
 
 
 
+
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
 
@@ -138,39 +110,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction and overview</a></li>
-<li class="chapter" data-level="2" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html"><i class="fa fa-check"></i><b>2</b> Auxiliary functions</a>
-<ul>
-<li class="chapter" data-level="2.1" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#cloud-and-cloud-shadow-masking"><i class="fa fa-check"></i><b>2.1</b> Cloud and cloud shadow masking</a></li>
-<li class="chapter" data-level="2.2" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#spectral-indices"><i class="fa fa-check"></i><b>2.2</b> Spectral indices</a></li>
-<li class="chapter" data-level="2.3" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#compositing"><i class="fa fa-check"></i><b>2.3</b> Compositing</a></li>
+<li class="chapter" data-level="2" data-path="part-i.html"><a href="part-i.html"><i class="fa fa-check"></i><b>2</b> pART I</a></li>
+<li class="chapter" data-level="3" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html"><i class="fa fa-check"></i><b>3</b> Auxiliary functions</a><ul>
+<li class="chapter" data-level="3.1" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#cloud-and-cloud-shadow-masking"><i class="fa fa-check"></i><b>3.1</b> Cloud and cloud shadow masking</a></li>
+<li class="chapter" data-level="3.2" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#spectral-indices"><i class="fa fa-check"></i><b>3.2</b> Spectral indices</a></li>
+<li class="chapter" data-level="3.3" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#compositing"><i class="fa fa-check"></i><b>3.3</b> Compositing</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html"><i class="fa fa-check"></i><b>3</b> Supervised classification of Landsat 8 OLI imagery</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020"><i class="fa fa-check"></i><b>3.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2020</a>
-<ul>
-<li class="chapter" data-level="3.1.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#temporal-and-spatial-parameters-for-compositing"><i class="fa fa-check"></i><b>3.1.1</b> Temporal and spatial parameters for compositing</a></li>
-<li class="chapter" data-level="3.1.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#landsat-8-pre-classification-steps"><i class="fa fa-check"></i><b>3.1.2</b> Landsat 8 Pre-classification steps</a></li>
-<li class="chapter" data-level="3.1.3" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#supervised-classification-with-random-forest"><i class="fa fa-check"></i><b>3.1.3</b> Supervised Classification with Random Forest</a></li>
+<li class="chapter" data-level="4" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html"><i class="fa fa-check"></i><b>4</b> Supervised classification of Landsat 8 OLI imagery</a><ul>
+<li class="chapter" data-level="4.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020"><i class="fa fa-check"></i><b>4.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2020</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#temporal-and-spatial-parameters-for-compositing"><i class="fa fa-check"></i><b>4.1.1</b> Temporal and spatial parameters for compositing</a></li>
+<li class="chapter" data-level="4.1.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#landsat-8-pre-classification-steps"><i class="fa fa-check"></i><b>4.1.2</b> Landsat 8 Pre-classification steps</a></li>
+<li class="chapter" data-level="4.1.3" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#supervised-classification-with-random-forest"><i class="fa fa-check"></i><b>4.1.3</b> Supervised Classification with Random Forest</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>3.2</b> Example 2: 2000 - 2020 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
+<li class="chapter" data-level="4.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>4.2</b> Example 2: 2000 - 2020 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="post-classification-processing.html"><a href="post-classification-processing.html"><i class="fa fa-check"></i><b>4</b> Post-classification processing</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="post-classification-processing.html"><a href="post-classification-processing.html#re-classification"><i class="fa fa-check"></i><b>4.1</b> Re-classification</a>
-<ul>
-<li class="chapter" data-level="4.1.1" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-1"><i class="fa fa-check"></i><b>4.1.1</b> Scenario 1</a></li>
-<li class="chapter" data-level="4.1.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-2"><i class="fa fa-check"></i><b>4.1.2</b> Scenario 2</a></li>
-<li class="chapter" data-level="4.1.3" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-3"><i class="fa fa-check"></i><b>4.1.3</b> Scenario 3</a></li>
+<li class="chapter" data-level="5" data-path="post-classification-processing.html"><a href="post-classification-processing.html"><i class="fa fa-check"></i><b>5</b> Post-classification processing</a><ul>
+<li class="chapter" data-level="5.1" data-path="post-classification-processing.html"><a href="post-classification-processing.html#re-classification"><i class="fa fa-check"></i><b>5.1</b> Re-classification</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-1"><i class="fa fa-check"></i><b>5.1.1</b> Scenario 1</a></li>
+<li class="chapter" data-level="5.1.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-2"><i class="fa fa-check"></i><b>5.1.2</b> Scenario 2</a></li>
+<li class="chapter" data-level="5.1.3" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-3"><i class="fa fa-check"></i><b>5.1.3</b> Scenario 3</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>4.2</b> Map spatial smoothing</a></li>
+<li class="chapter" data-level="5.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>5.2</b> Map spatial smoothing</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html"><i class="fa fa-check"></i><b>5</b> Country-specific analyses</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#mangrove-mapping-in-guinea---west-africa"><i class="fa fa-check"></i><b>5.1</b> Mangrove mapping in Guinea - West Africa</a>
-<ul>
-<li class="chapter" data-level="5.1.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#masking"><i class="fa fa-check"></i><b>5.1.1</b> Masking</a></li>
-<li class="chapter" data-level="5.1.2" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#landsat-8-image-collection-and-cloud-free-mosaic"><i class="fa fa-check"></i><b>5.1.2</b> Landsat 8 Image Collection and Cloud-free Mosaic</a></li>
-<li class="chapter" data-level="5.1.3" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#supervised-classification-with-random-forest-1"><i class="fa fa-check"></i><b>5.1.3</b> Supervised Classification with Random Forest</a></li>
+<li class="chapter" data-level="6" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html"><i class="fa fa-check"></i><b>6</b> Country-specific analyses</a><ul>
+<li class="chapter" data-level="6.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#mangrove-mapping-in-guinea---west-africa"><i class="fa fa-check"></i><b>6.1</b> Mangrove mapping in Guinea - West Africa</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#masking"><i class="fa fa-check"></i><b>6.1.1</b> Masking</a></li>
+<li class="chapter" data-level="6.1.2" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#landsat-8-image-collection-and-cloud-free-mosaic"><i class="fa fa-check"></i><b>6.1.2</b> Landsat 8 Image Collection and Cloud-free Mosaic</a></li>
+<li class="chapter" data-level="6.1.3" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#supervised-classification-with-random-forest-1"><i class="fa fa-check"></i><b>6.1.3</b> Supervised Classification with Random Forest</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -192,14 +158,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="auxiliary-functions" class="section level1" number="2">
-<h1><span class="header-section-number">Chapter 2</span> Auxiliary functions</h1>
+<div id="auxiliary-functions" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> Auxiliary functions</h1>
 <p>Objective:</p>
 <ul>
 <li>To provide the initial functions and lines of code to assist the user to prepare, process and analyze Landsat 8/7 data for classification purposes.</li>
 </ul>
-<div id="cloud-and-cloud-shadow-masking" class="section level2" number="2.1">
-<h2><span class="header-section-number">2.1</span> Cloud and cloud shadow masking</h2>
+<div id="cloud-and-cloud-shadow-masking" class="section level2">
+<h2><span class="header-section-number">3.1</span> Cloud and cloud shadow masking</h2>
 <div class="rmdcomment">
 <p>
 <a href="https://code.earthengine.google.com/cd7747671a8a2d411ae86afd1aebf084" target="_blank"><em>Section Snapshot at GEE</em></a>
@@ -207,62 +173,62 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>This section demonstrates a way of masking clouds and cloud shadow pixels from Landsat 8/7 Surface Reflectance data based on file metadata. This function was created based on the documentation available for Landsat 8/7. Values for pixel bit and pixel band were found <a href="https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1-level-1-quality-assessment-band?qt-science_support_page_related_con=0#qt-science_support_page_related_con" target="_blank"><em>here.</em></a></p>
 <p>The cloud masking function is as follows:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="auxiliary-functions.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span> <span class="fu">maskL8sr</span>(image) {</span>
-<span id="cb1-2"><a href="auxiliary-functions.html#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span> <span class="co">#Bits 3 and 5 are cloud shadow and cloud, respectively.</span></span>
-<span id="cb1-3"><a href="auxiliary-functions.html#cb1-3" aria-hidden="true" tabindex="-1"></a>  var cloudShadowBitMask <span class="ot">=</span> <span class="fu">ee.Number</span>(<span class="dv">2</span>)<span class="fu">.pow</span>(<span class="dv">3</span>)<span class="fu">.int</span>();</span>
-<span id="cb1-4"><a href="auxiliary-functions.html#cb1-4" aria-hidden="true" tabindex="-1"></a>  var cloudsBitMask <span class="ot">=</span> <span class="fu">ee.Number</span>(<span class="dv">2</span>)<span class="fu">.pow</span>(<span class="dv">5</span>)<span class="fu">.int</span>();</span>
-<span id="cb1-5"><a href="auxiliary-functions.html#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span> <span class="co">#Get the pixel QA band.</span></span>
-<span id="cb1-6"><a href="auxiliary-functions.html#cb1-6" aria-hidden="true" tabindex="-1"></a>  var qa <span class="ot">=</span> <span class="fu">image.select</span>(<span class="st">&#39;pixel_qa&#39;</span>);</span>
-<span id="cb1-7"><a href="auxiliary-functions.html#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span> <span class="co">#Both flags should be set to zero, indicating clear conditions.</span></span>
-<span id="cb1-8"><a href="auxiliary-functions.html#cb1-8" aria-hidden="true" tabindex="-1"></a>  var mask <span class="ot">=</span> <span class="fu">qa.bitwiseAnd</span>(cloudShadowBitMask)<span class="fu">.eq</span>(<span class="dv">0</span>)</span>
-<span id="cb1-9"><a href="auxiliary-functions.html#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">.and</span>(<span class="fu">qa.bitwiseAnd</span>(cloudsBitMask)<span class="fu">.eq</span>(<span class="dv">0</span>));</span>
-<span id="cb1-10"><a href="auxiliary-functions.html#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span> <span class="co">#Return the masked image, scaled to [0, 1].</span></span>
-<span id="cb1-11"><a href="auxiliary-functions.html#cb1-11" aria-hidden="true" tabindex="-1"></a>  return <span class="fu">image.updateMask</span>(mask)<span class="fu">.divide</span>(<span class="dv">10000</span>)<span class="fu">.copyProperties</span>(image, [<span class="st">&quot;system:time_start&quot;</span>]);</span>
-<span id="cb1-12"><a href="auxiliary-functions.html#cb1-12" aria-hidden="true" tabindex="-1"></a>};</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">function</span> <span class="kw">maskL8sr</span>(image) {
+  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="co">#Bits 3 and 5 are cloud shadow and cloud, respectively.</span>
+<span class="st">  </span>var cloudShadowBitMask =<span class="st"> </span><span class="kw">ee.Number</span>(<span class="dv">2</span>)<span class="kw">.pow</span>(<span class="dv">3</span>)<span class="kw">.int</span>();
+  var cloudsBitMask =<span class="st"> </span><span class="kw">ee.Number</span>(<span class="dv">2</span>)<span class="kw">.pow</span>(<span class="dv">5</span>)<span class="kw">.int</span>();
+  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="co">#Get the pixel QA band.</span>
+<span class="st">  </span>var qa =<span class="st"> </span><span class="kw">image.select</span>(<span class="st">&#39;pixel_qa&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="co">#Both flags should be set to zero, indicating clear conditions.</span>
+<span class="st">  </span>var mask =<span class="st"> </span><span class="kw">qa.bitwiseAnd</span>(cloudShadowBitMask)<span class="kw">.eq</span>(<span class="dv">0</span>)
+      <span class="kw">.and</span>(<span class="kw">qa.bitwiseAnd</span>(cloudsBitMask)<span class="kw">.eq</span>(<span class="dv">0</span>));
+  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="co">#Return the masked image, scaled to [0, 1].</span>
+<span class="st">  </span>return <span class="kw">image.updateMask</span>(mask)<span class="kw">.divide</span>(<span class="dv">10000</span>)<span class="kw">.copyProperties</span>(image, [<span class="st">&quot;system:time_start&quot;</span>]);
+};</code></pre></div>
 </div>
-<div id="spectral-indices" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> Spectral indices</h2>
+<div id="spectral-indices" class="section level2">
+<h2><span class="header-section-number">3.2</span> Spectral indices</h2>
 <p>This section demonstrates how to calculate and add spectral indices to each scene of a Landsat 8 image collection. The function below calculates and add spectral indices to an image collection taking into account the Landsat 8 spectral bands and their respective wavelengths:</p>
-<p><img src="images/TableBandsL8.PNG" /><!-- --></p>
+<p><img src="images/TableBandsL8.PNG" width="848" /></p>
 <p>The function used to calculate several commonly used spectral indices follows this format:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="auxiliary-functions.html#cb2-1" aria-hidden="true" tabindex="-1"></a>var addIndicesL8 <span class="ot">=</span> <span class="cf">function</span>(img) {</span>
-<span id="cb2-2"><a href="auxiliary-functions.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># NDVI (Normalized Difference Vegetation Index)</span></span>
-<span id="cb2-3"><a href="auxiliary-functions.html#cb2-3" aria-hidden="true" tabindex="-1"></a>  var ndvi <span class="ot">=</span> <span class="fu">img.normalizedDifference</span>([<span class="st">&#39;B5&#39;</span>,<span class="st">&#39;B4&#39;</span>])<span class="fu">.rename</span>(<span class="st">&#39;NDVI&#39;</span>);</span>
-<span id="cb2-4"><a href="auxiliary-functions.html#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># NDMI (Normalized Difference Mangrove Index - Shi et al 2016 )</span></span>
-<span id="cb2-5"><a href="auxiliary-functions.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  var ndmi <span class="ot">=</span> <span class="fu">img.normalizedDifference</span>([<span class="st">&#39;B7&#39;</span>,<span class="st">&#39;B3&#39;</span>])<span class="fu">.rename</span>(<span class="st">&#39;NDMI&#39;</span>);</span>
-<span id="cb2-6"><a href="auxiliary-functions.html#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># MNDWI (Modified Normalized Difference Water Index - Hanqiu Xu, 2006)</span></span>
-<span id="cb2-7"><a href="auxiliary-functions.html#cb2-7" aria-hidden="true" tabindex="-1"></a>  var mndwi <span class="ot">=</span> <span class="fu">img.normalizedDifference</span>([<span class="st">&#39;B3&#39;</span>,<span class="st">&#39;B6&#39;</span>])<span class="fu">.rename</span>(<span class="st">&#39;MNDWI&#39;</span>);</span>
-<span id="cb2-8"><a href="auxiliary-functions.html#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># SR (Simple Ratio)</span></span>
-<span id="cb2-9"><a href="auxiliary-functions.html#cb2-9" aria-hidden="true" tabindex="-1"></a>  var sr <span class="ot">=</span> <span class="fu">img.select</span>(<span class="st">&#39;B5&#39;</span>)<span class="fu">.divide</span>(<span class="fu">img.select</span>(<span class="st">&#39;B4&#39;</span>))<span class="fu">.rename</span>(<span class="st">&#39;SR&#39;</span>);</span>
-<span id="cb2-10"><a href="auxiliary-functions.html#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># Band Ratio 6/5</span></span>
-<span id="cb2-11"><a href="auxiliary-functions.html#cb2-11" aria-hidden="true" tabindex="-1"></a>  var ratio65 <span class="ot">=</span> <span class="fu">img.select</span>(<span class="st">&#39;B6&#39;</span>)<span class="fu">.divide</span>(<span class="fu">img.select</span>(<span class="st">&#39;B5&#39;</span>))<span class="fu">.rename</span>(<span class="st">&#39;R65&#39;</span>);</span>
-<span id="cb2-12"><a href="auxiliary-functions.html#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># Band Ratio 4/6</span></span>
-<span id="cb2-13"><a href="auxiliary-functions.html#cb2-13" aria-hidden="true" tabindex="-1"></a>  var ratio46 <span class="ot">=</span> <span class="fu">img.select</span>(<span class="st">&#39;B4&#39;</span>)<span class="fu">.divide</span>(<span class="fu">img.select</span>(<span class="st">&#39;B6&#39;</span>))<span class="fu">.rename</span>(<span class="st">&#39;R46&#39;</span>);</span>
-<span id="cb2-14"><a href="auxiliary-functions.html#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="sc">/</span><span class="er">/</span><span class="co"># GCVI (Green Chlorophyll Vegetation Index)</span></span>
-<span id="cb2-15"><a href="auxiliary-functions.html#cb2-15" aria-hidden="true" tabindex="-1"></a>  var gcvi <span class="ot">=</span> <span class="fu">img.expression</span>(<span class="st">&#39;(NIR/GREEN)-1&#39;</span>,{</span>
-<span id="cb2-16"><a href="auxiliary-functions.html#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;NIR&#39;</span><span class="sc">:</span><span class="fu">img.select</span>(<span class="st">&#39;B5&#39;</span>),</span>
-<span id="cb2-17"><a href="auxiliary-functions.html#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;GREEN&#39;</span><span class="sc">:</span><span class="fu">img.select</span>(<span class="st">&#39;B3&#39;</span>)</span>
-<span id="cb2-18"><a href="auxiliary-functions.html#cb2-18" aria-hidden="true" tabindex="-1"></a>  })<span class="fu">.rename</span>(<span class="st">&#39;GCVI&#39;</span>);</span>
-<span id="cb2-19"><a href="auxiliary-functions.html#cb2-19" aria-hidden="true" tabindex="-1"></a>   return img</span>
-<span id="cb2-20"><a href="auxiliary-functions.html#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.addBands</span>(ndvi) <span class="sc">/</span><span class="er">/</span><span class="co"># The .addBands will add each spectral index to each Landsat scene</span></span>
-<span id="cb2-21"><a href="auxiliary-functions.html#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.addBands</span>(ndmi)</span>
-<span id="cb2-22"><a href="auxiliary-functions.html#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.addBands</span>(mndwi)</span>
-<span id="cb2-23"><a href="auxiliary-functions.html#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.addBands</span>(sr)</span>
-<span id="cb2-24"><a href="auxiliary-functions.html#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.addBands</span>(ratio65)</span>
-<span id="cb2-25"><a href="auxiliary-functions.html#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.addBands</span>(ratio46)</span>
-<span id="cb2-26"><a href="auxiliary-functions.html#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.addBands</span>(gcvi);</span>
-<span id="cb2-27"><a href="auxiliary-functions.html#cb2-27" aria-hidden="true" tabindex="-1"></a>};</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var addIndicesL8 =<span class="st"> </span><span class="cf">function</span>(img) {
+  <span class="op">/</span><span class="er">/</span><span class="co"># NDVI (Normalized Difference Vegetation Index)</span>
+<span class="st">  </span>var ndvi =<span class="st"> </span><span class="kw">img.normalizedDifference</span>([<span class="st">&#39;B5&#39;</span>,<span class="st">&#39;B4&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;NDVI&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="co"># NDMI (Normalized Difference Mangrove Index - Shi et al 2016 )</span>
+<span class="st">  </span>var ndmi =<span class="st"> </span><span class="kw">img.normalizedDifference</span>([<span class="st">&#39;B7&#39;</span>,<span class="st">&#39;B3&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;NDMI&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="co"># MNDWI (Modified Normalized Difference Water Index - Hanqiu Xu, 2006)</span>
+<span class="st">  </span>var mndwi =<span class="st"> </span><span class="kw">img.normalizedDifference</span>([<span class="st">&#39;B3&#39;</span>,<span class="st">&#39;B6&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;MNDWI&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="co"># SR (Simple Ratio)</span>
+<span class="st">  </span>var sr =<span class="st"> </span><span class="kw">img.select</span>(<span class="st">&#39;B5&#39;</span>)<span class="kw">.divide</span>(<span class="kw">img.select</span>(<span class="st">&#39;B4&#39;</span>))<span class="kw">.rename</span>(<span class="st">&#39;SR&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="co"># Band Ratio 6/5</span>
+<span class="st">  </span>var ratio65 =<span class="st"> </span><span class="kw">img.select</span>(<span class="st">&#39;B6&#39;</span>)<span class="kw">.divide</span>(<span class="kw">img.select</span>(<span class="st">&#39;B5&#39;</span>))<span class="kw">.rename</span>(<span class="st">&#39;R65&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="co"># Band Ratio 4/6</span>
+<span class="st">  </span>var ratio46 =<span class="st"> </span><span class="kw">img.select</span>(<span class="st">&#39;B4&#39;</span>)<span class="kw">.divide</span>(<span class="kw">img.select</span>(<span class="st">&#39;B6&#39;</span>))<span class="kw">.rename</span>(<span class="st">&#39;R46&#39;</span>);
+  <span class="op">/</span><span class="er">/</span><span class="co"># GCVI (Green Chlorophyll Vegetation Index)</span>
+<span class="st">  </span>var gcvi =<span class="st"> </span><span class="kw">img.expression</span>(<span class="st">&#39;(NIR/GREEN)-1&#39;</span>,{
+    <span class="st">&#39;NIR&#39;</span><span class="op">:</span><span class="kw">img.select</span>(<span class="st">&#39;B5&#39;</span>),
+    <span class="st">&#39;GREEN&#39;</span><span class="op">:</span><span class="kw">img.select</span>(<span class="st">&#39;B3&#39;</span>)
+  })<span class="kw">.rename</span>(<span class="st">&#39;GCVI&#39;</span>);
+   return img
+    <span class="kw">.addBands</span>(ndvi) <span class="op">/</span><span class="er">/</span><span class="co"># The .addBands will add each spectral index to each Landsat scene</span>
+<span class="st">    </span><span class="kw">.addBands</span>(ndmi)
+    <span class="kw">.addBands</span>(mndwi)
+    <span class="kw">.addBands</span>(sr)
+    <span class="kw">.addBands</span>(ratio65)
+    <span class="kw">.addBands</span>(ratio46)
+    <span class="kw">.addBands</span>(gcvi);
+};</code></pre></div>
 <p>Note that the function above shows several ways of doing band math operations. First, normalized difference indices can be calculated using <code>img.normalizedDifference</code>. For more intricate expressions, You can use the expression format as shown with the Green Chlorophyll Vegetation Index example.</p>
-<p><img src="images/AttentionL7Bands.PNG" /><!-- --></p>
+<p><img src="images/AttentionL7Bands.PNG" width="1630" /></p>
 <div class="caution">
 <p>
 <strong>IMPORTANT:</strong> The function above is also applicable to Landsat 7 image collections. However, be mindful that these sensors have slightly different bands and wavelengths. Therefore, the name of the bands on the above function for each spectral index will not match Landsat 7’s spectral bands. Make sure to select the appropriate Landsat 7 spectral band for each spectral index. Use Table 2 for reference.
 </p>
 </div>
-<p><img src="images/TableBandsL7.PNG" /><!-- --></p>
+<p><img src="images/TableBandsL7.PNG" width="846" /></p>
 </div>
-<div id="compositing" class="section level2" number="2.3">
-<h2><span class="header-section-number">2.3</span> Compositing</h2>
+<div id="compositing" class="section level2">
+<h2><span class="header-section-number">3.3</span> Compositing</h2>
 <div class="rmdcomment">
 <p>
 <a href="https://code.earthengine.google.com/2e97616e22317b07d3885130a5af7e1e" target="_blank"><em>Section Snapshot at GEE</em></a>
@@ -272,10 +238,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>You can composite any object containing an image collection using on a per-pixel, per- band basis using <code>.median()</code> or using quality bands such as ‘NDVI’ with <code>.qualityMosaic(‘NDVI’)</code>. The <code>.median()</code> will composite all the images in the collection to a single image using the median values of each band, at the pixel level; <code>.qualityMosaic(‘NDVI’)</code> will composite all the images in the collection and set each pixel in the composite based on which image in the collection has a maximum value for the specified band, in this case NDVI.</p>
 <p>Although there are different methods for compositing, the median composite method is the state of the art in Google Earth Engine and it has been widely used in classification and change analysis studies. For instance, it was used in a <a href="https://doi.org/10.1016/j.jag.2018.11.014" target="_blank">recent publication</a> of September 2019 mapping cropland extent over southeast and northeast Asia using Landsat 8 and GEE. Median was also the compositing method chosen in <a href="https://doi.org/10.1016/j.rse.2017.05.025" target="_blank">this study</a> to showcase GEE’s array-based computational approach. The authors of this <a href="https://doi.org/10.3390/rs8080681" target="_blank">study</a> mapping land cover change in Namibia also used median composities in their analysis. The same approach was used <a href="https://doi.org/10.1080/2150704X.2016.1182659" target="_blank">here</a> to produce a land cover map for the entire Southeast Asia and <a href="https://doi.org/10.1371/journal.pone.0184926" target="_blank">here</a> to map land cover and land cover change over continental Africa.</p>
 <p>Additionally, methods such as maximum NDVI would present issues, especially over cloudy areas. As you composite using maximum values of NDVI, water bodies will be completely covered by clouds in the resulting composite as clouds have slightly higher NDVI than water. A second cleaning or compositing procedure would be necessary to avoid this issue over water bodies, which in this case is not ideal.</p>
-<div class="figure"><span style="display:block;" id="fig:my-fig4"></span>
-<img src="images/CompositesEx.PNG" alt="Median (left) and Maximum NDVI (Greenest Pixel) (right) composites of Landsat 8 images over Lake Piso in Liberia. Clouds have slightly higher NDVI than water. Therefore, cloudy pixels over water bodies often occur with this compositing method."  />
+<div class="figure"><span id="fig:my-fig4"></span>
+<img src="images/CompositesEx.PNG" alt="Median (left) and Maximum NDVI (Greenest Pixel) (right) composites of Landsat 8 images over Lake Piso in Liberia. Clouds have slightly higher NDVI than water. Therefore, cloudy pixels over water bodies often occur with this compositing method." width="1098" />
 <p class="caption">
-Figure 2.1: Median (left) and Maximum NDVI (Greenest Pixel) (right) composites of Landsat 8 images over Lake Piso in Liberia. Clouds have slightly higher NDVI than water. Therefore, cloudy pixels over water bodies often occur with this compositing method.
+Figure 3.1: Median (left) and Maximum NDVI (Greenest Pixel) (right) composites of Landsat 8 images over Lake Piso in Liberia. Clouds have slightly higher NDVI than water. Therefore, cloudy pixels over water bodies often occur with this compositing method.
 </p>
 </div>
 
@@ -286,11 +252,12 @@ Figure 2.1: Median (left) and Maximum NDVI (Greenest Pixel) (right) composites o
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="part-i.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="supervised-classification-of-landsat-8-oli-imagery.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -330,10 +297,6 @@ gitbook.start({
 "text": null
 },
 "download": null,
-"search": {
-"engine": "fuse",
-"options": null
-},
 "toc": {
 "collapse": "subsection"
 }
