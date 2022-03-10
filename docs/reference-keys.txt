@@ -1,4 +1,3 @@
-fig:my-fig4
 fig:my-figGEOMEgypt
 fig:my-figCompL8
 fig:my-figLayer
@@ -45,15 +44,11 @@ exploring-image-and-image-collection
 image-manipulation
 band-math-and-vi-calculation
 thresholds-and-masks
-auxiliary-functions
+part-2---advanced-google-earth-engine
+advanced-image-manipulation-pre-classification
 cloud-and-cloud-shadow-masking
 spectral-indices
 compositing
-part-2---advanced-google-earth-engine
-advanced-image-manipulation-pre-classification
-cloud-and-cloud-shadow-masking-1
-spectral-indices-1
-compositing-1
 supervised-classification-random-forest
 land-cover-classification-using-random-forest
 map-to-map-change
