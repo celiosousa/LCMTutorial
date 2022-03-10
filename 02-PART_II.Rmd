@@ -29,7 +29,7 @@ function maskL8sr(image) {
 
 This section demonstrates how to calculate and add spectral indices to each scene of a Landsat 8 image collection. The function below calculates and add spectral indices to an image collection taking into account the Landsat 8 spectral bands and their respective wavelengths:
 
-```{r my-fig,  echo=FALSE, message=FALSE}
+```{r my-figure,  echo=FALSE, message=FALSE}
 knitr::include_graphics("images/TableBandsL8.PNG")
 ```
 
