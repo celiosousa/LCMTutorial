@@ -1,0 +1,13 @@
+# PART 3 - Country-specific Applications
+
+## Liberia
+
+### Class-by-class land cover mapping
+
+### Multi-class land cover mapping
+
+### Land cover to ecosystems: a map merging approach
+
+## Guinea
+
+### Mangrove mapping in Guinea, West Africa
