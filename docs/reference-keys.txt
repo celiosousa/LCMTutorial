@@ -37,7 +37,14 @@ fig:my-stratatification
 fig:my-classficationmangrove
 fig:my-results
 introduction-and-overview
-part-i
+part-1---basics-fundamentals
+programming-and-remote-sensing-basics
+remote-sensing-language
+google-earth-engine-api-and-java-script
+exploring-image-and-image-collection
+image-manipulation
+band-math-and-vi-calculation
+thresholds-and-masks
 auxiliary-functions
 cloud-and-cloud-shadow-masking
 spectral-indices
