@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Post-classification processing | Supervised Classification with Google Earth Engine</title>
+  <meta name="description" content="Chapter 6 Post-classification processing | Supervised Classification with Google Earth Engine" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Post-classification processing | Supervised Classification with Google Earth Engine" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Post-classification processing | Supervised Classification with Google Earth Engine" />
+  
+  
+  
+
+<meta name="author" content="Celio Sousa" />
+
+
+<meta name="date" content="2022-03-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="supervised-classification-of-landsat-8-oli-imagery.html"/>
+<link rel="next" href="country-specific-analyses.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Classification Tutorial</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction and overview</a></li>
+<li class="chapter" data-level="2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html"><i class="fa fa-check"></i><b>2</b> Part 1 - Basics &amp; Fundamentals</a><ul>
+<li class="chapter" data-level="2.1" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#programming-and-remote-sensing-basics"><i class="fa fa-check"></i><b>2.1</b> Programming and Remote Sensing Basics</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#remote-sensing-language"><i class="fa fa-check"></i><b>2.1.1</b> Remote Sensing Language</a></li>
+<li class="chapter" data-level="2.1.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#google-earth-engine-api-and-java-script"><i class="fa fa-check"></i><b>2.1.2</b> Google Earth Engine API and Java Script</a></li>
+<li class="chapter" data-level="2.1.3" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#exploring-image-and-image-collection"><i class="fa fa-check"></i><b>2.1.3</b> Exploring Image and Image Collection</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#image-manipulation"><i class="fa fa-check"></i><b>2.2</b> Image Manipulation</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#band-math-and-vi-calculation"><i class="fa fa-check"></i><b>2.2.1</b> Band Math and VI Calculation</a></li>
+<li class="chapter" data-level="2.2.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#thresholds-and-masks"><i class="fa fa-check"></i><b>2.2.2</b> Thresholds and Masks</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html"><i class="fa fa-check"></i><b>3</b> Auxiliary functions</a><ul>
+<li class="chapter" data-level="3.1" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#cloud-and-cloud-shadow-masking"><i class="fa fa-check"></i><b>3.1</b> Cloud and cloud shadow masking</a></li>
+<li class="chapter" data-level="3.2" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#spectral-indices"><i class="fa fa-check"></i><b>3.2</b> Spectral indices</a></li>
+<li class="chapter" data-level="3.3" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#compositing"><i class="fa fa-check"></i><b>3.3</b> Compositing</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html"><i class="fa fa-check"></i><b>4</b> Part 2 - Advanced Google Earth Engine</a><ul>
+<li class="chapter" data-level="4.1" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#advanced-image-manipulation-pre-classification"><i class="fa fa-check"></i><b>4.1</b> Advanced Image Manipulation: Pre-classification</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#cloud-and-cloud-shadow-masking-1"><i class="fa fa-check"></i><b>4.1.1</b> Cloud and cloud shadow masking</a></li>
+<li class="chapter" data-level="4.1.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#spectral-indices-1"><i class="fa fa-check"></i><b>4.1.2</b> Spectral indices</a></li>
+<li class="chapter" data-level="4.1.3" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#compositing-1"><i class="fa fa-check"></i><b>4.1.3</b> Compositing</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#supervised-classification-random-forest"><i class="fa fa-check"></i><b>4.2</b> Supervised Classification: Random Forest</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#land-cover-classification-using-random-forest"><i class="fa fa-check"></i><b>4.2.1</b> Land-cover classification using Random Forest</a></li>
+<li class="chapter" data-level="4.2.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#map-to-map-change"><i class="fa fa-check"></i><b>4.2.2</b> Map-to-Map Change</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#post-classification-processing"><i class="fa fa-check"></i><b>4.3</b> Post-classification processing</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#re-classification"><i class="fa fa-check"></i><b>4.3.1</b> Re-classification</a></li>
+<li class="chapter" data-level="4.3.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>4.3.2</b> Map spatial smoothing</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html"><i class="fa fa-check"></i><b>5</b> Supervised classification of Landsat 8 OLI imagery</a><ul>
+<li class="chapter" data-level="5.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020"><i class="fa fa-check"></i><b>5.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2020</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#temporal-and-spatial-parameters-for-compositing"><i class="fa fa-check"></i><b>5.1.1</b> Temporal and spatial parameters for compositing</a></li>
+<li class="chapter" data-level="5.1.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#landsat-8-pre-classification-steps"><i class="fa fa-check"></i><b>5.1.2</b> Landsat 8 Pre-classification steps</a></li>
+<li class="chapter" data-level="5.1.3" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#supervised-classification-with-random-forest"><i class="fa fa-check"></i><b>5.1.3</b> Supervised Classification with Random Forest</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>5.2</b> Example 2: 2000 - 2020 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="post-classification-processing-1.html"><a href="post-classification-processing-1.html"><i class="fa fa-check"></i><b>6</b> Post-classification processing</a><ul>
+<li class="chapter" data-level="6.1" data-path="post-classification-processing-1.html"><a href="post-classification-processing-1.html#re-classification-1"><i class="fa fa-check"></i><b>6.1</b> Re-classification</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="post-classification-processing-1.html"><a href="post-classification-processing-1.html#scenario-1"><i class="fa fa-check"></i><b>6.1.1</b> Scenario 1</a></li>
+<li class="chapter" data-level="6.1.2" data-path="post-classification-processing-1.html"><a href="post-classification-processing-1.html#scenario-2"><i class="fa fa-check"></i><b>6.1.2</b> Scenario 2</a></li>
+<li class="chapter" data-level="6.1.3" data-path="post-classification-processing-1.html"><a href="post-classification-processing-1.html#scenario-3"><i class="fa fa-check"></i><b>6.1.3</b> Scenario 3</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="post-classification-processing-1.html"><a href="post-classification-processing-1.html#map-spatial-smoothing-1"><i class="fa fa-check"></i><b>6.2</b> Map spatial smoothing</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html"><i class="fa fa-check"></i><b>7</b> Country-specific analyses</a><ul>
+<li class="chapter" data-level="7.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#mangrove-mapping-in-guinea---west-africa"><i class="fa fa-check"></i><b>7.1</b> Mangrove mapping in Guinea - West Africa</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#masking"><i class="fa fa-check"></i><b>7.1.1</b> Masking</a></li>
+<li class="chapter" data-level="7.1.2" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#landsat-8-image-collection-and-cloud-free-mosaic"><i class="fa fa-check"></i><b>7.1.2</b> Landsat 8 Image Collection and Cloud-free Mosaic</a></li>
+<li class="chapter" data-level="7.1.3" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#supervised-classification-with-random-forest-1"><i class="fa fa-check"></i><b>7.1.3</b> Supervised Classification with Random Forest</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Supervised Classification with Google Earth Engine</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="post-classification-processing-1" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> Post-classification processing</h1>
+<p>Objective:</p>
+<ul>
+<li>To provide useful post-classification steps for corrections and general improvement of a random forest classification output.</li>
+</ul>
+<div id="re-classification-1" class="section level2">
+<h2><span class="header-section-number">6.1</span> Re-classification</h2>
+<p>Classification outputs often times will need some degree of correction or adjustment. Some of these corrections and adjustments include, for example, the Correction for missclassification erros in specific areas and changing class labels (pixel values) or class order. In this section we will explore the function <code>remap</code>. This function maps from input values to output values, represented by two parallel lists: one includes the original number classes and their value; the other represents which class (or classes) is being remapped and to what it is being remapped to. To ilustrate this concept, consider the following example:</p>
+<ul>
+<li>The previously produced land cover map of Greater Cairo includes four classes: Water (pixel value = 0), Cropland / Cultivated Areas (pixel value = 1), Sand and bare areas (pixel value = 2) and Built-up and Urban Areas (pixel value = 3) (List 1). If any of these class values needs to be changed, the new value for that class is placed in the <em>List 2</em>, in the position of the class that needs changing (Figure 1).</li>
+</ul>
+<div class="figure"><span id="fig:my-remap"></span>
+<img src="images/remap.PNG" alt="The `remap` function for the land cover classification of the Greater Cairo. " width="881" />
+<p class="caption">
+Figure 6.1: The <code>remap</code> function for the land cover classification of the Greater Cairo.
+</p>
+</div>
+<p>To test this function, start by <a href="https://code.earthengine.google.com/" target="_blank">opening a new code editor page</a> and importing one of the classification assets you used <a href="supervised-classification-of-landsat-8-oli-imagery.html#example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt">in the previous chapter</a>. In this example, we will importe the latest land cover map from the year 2020 as a variable called <code>Cairo2020</code> and we will add it to the map editor using the same color scheme from <code>paletteMAP</code> used in the previous chapter:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var Cairo2020 =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&quot;users/celiohelder/TutorialAssets/Cairo2020&quot;</span>);
+
+var paletteMAP =<span class="st"> </span>[
+  <span class="st">&#39;#0040ff&#39;</span>,  <span class="co">#// Water</span>
+  <span class="st">&#39;#00ab0c&#39;</span>,  <span class="co">#// Croplands / Cultivated Areas</span>
+  <span class="st">&#39;#fbf2ad&#39;</span>,  <span class="co">#// Sand and bare areas</span>
+  <span class="st">&#39;#878587&#39;</span>,  <span class="co">#// Built-up and Urban Areas</span>
+];
+
+<span class="kw">Map.addLayer</span>(Cairo2020, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo2000&#39;</span>);</code></pre></div>
+<p>Now, let's consider the following scenarios:</p>
+<div class="rmdcomment">
+<p>
+Access the full scrip for the three scenarios <a href="https://code.earthengine.google.com/a2e86da139ffccfdeaeda582355932a0" target="_blank">here.</a>
+</p>
+</div>
+<div id="scenario-1" class="section level3">
+<h3><span class="header-section-number">6.1.1</span> Scenario 1</h3>
+<p>A new version of the <code>Cairo2020</code> map where <em><strong>Sand and bare areas (pixel value = 2)</strong></em> and <em><strong>Built-up and Urban Areas (pixel value = 3)</strong></em> switch orders in the final map. In this case, we can use the <code>remap</code> function to change the pixel value of <em>Built-up and Urban Areas</em> to <strong>2</strong> and <em>Sand and bare areas</em> to <strong>3</strong> in their respective position on list 2 (Figure 2):</p>
+<div class="figure"><span id="fig:my-remap2"></span>
+<img src="images/remap2.PNG" alt="Sand (2) and Cities (3) changing orders in the image output using `.remap` " width="877" />
+<p class="caption">
+Figure 6.2: Sand (2) and Cities (3) changing orders in the image output using <code>.remap</code>
+</p>
+</div>
+<p>As a guide, the figure above can be used to create a new variable <code>CairoV1</code> with the new order for the classes using <code>remap</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var CairoV1 =<span class="st"> </span><span class="kw">Cairo2020.remap</span>([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>]);</code></pre></div>
+<p>Add the <code>CairoV1</code> to the the map using the original color scheme <code>paletteMAP</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(CairoV1, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo V1&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:my-CairoV1"></span>
+<img src="images/CairoV1.png" alt="`Cairo2020` and `CairoV1` maps using the original `paletteMap`. Note that Sand and bare areas and Built-up and Urban areas switched colors as we switched their order.  " width="816" />
+<p class="caption">
+Figure 6.3: <code>Cairo2020</code> and <code>CairoV1</code> maps using the original <code>paletteMap</code>. Note that Sand and bare areas and Built-up and Urban areas switched colors as we switched their order.
+</p>
+</div>
+</div>
+<div id="scenario-2" class="section level3">
+<h3><span class="header-section-number">6.1.2</span> Scenario 2</h3>
+<p>A new version of the <code>Cairo2020</code> map where <em><strong>Sand and bare areas (pixel value = 2)</strong></em> and <em><strong>Built-up and Urban Areas (pixel value = 3)</strong></em> are merged into a new class called <em><strong>Barren land and Articicial Surfaces (pixel value = 2)</strong></em>. Note that this new class can assume any value when merging, as long as both classes have the same value:</p>
+<div class="figure"><span id="fig:my-remap3"></span>
+<img src="images/remap3.PNG" alt="Sand and bare areas merging with Built-up and Urban area into a new class value (2). New classes can assume any value when merging, as long as these values are the same for both classes." width="874" />
+<p class="caption">
+Figure 6.4: Sand and bare areas merging with Built-up and Urban area into a new class value (2). New classes can assume any value when merging, as long as these values are the same for both classes.
+</p>
+</div>
+<p>For this example, keep the value <em><strong>2</strong></em> for this new class following Figure 4 and create a new variable <code>CairoV2</code> for the new map:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var CairoV2 =<span class="st"> </span><span class="kw">Cairo2020.remap</span>([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>]);</code></pre></div>
+<p>Similarly, Add the <code>CairoV2</code> to the the map using the original color scheme <code>paletteMAP</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(CairoV2, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">2</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo V1&#39;</span>);</code></pre></div>
+<p>Note that the <code>min</code> and <code>max</code> range of values changed from 0-3 (4 classes) to 0-2 (three classes). Even if the original range was mainted, <code>Map.addLayer</code> would only map the color scheme to the first three values of<code>Cairov2</code> (0, 1 and 2). However, it is always good practice to set the <code>min</code> and <code>max</code> range of values to match the actual number of classes. Alternatively, you can also edit the color palette to have the same number of colors as the number of classes in your map:</p>
+<div class="figure"><span id="fig:my-CairoV2"></span>
+<img src="images/CairoV2.png" alt="`Cairo2020` and `CairoV2` maps using the original `paletteMap`. Note that *Sand and bare areas* and *Built-up and Urban areas* have the same color as they were merged under the same pixel value (2)." width="816" />
+<p class="caption">
+Figure 6.5: <code>Cairo2020</code> and <code>CairoV2</code> maps using the original <code>paletteMap</code>. Note that <em>Sand and bare areas</em> and <em>Built-up and Urban areas</em> have the same color as they were merged under the same pixel value (2).
+</p>
+</div>
+</div>
+<div id="scenario-3" class="section level3">
+<h3><span class="header-section-number">6.1.3</span> Scenario 3</h3>
+<p>A new version of the <code>Cairo2020</code> map where only a portion of it is remapped to a given class. This scenario is one of the most commonly used post-classification procedure where the goal is to remap specific areas to fix for classification errors. To ilustrate, consider the following example:</p>
+<ul>
+<li>Upon close inspection, the <code>Cairo2020</code> map showed some cropland/cultivated areas within zones of dense urbanization. A team on the ground went to the area and confirmed that is indeed dense urbanization and no agricultural land was found in that area. Therefore, that portion of the map needs to be rectified in order to reflect the actual land cover. In this case, the <code>.where</code> function is used. This function performs conditional replacement of values, following the formula <code>input.where(test,value)</code>. For each pixel in each band of <code>input</code>, if the corresponding pixel in <code>test</code> is nonzero, Google Earth Engine will output the corresponding pixel in <code>value</code>, otherwise it will output the <code>input</code> pixel. Translating this function to this example, <code>input</code> is the land cover map in which we aim to perform the reclassification - in this case <code>Cairo2020</code>; <code>test</code> is the area or region of the map <code>value</code> will take place, and; <code>value</code> is the correct classification that will be included in the final map (Figure 6):</li>
+</ul>
+<div class="figure"><span id="fig:my-where"></span>
+<img src="images/WhereFunction.PNG" alt=" The `.where` function applied to this example." width="899" />
+<p class="caption">
+Figure 6.6:  The <code>.where</code> function applied to this example.
+</p>
+</div>
+In your own version of <code>Cairo2020</code> map, create an new geometry over an area of your interest and name it <code>aoi</code>:
+<div class="figure"><span id="fig:my-regionwhere"></span>
+<img src="images/RegionWhere.png" alt="A geometry over an area of `Cairo2020` highlighting cultivated areas next to urbanization." width="692" />
+<p class="caption">
+Figure 6.7: A geometry over an area of <code>Cairo2020</code> highlighting cultivated areas next to urbanization.
+</p>
+</div>
+<p>The function <code>.where</code> only uses images as <code>test</code>. Therefore, using the geometry/feature <code>aoi</code> is not allowed. An easy and effective way to go around this rule is to create an image with <code>ee.Image()</code> and clip it for the region of interest:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var region =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>)<span class="kw">.clip</span>(aoi);</code></pre></div>
+<p>The function above will create an image of 30 m pixels with value of 1 and will clip it for the area of interest <code>aoi</code>. Next, using the same approach from <em>Scenario 1</em> and <em>2</em>, create a new version of <code>Cairo2020</code> called <code>subistitute</code>, where the <em><strong>Cropland/Cultivated Areas</strong></em> class is remapped to <em><strong>Built-up and Urban Areas</strong></em>: the position 2 on list 2 (belonging to agricultural/cultivated areas) receives the value <em><strong>3</strong></em> from <em><strong>Built-up and Urban Areas</strong></em> on list 1:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var substitute =<span class="st"> </span><span class="kw">Cairo2020.remap</span>([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],[<span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">3</span>]);</code></pre></div>
+<p>Now, using <code>.where</code> create a new map <code>CairoV3</code> following the formula seen on Figure 6 and add it to the map editor:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var CairoV3 =<span class="st"> </span><span class="kw">Cairo2020.where</span>(region,substitute);
+<span class="kw">Map.addLayer</span>(CairoV3, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo V3&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:my-cairov3"></span>
+<img src="images/CairoV3.png" alt="`CairoV3` showing the pixels of Cropland/Cultivated Areas remapped as Built-up and Urban Areas within `aoi`." width="972" />
+<p class="caption">
+Figure 6.8: <code>CairoV3</code> showing the pixels of Cropland/Cultivated Areas remapped as Built-up and Urban Areas within <code>aoi</code>.
+</p>
+</div>
+<p>Notice that every pixel of <em><strong>Cropland/Cultivated Areas</strong></em> (green, pixel value = 2) within the <code>aoi</code> in <code>Cairo2020</code> is now remapped to <em><strong>Built-up and Urban Areas</strong></em> (grey, pixel value = 3) in <code>CairoV3</code>.</p>
+</div>
+</div>
+<div id="map-spatial-smoothing-1" class="section level2">
+<h2><span class="header-section-number">6.2</span> Map spatial smoothing</h2>
+<p>Spatial smoothing is another post-classification procedure to enhance the quality of a land cover classification output. A common issue that arises from the pixel-based classification of fine/medium spatial resolution imagery is the “salt-and-pepper” effect. This happens when individual pixels are classified differently from their neighbors, creating speckles of isolated pixels of different classes. There are several ways to minimize this issue, such as:</p>
+<ul>
+<li>image pre-processing, such as low-pass filter and texture analysis;</li>
+<li>contextual classification, and;</li>
+<li>post-classification processing, such as median and mode filtering.</li>
+</ul>
+<p>In this section, we will focus on a post-classification technique to reduce the salt and pepper effect and edge roughness of land cover maps using focal median filtering (<code>ee.Image.focal_median</code>).</p>
+<p>First, <a href="https://code.earthengine.google.com/" target="_blank">open a new code editor page</a> and add one the classification exports to this script by clicking the <em><strong>Import into script</strong></em> button (blue arrow) for the classification asset of your choosing. For this example, we will use <code>Cairo2020</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">/</span><span class="er">/</span><span class="st"> </span>Color palette <span class="cf">for</span> the original map
+var paletteMAP =<span class="st"> </span>[
+  <span class="st">&#39;#0040ff&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Water
+  <span class="st">&#39;#00ab0c&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Croplands <span class="op">/</span><span class="st"> </span>Cultivated Areas
+  <span class="st">&#39;#fbf2ad&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Sand and bare areas
+  <span class="st">&#39;#878587&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Built<span class="op">-</span>up and Urban Areas
+];
+
+<span class="kw">Map.setCenter</span>(<span class="fl">31.42217</span>, <span class="fl">29.99157</span>,<span class="dv">10</span>); <span class="op">/</span><span class="er">/</span><span class="st"> </span>Set the center over Cairo
+<span class="kw">Map.addLayer</span>(Cairo2020, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo2000&#39;</span>);</code></pre></div>
+<p>Next, we will apply the <code>.focal_median</code> function to <code>Cairo2020</code>. This function is a simple sliding-window spatial filter that replaces the center value (or class) in the window with the median of all the pixel values in the window. The window, or kernel, is usually square but can be any shape. The <code>focal_median</code> function usually is expressed as:</p>
+<div class="figure"><span id="fig:my-focal"></span>
+<img src="images/focal.PNG" alt="`.focal_median` spatial filter." width="1015" />
+<p class="caption">
+Figure 6.9: <code>.focal_median</code> spatial filter.
+</p>
+</div>
+<p>In the function above, the <code>radius</code> parameter specifies the number of pixels from the center that the kernel will cover. This radius value can be expressed as number of pixels or meters. The <code>kernelType</code> specifies the type of kernel to use. For instance, consider the example below:</p>
+<ul>
+<li>Either <code>.focal_median(1, 'square', 'pixels')</code> or <code>.focal_median(30, 'square', 'meters')</code> will produce a 3x3 pixel sliding-window, as you are specifing 1 pixel (or 30 meters which is equal to one Landsat pixel) in each direction from the center pixel. Similarly, a <code>radius</code> of 2 pixels or 60 meters will produce a 5x5 sliding-window: a center pixel plus 2 pixels in each direction.</li>
+</ul>
+<p>Following Figure 9 and the example above, apply the <code>.focal_median</code> filtering with two <code>radius</code> sizes (30 and 60 meters) to <code>Cairo2020</code>, add <code>Cairo30</code> and <code>Cairo60</code> to the map editor and compare the results:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var Cairo30 =<span class="st"> </span><span class="kw">Cairo2020.focal_median</span>(<span class="dv">1</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;pixels&#39;</span>);
+var Cairo60 =<span class="st"> </span><span class="kw">Cairo2020.focal_median</span>(<span class="dv">30</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;meters&#39;</span>);
+<span class="co">#// Add the new maps to the map editor</span>
+<span class="kw">Map.addLayer</span>(Cairo30, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo 3x3&#39;</span>);
+<span class="kw">Map.addLayer</span>(Cairo60, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo 5x5&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:my-smooth1"></span>
+<img src="images/cairosmooth1.png" alt="`Cairo2020` processed with `.focal_median` spatial filter with 3x3 and 5x5 pixels square kernels." width="1234" />
+<p class="caption">
+Figure 6.10: <code>Cairo2020</code> processed with <code>.focal_median</code> spatial filter with 3x3 and 5x5 pixels square kernels.
+</p>
+</div>
+<div class="caution">
+<p>
+<strong>IMPORTANT:</strong> The <em>.focal_median(1, 'square', 'pixels')</em> and <em>.focal_median(30, 'square', 'meters')</em> will only achieve the intended final result if you reproject it back to the original scale and projection from the original map.
+</p>
+</div>
+<p>Note that this technique while effective in removing the &quot;salt-and-pepper&quot; effect from the original map, it creates edges that are not in the same resolution and projection as the original map. Therefore, creating fairly rounded boundaries for the classes. This is not ideal as it is usually intended for these maps to keep the same resolution as the original map, as well as to preserve the boundaries between classes. To account for this issue, you can reproject this output back the original scale so it is formed by 30 x 30 meter pixels.</p>
+<p>To do that, simply use <code>.reproject(projection.atScale(scale))</code> within the <code>.focal_median</code> filter. The <code>.reproject</code> function will take two arguments: projection and scale. You can extract this information from the original map with <code>.projection()</code> and <code>.nominalScale()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var prj =<span class="st"> </span><span class="kw">Cairo2020.projection</span>();
+var scale =<span class="st"> </span><span class="kw">prj.nominalScale</span>();</code></pre></div>
+<p>Then, re-aply the <code>.focal_median</code> filter with <code>.reproject(projection.atScale(scale))</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var Cairo30 =<span class="st"> </span><span class="kw">Cairo2020.focal_median</span>(<span class="dv">1</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;pixels&#39;</span>)
+                       <span class="kw">.reproject</span>(<span class="kw">prj.atScale</span>(scale));
+                       
+var Cairo60 =<span class="st"> </span><span class="kw">Cairo2020.focal_median</span>(<span class="dv">30</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;meters&#39;</span>)
+                       <span class="kw">.reproject</span>(<span class="kw">prj.atScale</span>(scale));</code></pre></div>
+<div class="figure"><span id="fig:my-smooth2"></span>
+<img src="images/cairosmooth2.png" alt="`Cairo2020` processed with `.focal_median` spatial filter with 3x3 and 5x5 pixels square kernels. Note that the function was reprojected to match `Cairo2020`'s projection and scale" width="1234" />
+<p class="caption">
+Figure 6.11: <code>Cairo2020</code> processed with <code>.focal_median</code> spatial filter with 3x3 and 5x5 pixels square kernels. Note that the function was reprojected to match <code>Cairo2020</code>'s projection and scale
+</p>
+</div>
+<p>Note that even though the boundaries of the classes are smoother, they are formed by the 30 x 30 meter pixels. Usually, a <code>radius</code> of 1 (3x3 square window) removes most of the salt-and-pepper effect, smoothens the boundaries in between classes while preserving the overall shape of the classes.</p>
+<div class="rmdcomment">
+<p>
+Access the full scrip for this section <a href="https://code.earthengine.google.com/b5d782ff5849d59af760e62e85065909" target="_blank">here.</a>
+</p>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="supervised-classification-of-landsat-8-oli-imagery.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="country-specific-analyses.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/celiosousa/LCMTutorial/edit/master/04-PostClassification.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/celiosousa/LCMTutorial/blob/master/04-PostClassification.Rmd",
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

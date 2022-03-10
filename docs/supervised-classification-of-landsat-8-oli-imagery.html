@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine</title>
-  <meta name="description" content="Chapter 4 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine" />
+  <title>Chapter 5 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine</title>
+  <meta name="description" content="Chapter 5 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 4 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine" />
+  <meta property="og:title" content="Chapter 5 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine" />
+  <meta name="twitter:title" content="Chapter 5 Supervised classification of Landsat 8 OLI imagery | Supervised Classification with Google Earth Engine" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="auxiliary-functions.html"/>
-<link rel="next" href="post-classification-processing.html"/>
+<link rel="prev" href="part-2-advanced-google-earth-engine.html"/>
+<link rel="next" href="post-classification-processing-1.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -126,27 +126,42 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.2" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#spectral-indices"><i class="fa fa-check"></i><b>3.2</b> Spectral indices</a></li>
 <li class="chapter" data-level="3.3" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#compositing"><i class="fa fa-check"></i><b>3.3</b> Compositing</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html"><i class="fa fa-check"></i><b>4</b> Supervised classification of Landsat 8 OLI imagery</a><ul>
-<li class="chapter" data-level="4.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020"><i class="fa fa-check"></i><b>4.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2020</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#temporal-and-spatial-parameters-for-compositing"><i class="fa fa-check"></i><b>4.1.1</b> Temporal and spatial parameters for compositing</a></li>
-<li class="chapter" data-level="4.1.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#landsat-8-pre-classification-steps"><i class="fa fa-check"></i><b>4.1.2</b> Landsat 8 Pre-classification steps</a></li>
-<li class="chapter" data-level="4.1.3" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#supervised-classification-with-random-forest"><i class="fa fa-check"></i><b>4.1.3</b> Supervised Classification with Random Forest</a></li>
+<li class="chapter" data-level="4" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html"><i class="fa fa-check"></i><b>4</b> Part 2 - Advanced Google Earth Engine</a><ul>
+<li class="chapter" data-level="4.1" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#advanced-image-manipulation-pre-classification"><i class="fa fa-check"></i><b>4.1</b> Advanced Image Manipulation: Pre-classification</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#cloud-and-cloud-shadow-masking-1"><i class="fa fa-check"></i><b>4.1.1</b> Cloud and cloud shadow masking</a></li>
+<li class="chapter" data-level="4.1.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#spectral-indices-1"><i class="fa fa-check"></i><b>4.1.2</b> Spectral indices</a></li>
+<li class="chapter" data-level="4.1.3" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#compositing-1"><i class="fa fa-check"></i><b>4.1.3</b> Compositing</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>4.2</b> Example 2: 2000 - 2020 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
+<li class="chapter" data-level="4.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#supervised-classification-random-forest"><i class="fa fa-check"></i><b>4.2</b> Supervised Classification: Random Forest</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#land-cover-classification-using-random-forest"><i class="fa fa-check"></i><b>4.2.1</b> Land-cover classification using Random Forest</a></li>
+<li class="chapter" data-level="4.2.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#map-to-map-change"><i class="fa fa-check"></i><b>4.2.2</b> Map-to-Map Change</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="post-classification-processing.html"><a href="post-classification-processing.html"><i class="fa fa-check"></i><b>5</b> Post-classification processing</a><ul>
-<li class="chapter" data-level="5.1" data-path="post-classification-processing.html"><a href="post-classification-processing.html#re-classification"><i class="fa fa-check"></i><b>5.1</b> Re-classification</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-1"><i class="fa fa-check"></i><b>5.1.1</b> Scenario 1</a></li>
-<li class="chapter" data-level="5.1.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-2"><i class="fa fa-check"></i><b>5.1.2</b> Scenario 2</a></li>
-<li class="chapter" data-level="5.1.3" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-3"><i class="fa fa-check"></i><b>5.1.3</b> Scenario 3</a></li>
+<li class="chapter" data-level="4.3" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#post-classification-processing"><i class="fa fa-check"></i><b>4.3</b> Post-classification processing</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#re-classification"><i class="fa fa-check"></i><b>4.3.1</b> Re-classification</a></li>
+<li class="chapter" data-level="4.3.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>4.3.2</b> Map spatial smoothing</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>5.2</b> Map spatial smoothing</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html"><i class="fa fa-check"></i><b>6</b> Country-specific analyses</a><ul>
-<li class="chapter" data-level="6.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#mangrove-mapping-in-guinea---west-africa"><i class="fa fa-check"></i><b>6.1</b> Mangrove mapping in Guinea - West Africa</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#masking"><i class="fa fa-check"></i><b>6.1.1</b> Masking</a></li>
-<li class="chapter" data-level="6.1.2" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#landsat-8-image-collection-and-cloud-free-mosaic"><i class="fa fa-check"></i><b>6.1.2</b> Landsat 8 Image Collection and Cloud-free Mosaic</a></li>
-<li class="chapter" data-level="6.1.3" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#supervised-classification-with-random-forest-1"><i class="fa fa-check"></i><b>6.1.3</b> Supervised Classification with Random Forest</a></li>
+<li class="chapter" data-level="5" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html"><i class="fa fa-check"></i><b>5</b> Supervised classification of Landsat 8 OLI imagery</a><ul>
+<li class="chapter" data-level="5.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020"><i class="fa fa-check"></i><b>5.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2020</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#temporal-and-spatial-parameters-for-compositing"><i class="fa fa-check"></i><b>5.1.1</b> Temporal and spatial parameters for compositing</a></li>
+<li class="chapter" data-level="5.1.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#landsat-8-pre-classification-steps"><i class="fa fa-check"></i><b>5.1.2</b> Landsat 8 Pre-classification steps</a></li>
+<li class="chapter" data-level="5.1.3" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#supervised-classification-with-random-forest"><i class="fa fa-check"></i><b>5.1.3</b> Supervised Classification with Random Forest</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>5.2</b> Example 2: 2000 - 2020 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="post-classification-processing-1.html"><a href="post-classification-processing-1.html"><i class="fa fa-check"></i><b>6</b> Post-classification processing</a><ul>
+<li class="chapter" data-level="6.1" data-path="post-classification-processing-1.html"><a href="post-classification-processing-1.html#re-classification-1"><i class="fa fa-check"></i><b>6.1</b> Re-classification</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="post-classification-processing-1.html"><a href="post-classification-processing-1.html#scenario-1"><i class="fa fa-check"></i><b>6.1.1</b> Scenario 1</a></li>
+<li class="chapter" data-level="6.1.2" data-path="post-classification-processing-1.html"><a href="post-classification-processing-1.html#scenario-2"><i class="fa fa-check"></i><b>6.1.2</b> Scenario 2</a></li>
+<li class="chapter" data-level="6.1.3" data-path="post-classification-processing-1.html"><a href="post-classification-processing-1.html#scenario-3"><i class="fa fa-check"></i><b>6.1.3</b> Scenario 3</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="post-classification-processing-1.html"><a href="post-classification-processing-1.html#map-spatial-smoothing-1"><i class="fa fa-check"></i><b>6.2</b> Map spatial smoothing</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html"><i class="fa fa-check"></i><b>7</b> Country-specific analyses</a><ul>
+<li class="chapter" data-level="7.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#mangrove-mapping-in-guinea---west-africa"><i class="fa fa-check"></i><b>7.1</b> Mangrove mapping in Guinea - West Africa</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#masking"><i class="fa fa-check"></i><b>7.1.1</b> Masking</a></li>
+<li class="chapter" data-level="7.1.2" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#landsat-8-image-collection-and-cloud-free-mosaic"><i class="fa fa-check"></i><b>7.1.2</b> Landsat 8 Image Collection and Cloud-free Mosaic</a></li>
+<li class="chapter" data-level="7.1.3" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#supervised-classification-with-random-forest-1"><i class="fa fa-check"></i><b>7.1.3</b> Supervised Classification with Random Forest</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -169,18 +184,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="supervised-classification-of-landsat-8-oli-imagery" class="section level1">
-<h1><span class="header-section-number">Chapter 4</span> Supervised classification of Landsat 8 OLI imagery</h1>
+<h1><span class="header-section-number">Chapter 5</span> Supervised classification of Landsat 8 OLI imagery</h1>
 <p>Objectives:</p>
 <ul>
-<li>Use the cloud-masking function (See Chapter 2's <a href="auxiliary-functions.html#cloud-and-cloud-shadow-masking">Cloud and cloud shadow masking</a> section) to mask clouds on Landsat 8 Imagery;</li>
-<li>To produce a cloud-free composite mosaic using the median reducer (<a href="auxiliary-functions.html#compositing">Compositing</a>), and;</li>
+<li>Use the cloud-masking function (See Chapter 2's <a href="part-2-advanced-google-earth-engine.html#cloud-and-cloud-shadow-masking-1">Cloud and cloud shadow masking</a> section) to mask clouds on Landsat 8 Imagery;</li>
+<li>To produce a cloud-free composite mosaic using the median reducer (<a href="part-2-advanced-google-earth-engine.html#compositing-1">Compositing</a>), and;</li>
 <li>To classify the cloud-free composite mosaic of Landsat 8 scenes using Random Forest.</li>
 </ul>
 <div id="example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020" class="section level2">
-<h2><span class="header-section-number">4.1</span> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2020</h2>
+<h2><span class="header-section-number">5.1</span> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2020</h2>
 <p>We will start by <a href="https://code.earthengine.google.com/" target="_blank">opening a new code editor page</a></p>
 <div id="temporal-and-spatial-parameters-for-compositing" class="section level3">
-<h3><span class="header-section-number">4.1.1</span> Temporal and spatial parameters for compositing</h3>
+<h3><span class="header-section-number">5.1.1</span> Temporal and spatial parameters for compositing</h3>
 <p>In this example, we are going to create a 2020 annual composite. For this, let’s create three objects <code>(var)</code>: <code>year</code>, <code>startDay</code> and <code>endDay</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var year =<span class="st"> </span><span class="dv">2020</span>; <span class="op">/</span><span class="er">/</span><span class="co"># Year</span>
 var startDay =<span class="st"> </span>(year)<span class="op">+</span><span class="st">&#39;-01-01&#39;</span>; <span class="op">/</span><span class="er">/</span><span class="co"># beginning of date filter | month-day</span>
@@ -191,14 +206,14 @@ var endDay =<span class="st"> </span>(year)<span class="op">+</span><span class=
 <div class="figure"><span id="fig:my-figGEOMEgypt"></span>
 <img src="images/CairoGEOM1.png" alt="Geometry drawn over the Greater Cairo area" width="1526" />
 <p class="caption">
-Figure 4.1: Geometry drawn over the Greater Cairo area
+Figure 5.1: Geometry drawn over the Greater Cairo area
 </p>
 </div>
 <p>Now, let's create an object <code>var aoi</code> that will contain the geometry <code>AreaOfInterest</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var aoi =<span class="st"> </span>AreaOfInterest;</code></pre></div>
 </div>
 <div id="landsat-8-pre-classification-steps" class="section level3">
-<h3><span class="header-section-number">4.1.2</span> Landsat 8 Pre-classification steps</h3>
+<h3><span class="header-section-number">5.1.2</span> Landsat 8 Pre-classification steps</h3>
 <ul>
 <li><strong>Auxiliary Functions</strong></li>
 </ul>
@@ -254,7 +269,7 @@ Figure 4.1: Geometry drawn over the Greater Cairo area
 <span class="st">    </span><span class="kw">.map</span>(maskL8sr)                <span class="op">/</span><span class="er">/</span><span class="co"># Masks for clouds and cloud-shadows using the function we created</span>
 <span class="st">    </span><span class="kw">.map</span>(addIndicesL8);           <span class="op">/</span><span class="er">/</span><span class="co"># Add the indices using the function we created</span></code></pre></div>
 <p>The object <code>collection</code> will now contain <strong><em>all</em></strong> the Landsat 8 scenes from January to December for the year 2020. Each scene in this collection is masked for clouds and cloud shadows and will have additional bands for each spectral index included in the <code>addIndicesL8</code> function.</p>
-<p>Next, we will reduce this image collection into a composite. This can be done by a single median composite on a per-pixel, per- band basis using <code>.median()</code> or using quality bands such as ‘NDVI’ with <code>.qualityMosaic(‘NDVI’)</code> (See <a href="auxiliary-functions.html#compositing">Compositing</a> for more information). In an object called <code>var composite</code>, let’s reduce the collection using the container <code>.median()</code> and clip the composite to our area of interest <code>aoi</code> using the container <code>.clip</code>:</p>
+<p>Next, we will reduce this image collection into a composite. This can be done by a single median composite on a per-pixel, per- band basis using <code>.median()</code> or using quality bands such as ‘NDVI’ with <code>.qualityMosaic(‘NDVI’)</code> (See <a href="part-2-advanced-google-earth-engine.html#compositing-1">Compositing</a> for more information). In an object called <code>var composite</code>, let’s reduce the collection using the container <code>.median()</code> and clip the composite to our area of interest <code>aoi</code> using the container <code>.clip</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var composite =<span class="st"> </span>collection
                 <span class="kw">.median</span>()   <span class="op">/</span><span class="er">/</span><span class="co"># Uses the median reducer</span>
 <span class="st">                </span><span class="kw">.clip</span>(aoi); <span class="op">/</span><span class="er">/</span><span class="co"># Clips the composite to our area of interest</span></code></pre></div>
@@ -273,19 +288,19 @@ Figure 4.1: Geometry drawn over the Greater Cairo area
 <div class="figure"><span id="fig:my-figCompL8"></span>
 <img src="images/CompositeL8.PNG" alt="Landsat median composite for the area of interested displayed with a real color composition (RGB 432)" width="1420" />
 <p class="caption">
-Figure 4.2: Landsat median composite for the area of interested displayed with a real color composition (RGB 432)
+Figure 5.2: Landsat median composite for the area of interested displayed with a real color composition (RGB 432)
 </p>
 </div>
 <p>You can customize the composite visualization parameters by clicking on the settings icon (gear ⚙) next to the layer name (in this example: Composite. You can also toggle in between map and Google Earth imagery by using the buttons <em><strong>Map</strong></em> and <em><strong>Satellite</strong></em> as seen in Figure 3.3.</p>
 <div class="figure"><span id="fig:my-figLayer"></span>
 <img src="images/LayerSet.PNG" alt="Layer settings." width="1176" />
 <p class="caption">
-Figure 4.3: Layer settings.
+Figure 5.3: Layer settings.
 </p>
 </div>
 </div>
 <div id="supervised-classification-with-random-forest" class="section level3">
-<h3><span class="header-section-number">4.1.3</span> Supervised Classification with Random Forest</h3>
+<h3><span class="header-section-number">5.1.3</span> Supervised Classification with Random Forest</h3>
 <ul>
 <li><strong>Training sample selection</strong></li>
 </ul>
@@ -294,21 +309,21 @@ Figure 4.3: Layer settings.
 <div class="figure"><span id="fig:my-figGeom"></span>
 <img src="images/Geometries.PNG" alt="Geometry sets to hold samples for each of the four classes." width="1550" />
 <p class="caption">
-Figure 4.4: Geometry sets to hold samples for each of the four classes.
+Figure 5.4: Geometry sets to hold samples for each of the four classes.
 </p>
 </div>
 <p>Step 2 - For each geometry in the list, clicking on the settings icon (gear ): name them accordingly using the 'Name' box, choose a color for it using the color picker and import each geometry as <em>FeatureCollection</em>. Add a property called <em>landcover</em> by clicking on the <em><strong>+ Property</strong></em> and set a consecutive integer starting from 0 or 1 for each of the classes. You should achieve something similar to this:</p>
 <div class="figure"><span id="fig:my-figGeom2"></span>
 <img src="images/Geometries2.PNG" alt="Geometries used to create the training sample sets." width="830" />
 <p class="caption">
-Figure 4.5: Geometries used to create the training sample sets.
+Figure 5.5: Geometries used to create the training sample sets.
 </p>
 </div>
 <p>Your Geometry Imports should look like this:</p>
 <div class="figure"><span id="fig:my-figGeom3"></span>
 <img src="images/Geo3.PNG" alt="Geometry Imports after creating geometry sets to hold training samples" width="994" />
 <p class="caption">
-Figure 4.6: Geometry Imports after creating geometry sets to hold training samples
+Figure 5.6: Geometry Imports after creating geometry sets to hold training samples
 </p>
 </div>
 <p>Start selecting samples by clicking on the ‘Water’ geometry in the Geometry Imports. Choose the point drawing tool and place some points along the River Nile:</p>
@@ -317,7 +332,7 @@ Figure 4.6: Geometry Imports after creating geometry sets to hold training sampl
 <div class="figure"><span id="fig:my-figNile"></span>
 <img src="images/Nile.PNG" alt="Sample points and polygons for the Water class" width="1152" />
 <p class="caption">
-Figure 4.7: Sample points and polygons for the Water class
+Figure 5.7: Sample points and polygons for the Water class
 </p>
 </div>
 <p><img src="images/advantage2.PNG" width="1698" /></p>
@@ -325,7 +340,7 @@ Figure 4.7: Sample points and polygons for the Water class
 <div class="figure"><span id="fig:my-figAllSamples"></span>
 <img src="images/AllSamples.PNG" alt="Example of sample points and polygons for ‘Water’ (blue), ‘Cropland’ (yellow), ‘Urban’ (red) and ‘Sand’ (pink). Each pixel within the polygons will be used as training inputs for the RF classifier." width="1370" />
 <p class="caption">
-Figure 4.8: Example of sample points and polygons for ‘Water’ (blue), ‘Cropland’ (yellow), ‘Urban’ (red) and ‘Sand’ (pink). Each pixel within the polygons will be used as training inputs for the RF classifier.
+Figure 5.8: Example of sample points and polygons for ‘Water’ (blue), ‘Cropland’ (yellow), ‘Urban’ (red) and ‘Sand’ (pink). Each pixel within the polygons will be used as training inputs for the RF classifier.
 </p>
 </div>
 <p>After selecting the samples, we will merge all the geometries together into an object var classes using the <code>.merge</code> container:</p>
@@ -355,7 +370,7 @@ var testing =<span class="st"> </span><span class="kw">samples.filter</span>(<sp
 <div class="figure"><span id="fig:my-fig39"></span>
 <img src="images/Figure39.PNG" alt="Sample sets size for this example. Note that the number will vary based on the number of geometries (polygons and points) and the sample split value" width="817" />
 <p class="caption">
-Figure 4.9: Sample sets size for this example. Note that the number will vary based on the number of geometries (polygons and points) and the sample split value
+Figure 5.9: Sample sets size for this example. Note that the number will vary based on the number of geometries (polygons and points) and the sample split value
 </p>
 </div>
 <ul>
@@ -422,7 +437,7 @@ var makeRow =<span class="st"> </span><span class="cf">function</span>(color, na
 <div class="figure"><span id="fig:my-2020"></span>
 <img src="images/2020.PNG" alt="Random Forest classification output for 2020" width="1090" />
 <p class="caption">
-Figure 4.10: Random Forest classification output for 2020
+Figure 5.10: Random Forest classification output for 2020
 </p>
 </div>
 <p>Finally, export your classification output as a Google Earth Engine asset using the <code>Export.image.toAsset</code> function:</p>
@@ -438,7 +453,7 @@ Figure 4.10: Random Forest classification output for 2020
 </div>
 </div>
 <div id="example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt" class="section level2">
-<h2><span class="header-section-number">4.2</span> Example 2: 2000 - 2020 Map-to-Map change of greater Cairo and Giza area, Egypt</h2>
+<h2><span class="header-section-number">5.2</span> Example 2: 2000 - 2020 Map-to-Map change of greater Cairo and Giza area, Egypt</h2>
 <div class="rmdcomment">
 <p>
 Access the full scrip for this example <a href="https://code.earthengine.google.com/db8f334899c54ce9c6009fb3b56fc653" target="_blank">here.</a>
@@ -447,7 +462,7 @@ Access the full scrip for this example <a href="https://code.earthengine.google.
 <p>In this example, we will use the codes from <a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020">Example 1</a> to create a land cover classification for the year 2000 period. In this case, we have to use the Landsat 7 ETM+ image collection instead, as Landsat 8 OLI is only available after April 2013. Following are the changes to be made on the codes from <a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020">Example 1</a>:</p>
 <ol style="list-style-type: lower-alpha">
 <li>The <code>year</code> object will have a value of <code>2000</code>;</li>
-<li>The <code>addIndicesL8</code> function will have different names for the spectral bands. See <a href="auxiliary-functions.html#spectral-indices">Section 2 from Chapter 2</a>;</li>
+<li>The <code>addIndicesL8</code> function will have different names for the spectral bands. See <a href="part-2-advanced-google-earth-engine.html#spectral-indices-1">Section 2 from Chapter 2</a>;</li>
 <li>The <code>collection</code> object will have the Landsat 7 <code>'LANDSAT/LE07/C01/T1_SR'</code> image collection;</li>
 <li>Repeat the training sample selection (See <a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020">Sample sets</a> from previous example) to make sure the samples reflect the correct land cover class for the L7 composite in the year 2000.</li>
 </ol>
@@ -460,21 +475,21 @@ You can access the edited script for four steps above <a href="https://code.eart
 <div class="figure"><span id="fig:my-2000"></span>
 <img src="images/2000.PNG" alt="Random Forest classification output for 2000" width="1131" />
 <p class="caption">
-Figure 4.11: Random Forest classification output for 2000
+Figure 5.11: Random Forest classification output for 2000
 </p>
 </div>
 <p>Export this new classification to you assets. Next, <a href="https://code.earthengine.google.com/" target="_blank">open a new code editor page</a> and add the classification exports to this script by clicking the <em><strong>Import into script</strong></em> button (blue arrow) for both classification assets in the Assets tab as shown in the figure 3.12:</p>
 <div class="figure"><span id="fig:my-imports"></span>
 <img src="images/imports.png" alt="Assets tab with classification maps." width="736" />
 <p class="caption">
-Figure 4.12: Assets tab with classification maps.
+Figure 5.12: Assets tab with classification maps.
 </p>
 </div>
 <p>Rename each import by clicking on their names at the <em><strong>Imports</strong></em> header:</p>
 <div class="figure"><span id="fig:my-importsHead"></span>
 <img src="images/importHead.PNG" alt="Imports header." width="1124" />
 <p class="caption">
-Figure 4.13: Imports header.
+Figure 5.13: Imports header.
 </p>
 </div>
 <p>Alternatively, you can import assets to your scripts by using <code>ee.Image</code> and their respective asset directory:</p>
@@ -504,7 +519,7 @@ geometries<span class="op">:</span><span class="st"> </span>true
 <div class="figure"><span id="fig:my-strat"></span>
 <img src="images/stratsample.PNG" alt="2000 stratified random samples - 500 points by class." width="1122" />
 <p class="caption">
-Figure 4.14: 2000 stratified random samples - 500 points by class.
+Figure 5.14: 2000 stratified random samples - 500 points by class.
 </p>
 </div>
 <p>Next, create a transition matrix using the samples above. This matrix will show how many of these 500 remained the same land cover class 20 years later (<code>Cairo2018</code>) and how many of them changed to a given class. You can use <code>.accuracy()</code> to calculate the % of these samples remained unchanged between the two periods:</p>
@@ -519,7 +534,7 @@ Figure 4.14: 2000 stratified random samples - 500 points by class.
 <div class="figure"><span id="fig:my-matrix"></span>
 <img src="images/matrix.PNG" alt="Transition matrix based on the 2000 samples" width="470" />
 <p class="caption">
-Figure 4.15: Transition matrix based on the 2000 samples
+Figure 5.15: Transition matrix based on the 2000 samples
 </p>
 </div>
 <p>In the transition matrix above you can draw information about how many samples transitioned to each class from 2000 to 2020. For example, from the 500 samples of agriculture class (pixel value 1), 1 was classified (or ‘transitioned’) to water, 70 to sand and 106 to urban areas in 2020. Overall, 78% of these samples remained unchanged.</p>
@@ -547,7 +562,7 @@ var change =<span class="st"> </span><span class="kw">crop2020.subtract</span>(c
 <div class="figure"><span id="fig:my-change"></span>
 <img src="images/matrix.PNG" alt="2000-2020 Change Map. Conversion/loss west of the Nile Delta are likely due to harvest while the circle shaped areas in the center of the delta are related to expansion of cities and villages." width="470" />
 <p class="caption">
-Figure 4.16: 2000-2020 Change Map. Conversion/loss west of the Nile Delta are likely due to harvest while the circle shaped areas in the center of the delta are related to expansion of cities and villages.
+Figure 5.16: 2000-2020 Change Map. Conversion/loss west of the Nile Delta are likely due to harvest while the circle shaped areas in the center of the delta are related to expansion of cities and villages.
 </p>
 </div>
 <p>You can calculate the area of expansion/conversion by isolating the pixels of gain/loss from the <code>change</code> into <code>gain</code> and <code>loss</code>. Then, calculate the area of each pixel using <code>ee.Image.pixelArea</code> and multiplying by the count of pixels in gain and loss using <code>multiply</code>. The default unit is square meters (m²). You can use <code>.divide()</code> to transform into square kilometers (<code>.divide(1000000)</code>) or hectares (<code>.divide(10000)</code>)</p>
@@ -560,7 +575,7 @@ var lossArea =<span class="st"> </span><span class="kw">loss.multiply</span>(<sp
 <div class="figure"><span id="fig:my-areas"></span>
 <img src="images/areas.PNG" alt="Cultivated area gains and losses in the 2000-2020 period." width="539" />
 <p class="caption">
-Figure 4.17: Cultivated area gains and losses in the 2000-2020 period.
+Figure 5.17: Cultivated area gains and losses in the 2000-2020 period.
 </p>
 </div>
 
@@ -571,8 +586,8 @@ Figure 4.17: Cultivated area gains and losses in the 2000-2020 period.
           </div>
         </div>
       </div>
-<a href="auxiliary-functions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="post-classification-processing.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="part-2-advanced-google-earth-engine.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="post-classification-processing-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
