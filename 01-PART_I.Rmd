@@ -4,9 +4,10 @@
 
 ### Remote Sensing Language
 
-#### Definition
+A) Definition
 
-The term *Remote sensing* has been variously defined. Some of its early definitions include:
+The term *__Remote sensing__* has been variously defined. Some of its early definitions include:
+
 - [...] the art or science of telling something about an object without touching it .(Fischer et al., 1976)
 
 - Remote sensing is the acquisition of physical data of an object without touch or contact. (Lintz and Simonett, 1976)
@@ -17,14 +18,14 @@ The term *Remote sensing* has been variously defined. Some of its early definiti
 
 Thus, in the context of this training, we can define *Remote Sensing* as the science of acquiring information about a given target, object or phenomenon on the surface of the Earth by sensors on-board various platforms orbiting our planet. 
 
-#### Building blocks of a remote sensing system
+B) Building blocks of a remote sensing system
 
 Although the many different methods for collection, processing and interpretation of remotely sense data can vary widely, they will always have the following essential components:
 
-A)
+B.1)
 
 
-*_References_*
+*__References__*
 
 
 ### Google Earth Engine API and Java Script
