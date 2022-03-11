@@ -18,7 +18,7 @@ The term *__Remote sensing__* has been variously defined. Some of its early defi
 
 Thus, in the context of this training, we can define *Remote Sensing* as the science of acquiring information about a given target, object or phenomenon on the surface of the Earth by sensors on-board various platforms orbiting our planet. 
 
-__B) Building blocks of a remote sensing system__
+__B) Building blocks of remote sensing__
 
 Although the many different methods for collection, processing and interpretation of remotely sense data can vary widely, they will always have the following essential components:
 
@@ -27,6 +27,15 @@ knitr::include_graphics("images/BuildingBlocksRemoteSensing.png")
 ```
 
 - Energy Source
+
+The source of the electromagnetic radiation/energy is the first requirement of any remote sensing process. Depending on the source of energy they are using, the different remote sensing systems can be classified as *__active__* or *__passive__*. *Active* sensors will produce its own source of energy for the illumination of the target. They will emit the energy toward the target being investigated and the energy reflected by this target is detected and measured by the sensor. On the other hand, *passive* sensors only measures the energy that is naturally available, usually from the sun. These sensors can only be used to detect the energy being reflected during the time when the sun is illuminating the Earth.
+
+```{r PassiveAndActive, fig.cap="Remote sensing can be classified as Passive or Active based on the source of energy.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PassiveAndActive.png")
+```
+
+You can also think about these concepts of *active* and *passive* using a handheld photogarphic camera as an example: When photographing a target in the dark, the camera flash will provide the energy necessary to illuminate the target. Therefore, in that case, the camera is an *active* sensor. On the other hand, this same camera will be a *passive* sensor when you are photographing a target or object during the day, when the target being illuminated by sun light and no flash is necessary.
+
 
 - Interaction with the target/oject
 
