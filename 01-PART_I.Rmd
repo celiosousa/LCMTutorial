@@ -22,7 +22,7 @@ __B) Building blocks of a remote sensing system__
 
 Although the many different methods for collection, processing and interpretation of remotely sense data can vary widely, they will always have the following essential components:
 
-```{r FigBuildingBlocks, fig.cap="Basic components of a remote sensing system."echo=FALSE, message=FALSE}
+```{r FigBuildingBlocks, fig.cap="Basic components of a remote sensing system.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/BuildingBlocksRemoteSensing.png")
 ```
 
