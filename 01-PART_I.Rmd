@@ -36,8 +36,11 @@ knitr::include_graphics("images/PassiveAndActive.png")
 
 You can also think about these concepts of *active* and *passive* using a handheld photogarphic camera as an example: When photographing a target in the dark, the camera flash will provide the energy necessary to illuminate the target. Therefore, in that case, the camera is an *active* sensor. On the other hand, this same camera will be a *passive* sensor when you are photographing a target or object during the day, when the target being illuminated by sun light and no flash is necessary.
 
-
 - Interaction with the target/oject
+
+The most common medium in between the source and target is the atmosphere. This is where the firt interaction ocurrs. As the radiation/energy travel from its source to the target, it will come in contact with and interact different atmosphere constituents: aerosols, water vapor, solid particles, ect. Secondly, once this energy makes its way through the atmospherethe to the target, it will interact with it depending on the target properties. The electromagnetic energy can have different types of interaction when it encounters matter; whether it is gas, solid or gas: it can be __transmitted__ (that is, it passes through the target), __absorbed__ (that is, the target absorbs the energy usually increasing its temperature as a result), __emitted__ (that is, energy is emitted from all matter at temperatures above the absolute zero of 0 Kelvins), __scattered__ (that is, deflected in every direction) and __reflected__ (that is, energy bounces off the target's surface and its direction is usually a function of target structure and texture). 
+
+Remember: All targets can show different proportions of each of these interactions.
 
 - Recording of the energy by the sensor
 
@@ -46,9 +49,15 @@ You can also think about these concepts of *active* and *passive* using a handhe
 - Analysis and Interpretation (we are here!)
 
 
-
 *__References__*
 
+Fischer, W. A., W.R. Hemphill and A. Kover. 1976. Progress in Remote Sensing. *Photogrametria*, Vol. 32, pp. 33-72
+
+Lintz, J. and D. S. Simonett. 1976. *Remote Sensing of Environment*. Reading, MA: Addison-Wesley. 694 pp.
+
+Barrett, E. C. and C. F. Curtis. 1976. *Introduction to Environmental Remote Sensing*. New York: Macmillian, 472 pp.
+
+Colwell, R. N. 1966. Uses and Limitations of Multispectral Remote Sensing. In *Proceedings of the Fourth Symposium on Remote Sensing of Environment*. Ann Arbor: Institute of Science and Technology, University of Michigan, pp. 71-100.
 
 ### Google Earth Engine API and Java Script
 
