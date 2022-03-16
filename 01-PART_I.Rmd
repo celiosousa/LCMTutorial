@@ -28,7 +28,7 @@ knitr::include_graphics("images/BuildingBlocksRemoteSensing.png")
 
 - Energy Source
 
-The source of the electromagnetic radiation/energy is the first requirement of any remote sensing process. Depending on the source of energy they are using, the different remote sensing systems can be classified as *__active__* or *__passive__*. *Active* sensors will produce its own source of energy for the illumination of the target. They will emit the energy toward the target being investigated and the energy reflected by this target is detected and measured by the sensor. On the other hand, *passive* sensors only measures the energy that is naturally available, usually from the sun. These sensors can only be used to detect the energy being reflected during the time when the sun is illuminating the Earth.
+The source of the electromagnetic radiation/energy (EMR) is the first requirement of any remote sensing process. Depending on the source of energy they are using, the different remote sensing systems can be classified as *__active__* or *__passive__*. *Active* sensors will produce its own source of energy for the illumination of the target. They will emit the energy toward the target being investigated and the energy reflected by this target is detected and measured by the sensor. On the other hand, *passive* sensors only measures the energy that is naturally available, usually from the sun. These sensors can only be used to detect the energy being reflected during the time when the sun is illuminating the Earth.
 
 ```{r PassiveAndActive, fig.cap="Remote sensing can be classified as Passive or Active based on the source of energy.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/PassiveAndActive.png")
@@ -38,7 +38,7 @@ You can also think about these concepts of *active* and *passive* using a handhe
 
 - Interaction with the target/oject
 
-The most common medium in between the source and target is the atmosphere. This is where the firt interaction ocurrs. As the radiation/energy travel from its source to the target, it will come in contact with and interact different atmosphere constituents: aerosols, water vapor, solid particles, ect. Secondly, once this energy makes its way through the atmospherethe to the target, it will interact with it depending on the target properties. The electromagnetic energy can have different types of interaction when it encounters matter; whether it is gas, solid or gas: it can be __transmitted__ (that is, it passes through the target), __absorbed__ (that is, the target absorbs the energy usually increasing its temperature as a result), __emitted__ (that is, energy is emitted from all matter at temperatures above the absolute zero of 0 Kelvins), __scattered__ (that is, deflected in every direction) and __reflected__ (that is, energy bounces off the target's surface and its direction is usually a function of target structure and texture). 
+The most common medium in between the source and target is the atmosphere. This is where the firt interaction ocurrs. As the EMR travel from its source to the target, it will come in contact with and interact different atmosphere constituents: aerosols, water vapor, solid particles, ect. Secondly, once the EMR makes its way through the atmospherethe to the target, it will interact with it depending on the target properties and energy wavelength. The EMR can have different types of interaction when it encounters matter; whether it is gas, solid or gas: it can be __transmitted__ (that is, it passes through the target), __absorbed__ (that is, the target absorbs the energy usually increasing its temperature as a result), __emitted__ (that is, energy is emitted from all matter at temperatures above the absolute zero of 0 Kelvins), __scattered__ (that is, deflected in every direction) and __reflected__ (that is, energy bounces off the target's surface and its direction is usually a function of target structure and texture). 
 
 ```{block, type='caution'}
 Keep in mind: All targets can show different proportions of each of these interactions.
@@ -47,9 +47,23 @@ Keep in mind: All targets can show different proportions of each of these intera
 
 - Recording of the energy by the sensor
 
+The sensor - often onboard of airplanes or satellites in space - will measure the returning EMR after it has interacted with the target and the atmosphere. This measurement is converted into a digital image with discrete values in units of digital number (DN) for each image pixel. Depending on the sensor, these resulting images will have different characteristiscs (or *__resolutions__*). They are:
+
+I) __Spatial Resolution__: usually known as "pixel size". It refers to the sensor's ability to discriminate different objects/targets. A higher spatial resolution means a smaller pixel size which, in turn, means that smaller objects can be distinguishable as separate targets.
+
+II) __Spectral Resolution__: Different sensors will measure the EMR at specific ranges (or wavelengths), usually called *bands*. Thus, the spectral resolution of a sensor usually refers to the number and bandwith of these bands.
+
+III) __Radiometric Resolution__: Usually measured in *bits*, it refers to the sensor's ability to detect the smallest change in the spectral reflectance among different targets. For example, a 8-bit image will have 256 levels of brightness while a 16-bit image has 65,536 levels of brightness.
+
+IV) __Temporal resolution__ (sensors onboard satellites): is the time required for the satellite to collect two images at the same geographic location on Earth. Higher temporal resolution means less time for revisiting the same location. However, temporal resolution is usually inverselly proportional to spatial resolution: The larger the pixel size, the larger area the sensor will cover which means less time until the next revisit.
+
+
 - Transmission, Reception, and Processing
 
+
 - Analysis and Interpretation (we are here!)
+
+Land cover is the material at the ground, such as soil, vegetation, water, asphalt, etc. (Fisher and Unwin, 2005). Depending on the sensor resolutions, the number and kind of land cover classes that can be identified in the image can vary significantly.
 
 
 *__References__*
