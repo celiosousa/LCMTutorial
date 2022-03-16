@@ -40,7 +40,10 @@ You can also think about these concepts of *active* and *passive* using a handhe
 
 The most common medium in between the source and target is the atmosphere. This is where the firt interaction ocurrs. As the radiation/energy travel from its source to the target, it will come in contact with and interact different atmosphere constituents: aerosols, water vapor, solid particles, ect. Secondly, once this energy makes its way through the atmospherethe to the target, it will interact with it depending on the target properties. The electromagnetic energy can have different types of interaction when it encounters matter; whether it is gas, solid or gas: it can be __transmitted__ (that is, it passes through the target), __absorbed__ (that is, the target absorbs the energy usually increasing its temperature as a result), __emitted__ (that is, energy is emitted from all matter at temperatures above the absolute zero of 0 Kelvins), __scattered__ (that is, deflected in every direction) and __reflected__ (that is, energy bounces off the target's surface and its direction is usually a function of target structure and texture). 
 
-Remember: All targets can show different proportions of each of these interactions.
+```{block, type='caution'}
+Keep in mind: All targets can show different proportions of each of these interactions.
+
+```
 
 - Recording of the energy by the sensor
 
