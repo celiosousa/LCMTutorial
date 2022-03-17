@@ -66,8 +66,23 @@ The sensor - often onboard of airplanes or satellites in space - will measure th
 
 IV) Transmission, Reception, and Processing
 
+The EMR recorded by the sensor is transmitted in an electronic form to a receiving station on Earth where the data is processed and stored.
 
 V) Analysis and Interpretation (we are here!)
+
+This is where this training is focused on! The EMR was transformed into a digital dataset where we can use specialized instruments/hardware/software to extract information about the target observed. This final component of Remote Sensing is achieved when we apply the extracted information to solve a particular problem. 
+
+__C) Spectral Signatures: A target's spectral fingerprint__
+
+In order to understand and interprete the information extracted from remotely sensed data, you have to first understand the behavior of the target in respect to the electromagnetic spectrum. Each target will show a distinct reflectance pattern as a function of the wavelength - known as *__spectral signature__* (or a spectral fingerprint). This signature will directly (or indirectly) lead to the identification of a target based on its set of values for its reflectance in different spectral ranges.
+
+```{r SpectralSignature, fig.cap="Typical spectral signatures of specic land cover types in the VIS and IR region of the electromagnetic spectrum (Source: http://www.seos-project.eu/)", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PassiveAndActive.jpg")
+```
+
+
+
+
 
 Land cover is the material at the ground, such as soil, vegetation, water, asphalt, etc. (Fisher and Unwin, 2005). Depending on the sensor resolutions, the number and kind of land cover classes that can be identified in the image can vary significantly.
 
