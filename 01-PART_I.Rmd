@@ -77,7 +77,7 @@ __C) Spectral Signatures: A target's spectral fingerprint__
 In order to understand and interprete the information extracted from remotely sensed data, you have to first understand the behavior of the target in respect to the electromagnetic spectrum. Each target will show a distinct reflectance pattern as a function of the wavelength - known as *__spectral signature__* (or a spectral fingerprint). This signature will directly (or indirectly) lead to the identification of a target based on its set of values for its reflectance in different spectral ranges.
 
 ```{r SpectralSignature, fig.cap="Typical spectral signatures of specic land cover types in the VIS and IR region of the electromagnetic spectrum (Source: http://www.seos-project.eu/)", echo=FALSE, message=FALSE}
-knitr::include_graphics("images/PassiveAndActive.jpg")
+knitr::include_graphics("images/Spectral Signature.jpg")
 ```
 
 
