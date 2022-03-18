@@ -70,7 +70,15 @@ The EMR recorded by the sensor is transmitted in an electronic form to a receivi
 
 V) Analysis and Interpretation (we are here!)
 
-This is where this training is focused on! The EMR was transformed into a digital dataset where we can use specialized instruments/hardware/software to extract information about the target observed. This final component of Remote Sensing is achieved when we apply the extracted information to solve a particular problem. 
+This is where this training is focused on! The EMR was transformed into a digital dataset where we can use specialized instruments/hardware/software to extract information about the target observed. This extraction is often done through *__image processing__* (or digital image processing), which is the process which makes an image interpretable for a given use. There are many methods of image processing, but these are the most common ones:
+
+- __Image correction__: The digital image recorded by the sensor on a satellite (or aircraft) may contain errors related to the geometry and brightness values of the pixels. For example, a geometrical correction, also called *__geo-referencing__*, is a procedure where the content of image will be assigned a spatial coordinate system (for example, geographical latitude and longitude).
+
+- __Image enhancement__: This is related to modification of an image, by changing the pixel brightness values, to improve its visual aspects so that the actual analysis of images will be easier, faster and more reliable.
+
+- __Image classification__: The overall goal of this method is to categorize all pixels in an image into themes (or *__land cover classes__*). This resulting map with its limited number of classes can be more readily and sucessfully interpreted compared to the raw image and it is often use for planning purposes. There are supervised and unsupervised methods for classification of an image: A *__supervised classification__* (human-guided) is based on the idea that a user can select sample pixels in an image that are representative of specific classes and then direct the image processing software to use these training sites as references for the classification of all other pixels in the image. These samples are selected based on the knowledge of the user. On the other hand, an *__unsupervised classification__* (computer/software-guided) is where the output classes are based on the software's ability to determine which pixels are related, using several different models and techniques. 
+
+This final component of Remote Sensing (V) is achieved when we apply the extracted information to solve a particular problem. 
 
 __C) Spectral Signatures: A target's spectral fingerprint__
 
@@ -81,11 +89,9 @@ In order to understand and interprete the information extracted from remotely se
 knitr::include_graphics("images/Spectral Signature.jpg")
 ```
 
-
 ```{block, type='rmdcomment'}
 *__Reflectance__* is the ratio of the amount of light leaving a target to the amount of light striking the target. It has no units. 
 ```
-
 
 The spectral signature of *healthy green vegetation* has a small reflectance in the visible portion of the electromagnetic spectrum resulting from the pigments in plant leaves. Most of the light is being used in the photosynthesis process. However, the reflectance increases dramatically in the near infrared. The spectral signature of *soil* is much less variable. Its behavior is affected by soil moisture, texture, surface roughness and they are less dominant than the absorbance features present in vegetation. The *water*'s spectral signature is characterized by a high absorption at near infrared wavelengths range and beyond. Because of this absorption property, water bodies as well as features containing water can easily be detected, located and delineated with remote sensing data.
 

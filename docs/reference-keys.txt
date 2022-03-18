@@ -1,3 +1,7 @@
+fig:FigBuildingBlocks
+fig:FigEMS
+fig:PassiveAndActive
+fig:SpectralSignature
 part-1---basics-fundamentals
 programming-and-remote-sensing-basics
 remote-sensing-language
