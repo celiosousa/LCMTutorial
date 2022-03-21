@@ -14,6 +14,6 @@ Statistical standard of ***Ecosystem Accounting***...
 
 Here are essential components:
 
-```{r FigBuildingBlocks, fig.cap="Components of ecosystem accounting.", echo=FALSE, message=FALSE}
+```{r nameofFigure, fig.cap="Components of ecosystem accounting.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/EcosystemAccounts.png")
 ```
