@@ -95,7 +95,7 @@ knitr::include_graphics("images/Spectral Signature.jpg")
 
 The spectral signature of *healthy green vegetation* has a small reflectance in the visible portion of the electromagnetic spectrum resulting from the pigments in plant leaves. Most of the light is being used in the photosynthesis process. However, the reflectance increases dramatically in the near infrared. The spectral signature of *soil* is much less variable. Its behavior is affected by soil moisture, texture, surface roughness and they are less dominant than the absorbance features present in vegetation. The *water*'s spectral signature is characterized by a high absorption at near infrared wavelengths range and beyond. Because of this absorption property, water bodies as well as features containing water can easily be detected, located and delineated with remote sensing data.
 
-These differences make it possible to identify different earth surface features or materials by analysing their spectral reflectance patterns or spectral signatures.
+These differences make it possible to identify different earth surface features or materials by analysing their spectral reflectance patterns or spectral signatures. [add more text]
 
 
 
