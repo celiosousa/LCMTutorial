@@ -2,7 +2,9 @@
 
 ## Introduction to Ecosystem Accounting
 
-### Ecosystem Accounting
+This section introduces the System of Environmental Economic Accounting (SEEA) and how remote sensing derived products can be used for ecosystem accounting.
+
+### Essentials
 
 **A) Background**
 
@@ -17,3 +19,35 @@ Here are essential components:
 ```{r FigBuildingBlocks, fig.cap="Components of ecosystem accounting.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/EcosystemAccounts.png")
 ```
+
+## Introduction to Ecosystem Extent Account
+
+This section introduces the structure of the SEEA extent account and how it is derived. The account compilation process will be demonstrated through a simple exercise.
+
+### Essentials
+
+**A) Projections**
+
+## Compiling Ecosystem Extent Account Tables
+
+This section demonstrates the process of deriving ecosystem extent accounts using scripts developed in GEE Python Colab and/or Jupyter Notebook for ArcGIS Pro.
+
+### Essentials
+
+**A) GEE Python Colab** Google Earth Engine Application Programming Interface (API) Colab, or "Colaboratory" is a web-based interactive development environment that allows you to write and execute Python in your browser with Zero configuration required, and an access to graphics processing units (GPU) free of charge.
+
+It can be accessed here: <https://colab.research.google.com/github/google/earthengine-api/blob/master/python/examples/ipynb/ee-api-colab-setup.ipynb>
+
+**B) Jupyter Notebook** Jupyter Notebook is the latest web-based interactive development environment for notebooks, code, and data. Its flexible interface allows users to configure and arrange workflows in data science, scientific computing, computational journalism, and machine learning.
+
+It can be accessed here: <https://jupyter.org/>
+
+## Compiling Ecosystem Extent Account Tables
+
+This section explores the use of Microsoft Excel to do basic data analytics using information from ecosystem extent accounts.
+
+### Essentials
+
+**A) Macros**
+If you have tasks in Microsoft Excel that you do repeatedly, you can record a macro to automate those tasks. A macro is an action or a set of actions that you can run as many times as you want. When you create a macro, you are recording your mouse clicks and keystrokes.
+
