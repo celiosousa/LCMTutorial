@@ -97,8 +97,6 @@ The spectral signature of *healthy green vegetation* has a small reflectance in 
 
 These differences make it possible to identify different earth surface features or materials by analysing their spectral reflectance patterns or spectral signatures. [add more text]
 
-
-
 *__References__*
 
 Fischer, W. A., W.R. Hemphill and A. Kover. 1976. Progress in Remote Sensing. *Photogrametria*, Vol. 32, pp. 33-72
@@ -109,7 +107,29 @@ Barrett, E. C. and C. F. Curtis. 1976. *Introduction to Environmental Remote Sen
 
 Colwell, R. N. 1966. Uses and Limitations of Multispectral Remote Sensing. In *Proceedings of the Fourth Symposium on Remote Sensing of Environment*. Ann Arbor: Institute of Science and Technology, University of Michigan, pp. 71-100.
 
-### Google Earth Engine API and Java Script
+### Google Earth Engine's Application Programming Interface (API) and Java Script
+
+Google Earth Engine is a cloud-based platform for scientific data analysis. It provides ready-to-use, cloud-hosted datasets and a large pool of servers. One feature that makes Earth Engine particularly attractive is the ability to run large computations very fast by distributing them across a large pool of servers. The ability to efficiently use cloud-hosted datasets and computation is enabled by the Earth Engine API.
+
+An API is a way to communicate with Google Earth Engine servers. It allows you to specify what computation you would like to do, and then to receive the results. The API is designed so that users do not need to worry about how the computation is distributed across a cluster of machines and the results are assembled. Users of the API simply specify what needs to be done. This greatly simplifies the code by hiding the implementation detail from the users. It also makes Earth Engine very approachable for users who are not familiar with writing code.
+
+__Java Script API and Introduction to the Code Editor__
+
+The Earth Engine JavaScript API is the easiest to use when getting started. The Earth Engine platform comes with a web-based Code Editor that allows you to start using the Earth Engine JavaScript API without any installation. It also provides additional functionality to display your results on a map, save your scripts, access documentation, manage tasks, and more. It has a one-click mechanism to share your code with other users—allowing for easy reproducibility and collaboration. In addition, the JavaScript API comes with a user interface library, which allows you to create charts and web-based applications with little effort.
+
+The Code Editor is an integrated development environment for the Earth Engine JavaScript API. It offers an easy way to type, debug, run, and manage code. Once you have successfully registered for a Google Earth Engine account, you can visit https://code.earthengine.google.com/ to open the Code Editor. When you first visit the Code Editor, you will see a screen such as the one shown below:
+
+```{r CodeEditor, fig.cap="Earth Engine Code Editor", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-CodeEditor.PNG")
+```
+
+The Code Editor allows you to type JavaScript code and execute it. When you are first learning a new language and getting used to a new programming environment, it is customary to make a program to display your name or the words “Hello World.” This is a fun way to start coding that shows you how to give input to the program and how to execute it. It also shows where the program displays the output. Doing this in JavaScript is quite simple. Copy the following code into the center panel:
+
+```{r eval=FALSE}
+print('Hello World');
+```
+
+The line of code above uses the JavaScript `print()` function to print the text “Hello World” to the screen. Once you enter the code, click the Run button. The output will be displayed on the upper right-hand panel under the Console tab:
 
 ### Exploring Image and Image Collection
 
