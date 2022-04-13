@@ -129,10 +129,16 @@ The Code Editor allows you to type JavaScript code and execute it. When you are 
 print('Hello World');
 ```
 
-The line of code above uses the JavaScript `print()` function to print the text “Hello World” to the screen. Once you enter the code, click the Run button. The output will be displayed on the upper right-hand panel under the Console tab:
+The line of code above uses the JavaScript `print()` function to print the text “Hello World” to the screen. Once you enter the code, click the __Run__ button. The output will be displayed on the upper right-hand panel under the __Console__ tab:
 
-```{r PrintRun, fig.cap="Earth Engine Code Editor", echo=FALSE, message=FALSE}
+```{r PrintRun, fig.cap="Running code with GEE", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/PartI-PrintRun.PNG")
+```
+
+You now know where to type your code, how to run it, and where to look for the output. You just wrote your first Earth Engine script and may want to save it. Click the __Save__ button to save a script:
+
+```{r Save, fig.cap="Saving a script", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Save.PNG")
 ```
 
 ### Exploring Image and Image Collection
