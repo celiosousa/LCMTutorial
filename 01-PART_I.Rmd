@@ -131,6 +131,10 @@ print('Hello World');
 
 The line of code above uses the JavaScript `print()` function to print the text “Hello World” to the screen. Once you enter the code, click the Run button. The output will be displayed on the upper right-hand panel under the Console tab:
 
+```{r PrintRun, fig.cap="Earth Engine Code Editor", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-PrintRun.PNG")
+```
+
 ### Exploring Image and Image Collection
 
 ## Image Manipulation
