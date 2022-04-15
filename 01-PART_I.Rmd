@@ -109,13 +109,13 @@ Colwell, R. N. 1966. Uses and Limitations of Multispectral Remote Sensing. In *P
 
 ### Google Earth Engine's Application Programming Interface (API) and Java Script
 
-Google Earth Engine is a cloud-based platform for scientific data analysis. It provides ready-to-use, cloud-hosted datasets and a large pool of servers. One feature that makes Earth Engine particularly attractive is the ability to run large computations very fast by distributing them across a large pool of servers. The ability to efficiently use cloud-hosted datasets and computation is enabled by the Earth Engine API.
+Google Earth Engine is a cloud-based platform for scientific data analysis and remote sensing data processing. It provides a large catalog of ready-to-use, cloud-hosted datasets. One of Earth Engine's key features is the ability to handle computationally demading processing and analysis very fast by distributing them across a large number of servers. The ability to efficiently use the cloud-hosted datasets and computation is enabled by the Earth Engine API.
 
-An API is a way to communicate with Google Earth Engine servers. It allows you to specify what computation you would like to do, and then to receive the results. The API is designed so that users do not need to worry about how the computation is distributed across a cluster of machines and the results are assembled. Users of the API simply specify what needs to be done. This greatly simplifies the code by hiding the implementation detail from the users. It also makes Earth Engine very approachable for users who are not familiar with writing code.
+An API is a way to communicate with Google Earth Engine servers. It allows you to specify what computation or command you would like to do, and then to receive the results back from the servers. The API is designed so that users do not need to worry about how the computation is distributed across a cluster of machines and the results are assembled. Users of the API simply specify what needs to be done. This greatly simplifies the code by hiding the implementation detail from the users. It also makes Earth Engine simpler for users who are not too familiar with writing code.
 
 __Java Script API and Introduction to the Code Editor__
 
-The Earth Engine JavaScript API is the easiest to use when getting started. The Earth Engine platform comes with a web-based Code Editor that allows you to start using the Earth Engine JavaScript API without any installation. It also provides additional functionality to display your results on a map, save your scripts, access documentation, manage tasks, and more. It has a one-click mechanism to share your code with other users—allowing for easy reproducibility and collaboration. In addition, the JavaScript API comes with a user interface library, which allows you to create charts and web-based applications with little effort.
+The Earth Engine platform comes with a web-based Code Editor that allows you to start using the Earth Engine JavaScript API without any installation. It also provides additional functionality to display your results on a map, save your scripts, access documentation, manage tasks, and more. It has a one-click mechanism to share your code with other users—allowing for easy reproducibility and collaboration. In addition, the JavaScript API comes with a user interface library, which allows you to create charts and web-based applications with little effort.
 
 The Code Editor is an integrated development environment for the Earth Engine JavaScript API. It offers an easy way to type, debug, run, and manage code. Once you have successfully registered for a Google Earth Engine account, you can visit https://code.earthengine.google.com/ to open the Code Editor. When you first visit the Code Editor, you will see a screen such as the one shown below:
 
@@ -139,6 +139,38 @@ You now know where to type your code, how to run it, and where to look for the o
 
 ```{r Save, fig.cap="Saving a script", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/PartI-Save.PNG")
+```
+
+If this is your first time using the Code Editor, you will be prompted to create a home folder. This is a folder in the cloud where all your code will be saved:
+
+```{r SaveII, fig.cap="Your first home folder", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-SaveII.PNG")
+```
+
+```{block, type='caution'}
+You can pick a name of your choice, but remember that __it cannot be changed and will permanently be associated with your account__.
+```
+
+Once youre home folder is created, you will be prompted to create a *new repository*. A repository is a like a folder where you can save your scripts. You can also share entire repositories with other users. Your account can have multiple repositories and each one can hold multiple code scripts. Start by creating a repository:
+
+```{r Repository, fig.cap="Your first repository", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/Repository.PNG")
+```
+
+Finally, you will be able to save your script inside the newly created repository. Enter a name of your choice and click __OK__:
+
+```{block, type='caution'}
+Spaces are not allowed when naming scripts!
+```
+
+```{r SaveIII, fig.cap="Saving a script file", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/SaveIII.PNG")
+```
+
+Once the script is saved, it will appear in the script manager panel. The scripts are saved in the cloud and will always be available to you when you open the Code Editor.
+
+```{r Saved, fig.cap="Your first script in your repository", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/Saved.PNG")
 ```
 
 ### Exploring Image and Image Collection
