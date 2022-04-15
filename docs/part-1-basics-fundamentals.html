@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa (celio.h.resendedesousa@nasa.gov)" />
 
 
-<meta name="date" content="2022-03-17" />
+<meta name="date" content="2022-04-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -113,7 +113,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html"><i class="fa fa-check"></i><b>1</b> Part 1 - Basics &amp; Fundamentals</a><ul>
 <li class="chapter" data-level="1.1" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#programming-and-remote-sensing-basics"><i class="fa fa-check"></i><b>1.1</b> Programming and Remote Sensing Basics</a><ul>
 <li class="chapter" data-level="1.1.1" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#remote-sensing-language"><i class="fa fa-check"></i><b>1.1.1</b> Remote Sensing Language</a></li>
-<li class="chapter" data-level="1.1.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#google-earth-engine-api-and-java-script"><i class="fa fa-check"></i><b>1.1.2</b> Google Earth Engine API and Java Script</a></li>
+<li class="chapter" data-level="1.1.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#google-earth-engines-application-programming-interface-api-and-java-script"><i class="fa fa-check"></i><b>1.1.2</b> Google Earth Engine's Application Programming Interface (API) and Java Script</a></li>
 <li class="chapter" data-level="1.1.3" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#exploring-image-and-image-collection"><i class="fa fa-check"></i><b>1.1.3</b> Exploring Image and Image Collection</a></li>
 </ul></li>
 <li class="chapter" data-level="1.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#image-manipulation"><i class="fa fa-check"></i><b>1.2</b> Image Manipulation</a><ul>
@@ -144,6 +144,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="3.2" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#guinea"><i class="fa fa-check"></i><b>3.2</b> Guinea</a><ul>
 <li class="chapter" data-level="3.2.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#mangrove-mapping-in-guinea-west-africa"><i class="fa fa-check"></i><b>3.2.1</b> Mangrove mapping in Guinea, West Africa</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html"><i class="fa fa-check"></i><b>4</b> Part 4 - Ecosystem Accounting</a><ul>
+<li class="chapter" data-level="4.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#introduction-to-ecosystem-accounting"><i class="fa fa-check"></i><b>4.1</b> Introduction to Ecosystem Accounting</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#ecosystem-accounting"><i class="fa fa-check"></i><b>4.1.1</b> Ecosystem Accounting</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -232,7 +237,13 @@ Keep in mind: All targets can show different proportions of each of these intera
 <ol start="22" style="list-style-type: upper-alpha">
 <li>Analysis and Interpretation (we are here!)</li>
 </ol>
-<p>This is where this training is focused on! The EMR was transformed into a digital dataset where we can use specialized instruments/hardware/software to extract information about the target observed. This final component of Remote Sensing is achieved when we apply the extracted information to solve a particular problem.</p>
+<p>This is where this training is focused on! The EMR was transformed into a digital dataset where we can use specialized instruments/hardware/software to extract information about the target observed. This extraction is often done through <em><strong>image processing</strong></em> (or digital image processing), which is the process which makes an image interpretable for a given use. There are many methods of image processing, but these are the most common ones:</p>
+<ul>
+<li><p><strong>Image correction</strong>: The digital image recorded by the sensor on a satellite (or aircraft) may contain errors related to the geometry and brightness values of the pixels. For example, a geometrical correction, also called <em><strong>geo-referencing</strong></em>, is a procedure where the content of image will be assigned a spatial coordinate system (for example, geographical latitude and longitude).</p></li>
+<li><p><strong>Image enhancement</strong>: This is related to modification of an image, by changing the pixel brightness values, to improve its visual aspects so that the actual analysis of images will be easier, faster and more reliable.</p></li>
+<li><p><strong>Image classification</strong>: The overall goal of this method is to categorize all pixels in an image into themes (or <em><strong>land cover classes</strong></em>). This resulting map with its limited number of classes can be more readily and sucessfully interpreted compared to the raw image and it is often use for planning purposes. There are supervised and unsupervised methods for classification of an image: A <em><strong>supervised classification</strong></em> (human-guided) is based on the idea that a user can select sample pixels in an image that are representative of specific classes and then direct the image processing software to use these training sites as references for the classification of all other pixels in the image. These samples are selected based on the knowledge of the user. On the other hand, an <em><strong>unsupervised classification</strong></em> (computer/software-guided) is where the output classes are based on the software's ability to determine which pixels are related, using several different models and techniques.</p></li>
+</ul>
+<p>This final component of Remote Sensing (V) is achieved when we apply the extracted information to solve a particular problem.</p>
 <p><strong>C) Spectral Signatures: A target's spectral fingerprint</strong></p>
 <p>As mentioned before, remote sensing is based on the measurement of reflected (or emitted) radiation from different targets. Objects having different surface features reflect or absorb the sun's radiation in different ways. In order to understand and interprete the information extracted from remotely sensed data, you have to first understand the behavior of the target in respect to the electromagnetic spectrum. Each target will show a distinct reflectance pattern as a function of the wavelength - known as <em><strong>spectral signature</strong></em> (or a spectral fingerprint). This signature will directly (or indirectly) lead to the identification of a target based on its set of values for its reflectance in different spectral ranges:</p>
 <div class="figure"><span id="fig:SpectralSignature"></span>
@@ -247,15 +258,48 @@ Figure 1.4: Typical spectral signatures of specic land cover types in the visibl
 </p>
 </div>
 <p>The spectral signature of <em>healthy green vegetation</em> has a small reflectance in the visible portion of the electromagnetic spectrum resulting from the pigments in plant leaves. Most of the light is being used in the photosynthesis process. However, the reflectance increases dramatically in the near infrared. The spectral signature of <em>soil</em> is much less variable. Its behavior is affected by soil moisture, texture, surface roughness and they are less dominant than the absorbance features present in vegetation. The <em>water</em>'s spectral signature is characterized by a high absorption at near infrared wavelengths range and beyond. Because of this absorption property, water bodies as well as features containing water can easily be detected, located and delineated with remote sensing data.</p>
-<p>These differences make it possible to identify different earth surface features or materials by analysing their spectral reflectance patterns or spectral signatures.</p>
+<p>These differences make it possible to identify different earth surface features or materials by analysing their spectral reflectance patterns or spectral signatures. [add more text]</p>
 <p><em><strong>References</strong></em></p>
 <p>Fischer, W. A., W.R. Hemphill and A. Kover. 1976. Progress in Remote Sensing. <em>Photogrametria</em>, Vol. 32, pp. 33-72</p>
 <p>Lintz, J. and D. S. Simonett. 1976. <em>Remote Sensing of Environment</em>. Reading, MA: Addison-Wesley. 694 pp.</p>
 <p>Barrett, E. C. and C. F. Curtis. 1976. <em>Introduction to Environmental Remote Sensing</em>. New York: Macmillian, 472 pp.</p>
 <p>Colwell, R. N. 1966. Uses and Limitations of Multispectral Remote Sensing. In <em>Proceedings of the Fourth Symposium on Remote Sensing of Environment</em>. Ann Arbor: Institute of Science and Technology, University of Michigan, pp. 71-100.</p>
 </div>
-<div id="google-earth-engine-api-and-java-script" class="section level3">
-<h3><span class="header-section-number">1.1.2</span> Google Earth Engine API and Java Script</h3>
+<div id="google-earth-engines-application-programming-interface-api-and-java-script" class="section level3">
+<h3><span class="header-section-number">1.1.2</span> Google Earth Engine's Application Programming Interface (API) and Java Script</h3>
+<p>Google Earth Engine is a cloud-based platform for scientific data analysis and remote sensing data processing. It provides a large catalog of ready-to-use, cloud-hosted datasets. One of Earth Engine's key features is the ability to handle computationally demading processing and analysis very fast by distributing them across a large number of servers. The ability to efficiently use the cloud-hosted datasets and computation is enabled by the Earth Engine API.</p>
+<p>An API is a way to communicate with Google Earth Engine servers. It allows you to specify what computation or command you would like to do, and then to receive the results back from the servers. The API is designed so that users do not need to worry about how the computation is distributed across a cluster of machines and the results are assembled. Users of the API simply specify what needs to be done. This greatly simplifies the code by hiding the implementation detail from the users. It also makes Earth Engine simpler for users who are not too familiar with writing code.</p>
+<p><strong>Java Script API and Introduction to the Code Editor</strong></p>
+<p>The Earth Engine platform comes with a web-based Code Editor that allows you to start using the Earth Engine JavaScript API without any installation. It also provides additional functionality to display your results on a map, save your scripts, access documentation, manage tasks, and more. It has a one-click mechanism to share your code with other users—allowing for easy reproducibility and collaboration. In addition, the JavaScript API comes with a user interface library, which allows you to create charts and web-based applications with little effort.</p>
+<p>The Code Editor is an integrated development environment for the Earth Engine JavaScript API. It offers an easy way to type, debug, run, and manage code. Once you have successfully registered for a Google Earth Engine account, you can visit <a href="https://code.earthengine.google.com/" class="uri">https://code.earthengine.google.com/</a> to open the Code Editor. When you first visit the Code Editor, you will see a screen such as the one shown below:</p>
+<div class="figure"><span id="fig:CodeEditor"></span>
+<img src="images/PartI-CodeEditor.PNG" alt="Earth Engine Code Editor" width="858" />
+<p class="caption">
+Figure 1.5: Earth Engine Code Editor
+</p>
+</div>
+<p>The Code Editor allows you to type JavaScript code and execute it. When you are first learning a new language and getting used to a new programming environment, it is customary to make a program to display your name or the words “Hello World.” This is a fun way to start coding that shows you how to give input to the program and how to execute it. It also shows where the program displays the output. Doing this in JavaScript is quite simple. Copy the following code into the center panel:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="st">&#39;Hello World&#39;</span>);</code></pre></div>
+<p>The line of code above uses the JavaScript <code>print()</code> function to print the text “Hello World” to the screen. Once you enter the code, click the <strong>Run</strong> button. The output will be displayed on the upper right-hand panel under the <strong>Console</strong> tab:</p>
+<div class="figure"><span id="fig:PrintRun"></span>
+<img src="images/PartI-PrintRun.png" alt="Running code with GEE" width="858" />
+<p class="caption">
+Figure 1.6: Running code with GEE
+</p>
+</div>
+<p>You now know where to type your code, how to run it, and where to look for the output. You just wrote your first Earth Engine script and may want to save it. Click the <strong>Save</strong> button to save a script:</p>
+<div class="figure"><span id="fig:Save"></span>
+<img src="images/PartI-Save.png" alt="Saving a script" width="858" />
+<p class="caption">
+Figure 1.7: Saving a script
+</p>
+</div>
+<div class="caution">
+<p>
+If this is your first time using the Code Editor, you will be prompted to create a home folder. This is a folder in the cloud where all your code will be saved. You can pick a name of your choice, but remember that it cannot be changed and will forever be associated with your account.
+</p>
+</div>
+<p>Once youre home folder is created, you will be prompted to create a <em>new repository</em>. A repository is a like a folder where you can save your scripts. You can also share entire repositories with other users. Your account can have multiple repositories and each one can hold multiple code scripts. Start by creating a repository</p>
 </div>
 <div id="exploring-image-and-image-collection" class="section level3">
 <h3><span class="header-section-number">1.1.3</span> Exploring Image and Image Collection</h3>
