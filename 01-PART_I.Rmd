@@ -113,7 +113,7 @@ Google Earth Engine is a cloud-based platform for scientific data analysis and r
 
 An API is a way to communicate with Google Earth Engine servers. It allows you to specify what computation or command you would like to do, and then to receive the results back from the servers. The API is designed so that users do not need to worry about how the computation is distributed across a cluster of machines and the results are assembled. Users of the API simply specify what needs to be done. This greatly simplifies the code by hiding the implementation detail from the users. It also makes Earth Engine simpler for users who are not too familiar with writing code.
 
-__Java Script API and Introduction to the Code Editor__
+__JavaScript API and Introduction to the Code Editor__
 
 The Earth Engine platform comes with a web-based Code Editor that allows you to start using the Earth Engine JavaScript API without any installation. It also provides additional functionality to display your results on a map, save your scripts, access documentation, manage tasks, and more. It has a one-click mechanism to share your code with other users—allowing for easy reproducibility and collaboration. In addition, the JavaScript API comes with a user interface library, which allows you to create charts and web-based applications with little effort.
 
@@ -138,13 +138,13 @@ knitr::include_graphics("images/PartI-PrintRun.PNG")
 You now know where to type your code, how to run it, and where to look for the output. You just wrote your first Earth Engine script and may want to save it. Click the __Save__ button to save a script:
 
 ```{r Save, fig.cap="Saving a script", echo=FALSE, message=FALSE}
-knitr::include_graphics("images/PartI-Save.PNG")
+knitr::include_graphics("images/PartI-Save.png")
 ```
 
 If this is your first time using the Code Editor, you will be prompted to create a home folder. This is a folder in the cloud where all your code will be saved:
 
 ```{r SaveII, fig.cap="Your first home folder", echo=FALSE, message=FALSE}
-knitr::include_graphics("images/PartI-SaveII.PNG")
+knitr::include_graphics("images/PartI-SaveII.png")
 ```
 
 ```{block, type='caution'}
@@ -154,7 +154,7 @@ You can pick a name of your choice, but remember that __it cannot be changed and
 Once youre home folder is created, you will be prompted to create a *new repository*. A repository is a like a folder where you can save your scripts. You can also share entire repositories with other users. Your account can have multiple repositories and each one can hold multiple code scripts. Start by creating a repository:
 
 ```{r Repository, fig.cap="Your first repository", echo=FALSE, message=FALSE}
-knitr::include_graphics("images/Repository.PNG")
+knitr::include_graphics("images/PartI-Repository.png")
 ```
 
 Finally, you will be able to save your script inside the newly created repository. Enter a name of your choice and click __OK__:
@@ -164,14 +164,153 @@ Spaces are not allowed when naming scripts!
 ```
 
 ```{r SaveIII, fig.cap="Saving a script file", echo=FALSE, message=FALSE}
-knitr::include_graphics("images/SaveIII.PNG")
+knitr::include_graphics("images/PartI-SaveIII.png")
 ```
 
 Once the script is saved, it will appear in the script manager panel. The scripts are saved in the cloud and will always be available to you when you open the Code Editor.
 
 ```{r Saved, fig.cap="Your first script in your repository", echo=FALSE, message=FALSE}
-knitr::include_graphics("images/Saved.PNG")
+knitr::include_graphics("images/PartI-Saved.png")
 ```
+
+__JavaScript Basics__
+
+Javascript is the language you will use to construct and set up your commands and analysis. This section covers the basics of the Java Script sintax and some basic data structures. In the following sections, more JavaScript code will be presented. Throughout this document, code will be presented with a distinct colored font and with shaded background. As you encounter code, copy and paste it into the Code Editor and click __Run__.
+
+*___A) Variables___*
+
+In a programming language, variables are used to store data values. In JavaScript, a variable is defined using the `var` keyword followed by the name of the variable. For instance, create a `var` named `city` that contain the text string `'Monrovia'`. Text strings in the code must be always in quotes. Google Earth Engine allows you to use single `'` or double `"` quotes, as long as they match in the beginning and end of the text string. We also usually end each statement on scripts with a semicolon `;`, although Earth Engine's code editor does not require it. A `i' will be shown in the line of the code where a semicolon is missing:
+
+```{r Semicolon, fig.cap="Even though they are not a requirement, Google Earth Engine indicates that a semicolon is missing in the statement. You can hover the mouse cursor over the icon to reveal its meaning.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Semicolon.png")
+```
+
+```{r eval=FALSE}
+var city = 'Monrovia';
+```
+
+If you `print` the variable `city`, you will get the value stored (as a string because of the quotations) stored in the variable (Monrovia) printed in the __Console__.
+
+```{r eval=FALSE}
+print(city);
+```
+
+When you use quotations, the variable is automatically assigned the type *string*. You can also assign numbers to variables. For example, create the variables `population` and `area` and assing a number as their value. When assigning numbers, you do not use commas `,` for thousand separators. You do, however, use `.` for decimals:
+
+```{r eval=FALSE}
+var population = 939524;
+var area = 194.25;
+```
+
+Print those variables to the __Console__. You can also add text to describe the variables printed in the __Console__. Simply add a text string within the `print` function along with the variable being printed separated with `,`. Use the code below as example:
+
+```{r eval=FALSE}
+print('Number of people in Monrovia:', population);
+print(area, 'km squared');
+```
+
+*___B) Lists___*
+
+In the previous examples, we created variables holding a single value (text or number). JavaScript provides a data structure called a *list* that can be used When you want to store multiple values in a single variable. You can create lists using square brackets `[]` and adding multiple values separated by `,`. Create a variable called `listofcities`, add values to it and print it to the __Console__:
+
+``` {r eval=FALSE}
+var listofcities = ['Monrovia', 'Gbarnga','Kakata', 'Bensonville'];
+print('Largest cities in Liberia', listofcities);
+```
+
+Looking at the output in the __Console__, you will see `listofcities` with an expander arrow (▹) next to it. Expand the list by clicking on the arrow to show its content. You will notice that along with the items on the list, there will be a number next to each value you added. __This is the index of each item__. It allows you to refer to each item in the list using a numeric value that indicates its position in the list. This is useful when you want to extract a particular item from a list object.
+
+```{r List, fig.cap="A JavaScript List.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-List.png")
+```
+
+*___C) Objects and Dictionaries___*
+
+While useful to hold multiple values, *lists* are not appropriate to hold more structured data. JavaScript allows you to store 'key-value' information in *objects* or *dictionaries*. In this type of data structure, you can refer to a value by its key rather than its position - like in *lists*. You can create objects using curly braces `{}`. Use the code below as an example of an object:
+
+```{r eval=FALSE}
+var cityData = {'city': 'Monrovia', 'population': 939524, 'area': 194.25, 'coordinates': [-10.790, 6.315]};
+```
+
+There are a few important things about the syntax of the code above. As objects tend to hold several keys and values, it can be difficult to read the code if it is written on a continuous string. To improve readability you can use multiple lines instead: 
+
+```{r eval=FALSE}
+var cityData = {
+  'city': 'Monrovia',
+  'population': 939524,
+  'area': 194.25,
+  'coordinates': [-10.790, 6.315]
+};
+```
+
+Note how each key-value pair is on a different line. It is much easier to organize your key-value information this way. Additionally, the code can be more easily read.
+Second, note that the object above can holds multiple types of types of values (string and numbers) and structure (list)!
+
+If you print `cityData` to the __Console__, you can see that instead of a numeric index, each value will be identified by its *key*. 
+
+```{r Dictionary, fig.cap="A JavaScript Object.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Dictionary.png")
+```
+
+This key can also be used to retrieve the value of an item within an object or dictionary. If you want to retrieve a particular key from a dictionary, simply use `['key']`. For example, if you want to retrieve the population value from this object and print it individually to the __Console__, you can use a code like this:
+
+```{r eval=FALSE}
+print(cityData['population']);
+```
+
+The same logic can be applied to *lists*. Always remember that lists have numeric index. Therefore, when retrieving itens from a list, use the number of its position on the list:
+
+```{r eval=FALSE}
+print(listofcities['2']);
+```
+
+*___D) Functions___*
+
+Functions are often used to group a set of operations and used to repeat the same operation with different set of parameters without having to rewrite the code for every iteration. In other words, you can call a function with different parameters to generate different outputs without changing the code.
+Functions are defined using `function()`. They often take parameters which tell the function what to do. These parameters go inside the parentheses `()`. 
+Below is an example of a function named `SumFunction` to calculate the sum of two numbers: `fistValue` and `secondValue`. The var `sum` adds those two parameters and `return` is used to generate the output of that operation
+
+```{r eval=FALSE}
+function SumFunction (firstValue, secondValue) {
+  var sum = firstValue + secondValue;
+  return sum;
+}
+```
+
+Note that if you run the code above, nothing happens. This is just a function and it needs to be given the parameters. For example, if you need to add 37 to 584 using this function and print the result into the __Console__, you can use the code below:
+
+```{r eval=FALSE}
+var result = SumFunction(37,584);
+print(result);
+```
+
+When you call `SumFunction`, it will always perform the operation `sum` with watever two parameters you define in `()`.
+As mentioned, you can perform several operations at once using functions. For example, you can add other operations in the function above and return
+a list or a dictionary with the results: 
+
+```{r eval=FALSE}
+function MathFunction (firstValue, secondValue) {
+  var sum = firstValue + secondValue;
+  var sub = firstValue - secondValue;
+  var fraction = firstValue / secondValue;
+  return {'Result Sum':sum, 'Result Substraction':sub, 'Result Division': fraction};
+}
+```
+
+Using `MathFunction` with a pair of parameters (`firstValue` and `SecondValue`) will return an object with the results of each operation:
+
+```{r eval=FALSE}
+var results = MathFunction(500,5);
+print(results);
+```
+
+```{r Results, fig.cap="Printed results of MathFunction.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Results.png")
+```
+
+__Earth Engine Containers and Objects__
+
+So far, you learned the different data structure you can use within Google Earth Engine. However, if you want to do any computation with the data stored in these different types of structure, you will have to use an Earth Engine container. The `ee` package is used for formulating requests to Earth Engine. In other words, `ee` allows you to request Earth Engine servers to perform a certain computation to an varible or object.
 
 ### Exploring Image and Image Collection
 
