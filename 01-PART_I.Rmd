@@ -173,7 +173,7 @@ Once the script is saved, it will appear in the script manager panel. The script
 knitr::include_graphics("images/PartI-Saved.png")
 ```
 
-__JavaScript Basics__
+__JavaScript Basics: Data types__
 
 Javascript is the language you will use to construct and set up your commands and analysis. This section covers the basics of the Java Script sintax and some basic data structures. In the following sections, more JavaScript code will be presented. Throughout this document, code will be presented with a distinct colored font and with shaded background. As you encounter code, copy and paste it into the Code Editor and click __Run__.
 
@@ -232,7 +232,7 @@ While useful to hold multiple values, *lists* are not appropriate to hold more s
 var cityData = {'city': 'Monrovia', 'population': 939524, 'area': 194.25, 'coordinates': [-10.790, 6.315]};
 ```
 
-There are a few important things about the syntax of the code above. As objects tend to hold several keys and values, it can be difficult to read the code if it is written on a continuous string. To improve readability you can use multiple lines instead: 
+There are a few important things about the syntax of the code above: As objects tend to hold several keys and values, it can be difficult to read the code if it is written on a continuous string. To improve readability you can use multiple lines instead: 
 
 ```{r eval=FALSE}
 var cityData = {
@@ -310,9 +310,144 @@ knitr::include_graphics("images/PartI-Results.png")
 
 __Earth Engine Containers and Objects__
 
-So far, you learned the different data structure you can use within Google Earth Engine. However, if you want to do any computation with the data stored in these different types of structure, you will have to use an Earth Engine container. The `ee` package is used for formulating requests to Earth Engine. In other words, `ee` allows you to request Earth Engine servers to perform a certain computation to an varible or object.
+So far, you learned the different data structure/types you can use within Google Earth Engine. However, if you want to do any computation with the data stored in these different types of structure, you will have to use an Earth Engine container. The `ee` package is used for formulating requests to Earth Engine. In other words, `ee` (prefix for Earth Engine) allows you to request Earth Engine servers to perform a certain computation to an variable or object. Each `ee` object has many different *methods*. You can think of *methods* as the many different things and computations that can be done for an specific object. In the Code Editor, you can switch to the __Docs__ tab to see the API functions grouped by object types.
+
+```{r Docs, fig.cap="List of available objects in the Docs tab of GEE API.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-DocsTab.png")
+```
+
+Below are some examples to ilustrate the concept behind an Earth Engine object:
+
+*__A) Strings__*
+
+You can put strings into a `ee.String` object to be sent to Earth Engine. Using an object/container allows you to do manipulate them in many different ways. For example, `ee.String` has the:
+* `toLowerCase()` method. This method will convert any string in a `ee.String` object to lower case;
+* `length()` method. This method will count the characters in your string;
+* `cat()` method. This method will concatenate two strings into one;
+* and many others! Make sure to check the __Docs__ tab for all the available methods for a given object.
+
+The code below uses some of the methods of `ee.String` as an example:
+
+```{r eval=FALSE}
+var string = ee.String('HELLO EVERYONE, ');
+print(string.toLowerCase());
+print(string.length());
+var string2 = ee.String('nice to meet you');
+print(string.cat(string2));
+```
+In your console tab you will see that the 'HELLO EVERYONE, ' string is now all in lower case. You will also see that `.length()` returned 16 as the number of characters for that string.
+
+Consider the code below:
+
+```{r eval=FALSE}
+var string = 'HELLO EVERYONE';
+var string2 = 'nice to meet you';
+print(string.cat(string2));
+```
+
+If you try to use a method on a non `ee` object, you will get an error. 
+
+```{r Error, fig.cap="Trying to use a method on non-ee.Object will return an error", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Error.png")
+```
+
+*__B) Numbers__*
+
+`ee.Number` is just another example of an object from that list. Similarly to `ee.String`, it will have many methods to be used with. For example, `.add()`, `.subtract()`, `.divide()` and `.multiply ()` will perform  these operations on `ee.Number` objects. Make sure to consult the __Docs__ tab for all the different methods for each object.
+
+```{r eval=FALSE}
+var value1 = ee.Number(100);
+var value2 = ee.Number(2);
+print(value1.add(value2));
+print(value1.subtract(value2));
+print(value1.divide(value2));
+print(value1.multiply(value2));
+print(value1.log10());
+```
+
+*__B) Lists__*
+
+You can also make a JavaScript list into an `ee.List` on Earth Engine server by simply casting your list into the container. There are many other useful methods to use when you have an `ee.List`. For instance, instead of making a JavaScript list by typing each value, you can use `ee.List.sequence()` to construct a list. This method will take many arguments, such as the value of the start of the list, the value at the end of the list, steps (increment) and count. Consider the examples below:
+
+* Making a list with numbers from 0 to 10:
+```{r eval=FALSE}
+print('List 1', ee.List.sequence(0,10))
+```
+* Making a list from 0 to 10 with increments of 2:
+```{r eval=FALSE}
+print('List 2', ee.List.sequence(0,10,2))
+```
+
+```{block, type='rmdcomment'}
+__Remember__: A `var string = 'text'` is a JavaScript string that does not allow computations. A `var string = ee.String('text')` is an Earth Engine object that allows computations!
+```
 
 ### Exploring Image and Image Collection
+
+Now that you learned the basics of JavaScript and Earth Engine objects, you have the tools at your disposal to start using the Earth Engine API to build scripts for remote sensing analysis. In this section, we explore satellite imagery, which are one of GEE's core capabilities!
+
+*__A) Single band image__*
+
+The first thing you need to know is that when working with images in Earth Engine, you will have to use an `ee.Image()` container. The argument provided to the constructor is the string ID of an image in the Earth Engine data catalog. (Remember to always see the __Docs__ tab for a full list of arguments to this container). To retrieve an image ID, you can search in the Earth Engine catalog using the search tool at the top of the Code Editor:
+
+```{r Search, fig.cap="You can browse through Earth Engine's data catalog with the search tool", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Search.png")
+```
+
+For example, try typing 'elevation' into the search field and note that a list of rasters is returned:
+
+```{r SearchII, fig.cap="Typing in the search field. Google Earth Engine will show all datasets available with that criteria.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-SearchII.png")
+```
+
+Click in any of the dataset entries to see more information about that dataset. From the list above, explore the dataset 'SRTM Digital Elevation Data Version 4'. You can also find more information about this dataset on the tabs on the top right side of the dataset description screen. On the left side of the dataset description screen, you can find the Image ID, which is what we use with the `ee.Image()`. Alternatively, you can use the __Import__ button on the dataset description. Using the __Import__ button, a variable is automatically created in a special section, named 'Imports', at the top of your script. You can rename the variable by clicking on its name in the imports section.
+
+```{r DataInfo, fig.cap="Data description", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-DataInfo.png")
+```
+
+Copy the image ID from the screen above and add it to a `var` elevationImage with the `ee.Image()` container as shown below:
+
+```{r eval= FALSE}
+var elevationImage = ee.Image('CGIAR/SRTM90_V4');
+```
+
+You can also retrieve the metadata about this image by using `print()`. In the __Console__, click the expander arrows to show the information. You will discover that the SRTM image has one band called 'elevation'.
+
+```{r eval= FALSE}
+print(elevationImage);
+```
+
+```{r ImageInfo, fig.cap="Image description using `print()`", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-ImageInfo.png")
+```
+
+To display the image in the Map Editor, use the `Map` object's `.addLayer()` method. When you add an image to a map using `Map.addLayer()`, Earth Engine needs to determine how to map the values in the image band(s) to colors on the display. If a single-band image is added to a map - which is our case- by default Earth Engine displays the band in grayscale, where the minimum value is assigned to black, and the maximum value is assigned to white. If you don't specify what the minimum and maximum should be, Earth Engine will use default values.
+
+```{r eval= FALSE}
+Map.addLayer(elevationImage);
+```
+
+*Do not worry! You can make it look better with custom visualization parameters!*
+
+To change the way the data are stretched, you can provide another parameter to the `Map.addLayer()` call. Specifically, the second parameter, `visParams`, lets you specify the minimum and maximum values to display. One way of gauging the range of values of an image is by activating the __Inspector__ tab and click around on the map. You will be able to see the value of that band for this dataset at that particular location:
+
+```{r Inspector, fig.cap="Inspector tab. Click in the image and the inspector tab will display the data for that point", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Inspector.png")
+```
+
+Click around the area of Liberia to have a sense of the range of values for this dataset. Suppose that, through further investigation, you determine that the best range of values to display elevation data in Liberia is [0,1000]. To display the data using this range, you can use a dictionary containing two keys: `min` and `max` and their respective values `0` and `1000`. A third parameter for `Map.addLayer()` is the name of the layer that is displayed in the Layer manager. Thus your code should be looking like the one below:
+
+```{r eval= FALSE}
+Map.addLayer(elevationImage, {min:0, max:1000}, 'Custom Visualization');
+```
+
+Run the code and you will see something like:
+
+```{r ImageVis, fig.cap="Custom Visualization for the SRTM data based on range of values", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-VisLayer.png")
+```
+
 
 ## Image Manipulation
 

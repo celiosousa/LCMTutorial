@@ -13,6 +13,14 @@ fig:Semicolon
 fig:List
 fig:Dictionary
 fig:Results
+fig:Docs
+fig:Error
+fig:Search
+fig:SearchII
+fig:DataInfo
+fig:ImageInfo
+fig:Inspector
+fig:ImageVis
 fig:nameofFigure
 part-1---basics-fundamentals
 programming-and-remote-sensing-basics

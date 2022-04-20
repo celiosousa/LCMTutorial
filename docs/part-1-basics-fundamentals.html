@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa (celio.h.resendedesousa@nasa.gov)" />
 
 
-<meta name="date" content="2022-04-15" />
+<meta name="date" content="2022-04-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -332,7 +332,7 @@ Figure 1.10: Saving a script file
 Figure 1.11: Your first script in your repository
 </p>
 </div>
-<p><strong>JavaScript Basics</strong></p>
+<p><strong>JavaScript Basics: Data types</strong></p>
 <p>Javascript is the language you will use to construct and set up your commands and analysis. This section covers the basics of the Java Script sintax and some basic data structures. In the following sections, more JavaScript code will be presented. Throughout this document, code will be presented with a distinct colored font and with shaded background. As you encounter code, copy and paste it into the Code Editor and click <strong>Run</strong>.</p>
 <p><em><strong><em>A) Variables</em></strong></em></p>
 <p>In a programming language, variables are used to store data values. In JavaScript, a variable is defined using the <code>var</code> keyword followed by the name of the variable. For instance, create a <code>var</code> named <code>city</code> that contain the text string <code>'Monrovia'</code>. Text strings in the code must be always in quotes. Google Earth Engine allows you to use single <code>'</code> or double <code>&quot;</code> quotes, as long as they match in the beginning and end of the text string. We also usually end each statement on scripts with a semicolon <code>;</code>, although Earth Engine's code editor does not require it. A `i' will be shown in the line of the code where a semicolon is missing:</p>
@@ -365,7 +365,7 @@ Figure 1.13: A JavaScript List.
 <p><em><strong><em>C) Objects and Dictionaries</em></strong></em></p>
 <p>While useful to hold multiple values, <em>lists</em> are not appropriate to hold more structured data. JavaScript allows you to store 'key-value' information in <em>objects</em> or <em>dictionaries</em>. In this type of data structure, you can refer to a value by its key rather than its position - like in <em>lists</em>. You can create objects using curly braces <code>{}</code>. Use the code below as an example of an object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var cityData =<span class="st"> </span>{<span class="st">&#39;city&#39;</span><span class="op">:</span><span class="st"> &#39;Monrovia&#39;</span>, <span class="st">&#39;population&#39;</span><span class="op">:</span><span class="st"> </span><span class="dv">939524</span>, <span class="st">&#39;area&#39;</span><span class="op">:</span><span class="st"> </span><span class="fl">194.25</span>, <span class="st">&#39;coordinates&#39;</span><span class="op">:</span><span class="st"> </span>[<span class="op">-</span><span class="fl">10.790</span>, <span class="fl">6.315</span>]};</code></pre></div>
-<p>There are a few important things about the syntax of the code above. As objects tend to hold several keys and values, it can be difficult to read the code if it is written on a continuous string. To improve readability you can use multiple lines instead:</p>
+<p>There are a few important things about the syntax of the code above: As objects tend to hold several keys and values, it can be difficult to read the code if it is written on a continuous string. To improve readability you can use multiple lines instead:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var cityData =<span class="st"> </span>{
   <span class="st">&#39;city&#39;</span><span class="op">:</span><span class="st"> &#39;Monrovia&#39;</span>,
   <span class="st">&#39;population&#39;</span><span class="op">:</span><span class="st"> </span><span class="dv">939524</span>,
@@ -410,10 +410,113 @@ Figure 1.15: Printed results of MathFunction.
 </p>
 </div>
 <p><strong>Earth Engine Containers and Objects</strong></p>
-<p>So far, you learned the different data structure you can use within Google Earth Engine. However, if you want to do any computation with the data stored in these different types of structure, you will have to use an Earth Engine container. The <code>ee</code> package is used for formulating requests to Earth Engine. In other words, <code>ee</code> allows you to request Earth Engine servers to perform a certain computation to an varible or object.</p>
+<p>So far, you learned the different data structure/types you can use within Google Earth Engine. However, if you want to do any computation with the data stored in these different types of structure, you will have to use an Earth Engine container. The <code>ee</code> package is used for formulating requests to Earth Engine. In other words, <code>ee</code> (prefix for Earth Engine) allows you to request Earth Engine servers to perform a certain computation to an variable or object. Each <code>ee</code> object has many different <em>methods</em>. You can think of <em>methods</em> as the many different things and computations that can be done for an specific object. In the Code Editor, you can switch to the <strong>Docs</strong> tab to see the API functions grouped by object types.</p>
+<div class="figure"><span id="fig:Docs"></span>
+<img src="images/PartI-DocsTab.png" alt="List of available objects in the Docs tab of GEE API." width="502" />
+<p class="caption">
+Figure 1.16: List of available objects in the Docs tab of GEE API.
+</p>
+</div>
+<p>Below are some examples to ilustrate the concept behind an Earth Engine object:</p>
+<p><em><strong>A) Strings</strong></em></p>
+<p>You can put strings into a <code>ee.String</code> object to be sent to Earth Engine. Using an object/container allows you to do manipulate them in many different ways. For example, <code>ee.String</code> has the: * <code>toLowerCase()</code> method. This method will convert any string in a <code>ee.String</code> object to lower case; * <code>length()</code> method. This method will count the characters in your string; * <code>cat()</code> method. This method will concatenate two strings into one; * and many others! Make sure to check the <strong>Docs</strong> tab for all the available methods for a given object.</p>
+<p>The code below uses some of the methods of <code>ee.String</code> as an example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var string =<span class="st"> </span><span class="kw">ee.String</span>(<span class="st">&#39;HELLO EVERYONE, &#39;</span>);
+<span class="kw">print</span>(<span class="kw">string.toLowerCase</span>());
+<span class="kw">print</span>(<span class="kw">string.length</span>());
+var string2 =<span class="st"> </span><span class="kw">ee.String</span>(<span class="st">&#39;nice to meet you&#39;</span>);
+<span class="kw">print</span>(<span class="kw">string.cat</span>(string2));</code></pre></div>
+<p>In your console tab you will see that the 'HELLO EVERYONE, ' string is now all in lower case. You will also see that <code>.length()</code> returned 16 as the number of characters for that string.</p>
+<p>Consider the code below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var string =<span class="st"> &#39;HELLO EVERYONE&#39;</span>;
+var string2 =<span class="st"> &#39;nice to meet you&#39;</span>;
+<span class="kw">print</span>(<span class="kw">string.cat</span>(string2));</code></pre></div>
+<p>If you try to use a method on a non <code>ee</code> object, you will get an error.</p>
+<div class="figure"><span id="fig:Error"></span>
+<img src="images/PartI-Error.png" alt="Trying to use a method on non-ee.Object will return an error" width="500" />
+<p class="caption">
+Figure 1.17: Trying to use a method on non-ee.Object will return an error
+</p>
+</div>
+<p><em><strong>B) Numbers</strong></em></p>
+<p><code>ee.Number</code> is just another example of an object from that list. Similarly to <code>ee.String</code>, it will have many methods to be used with. For example, <code>.add()</code>, <code>.subtract()</code>, <code>.divide()</code> and <code>.multiply ()</code> will perform these operations on <code>ee.Number</code> objects. Make sure to consult the <strong>Docs</strong> tab for all the different methods for each object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var value1 =<span class="st"> </span><span class="kw">ee.Number</span>(<span class="dv">100</span>);
+var value2 =<span class="st"> </span><span class="kw">ee.Number</span>(<span class="dv">2</span>);
+<span class="kw">print</span>(<span class="kw">value1.add</span>(value2));
+<span class="kw">print</span>(<span class="kw">value1.subtract</span>(value2));
+<span class="kw">print</span>(<span class="kw">value1.divide</span>(value2));
+<span class="kw">print</span>(<span class="kw">value1.multiply</span>(value2));
+<span class="kw">print</span>(<span class="kw">value1.log10</span>());</code></pre></div>
+<p><em><strong>B) Lists</strong></em></p>
+<p>You can also make a JavaScript list into an <code>ee.List</code> on Earth Engine server by simply casting your list into the container. There are many other useful methods to use when you have an <code>ee.List</code>. For instance, instead of making a JavaScript list by typing each value, you can use <code>ee.List.sequence()</code> to construct a list. This method will take many arguments, such as the value of the start of the list, the value at the end of the list, steps (increment) and count. Consider the examples below:</p>
+<ul>
+<li>Making a list with numbers from 0 to 10:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="st">&#39;List 1&#39;</span>, <span class="kw">ee.List.sequence</span>(<span class="dv">0</span>,<span class="dv">10</span>))</code></pre></div>
+<ul>
+<li>Making a list from 0 to 10 with increments of 2:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="st">&#39;List 2&#39;</span>, <span class="kw">ee.List.sequence</span>(<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">2</span>))</code></pre></div>
+<div class="rmdcomment">
+<p>
+<strong>Remember</strong>: A <code>var string = 'text'</code> is a JavaScript string that does not allow computations. A <code>var string = ee.String('text')</code> is an Earth Engine object that allows computations!
+</p>
+</div>
 </div>
 <div id="exploring-image-and-image-collection" class="section level3">
 <h3><span class="header-section-number">1.1.3</span> Exploring Image and Image Collection</h3>
+<p>Now that you learned the basics of JavaScript and Earth Engine objects, you have the tools at your disposal to start using the Earth Engine API to build scripts for remote sensing analysis. In this section, we explore satellite imagery, which are one of GEE's core capabilities!</p>
+<p><em><strong>A) Single band image</strong></em></p>
+<p>The first thing you need to know is that when working with images in Earth Engine, you will have to use an <code>ee.Image()</code> container. The argument provided to the constructor is the string ID of an image in the Earth Engine data catalog. (Remember to always see the <strong>Docs</strong> tab for a full list of arguments to this container). To retrieve an image ID, you can search in the Earth Engine catalog using the search tool at the top of the Code Editor:</p>
+<div class="figure"><span id="fig:Search"></span>
+<img src="images/PartI-Search.png" alt="You can browse through Earth Engine's data catalog with the search tool" width="855" />
+<p class="caption">
+Figure 1.18: You can browse through Earth Engine's data catalog with the search tool
+</p>
+</div>
+<p>For example, try typing 'elevation' into the search field and note that a list of rasters is returned:</p>
+<div class="figure"><span id="fig:SearchII"></span>
+<img src="images/PartI-SearchII.png" alt="Typing in the search field. Google Earth Engine will show all datasets available with that criteria." width="855" />
+<p class="caption">
+Figure 1.19: Typing in the search field. Google Earth Engine will show all datasets available with that criteria.
+</p>
+</div>
+<p>Click in any of the dataset entries to see more information about that dataset. From the list above, explore the dataset 'SRTM Digital Elevation Data Version 4'. You can also find more information about this dataset on the tabs on the top right side of the dataset description screen. On the left side of the dataset description screen, you can find the Image ID, which is what we use with the <code>ee.Image()</code>. Alternatively, you can use the <strong>Import</strong> button on the dataset description. Using the <strong>Import</strong> button, a variable is automatically created in a special section, named 'Imports', at the top of your script. You can rename the variable by clicking on its name in the imports section.</p>
+<div class="figure"><span id="fig:DataInfo"></span>
+<img src="images/PartI-DataInfo.png" alt="Data description" width="788" />
+<p class="caption">
+Figure 1.20: Data description
+</p>
+</div>
+<p>Copy the image ID from the screen above and add it to a <code>var</code> elevationImage with the <code>ee.Image()</code> container as shown below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var elevationImage =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;CGIAR/SRTM90_V4&#39;</span>);</code></pre></div>
+<p>You can also retrieve the metadata about this image by using <code>print()</code>. In the <strong>Console</strong>, click the expander arrows to show the information. You will discover that the SRTM image has one band called 'elevation'.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(elevationImage);</code></pre></div>
+<div class="figure"><span id="fig:ImageInfo"></span>
+<img src="images/PartI-ImageInfo.png" alt="Image description using `print()`" width="506" />
+<p class="caption">
+Figure 1.21: Image description using <code>print()</code>
+</p>
+</div>
+<p>To display the image in the Map Editor, use the <code>Map</code> object's <code>.addLayer()</code> method. When you add an image to a map using <code>Map.addLayer()</code>, Earth Engine needs to determine how to map the values in the image band(s) to colors on the display. If a single-band image is added to a map - which is our case- by default Earth Engine displays the band in grayscale, where the minimum value is assigned to black, and the maximum value is assigned to white. If you don't specify what the minimum and maximum should be, Earth Engine will use default values.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(elevationImage);</code></pre></div>
+<p><em>Do not worry! You can make it look better with custom visualization parameters!</em></p>
+<p>To change the way the data are stretched, you can provide another parameter to the <code>Map.addLayer()</code> call. Specifically, the second parameter, <code>visParams</code>, lets you specify the minimum and maximum values to display. One way of gauging the range of values of an image is by activating the <strong>Inspector</strong> tab and click around on the map. You will be able to see the value of that band for this dataset at that particular location:</p>
+<div class="figure"><span id="fig:Inspector"></span>
+<img src="images/PartI-Inspector.png" alt="Inspector tab. Click in the image and the inspector tab will display the data for that point" width="862" />
+<p class="caption">
+Figure 1.22: Inspector tab. Click in the image and the inspector tab will display the data for that point
+</p>
+</div>
+<p>Click around the area of Liberia to have a sense of the range of values for this dataset. Suppose that, through further investigation, you determine that the best range of values to display elevation data in Liberia is [0,1000]. To display the data using this range, you can use a dictionary containing two keys: <code>min</code> and <code>max</code> and their respective values <code>0</code> and <code>1000</code>. A third parameter for <code>Map.addLayer()</code> is the name of the layer that is displayed in the Layer manager. Thus your code should be looking like the one below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(elevationImage, {min<span class="op">:</span><span class="dv">0</span>, max<span class="op">:</span><span class="dv">1000</span>}, <span class="st">&#39;Custom Visualization&#39;</span>);</code></pre></div>
+<p>Run the code and you will see something like:</p>
+<div class="figure"><span id="fig:ImageVis"></span>
+<img src="images/PartI-VisLayer.png" alt="Custom Visualization for the SRTM data based on range of values" width="862" />
+<p class="caption">
+Figure 1.23: Custom Visualization for the SRTM data based on range of values
+</p>
+</div>
 </div>
 </div>
 <div id="image-manipulation" class="section level2">
