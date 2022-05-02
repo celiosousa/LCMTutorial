@@ -179,7 +179,7 @@ Javascript is the language you will use to construct and set up your commands an
 
 *___A) Variables___*
 
-In a programming language, variables are used to store data values. In JavaScript, a variable is defined using the `var` keyword followed by the name of the variable. For instance, create a `var` named `city` that contain the text string `'Monrovia'`. Text strings in the code must be always in quotes. Google Earth Engine allows you to use single `'` or double `"` quotes, as long as they match in the beginning and end of the text string. We also usually end each statement on scripts with a semicolon `;`, although Earth Engine's code editor does not require it. A `i' will be shown in the line of the code where a semicolon is missing:
+In a programming language, variables are used to store data values. In JavaScript, a variable is defined using the `var` keyword followed by the name of the variable. For instance, create a `var` named `city` that contain the text string `'Monrovia'`. Text strings in the code must be always in quotes. Google Earth Engine allows you to use single `'` or double `"` quotes, as long as they match in the beginning and end of the text string. We also usually end each statement on scripts with a semicolon `;`, although Earth Engine's code editor does not require it. A 'i' will be shown in the line of the code where a semicolon is missing:
 
 ```{r Semicolon, fig.cap="Even though they are not a requirement, Google Earth Engine indicates that a semicolon is missing in the statement. You can hover the mouse cursor over the icon to reveal its meaning.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/PartI-Semicolon.png")
@@ -189,7 +189,7 @@ knitr::include_graphics("images/PartI-Semicolon.png")
 var city = 'Monrovia';
 ```
 
-If you `print` the variable `city`, you will get the value stored (as a string because of the quotations) stored in the variable (Monrovia) printed in the __Console__.
+If you `print` the variable `city`, you will get the string stored in the variable (Monrovia) printed in the __Console__.
 
 ```{r eval=FALSE}
 print(city);
@@ -444,13 +444,344 @@ Map.addLayer(elevationImage, {min:0, max:1000}, 'Custom Visualization');
 
 Run the code and you will see something like:
 
-```{r ImageVis, fig.cap="Custom Visualization for the SRTM data based on range of values", echo=FALSE, message=FALSE}
+```{r ImageVis, fig.cap="Custom Visualization for the SRTM data based on range of values.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/PartI-VisLayer.png")
 ```
 
+You can further improve your image display by using a color palette. Palettes let you set the color scheme for single-band images. A palette is a comma delimited *list* of color strings which are linearly interpolated between the maximum and minimum values in the visualization parameters.
 
-## Image Manipulation
+To display this elevation band using a color palette, add a `palette` property to the `visParams` dictionary:
 
-### Band Math and VI Calculation
+``` {r eval=FALSE}
+Map.addLayer(elevationImage, {min:0, max:1000,palette: ['green', 'yellow', 'red']}, 'Custom Visualization - Color');
+```
 
-### Thresholds and Masks
+```{r ImageVisColor, fig.cap="Custom Visualization for the SRTM data based on range of values and color palette.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-VisLayerColor.png")
+```
+
+In the next section, you'll learn how to display multi-band imagery.
+
+*__B) Multi band image__*
+
+To ilustrate the concepts and codes in this section, we will use a Landsat 8 image from April 2022 over Cairo, Egypt. Landsat is a set of multispectral satellites developed by the NASA (National Aeronautics and Space Administration of USA), since the early 1970’s. Landsat images are very used for environmental research. These images have from 8 to 11 spectral bands (spectral resolution), with pixels of 30x30 meters (spatial resolution) and with a revisit time of 16 days (temporal resolution).
+
+Copy and paste the code below into the Code Editor:
+
+```{r eval=FALSE}
+var ImageL8 = ee.Image('LANDSAT/LC08/C02/T1_L2/LC08_176039_20220406');
+```
+
+As learned before, the code above is casting a Landsat 8 image into an `ee.Image` container using its ID into a `var` called 'ImageL8'. By clicking __Run__, Earth Engine will retrieve this image from its Landsat image catalog. You will not yet see any output.
+
+As you learned, you can retrieve additional information about this image by using `print()`.
+
+```{r eval=FALSE}
+print(ImageL8)
+```
+
+In the Console panel, you may need to click the expander arrows to show the information. You should be able to read that this image consists of 19 different bands (index 0 to 18). Each band will have 4 properties: *name*, *data type* (as in if the value is an integer, float, ect.), *projection* and *dimensions* (in rows and columns of pixels). For this example, simply note the first property of the first band:
+
+```{r L8Image, fig.cap="Landsat 8 image metadata.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-L8Image.png")
+```
+
+A satellite sensor like Landsat 8 measures the EMR in different portions of the electromagnetic spectrum. Six out of seven first bands in our image ("SR_B2" through "SR_B7") contain measurements for six different portions of the spectrum:
+
+```{r L8bands, fig.cap="Landsat 8 bands. Source: https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-L8Bands.png")
+```
+
+
+Now, let's visualize `ImageL8`. First, make sure your map is somewhere near Cairo, Egypt. To do this, click and drag the map towards Cairo, Egypt. (You can also jump there by typing “Cairo” into the __Search panel__ at the top of the Code Editor). Add `ImageL8` to the Map as a *layer* using the code below:
+
+```{r eval=FALSE}
+Map.addLayer(ImageL8);
+```
+
+You probably see a gray image with not a lot of details. From the previous section you learned that `Map.addLayer` take many parameters. One of them is the `visParams`, which lets you specify the minimum and maximum values to display. Similarly to the previous section, you can use the __Inspector__ tab to investigate the range of values for each location for each of `ImageL8`'s band. Now, specify a range of values to be displayed. Follow the code example below:
+
+```{r eval=FALSE}
+Map.addLayer(ImageL8, {min:8000, max:20000}, 'My First Image');
+```
+
+You should see something like this:
+
+```{r L8FalseColor, fig.cap="Landsat 8 image in false color .", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-L8FalseColor.png")
+```
+
+By default, if you do not specify the bands to be displayed within the `visParams`, Earth Engine will display the first three bands, each band on each RGB (red, green, blue) channel of your monitor screen. In other words, Earth Engine is displaying 'SR_B1' (Landsat 8's coastal aerosol band) in the red channel, 'SR_B2' (Landsat 8's blue band) in the green channel and 'SR_B3 (Landsat 8's green band). This is a case of a *false color* display, when spectral bands do not match the RGB channels in your screen. *False color* displays have many advantages and they will be explored later in the tutorial.
+
+For a *real color* display, you will need to define the bands within `visParams` to match the RGB channels:
+
+```{r eval=FALSE}
+Map.addLayer(ImageL8, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:8000, max:20000}, 'Real color');
+```
+
+In the code above, `visParams` contains a list (`bands`) with the names of the `ImageL8`'s bands to be displayed in the RGB channels of your screen. This band set up tells Earth Engine to display the red band in the red channel, the green band in the green channel and the blue band in blue channel. We call this composition a *RGB 432* or *Real color* composition. You should see an image like this when running the code above:
+
+```{r L8RealColor, fig.cap="Landsat 8 image displayed with a real color composition.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-L8Real.png")
+```
+
+You can easily change these values and settings within `visParams` by using the Layer setting option in the Map editor. You can find it by hovering your cursor over the Layer List (upper right corner of the Map editor, next to the *Map* and *Satellite* buttons) and clicking the *gear* icon of the layer:
+
+```{r L8LayerSetting, fig.cap="Layer settings window.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-L8LayerSetting.png")
+```
+
+Once you chose your settings, click __Apply__. Earth Engine will automatically apply the new settings and display the layer. Try using different band combinations and range values to see how the image changes. Different color compositions will highlight different features in the image based on their spectral signatures!
+
+*__C) Image collections__*
+
+An image collection refers to a set of Earth Engine images. For example, the collection of all Landsat 8 images! In this case, you will use `ee.ImageCollection()` instead of `ee.Image()` to retrieve a particular image collection . Like the SRTM image or the Landsat image you have been working with, image collections also have an ID. Similarly to the single images, you can discover the ID of an image collection by searching the Earth Engine data catalog from the Code Editor.
+
+Start by loading the Landsat 8 image collection into a `var` called 'collection using the `ee.ImageCollection` container. Then try to print this collection to the __Console__:
+
+```{r eval=FALSE}
+var collection = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2');
+print(collection);
+```
+
+You will notice that you will get an error when trying to print `collection` to the __Console__: 
+
+```{r L8Error, fig.cap="Trying to print an image collection without any filter.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-ErrorCollection.png")
+```
+
+It's worth noting that this collection represents every Landsat 8 scene collected, all over the Earth. Thus, Earth Engine is not able to print the information for every scene all over the globe since 2013 (when Landsat 8 started collecting data). In this case we need to filter this collection.
+Exploring the __Docs__ tab of the Code Editor to learn more about `ee.ImageCollection`, you will notice the methods `filterBounds()` and `filterDate()`. These are shortcut methods on a bigger `filter()` method. In this case, `filterBounds()` filters a collection by intersection with geometry (or a location) while `filterDate()` filters a collection by a date range, expressed as strings.
+
+__Location Filter__: To filter `collection` to images that cover a particular location, first define your area of interest with the geometry drawing tools. To create geometries, use the geometry drawing tools in the upper left corner of the map display.
+
+```{r Tools, fig.cap="The Geometry tools.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-GeometryTool.png")
+```
+
+For drawing points, use the place mark icon, for drawing lines, use the line icon, for drawing polygons, use the polygon icon, for drawing rectangles, use the rectangle icon. Using any of the drawing tools will automatically create a new geometry layer and add an import for that layer to the Imports section (top of the script). Once you finish drawing the geometry, click __Exit__. To rename the geometries that are imported to your script, click the settings icon next to it (or rename it directly in the Imports section).The geometry layer settings tool will be displayed in a dialog where you can change the geometry name.
+
+Use the point mark and create a point geometry named 'aoi' (area of interest) in a location of your interest. For this example, we will use a point mark location over Cairo, Egypt. Use the figure below as a guide: 1) Click on the point mark geometry; 2) Place it in your location of interest, and; 3) rename it 'aoi'.
+
+```{r point, fig.cap="Creating a point geometry.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-PointGeometry.png")
+```
+
+__Date filter__: Now that you have a location, create two variables `startDate` and `endDate` containing a data range expressed as strings.
+Use a date range of your choice. Dates are expressed as 'YYYY-MM-DD' in Earth Engine. For this example, we will use the first four months of 2022:
+
+```{r eval=FALSE}
+var startDate = '2022-01-01';
+var endDate = '2022-04-30';
+```
+
+Now that you have both filters for location and date range, you are ready to filter your image collection using `filterBounds()` and `filterDates()`:
+
+```{r eval=FALSE}
+var collectionFiltered = collection.filterBounds(aoi).filterDate(startDate,endDate);
+print(collectionFiltered);
+```
+
+When printing `collectionFiltered` to the __Console__ you will notice that now Earth Engine was able to retrieve the information of every Landsat scene based on your filters. Using the date range and the location filters from this example, there are the 13 images in the `collectionFiltered` for Cairo from January to April, 2022:
+
+```{r Collection, fig.cap="Filtered collection.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Collection.png")
+```
+
+If you want to retrieve a particular image from this collection you can simply use `ee.Image()` and the image ID printed in the __Console__ tab!
+
+## Image and Image Collection Manipulation
+
+Now that you know how to load and display an image, it's time to apply a computation to it. In the following sections you will learn some examples of computations for a single-band image and multi-band image (band math and vegetation index calculation) and for an image collection.
+
+### Image Math
+
+* __Single-band image__
+
+Considering our previous example, we will use the SRTM single-band image `elevationImage` and create a 'slope' image. Briefly, you calculate the slope by dividing the difference between the elevations of two points by the distance between them, then multiply the quotient by 100. The difference in elevation between points is called the rise. The distance between the points is called the run. Thus, percent slope equals (rise / run) x 100. Intuitively, you can think of doing this calculation manually by applying `.divide()` and `.multiply()`. However, as you will learn with this material, Google Earth Engine has specific methods within `ee` objects to perform computations such as slope, for example.
+Simply, you can create an the 'slope' image with the `slope` method of the `ee.Terrain` package:
+
+```{r eval=FALSE}
+var slope = ee.Terrain.slope(elevationImage);
+```
+Note that `elevationImage` was provided as an argument to the slope method! Add `slope` to the map and find Mount Nimba, in Liberia. Use a `min` and `max` values to reflect a resonable range of % slope.
+
+```{r eval=FALSE}
+Map.addLayer(slope, {min: 0, max :50}, 'Slope');
+```
+
+Explore the slope image around Mount Nimba, in Liberia. It should look like the figure below:
+
+```{r Slope, fig.cap="Slope image calculated with the `.slope()` method of the `ee.Terrain` package. Mount Nimba in Liberia is shown in white.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Slope.png")
+```
+
+As mentioned before, there are also methods in the `ee.Image` container that can be invoked on an image object. We call it *band math* when you do mathematical operations with image bands. Still considering the previous example, suppose you are interested in further processing the slope image into an aspect image and then perform some trigonometric operations on it. Aspect, in this case, refers to the orientation of a slope, measured clockwise in degrees, from 0 to 360. Similarly to `.slope()`, `.aspect()` is also an method from `ee.Terrain`.
+
+```{r eval=FALSE}
+var aspect = ee.Terrain.aspect(elevationImage);
+```
+
+Now, convert the image `aspect` into radians then calculate its sin:
+
+```{r eval=FALSE}
+var sinImage = aspect.divide(180).multiply(Math.PI).sin()
+```
+
+It is worth noting that the code above chained multiple methods. This way, you can perform complex mathematical operations. In other words, the code above is simply dividing the aspect by 180 (using the `.divide()` method), multiplying (with `.multiply()`) the result of that by π (that can be retrieved using `Math.PI`), and finally taking the sin (with `.sin()`). The result should look something like the figure below:
+
+```{r Sin, fig.cap="Aspect image calculated with the `.aspect()` method of the `ee.Terrain` package. The resulting SIN image from aspect reveals Mount Nimba in greater detail.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Sin.png")
+```
+
+* __Band math with multi-band image__
+
+As mentioned previously, you can do mathematical operations with bands from a given image. One of the most common examples of band math with remote sensing imagery is the calculation of *spectral indices*. A *spectral index* is a mathematical equation that is applied on the various spectral bands of an image per pixel, with the objective of highlighting pixels showing the relative abundance or lack of the feature of interest. There are several categories of spectral indices that have been developed, using a variety of spectral bands to highlight different phenomena, such as water, snow, soil and vegetation. For example, *Vegetation Indices* (VIs) are combinations of surface reflectance at two or more wavelengths designed to highlight a particular property of vegetation.
+
+*A) NDVI*
+
+The most used index in this category is the __Normalized Difference Vegetation Index (NDVI)__, which provides an indication of abundance of live green vegetation (or abundance of chlorophyll). The pigment in plant leaves, chlorophyll, strongly absorbs visible light (from 0.4 to 0.7 µm) for use in photosynthesis. The cell structure of the leaves, on the other hand, strongly reflects near-infrared light (from 0.7 to 1.1 µm) (See Figure \@ref(fig:SpectralSignature)). Thus, NDVI is calculated by comparing the different reflectance values of the red and near-infrared bands (normalized such that the minimum value is -1.0, and the maximum is +1.0).
+
+Bringing this concept to the context of a Landsat 8 image, we can produce an NDVI image by computing the normalized difference between its bands 5 (near-infrared) and 4 (red) (See Figure \@ref(fig:L8bands)).
+
+For this example, we will use `ImageL8` created in the previous sections to create a NDVI image. We can use the method `.select()` on a `ee.Image` object to select any given band. The `.select()` method will take a string as an argument for the band name you want to select. Then we can use the mathematical operators to perform a normalized difference using these bands:
+
+```{r eval=FALSE}
+var nirBand = ImageL8.select('SR_B5');
+var redBand = ImageL8.select('SR_B4');
+var NDVI = nirBand.subtract(redBand).divide(nirBand.add(redBand));
+```
+
+There is another way of doing the same calculation from the code above. As we seen previously, Earth Engine usually have methods for widely used operations and computations with remote sensing data. In this case, the normalized difference operation is available as a shortcut method `.normalizedDifference()` for a `ee.Image()` object. It take as an argument a list with the names of the bands you wish to calculate the normalized difference with. Thus, `NDVI` can be rewritten as:
+
+```{r eval=FALSE}
+var NDVI = ImageL8.normalizedDifference(['SR_B5', 'SR_B4'])
+```
+
+You can then visualize this NDVI image by adding it to the Map Editor. Add it to the map and use the __Inspector__ tab to investigate the range of values of NDVI around Cairo:
+
+```{R eval=FALSE}
+Map.addLayer(NDVI, {min: 0, max: 0.3, palette: ['a6611a', 'f5f5f5', '4dac26']}, 'NDVI Image');
+```
+
+You should see something like this:
+
+```{r NDVI, fig.cap="NDVI Image highlighting the agricultural area in the Nile Delta. With the visualization parameters provided above, higher values of NDVI (that is, higher content of chlorophyll in live green leaves) is shown in green. ", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-NDVI.png")
+```
+
+*A) EVI*
+
+EVI, or __Enhanced Vegetation Index__, is similar to NDVI and can be used to quantify vegetation greenness. However, EVI corrects for some atmospheric conditions and canopy background noise and *is more sensitive in areas with dense vegetation* where NDVI usually saturates. It incorporates an “L” value to adjust for canopy background, “C” values as coefficients for atmospheric resistance, and values from the blue band (B):
+
+__EVI = 2.5 * ((Near-infrared - Red) / (Near-infrared + C1 * Red – C2 * Blue + L))__, where C1, C2 and L are usually 6, 7.5 and 1, respectively.
+
+You can see that an expression like this can become hard to be expressed using mathematical operators such as the ones used to calculate a normalized difference. To implement more complex mathematical expressions, consider using the `.expression()` method for a `ee.Image` object. the first argument to `.expression()` is the textual representation (string) of the math operation, the second argument is a dictionary where the *keys* are variable names used in the expression and the *values* are the image bands to be used in the operation. Using the same `ImageL8` as an example, EVI would be defined as:
+
+```{r eval=FALSE}
+var EVI = ImageL8.expression(
+    '2.5 * ((NIR - RED) / (NIR + 6 * RED - 7.5 * BLUE + 1))', {
+      'NIR': ImageL8.select('SR_B5'),
+      'RED': ImageL8.select('SR_B4'),
+      'BLUE': ImageL8.select('SR_B2')
+});
+```
+
+The code above is able to regonize operators (+, -, *, /, %, **: Add, Subtract, Multiply, Divide, Modulus, Exponent) and the numbers; everything else is defined as keys in the dictionary.
+
+Can you think of how you can calculate the NDVI using the code structure above?
+
+### Compositing and Mosaicking
+
+Compositing is an example of a computation that can be done to a image collection. In general, _compositing_ refers to the process of combining spatially overlapping images into a single image based on an aggregation function while _mosaicking_ usually refers to the assembly of these images to produce a spatially contiguous one. In Earth Engine, when you composite two scenes that do not overlap completely, the resulting composite will be a composited mosaic: 
+
+```{r Composite, fig.cap="Compositing images in Earth Engine. When applying a compositing function to scenes that do not overlap completely (B), the resulting composite will be a spatially contiguous image.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Composite.png")
+```
+
+Thefore, in the context of Earth Engine these terms are used interchangeably. We illustrate these concepts with the examples below.
+
+* __Example 1: Compositing the same scene (100% overlap)__
+
+In this example, we will use `collectionFiltered` (a Landsat 8 image collection filtered for Cairo from January to April 2022. *See* \@ref(fig:Collection)). There are several aggregation functions that can be used to composite an image collection, most notably `.max()` for a maximum value composite and `.mendian()` for a median value composite. All these functions will aggregate the values on a per-pixel, per-band basis. In other words, `.max()` will select the maximum value of a given pixel for each image band to create the final composite while `.median()` will calculate the median value of each band for this pixel.
+
+```{r eval=FALSE}
+var compositeMax = collectionFiltered.max();
+var compositeMedian = collectionFiltered.median();
+```
+
+```{block, type='rmdcomment'}
+If you print these composites to the __Console__ you will notice that they are a 19-band single image and no longer a collection with 13 images with 19 bands each! 
+```
+
+Add these composites to the Map Editor to investigate their differences:
+
+```{r eval=FALSE}
+Map.addLayer(compositeMax, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:8000, max:30000}, 'Composite Max');
+Map.addLayer(compositeMedian, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:8000, max:30000}, 'Composite Median');
+```
+
+*Question*: What is the most evident difference between these composites?
+
+__Answer__: The max value composite is mostly covered by clouds. Clouds and snow are very reflective and will always have high reflectance values for the regions of the electromagnetic spectrum covered by the Landsat spectral bands. Therefore, a maximum value composite will likely highlight these features - which is not desireable in most cases.
+
+```{r Composites, fig.cap="Maximum and median value composites. Clouds are evident in the maximum value composite due to their high reflectance values.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Composites.png")
+```
+
+```{block, type='rmdcomment'}
+Although there are different methods for compositing, the median composite method is the state of the art in Google Earth Engine and has been applied to a multitude of studies using multitemporal remote sensing data.
+```
+
+* __Example 2: Compositing (mosaicking) different scenes__
+
+Consider the need to composite (mosaic) four different Landsat scenes at different locations. For that we will edit the location parameter from `.filterBounds()` to include extra Landsat scenes from different locations. Use the information from figures \@ref(fig:Tools) and \@ref(fig:point) to create a geometry covering a larger area. Remember that `.filterBounds()` will filter an image collection to all the scenes that intercept the boundaries of a geometry, whether it is a line, point mark or polygon. 
+Rename this as 'aoi2'. For this example, we will use the polygon tool to draw a large polygon over a large area in Egypt.
+
+```{r aoi2, fig.cap="Area of interest (aoi) for filtering image collection.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-aoi2.png")
+```
+
+We will use this geometry to filter `collection` to this new spatial filter `aoi2`:
+
+```{r eval=FALSE}
+var collectionFiltered2 = collection.filterBounds(aoi2).filterDate(startDate,endDate);
+print(collectionFiltered2);
+```
+
+```{block, type='rmdcomment'}
+Note that if you print `collectionFiltered2` to the __Console__ you will notice that it includes more images than when we filtered for a single location using a point geometry.
+```
+
+Using the same compositing functions described earlier in this section, we will composite this new collection to two new composites. Also, we will use the `.mosaic()` method as a comparison. This method composites overlapping images according to their order in the collection (last on top):
+
+```{r eval=FALSE}
+var compositeMax2 = collectionFiltered2.max();
+var compositeMedian2 = collectionFiltered2.median();
+var mosaic = collectionFiltered2.mosaic();
+
+Map.addLayer(compositeMax2, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:8000, max:30000}, 'Composite Max 2');
+Map.addLayer(compositeMedian2, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:8000, max:30000}, 'Composite Median 2');
+Map.addLayer(mosaic, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:8000, max:30000}, 'Mosaic');
+```
+
+```{r mosaics, fig.cap="Composites of an image collection filtered by the bounds of `aoi2`.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Mosaics.png")
+```
+
+Whether you are compositing using an aggregation function or mosaicking with `.mosaic()` the result will be similar in respect to the output type (i.e. an ee.Image object) and spatial extent. Thus, explaining why compositing and mosaicking are used interchangeably in Earth Engine.
+
+Suppose you are only interested in the composite within the bounds of your area of interest. The method `.clip()` of an `ee.Image()` allows you to clip (or cut) any image to the shape of a geometry. We will use `compositeMedian2` and `aoi2` as an example:
+
+```{r eval=FALSE}
+var compositeClipped = compositeMedian2.clip(aoi2);
+Map.addLayer(compositeClipped, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:8000, max:30000}, 'Composite Median 2 clipped');
+```
+
+```{r clip, fig.cap="Median composite clipped by the extent of `aoi2`.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Clip.png")
+```
+
+```{block, type='caution'}
+You can only clip an ee.Image() object, __never an image collection!__
+```

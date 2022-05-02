@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa (celio.h.resendedesousa@nasa.gov)" />
 
 
-<meta name="date" content="2022-04-20" />
+<meta name="date" content="2022-05-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -116,9 +116,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1.1.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#google-earth-engines-application-programming-interface-api-and-java-script"><i class="fa fa-check"></i><b>1.1.2</b> Google Earth Engine's Application Programming Interface (API) and Java Script</a></li>
 <li class="chapter" data-level="1.1.3" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#exploring-image-and-image-collection"><i class="fa fa-check"></i><b>1.1.3</b> Exploring Image and Image Collection</a></li>
 </ul></li>
-<li class="chapter" data-level="1.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#image-manipulation"><i class="fa fa-check"></i><b>1.2</b> Image Manipulation</a><ul>
-<li class="chapter" data-level="1.2.1" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#band-math-and-vi-calculation"><i class="fa fa-check"></i><b>1.2.1</b> Band Math and VI Calculation</a></li>
-<li class="chapter" data-level="1.2.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#thresholds-and-masks"><i class="fa fa-check"></i><b>1.2.2</b> Thresholds and Masks</a></li>
+<li class="chapter" data-level="1.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#image-and-image-collection-manipulation"><i class="fa fa-check"></i><b>1.2</b> Image and Image Collection Manipulation</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#image-math"><i class="fa fa-check"></i><b>1.2.1</b> Image Math</a></li>
+<li class="chapter" data-level="1.2.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#compositing-and-mosaicking"><i class="fa fa-check"></i><b>1.2.2</b> Compositing and Mosaicking</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html"><i class="fa fa-check"></i><b>2</b> Part 2 - Advanced Google Earth Engine</a><ul>
@@ -335,7 +335,7 @@ Figure 1.11: Your first script in your repository
 <p><strong>JavaScript Basics: Data types</strong></p>
 <p>Javascript is the language you will use to construct and set up your commands and analysis. This section covers the basics of the Java Script sintax and some basic data structures. In the following sections, more JavaScript code will be presented. Throughout this document, code will be presented with a distinct colored font and with shaded background. As you encounter code, copy and paste it into the Code Editor and click <strong>Run</strong>.</p>
 <p><em><strong><em>A) Variables</em></strong></em></p>
-<p>In a programming language, variables are used to store data values. In JavaScript, a variable is defined using the <code>var</code> keyword followed by the name of the variable. For instance, create a <code>var</code> named <code>city</code> that contain the text string <code>'Monrovia'</code>. Text strings in the code must be always in quotes. Google Earth Engine allows you to use single <code>'</code> or double <code>&quot;</code> quotes, as long as they match in the beginning and end of the text string. We also usually end each statement on scripts with a semicolon <code>;</code>, although Earth Engine's code editor does not require it. A `i' will be shown in the line of the code where a semicolon is missing:</p>
+<p>In a programming language, variables are used to store data values. In JavaScript, a variable is defined using the <code>var</code> keyword followed by the name of the variable. For instance, create a <code>var</code> named <code>city</code> that contain the text string <code>'Monrovia'</code>. Text strings in the code must be always in quotes. Google Earth Engine allows you to use single <code>'</code> or double <code>&quot;</code> quotes, as long as they match in the beginning and end of the text string. We also usually end each statement on scripts with a semicolon <code>;</code>, although Earth Engine's code editor does not require it. A 'i' will be shown in the line of the code where a semicolon is missing:</p>
 <div class="figure"><span id="fig:Semicolon"></span>
 <img src="images/PartI-Semicolon.png" alt="Even though they are not a requirement, Google Earth Engine indicates that a semicolon is missing in the statement. You can hover the mouse cursor over the icon to reveal its meaning." width="801" />
 <p class="caption">
@@ -343,7 +343,7 @@ Figure 1.12: Even though they are not a requirement, Google Earth Engine indicat
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var city =<span class="st"> &#39;Monrovia&#39;</span>;</code></pre></div>
-<p>If you <code>print</code> the variable <code>city</code>, you will get the value stored (as a string because of the quotations) stored in the variable (Monrovia) printed in the <strong>Console</strong>.</p>
+<p>If you <code>print</code> the variable <code>city</code>, you will get the string stored in the variable (Monrovia) printed in the <strong>Console</strong>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(city);</code></pre></div>
 <p>When you use quotations, the variable is automatically assigned the type <em>string</em>. You can also assign numbers to variables. For example, create the variables <code>population</code> and <code>area</code> and assing a number as their value. When assigning numbers, you do not use commas <code>,</code> for thousand separators. You do, however, use <code>.</code> for decimals:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var population =<span class="st"> </span><span class="dv">939524</span>;
@@ -512,20 +512,264 @@ Figure 1.22: Inspector tab. Click in the image and the inspector tab will displa
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(elevationImage, {min<span class="op">:</span><span class="dv">0</span>, max<span class="op">:</span><span class="dv">1000</span>}, <span class="st">&#39;Custom Visualization&#39;</span>);</code></pre></div>
 <p>Run the code and you will see something like:</p>
 <div class="figure"><span id="fig:ImageVis"></span>
-<img src="images/PartI-VisLayer.png" alt="Custom Visualization for the SRTM data based on range of values" width="862" />
+<img src="images/PartI-VisLayer.png" alt="Custom Visualization for the SRTM data based on range of values." width="862" />
 <p class="caption">
-Figure 1.23: Custom Visualization for the SRTM data based on range of values
+Figure 1.23: Custom Visualization for the SRTM data based on range of values.
 </p>
 </div>
+<p>You can further improve your image display by using a color palette. Palettes let you set the color scheme for single-band images. A palette is a comma delimited <em>list</em> of color strings which are linearly interpolated between the maximum and minimum values in the visualization parameters.</p>
+<p>To display this elevation band using a color palette, add a <code>palette</code> property to the <code>visParams</code> dictionary:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(elevationImage, {min<span class="op">:</span><span class="dv">0</span>, max<span class="op">:</span><span class="dv">1000</span>,palette<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;green&#39;</span>, <span class="st">&#39;yellow&#39;</span>, <span class="st">&#39;red&#39;</span>]}, <span class="st">&#39;Custom Visualization - Color&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:ImageVisColor"></span>
+<img src="images/PartI-VisLayerColor.png" alt="Custom Visualization for the SRTM data based on range of values and color palette." width="863" />
+<p class="caption">
+Figure 1.24: Custom Visualization for the SRTM data based on range of values and color palette.
+</p>
+</div>
+<p>In the next section, you'll learn how to display multi-band imagery.</p>
+<p><em><strong>B) Multi band image</strong></em></p>
+<p>To ilustrate the concepts and codes in this section, we will use a Landsat 8 image from April 2022 over Cairo, Egypt. Landsat is a set of multispectral satellites developed by the NASA (National Aeronautics and Space Administration of USA), since the early 1970’s. Landsat images are very used for environmental research. These images have from 8 to 11 spectral bands (spectral resolution), with pixels of 30x30 meters (spatial resolution) and with a revisit time of 16 days (temporal resolution).</p>
+<p>Copy and paste the code below into the Code Editor:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var ImageL8 =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;LANDSAT/LC08/C02/T1_L2/LC08_176039_20220406&#39;</span>);</code></pre></div>
+<p>As learned before, the code above is casting a Landsat 8 image into an <code>ee.Image</code> container using its ID into a <code>var</code> called 'ImageL8'. By clicking <strong>Run</strong>, Earth Engine will retrieve this image from its Landsat image catalog. You will not yet see any output.</p>
+<p>As you learned, you can retrieve additional information about this image by using <code>print()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(ImageL8)</code></pre></div>
+<p>In the Console panel, you may need to click the expander arrows to show the information. You should be able to read that this image consists of 19 different bands (index 0 to 18). Each band will have 4 properties: <em>name</em>, <em>data type</em> (as in if the value is an integer, float, ect.), <em>projection</em> and <em>dimensions</em> (in rows and columns of pixels). For this example, simply note the first property of the first band:</p>
+<div class="figure"><span id="fig:L8Image"></span>
+<img src="images/PartI-L8Image.png" alt="Landsat 8 image metadata." width="696" />
+<p class="caption">
+Figure 1.25: Landsat 8 image metadata.
+</p>
+</div>
+<p>A satellite sensor like Landsat 8 measures the EMR in different portions of the electromagnetic spectrum. Six out of seven first bands in our image (&quot;SR_B2&quot; through &quot;SR_B7&quot;) contain measurements for six different portions of the spectrum:</p>
+<div class="figure"><span id="fig:L8bands"></span>
+<img src="images/PartI-L8Bands.png" alt="Landsat 8 bands. Source: https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites" width="1008" />
+<p class="caption">
+Figure 1.26: Landsat 8 bands. Source: <a href="https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites" class="uri">https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites</a>
+</p>
+</div>
+<p>Now, let's visualize <code>ImageL8</code>. First, make sure your map is somewhere near Cairo, Egypt. To do this, click and drag the map towards Cairo, Egypt. (You can also jump there by typing “Cairo” into the <strong>Search panel</strong> at the top of the Code Editor). Add <code>ImageL8</code> to the Map as a <em>layer</em> using the code below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(ImageL8);</code></pre></div>
+<p>You probably see a gray image with not a lot of details. From the previous section you learned that <code>Map.addLayer</code> take many parameters. One of them is the <code>visParams</code>, which lets you specify the minimum and maximum values to display. Similarly to the previous section, you can use the <strong>Inspector</strong> tab to investigate the range of values for each location for each of <code>ImageL8</code>'s band. Now, specify a range of values to be displayed. Follow the code example below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(ImageL8, {min<span class="op">:</span><span class="dv">8000</span>, max<span class="op">:</span><span class="dv">20000</span>}, <span class="st">&#39;My First Image&#39;</span>);</code></pre></div>
+<p>You should see something like this:</p>
+<div class="figure"><span id="fig:L8FalseColor"></span>
+<img src="images/PartI-L8FalseColor.png" alt="Landsat 8 image in false color ." width="856" />
+<p class="caption">
+Figure 1.27: Landsat 8 image in false color .
+</p>
+</div>
+<p>By default, if you do not specify the bands to be displayed within the <code>visParams</code>, Earth Engine will display the first three bands, each band on each RGB (red, green, blue) channel of your monitor screen. In other words, Earth Engine is displaying 'SR_B1' (Landsat 8's coastal aerosol band) in the red channel, 'SR_B2' (Landsat 8's blue band) in the green channel and 'SR_B3 (Landsat 8's green band). This is a case of a <em>false color</em> display, when spectral bands do not match the RGB channels in your screen. <em>False color</em> displays have many advantages and they will be explored later in the tutorial.</p>
+<p>For a <em>real color</em> display, you will need to define the bands within <code>visParams</code> to match the RGB channels:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(ImageL8, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B4&#39;</span>, <span class="st">&#39;SR_B3&#39;</span>, <span class="st">&#39;SR_B2&#39;</span>], min<span class="op">:</span><span class="dv">8000</span>, max<span class="op">:</span><span class="dv">20000</span>}, <span class="st">&#39;Real color&#39;</span>);</code></pre></div>
+<p>In the code above, <code>visParams</code> contains a list (<code>bands</code>) with the names of the <code>ImageL8</code>'s bands to be displayed in the RGB channels of your screen. This band set up tells Earth Engine to display the red band in the red channel, the green band in the green channel and the blue band in blue channel. We call this composition a <em>RGB 432</em> or <em>Real color</em> composition. You should see an image like this when running the code above:</p>
+<div class="figure"><span id="fig:L8RealColor"></span>
+<img src="images/PartI-L8Real.png" alt="Landsat 8 image displayed with a real color composition." width="856" />
+<p class="caption">
+Figure 1.28: Landsat 8 image displayed with a real color composition.
+</p>
+</div>
+<p>You can easily change these values and settings within <code>visParams</code> by using the Layer setting option in the Map editor. You can find it by hovering your cursor over the Layer List (upper right corner of the Map editor, next to the <em>Map</em> and <em>Satellite</em> buttons) and clicking the <em>gear</em> icon of the layer:</p>
+<div class="figure"><span id="fig:L8LayerSetting"></span>
+<img src="images/PartI-L8LayerSetting.png" alt="Layer settings window." width="856" />
+<p class="caption">
+Figure 1.29: Layer settings window.
+</p>
+</div>
+<p>Once you chose your settings, click <strong>Apply</strong>. Earth Engine will automatically apply the new settings and display the layer. Try using different band combinations and range values to see how the image changes. Different color compositions will highlight different features in the image based on their spectral signatures!</p>
+<p><em><strong>C) Image collections</strong></em></p>
+<p>An image collection refers to a set of Earth Engine images. For example, the collection of all Landsat 8 images! In this case, you will use <code>ee.ImageCollection()</code> instead of <code>ee.Image()</code> to retrieve a particular image collection . Like the SRTM image or the Landsat image you have been working with, image collections also have an ID. Similarly to the single images, you can discover the ID of an image collection by searching the Earth Engine data catalog from the Code Editor.</p>
+<p>Start by loading the Landsat 8 image collection into a <code>var</code> called 'collection using the <code>ee.ImageCollection</code> container. Then try to print this collection to the <strong>Console</strong>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var collection =<span class="st"> </span><span class="kw">ee.ImageCollection</span>(<span class="st">&#39;LANDSAT/LC08/C02/T1_L2&#39;</span>);
+<span class="kw">print</span>(collection);</code></pre></div>
+<p>You will notice that you will get an error when trying to print <code>collection</code> to the <strong>Console</strong>:</p>
+<div class="figure"><span id="fig:L8Error"></span>
+<img src="images/PartI-ErrorCollection.png" alt="Trying to print an image collection without any filter." width="567" />
+<p class="caption">
+Figure 1.30: Trying to print an image collection without any filter.
+</p>
+</div>
+<p>It's worth noting that this collection represents every Landsat 8 scene collected, all over the Earth. Thus, Earth Engine is not able to print the information for every scene all over the globe since 2013 (when Landsat 8 started collecting data). In this case we need to filter this collection. Exploring the <strong>Docs</strong> tab of the Code Editor to learn more about <code>ee.ImageCollection</code>, you will notice the methods <code>filterBounds()</code> and <code>filterDate()</code>. These are shortcut methods on a bigger <code>filter()</code> method. In this case, <code>filterBounds()</code> filters a collection by intersection with geometry (or a location) while <code>filterDate()</code> filters a collection by a date range, expressed as strings.</p>
+<p><strong>Location Filter</strong>: To filter <code>collection</code> to images that cover a particular location, first define your area of interest with the geometry drawing tools. To create geometries, use the geometry drawing tools in the upper left corner of the map display.</p>
+<div class="figure"><span id="fig:Tools"></span>
+<img src="images/PartI-GeometryTool.png" alt="The Geometry tools." width="855" />
+<p class="caption">
+Figure 1.31: The Geometry tools.
+</p>
+</div>
+<p>For drawing points, use the place mark icon, for drawing lines, use the line icon, for drawing polygons, use the polygon icon, for drawing rectangles, use the rectangle icon. Using any of the drawing tools will automatically create a new geometry layer and add an import for that layer to the Imports section (top of the script). Once you finish drawing the geometry, click <strong>Exit</strong>. To rename the geometries that are imported to your script, click the settings icon next to it (or rename it directly in the Imports section).The geometry layer settings tool will be displayed in a dialog where you can change the geometry name.</p>
+<p>Use the point mark and create a point geometry named 'aoi' (area of interest) in a location of your interest. For this example, we will use a point mark location over Cairo, Egypt. Use the figure below as a guide: 1) Click on the point mark geometry; 2) Place it in your location of interest, and; 3) rename it 'aoi'.</p>
+<div class="figure"><span id="fig:point"></span>
+<img src="images/PartI-PointGeometry.png" alt="Creating a point geometry." width="856" />
+<p class="caption">
+Figure 1.32: Creating a point geometry.
+</p>
+</div>
+<p><strong>Date filter</strong>: Now that you have a location, create two variables <code>startDate</code> and <code>endDate</code> containing a data range expressed as strings. Use a date range of your choice. Dates are expressed as 'YYYY-MM-DD' in Earth Engine. For this example, we will use the first four months of 2022:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var startDate =<span class="st"> &#39;2022-01-01&#39;</span>;
+var endDate =<span class="st"> &#39;2022-04-30&#39;</span>;</code></pre></div>
+<p>Now that you have both filters for location and date range, you are ready to filter your image collection using <code>filterBounds()</code> and <code>filterDates()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var collectionFiltered =<span class="st"> </span><span class="kw">collection.filterBounds</span>(aoi)<span class="kw">.filterDate</span>(startDate,endDate);
+<span class="kw">print</span>(collectionFiltered);</code></pre></div>
+<p>When printing <code>collectionFiltered</code> to the <strong>Console</strong> you will notice that now Earth Engine was able to retrieve the information of every Landsat scene based on your filters. Using the date range and the location filters from this example, there are the 13 images in the <code>collectionFiltered</code> for Cairo from January to April, 2022:</p>
+<div class="figure"><span id="fig:Collection"></span>
+<img src="images/PartI-Collection.png" alt="Filtered collection." width="707" />
+<p class="caption">
+Figure 1.33: Filtered collection.
+</p>
+</div>
+<p>If you want to retrieve a particular image from this collection you can simply use <code>ee.Image()</code> and the image ID printed in the <strong>Console</strong> tab!</p>
 </div>
 </div>
-<div id="image-manipulation" class="section level2">
-<h2><span class="header-section-number">1.2</span> Image Manipulation</h2>
-<div id="band-math-and-vi-calculation" class="section level3">
-<h3><span class="header-section-number">1.2.1</span> Band Math and VI Calculation</h3>
+<div id="image-and-image-collection-manipulation" class="section level2">
+<h2><span class="header-section-number">1.2</span> Image and Image Collection Manipulation</h2>
+<p>Now that you know how to load and display an image, it's time to apply a computation to it. In the following sections you will learn some examples of computations for a single-band image and multi-band image (band math and vegetation index calculation) and for an image collection.</p>
+<div id="image-math" class="section level3">
+<h3><span class="header-section-number">1.2.1</span> Image Math</h3>
+<ul>
+<li><strong>Single-band image</strong></li>
+</ul>
+<p>Considering our previous example, we will use the SRTM single-band image <code>elevationImage</code> and create a 'slope' image. Briefly, you calculate the slope by dividing the difference between the elevations of two points by the distance between them, then multiply the quotient by 100. The difference in elevation between points is called the rise. The distance between the points is called the run. Thus, percent slope equals (rise / run) x 100. Intuitively, you can think of doing this calculation manually by applying <code>.divide()</code> and <code>.multiply()</code>. However, as you will learn with this material, Google Earth Engine has specific methods within <code>ee</code> objects to perform computations such as slope, for example. Simply, you can create an the 'slope' image with the <code>slope</code> method of the <code>ee.Terrain</code> package:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var slope =<span class="st"> </span><span class="kw">ee.Terrain.slope</span>(elevationImage);</code></pre></div>
+<p>Note that <code>elevationImage</code> was provided as an argument to the slope method! Add <code>slope</code> to the map and find Mount Nimba, in Liberia. Use a <code>min</code> and <code>max</code> values to reflect a resonable range of % slope.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(slope, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max <span class="op">:</span><span class="dv">50</span>}, <span class="st">&#39;Slope&#39;</span>);</code></pre></div>
+<p>Explore the slope image around Mount Nimba, in Liberia. It should look like the figure below:</p>
+<div class="figure"><span id="fig:Slope"></span>
+<img src="images/PartI-Slope.png" alt="Slope image calculated with the `.slope()` method of the `ee.Terrain` package. Mount Nimba in Liberia is shown in white." width="858" />
+<p class="caption">
+Figure 1.34: Slope image calculated with the <code>.slope()</code> method of the <code>ee.Terrain</code> package. Mount Nimba in Liberia is shown in white.
+</p>
 </div>
-<div id="thresholds-and-masks" class="section level3">
-<h3><span class="header-section-number">1.2.2</span> Thresholds and Masks</h3>
+<p>As mentioned before, there are also methods in the <code>ee.Image</code> container that can be invoked on an image object. We call it <em>band math</em> when you do mathematical operations with image bands. Still considering the previous example, suppose you are interested in further processing the slope image into an aspect image and then perform some trigonometric operations on it. Aspect, in this case, refers to the orientation of a slope, measured clockwise in degrees, from 0 to 360. Similarly to <code>.slope()</code>, <code>.aspect()</code> is also an method from <code>ee.Terrain</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var aspect =<span class="st"> </span><span class="kw">ee.Terrain.aspect</span>(elevationImage);</code></pre></div>
+<p>Now, convert the image <code>aspect</code> into radians then calculate its sin:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var sinImage =<span class="st"> </span><span class="kw">aspect.divide</span>(<span class="dv">180</span>)<span class="kw">.multiply</span>(Math.PI)<span class="kw">.sin</span>()</code></pre></div>
+<p>It is worth noting that the code above chained multiple methods. This way, you can perform complex mathematical operations. In other words, the code above is simply dividing the aspect by 180 (using the <code>.divide()</code> method), multiplying (with <code>.multiply()</code>) the result of that by π (that can be retrieved using <code>Math.PI</code>), and finally taking the sin (with <code>.sin()</code>). The result should look something like the figure below:</p>
+<div class="figure"><span id="fig:Sin"></span>
+<img src="images/PartI-Sin.PNG" alt="Aspect image calculated with the `.aspect()` method of the `ee.Terrain` package. The resulting SIN image from aspect reveals Mount Nimba in greater detail." width="858" />
+<p class="caption">
+Figure 1.35: Aspect image calculated with the <code>.aspect()</code> method of the <code>ee.Terrain</code> package. The resulting SIN image from aspect reveals Mount Nimba in greater detail.
+</p>
+</div>
+<ul>
+<li><strong>Band math with multi-band image</strong></li>
+</ul>
+<p>As mentioned previously, you can do mathematical operations with bands from a given image. One of the most common examples of band math with remote sensing imagery is the calculation of <em>spectral indices</em>. A <em>spectral index</em> is a mathematical equation that is applied on the various spectral bands of an image per pixel, with the objective of highlighting pixels showing the relative abundance or lack of the feature of interest. There are several categories of spectral indices that have been developed, using a variety of spectral bands to highlight different phenomena, such as water, snow, soil and vegetation. For example, <em>Vegetation Indices</em> (VIs) are combinations of surface reflectance at two or more wavelengths designed to highlight a particular property of vegetation.</p>
+<p><em>A) NDVI</em></p>
+<p>The most used index in this category is the <strong>Normalized Difference Vegetation Index (NDVI)</strong>, which provides an indication of abundance of live green vegetation (or abundance of chlorophyll). The pigment in plant leaves, chlorophyll, strongly absorbs visible light (from 0.4 to 0.7 µm) for use in photosynthesis. The cell structure of the leaves, on the other hand, strongly reflects near-infrared light (from 0.7 to 1.1 µm) (See Figure <a href="part-1-basics-fundamentals.html#fig:SpectralSignature">1.4</a>). Thus, NDVI is calculated by comparing the different reflectance values of the red and near-infrared bands (normalized such that the minimum value is -1.0, and the maximum is +1.0).</p>
+<p>Bringing this concept to the context of a Landsat 8 image, we can produce an NDVI image by computing the normalized difference between its bands 5 (near-infrared) and 4 (red) (See Figure <a href="part-1-basics-fundamentals.html#fig:L8bands">1.26</a>).</p>
+<p>For this example, we will use <code>ImageL8</code> created in the previous sections to create a NDVI image. We can use the method <code>.select()</code> on a <code>ee.Image</code> object to select any given band. The <code>.select()</code> method will take a string as an argument for the band name you want to select. Then we can use the mathematical operators to perform a normalized difference using these bands:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var nirBand =<span class="st"> </span><span class="kw">ImageL8.select</span>(<span class="st">&#39;SR_B5&#39;</span>);
+var redBand =<span class="st"> </span><span class="kw">ImageL8.select</span>(<span class="st">&#39;SR_B4&#39;</span>);
+var NDVI =<span class="st"> </span><span class="kw">nirBand.subtract</span>(redBand)<span class="kw">.divide</span>(<span class="kw">nirBand.add</span>(redBand));</code></pre></div>
+<p>There is another way of doing the same calculation from the code above. As we seen previously, Earth Engine usually have methods for widely used operations and computations with remote sensing data. In this case, the normalized difference operation is available as a shortcut method <code>.normalizedDifference()</code> for a <code>ee.Image()</code> object. It take as an argument a list with the names of the bands you wish to calculate the normalized difference with. Thus, <code>NDVI</code> can be rewritten as:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var NDVI =<span class="st"> </span><span class="kw">ImageL8.normalizedDifference</span>([<span class="st">&#39;SR_B5&#39;</span>, <span class="st">&#39;SR_B4&#39;</span>])</code></pre></div>
+<p>You can then visualize this NDVI image by adding it to the Map Editor. Add it to the map and use the <strong>Inspector</strong> tab to investigate the range of values of NDVI around Cairo:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(NDVI, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="fl">0.3</span>, palette<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;a6611a&#39;</span>, <span class="st">&#39;f5f5f5&#39;</span>, <span class="st">&#39;4dac26&#39;</span>]}, <span class="st">&#39;NDVI Image&#39;</span>);</code></pre></div>
+<p>You should see something like this:</p>
+<div class="figure"><span id="fig:NDVI"></span>
+<img src="images/PartI-NDVI.png" alt="NDVI Image highlighting the agricultural area in the Nile Delta. With the visualization parameters provided above, higher values of NDVI (that is, higher content of chlorophyll in live green leaves) is shown in green. " width="856" />
+<p class="caption">
+Figure 1.36: NDVI Image highlighting the agricultural area in the Nile Delta. With the visualization parameters provided above, higher values of NDVI (that is, higher content of chlorophyll in live green leaves) is shown in green.
+</p>
+</div>
+<p><em>A) EVI</em></p>
+<p>EVI, or <strong>Enhanced Vegetation Index</strong>, is similar to NDVI and can be used to quantify vegetation greenness. However, EVI corrects for some atmospheric conditions and canopy background noise and <em>is more sensitive in areas with dense vegetation</em> where NDVI usually saturates. It incorporates an “L” value to adjust for canopy background, “C” values as coefficients for atmospheric resistance, and values from the blue band (B):</p>
+<p><strong>EVI = 2.5 * ((Near-infrared - Red) / (Near-infrared + C1 * Red – C2 * Blue + L))</strong>, where C1, C2 and L are usually 6, 7.5 and 1, respectively.</p>
+<p>You can see that an expression like this can become hard to be expressed using mathematical operators such as the ones used to calculate a normalized difference. To implement more complex mathematical expressions, consider using the <code>.expression()</code> method for a <code>ee.Image</code> object. the first argument to <code>.expression()</code> is the textual representation (string) of the math operation, the second argument is a dictionary where the <em>keys</em> are variable names used in the expression and the <em>values</em> are the image bands to be used in the operation. Using the same <code>ImageL8</code> as an example, EVI would be defined as:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var EVI =<span class="st"> </span><span class="kw">ImageL8.expression</span>(
+    <span class="st">&#39;2.5 * ((NIR - RED) / (NIR + 6 * RED - 7.5 * BLUE + 1))&#39;</span>, {
+      <span class="st">&#39;NIR&#39;</span><span class="op">:</span><span class="st"> </span><span class="kw">ImageL8.select</span>(<span class="st">&#39;SR_B5&#39;</span>),
+      <span class="st">&#39;RED&#39;</span><span class="op">:</span><span class="st"> </span><span class="kw">ImageL8.select</span>(<span class="st">&#39;SR_B4&#39;</span>),
+      <span class="st">&#39;BLUE&#39;</span><span class="op">:</span><span class="st"> </span><span class="kw">ImageL8.select</span>(<span class="st">&#39;SR_B2&#39;</span>)
+});</code></pre></div>
+<p>The code above is able to regonize operators (+, -, *, /, %, **: Add, Subtract, Multiply, Divide, Modulus, Exponent) and the numbers; everything else is defined as keys in the dictionary.</p>
+<p>Can you think of how you can calculate the NDVI using the code structure above?</p>
+</div>
+<div id="compositing-and-mosaicking" class="section level3">
+<h3><span class="header-section-number">1.2.2</span> Compositing and Mosaicking</h3>
+<p>Compositing is an example of a computation that can be done to a image collection. In general, <em>compositing</em> refers to the process of combining spatially overlapping images into a single image based on an aggregation function while <em>mosaicking</em> usually refers to the assembly of these images to produce a spatially contiguous one. In Earth Engine, when you composite two scenes that do not overlap completely, the resulting composite will be a composited mosaic:</p>
+<div class="figure"><span id="fig:Composite"></span>
+<img src="images/PartI-Composite.png" alt="Compositing images in Earth Engine. When applying a compositing function to scenes that do not overlap completely (B), the resulting composite will be a spatially contiguous image." width="1000" />
+<p class="caption">
+Figure 1.37: Compositing images in Earth Engine. When applying a compositing function to scenes that do not overlap completely (B), the resulting composite will be a spatially contiguous image.
+</p>
+</div>
+<p>Thefore, in the context of Earth Engine these terms are used interchangeably. We illustrate these concepts with the examples below.</p>
+<ul>
+<li><strong>Example 1: Compositing the same scene (100% overlap)</strong></li>
+</ul>
+<p>In this example, we will use <code>collectionFiltered</code> (a Landsat 8 image collection filtered for Cairo from January to April 2022. <em>See</em> <a href="part-1-basics-fundamentals.html#fig:Collection">1.33</a>). There are several aggregation functions that can be used to composite an image collection, most notably <code>.max()</code> for a maximum value composite and <code>.mendian()</code> for a median value composite. All these functions will aggregate the values on a per-pixel, per-band basis. In other words, <code>.max()</code> will select the maximum value of a given pixel for each image band to create the final composite while <code>.median()</code> will calculate the median value of each band for this pixel.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var compositeMax =<span class="st"> </span><span class="kw">collectionFiltered.max</span>();
+var compositeMedian =<span class="st"> </span><span class="kw">collectionFiltered.median</span>();</code></pre></div>
+<div class="rmdcomment">
+<p>
+If you print these composites to the <strong>Console</strong> you will notice that they are a 19-band single image and no longer a collection with 13 images with 19 bands each!
+</p>
+</div>
+<p>Add these composites to the Map Editor to investigate their differences:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(compositeMax, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B4&#39;</span>, <span class="st">&#39;SR_B3&#39;</span>, <span class="st">&#39;SR_B2&#39;</span>], min<span class="op">:</span><span class="dv">8000</span>, max<span class="op">:</span><span class="dv">30000</span>}, <span class="st">&#39;Composite Max&#39;</span>);
+<span class="kw">Map.addLayer</span>(compositeMedian, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B4&#39;</span>, <span class="st">&#39;SR_B3&#39;</span>, <span class="st">&#39;SR_B2&#39;</span>], min<span class="op">:</span><span class="dv">8000</span>, max<span class="op">:</span><span class="dv">30000</span>}, <span class="st">&#39;Composite Median&#39;</span>);</code></pre></div>
+<p><em>Question</em>: What is the most evident difference between these composites?</p>
+<p><strong>Answer</strong>: The max value composite is mostly covered by clouds. Clouds and snow are very reflective and will always have high reflectance values for the regions of the electromagnetic spectrum covered by the Landsat spectral bands. Therefore, a maximum value composite will likely highlight these features - which is not desireable in most cases.</p>
+<div class="figure"><span id="fig:Composites"></span>
+<img src="images/PartI-Composites.png" alt="Maximum and median value composites. Clouds are evident in the maximum value composite due to their high reflectance values." width="1427" />
+<p class="caption">
+Figure 1.38: Maximum and median value composites. Clouds are evident in the maximum value composite due to their high reflectance values.
+</p>
+</div>
+<div class="rmdcomment">
+<p>
+Although there are different methods for compositing, the median composite method is the state of the art in Google Earth Engine and has been applied to a multitude of studies using multitemporal remote sensing data.
+</p>
+</div>
+<ul>
+<li><strong>Example 2: Compositing (mosaicking) different scenes</strong></li>
+</ul>
+<p>Consider the need to composite (mosaic) four different Landsat scenes at different locations. For that we will edit the location parameter from <code>.filterBounds()</code> to include extra Landsat scenes from different locations. Use the information from figures <a href="part-1-basics-fundamentals.html#fig:Tools">1.31</a> and <a href="part-1-basics-fundamentals.html#fig:point">1.32</a> to create a geometry covering a larger area. Remember that <code>.filterBounds()</code> will filter an image collection to all the scenes that intercept the boundaries of a geometry, whether it is a line, point mark or polygon. Rename this as 'aoi2'. For this example, we will use the polygon tool to draw a large polygon over a large area in Egypt.</p>
+<div class="figure"><span id="fig:aoi2"></span>
+<img src="images/PartI-aoi2.png" alt="Area of interest (aoi) for filtering image collection." width="858" />
+<p class="caption">
+Figure 1.39: Area of interest (aoi) for filtering image collection.
+</p>
+</div>
+<p>We will use this geometry to filter <code>collection</code> to this new spatial filter <code>aoi2</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var collectionFiltered2 =<span class="st"> </span><span class="kw">collection.filterBounds</span>(aoi2)<span class="kw">.filterDate</span>(startDate,endDate);
+<span class="kw">print</span>(collectionFiltered2);</code></pre></div>
+<div class="rmdcomment">
+<p>
+Note that if you print <code>collectionFiltered2</code> to the <strong>Console</strong> you will notice that it includes more images than when we filtered for a single location using a point geometry.
+</p>
+</div>
+<p>Using the same compositing functions described earlier in this section, we will composite this new collection to two new composites. Also, we will use the <code>.mosaic()</code> method as a comparison. This method composites overlapping images according to their order in the collection (last on top):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var compositeMax2 =<span class="st"> </span><span class="kw">collectionFiltered2.max</span>();
+var compositeMedian2 =<span class="st"> </span><span class="kw">collectionFiltered2.median</span>();
+var mosaic =<span class="st"> </span><span class="kw">collectionFiltered2.mosaic</span>();
+
+<span class="kw">Map.addLayer</span>(compositeMax2, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B4&#39;</span>, <span class="st">&#39;SR_B3&#39;</span>, <span class="st">&#39;SR_B2&#39;</span>], min<span class="op">:</span><span class="dv">8000</span>, max<span class="op">:</span><span class="dv">30000</span>}, <span class="st">&#39;Composite Max 2&#39;</span>);
+<span class="kw">Map.addLayer</span>(compositeMedian2, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B4&#39;</span>, <span class="st">&#39;SR_B3&#39;</span>, <span class="st">&#39;SR_B2&#39;</span>], min<span class="op">:</span><span class="dv">8000</span>, max<span class="op">:</span><span class="dv">30000</span>}, <span class="st">&#39;Composite Median 2&#39;</span>);
+<span class="kw">Map.addLayer</span>(mosaic, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B4&#39;</span>, <span class="st">&#39;SR_B3&#39;</span>, <span class="st">&#39;SR_B2&#39;</span>], min<span class="op">:</span><span class="dv">8000</span>, max<span class="op">:</span><span class="dv">30000</span>}, <span class="st">&#39;Mosaic&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:mosaics"></span>
+<img src="images/PartI-Mosaics.png" alt="Composites of an image collection filtered by the bounds of `aoi2`." width="1368" />
+<p class="caption">
+Figure 1.40: Composites of an image collection filtered by the bounds of <code>aoi2</code>.
+</p>
+</div>
+<p>Whether you are compositing using an aggregation function or mosaicking with <code>.mosaic()</code> the result will be similar in respect to the output type (i.e. an ee.Image object) and spatial extent. Thus, explaining why compositing and mosaicking are used interchangeably in Earth Engine.</p>
+<p>Suppose you are only interested in the composite within the bounds of your area of interest. The method <code>.clip()</code> of an <code>ee.Image()</code> allows you to clip (or cut) any image to the shape of a geometry. We will use <code>compositeMedian2</code> and <code>aoi2</code> as an example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var compositeClipped =<span class="st"> </span><span class="kw">compositeMedian2.clip</span>(aoi2);
+<span class="kw">Map.addLayer</span>(compositeClipped, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B4&#39;</span>, <span class="st">&#39;SR_B3&#39;</span>, <span class="st">&#39;SR_B2&#39;</span>], min<span class="op">:</span><span class="dv">8000</span>, max<span class="op">:</span><span class="dv">30000</span>}, <span class="st">&#39;Composite Median 2 clipped&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:clip"></span>
+<img src="images/PartI-Clip.png" alt="Median composite clipped by the extent of `aoi2`." width="856" />
+<p class="caption">
+Figure 1.41: Median composite clipped by the extent of <code>aoi2</code>.
+</p>
+</div>
+<div class="caution">
+<p>
+You can only clip an ee.Image() object, <strong>never an image collection</strong>
+</p>
+</div>
 
 </div>
 </div>
