@@ -95,9 +95,7 @@ knitr::include_graphics("images/Spectral Signature.jpg")
 
 The spectral signature of *healthy green vegetation* has a small reflectance in the visible portion of the electromagnetic spectrum resulting from the pigments in plant leaves. Most of the light is being used in the photosynthesis process. However, the reflectance increases dramatically in the near infrared. The spectral signature of *soil* is much less variable. Its behavior is affected by soil moisture, texture, surface roughness and they are less dominant than the absorbance features present in vegetation. The *water*'s spectral signature is characterized by a high absorption at near infrared wavelengths range and beyond. Because of this absorption property, water bodies as well as features containing water can easily be detected, located and delineated with remote sensing data.
 
-These differences make it possible to identify different earth surface features or materials by analysing their spectral reflectance patterns or spectral signatures.
-
-
+These differences make it possible to identify different earth surface features or materials by analysing their spectral reflectance patterns or spectral signatures. [add more text]
 
 *__References__*
 
@@ -109,12 +107,681 @@ Barrett, E. C. and C. F. Curtis. 1976. *Introduction to Environmental Remote Sen
 
 Colwell, R. N. 1966. Uses and Limitations of Multispectral Remote Sensing. In *Proceedings of the Fourth Symposium on Remote Sensing of Environment*. Ann Arbor: Institute of Science and Technology, University of Michigan, pp. 71-100.
 
-### Google Earth Engine API and Java Script
+### Google Earth Engine's Application Programming Interface (API) and Java Script
+
+Google Earth Engine is a cloud-based platform for scientific data analysis and remote sensing data processing. It provides a large catalog of ready-to-use, cloud-hosted datasets. One of Earth Engine's key features is the ability to handle computationally demading processing and analysis very fast by distributing them across a large number of servers. The ability to efficiently use the cloud-hosted datasets and computation is enabled by the Earth Engine API.
+
+An API is a way to communicate with Google Earth Engine servers. It allows you to specify what computation or command you would like to do, and then to receive the results back from the servers. The API is designed so that users do not need to worry about how the computation is distributed across a cluster of machines and the results are assembled. Users of the API simply specify what needs to be done. This greatly simplifies the code by hiding the implementation detail from the users. It also makes Earth Engine simpler for users who are not too familiar with writing code.
+
+__JavaScript API and Introduction to the Code Editor__
+
+The Earth Engine platform comes with a web-based Code Editor that allows you to start using the Earth Engine JavaScript API without any installation. It also provides additional functionality to display your results on a map, save your scripts, access documentation, manage tasks, and more. It has a one-click mechanism to share your code with other users—allowing for easy reproducibility and collaboration. In addition, the JavaScript API comes with a user interface library, which allows you to create charts and web-based applications with little effort.
+
+The Code Editor is an integrated development environment for the Earth Engine JavaScript API. It offers an easy way to type, debug, run, and manage code. Once you have successfully registered for a Google Earth Engine account, you can visit https://code.earthengine.google.com/ to open the Code Editor. When you first visit the Code Editor, you will see a screen such as the one shown below:
+
+```{r CodeEditor, fig.cap="Earth Engine Code Editor", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-CodeEditor.PNG")
+```
+
+The Code Editor allows you to type JavaScript code and execute it. When you are first learning a new language and getting used to a new programming environment, it is customary to make a program to display your name or the words “Hello World.” This is a fun way to start coding that shows you how to give input to the program and how to execute it. It also shows where the program displays the output. Doing this in JavaScript is quite simple. Copy the following code into the center panel:
+
+```{r eval=FALSE}
+print('Hello World');
+```
+
+The line of code above uses the JavaScript `print()` function to print the text “Hello World” to the screen. Once you enter the code, click the __Run__ button. The output will be displayed on the upper right-hand panel under the __Console__ tab:
+
+```{r PrintRun, fig.cap="Running code with GEE", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-PrintRun.PNG")
+```
+
+You now know where to type your code, how to run it, and where to look for the output. You just wrote your first Earth Engine script and may want to save it. Click the __Save__ button to save a script:
+
+```{r Save, fig.cap="Saving a script", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Save.png")
+```
+
+If this is your first time using the Code Editor, you will be prompted to create a home folder. This is a folder in the cloud where all your code will be saved:
+
+```{r SaveII, fig.cap="Your first home folder", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-SaveII.png")
+```
+
+```{block, type='caution'}
+You can pick a name of your choice, but remember that __it cannot be changed and will permanently be associated with your account__.
+```
+
+Once youre home folder is created, you will be prompted to create a *new repository*. A repository is a like a folder where you can save your scripts. You can also share entire repositories with other users. Your account can have multiple repositories and each one can hold multiple code scripts. Start by creating a repository:
+
+```{r Repository, fig.cap="Your first repository", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Repository.png")
+```
+
+Finally, you will be able to save your script inside the newly created repository. Enter a name of your choice and click __OK__:
+
+```{block, type='caution'}
+Spaces are not allowed when naming scripts!
+```
+
+```{r SaveIII, fig.cap="Saving a script file", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-SaveIII.png")
+```
+
+Once the script is saved, it will appear in the script manager panel. The scripts are saved in the cloud and will always be available to you when you open the Code Editor.
+
+```{r Saved, fig.cap="Your first script in your repository", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Saved.png")
+```
+
+__JavaScript Basics: Data types__
+
+Javascript is the language you will use to construct and set up your commands and analysis. This section covers the basics of the Java Script sintax and some basic data structures. In the following sections, more JavaScript code will be presented. Throughout this document, code will be presented with a distinct colored font and with shaded background. As you encounter code, copy and paste it into the Code Editor and click __Run__.
+
+*___A) Variables___*
+
+In a programming language, variables are used to store data values. In JavaScript, a variable is defined using the `var` keyword followed by the name of the variable. For instance, create a `var` named `city` that contain the text string `'Monrovia'`. Text strings in the code must be always in quotes. Google Earth Engine allows you to use single `'` or double `"` quotes, as long as they match in the beginning and end of the text string. We also usually end each statement on scripts with a semicolon `;`, although Earth Engine's code editor does not require it. A 'i' will be shown in the line of the code where a semicolon is missing:
+
+```{r Semicolon, fig.cap="Even though they are not a requirement, Google Earth Engine indicates that a semicolon is missing in the statement. You can hover the mouse cursor over the icon to reveal its meaning.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Semicolon.png")
+```
+
+```{r eval=FALSE}
+var city = 'Monrovia';
+```
+
+If you `print` the variable `city`, you will get the string stored in the variable (Monrovia) printed in the __Console__.
+
+```{r eval=FALSE}
+print(city);
+```
+
+When you use quotations, the variable is automatically assigned the type *string*. You can also assign numbers to variables. For example, create the variables `population` and `area` and assing a number as their value. When assigning numbers, you do not use commas `,` for thousand separators. You do, however, use `.` for decimals:
+
+```{r eval=FALSE}
+var population = 939524;
+var area = 194.25;
+```
+
+Print those variables to the __Console__. You can also add text to describe the variables printed in the __Console__. Simply add a text string within the `print` function along with the variable being printed separated with `,`. Use the code below as example:
+
+```{r eval=FALSE}
+print('Number of people in Monrovia:', population);
+print(area, 'km squared');
+```
+
+*___B) Lists___*
+
+In the previous examples, we created variables holding a single value (text or number). JavaScript provides a data structure called a *list* that can be used When you want to store multiple values in a single variable. You can create lists using square brackets `[]` and adding multiple values separated by `,`. Create a variable called `listofcities`, add values to it and print it to the __Console__:
+
+``` {r eval=FALSE}
+var listofcities = ['Monrovia', 'Gbarnga','Kakata', 'Bensonville'];
+print('Largest cities in Liberia', listofcities);
+```
+
+Looking at the output in the __Console__, you will see `listofcities` with an expander arrow (▹) next to it. Expand the list by clicking on the arrow to show its content. You will notice that along with the items on the list, there will be a number next to each value you added. __This is the index of each item__. It allows you to refer to each item in the list using a numeric value that indicates its position in the list. This is useful when you want to extract a particular item from a list object.
+
+```{r List, fig.cap="A JavaScript List.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-List.png")
+```
+
+*___C) Objects and Dictionaries___*
+
+While useful to hold multiple values, *lists* are not appropriate to hold more structured data. JavaScript allows you to store 'key-value' information in *objects* or *dictionaries*. In this type of data structure, you can refer to a value by its key rather than its position - like in *lists*. You can create objects using curly braces `{}`. Use the code below as an example of an object:
+
+```{r eval=FALSE}
+var cityData = {'city': 'Monrovia', 'population': 939524, 'area': 194.25, 'coordinates': [-10.790, 6.315]};
+```
+
+There are a few important things about the syntax of the code above: As objects tend to hold several keys and values, it can be difficult to read the code if it is written on a continuous string. To improve readability you can use multiple lines instead: 
+
+```{r eval=FALSE}
+var cityData = {
+  'city': 'Monrovia',
+  'population': 939524,
+  'area': 194.25,
+  'coordinates': [-10.790, 6.315]
+};
+```
+
+Note how each key-value pair is on a different line. It is much easier to organize your key-value information this way. Additionally, the code can be more easily read.
+Second, note that the object above can holds multiple types of types of values (string and numbers) and structure (list)!
+
+If you print `cityData` to the __Console__, you can see that instead of a numeric index, each value will be identified by its *key*. 
+
+```{r Dictionary, fig.cap="A JavaScript Object.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Dictionary.png")
+```
+
+This key can also be used to retrieve the value of an item within an object or dictionary. If you want to retrieve a particular key from a dictionary, simply use `['key']`. For example, if you want to retrieve the population value from this object and print it individually to the __Console__, you can use a code like this:
+
+```{r eval=FALSE}
+print(cityData['population']);
+```
+
+The same logic can be applied to *lists*. Always remember that lists have numeric index. Therefore, when retrieving itens from a list, use the number of its position on the list:
+
+```{r eval=FALSE}
+print(listofcities['2']);
+```
+
+*___D) Functions___*
+
+Functions are often used to group a set of operations and used to repeat the same operation with different set of parameters without having to rewrite the code for every iteration. In other words, you can call a function with different parameters to generate different outputs without changing the code.
+Functions are defined using `function()`. They often take parameters which tell the function what to do. These parameters go inside the parentheses `()`. 
+Below is an example of a function named `SumFunction` to calculate the sum of two numbers: `fistValue` and `secondValue`. The var `sum` adds those two parameters and `return` is used to generate the output of that operation
+
+```{r eval=FALSE}
+function SumFunction (firstValue, secondValue) {
+  var sum = firstValue + secondValue;
+  return sum;
+}
+```
+
+Note that if you run the code above, nothing happens. This is just a function and it needs to be given the parameters. For example, if you need to add 37 to 584 using this function and print the result into the __Console__, you can use the code below:
+
+```{r eval=FALSE}
+var result = SumFunction(37,584);
+print(result);
+```
+
+When you call `SumFunction`, it will always perform the operation `sum` with watever two parameters you define in `()`.
+As mentioned, you can perform several operations at once using functions. For example, you can add other operations in the function above and return
+a list or a dictionary with the results: 
+
+```{r eval=FALSE}
+function MathFunction (firstValue, secondValue) {
+  var sum = firstValue + secondValue;
+  var sub = firstValue - secondValue;
+  var fraction = firstValue / secondValue;
+  return {'Result Sum':sum, 'Result Substraction':sub, 'Result Division': fraction};
+}
+```
+
+Using `MathFunction` with a pair of parameters (`firstValue` and `SecondValue`) will return an object with the results of each operation:
+
+```{r eval=FALSE}
+var results = MathFunction(500,5);
+print(results);
+```
+
+```{r Results, fig.cap="Printed results of MathFunction.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Results.png")
+```
+
+__Earth Engine Containers and Objects__
+
+So far, you learned the different data structure/types you can use within Google Earth Engine. However, if you want to do any computation with the data stored in these different types of structure, you will have to use an Earth Engine container. The `ee` package is used for formulating requests to Earth Engine. In other words, `ee` (prefix for Earth Engine) allows you to request Earth Engine servers to perform a certain computation to an variable or object. Each `ee` object has many different *methods*. You can think of *methods* as the many different things and computations that can be done for an specific object. In the Code Editor, you can switch to the __Docs__ tab to see the API functions grouped by object types.
+
+```{r Docs, fig.cap="List of available objects in the Docs tab of GEE API.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-DocsTab.png")
+```
+
+Below are some examples to ilustrate the concept behind an Earth Engine object:
+
+*__A) Strings__*
+
+You can put strings into a `ee.String` object to be sent to Earth Engine. Using an object/container allows you to do manipulate them in many different ways. For example, `ee.String` has the:
+* `toLowerCase()` method. This method will convert any string in a `ee.String` object to lower case;
+* `length()` method. This method will count the characters in your string;
+* `cat()` method. This method will concatenate two strings into one;
+* and many others! Make sure to check the __Docs__ tab for all the available methods for a given object.
+
+The code below uses some of the methods of `ee.String` as an example:
+
+```{r eval=FALSE}
+var string = ee.String('HELLO EVERYONE, ');
+print(string.toLowerCase());
+print(string.length());
+var string2 = ee.String('nice to meet you');
+print(string.cat(string2));
+```
+In your console tab you will see that the 'HELLO EVERYONE, ' string is now all in lower case. You will also see that `.length()` returned 16 as the number of characters for that string.
+
+Consider the code below:
+
+```{r eval=FALSE}
+var string = 'HELLO EVERYONE';
+var string2 = 'nice to meet you';
+print(string.cat(string2));
+```
+
+If you try to use a method on a non `ee` object, you will get an error. 
+
+```{r Error, fig.cap="Trying to use a method on non-ee.Object will return an error", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Error.png")
+```
+
+*__B) Numbers__*
+
+`ee.Number` is just another example of an object from that list. Similarly to `ee.String`, it will have many methods to be used with. For example, `.add()`, `.subtract()`, `.divide()` and `.multiply ()` will perform  these operations on `ee.Number` objects. Make sure to consult the __Docs__ tab for all the different methods for each object.
+
+```{r eval=FALSE}
+var value1 = ee.Number(100);
+var value2 = ee.Number(2);
+print(value1.add(value2));
+print(value1.subtract(value2));
+print(value1.divide(value2));
+print(value1.multiply(value2));
+print(value1.log10());
+```
+
+*__B) Lists__*
+
+You can also make a JavaScript list into an `ee.List` on Earth Engine server by simply casting your list into the container. There are many other useful methods to use when you have an `ee.List`. For instance, instead of making a JavaScript list by typing each value, you can use `ee.List.sequence()` to construct a list. This method will take many arguments, such as the value of the start of the list, the value at the end of the list, steps (increment) and count. Consider the examples below:
+
+* Making a list with numbers from 0 to 10:
+```{r eval=FALSE}
+print('List 1', ee.List.sequence(0,10))
+```
+* Making a list from 0 to 10 with increments of 2:
+```{r eval=FALSE}
+print('List 2', ee.List.sequence(0,10,2))
+```
+
+```{block, type='rmdcomment'}
+__Remember__: A `var string = 'text'` is a JavaScript string that does not allow computations. A `var string = ee.String('text')` is an Earth Engine object that allows computations!
+```
 
 ### Exploring Image and Image Collection
 
-## Image Manipulation
+Now that you learned the basics of JavaScript and Earth Engine objects, you have the tools at your disposal to start using the Earth Engine API to build scripts for remote sensing analysis. In this section, we explore satellite imagery, which are one of GEE's core capabilities!
 
-### Band Math and VI Calculation
+*__A) Single band image__*
 
-### Thresholds and Masks
+The first thing you need to know is that when working with images in Earth Engine, you will have to use an `ee.Image()` container. The argument provided to the constructor is the string ID of an image in the Earth Engine data catalog. (Remember to always see the __Docs__ tab for a full list of arguments to this container). To retrieve an image ID, you can search in the Earth Engine catalog using the search tool at the top of the Code Editor:
+
+```{r Search, fig.cap="You can browse through Earth Engine's data catalog with the search tool", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Search.png")
+```
+
+For example, try typing 'elevation' into the search field and note that a list of rasters is returned:
+
+```{r SearchII, fig.cap="Typing in the search field. Google Earth Engine will show all datasets available with that criteria.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-SearchII.png")
+```
+
+Click in any of the dataset entries to see more information about that dataset. From the list above, explore the dataset 'SRTM Digital Elevation Data Version 4'. You can also find more information about this dataset on the tabs on the top right side of the dataset description screen. On the left side of the dataset description screen, you can find the Image ID, which is what we use with the `ee.Image()`. Alternatively, you can use the __Import__ button on the dataset description. Using the __Import__ button, a variable is automatically created in a special section, named 'Imports', at the top of your script. You can rename the variable by clicking on its name in the imports section.
+
+```{r DataInfo, fig.cap="Data description", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-DataInfo.png")
+```
+
+Copy the image ID from the screen above and add it to a `var` elevationImage with the `ee.Image()` container as shown below:
+
+```{r eval= FALSE}
+var elevationImage = ee.Image('CGIAR/SRTM90_V4');
+```
+
+You can also retrieve the metadata about this image by using `print()`. In the __Console__, click the expander arrows to show the information. You will discover that the SRTM image has one band called 'elevation'.
+
+```{r eval= FALSE}
+print(elevationImage);
+```
+
+```{r ImageInfo, fig.cap="Image description using `print()`", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-ImageInfo.png")
+```
+
+To display the image in the Map Editor, use the `Map` object's `.addLayer()` method. When you add an image to a map using `Map.addLayer()`, Earth Engine needs to determine how to map the values in the image band(s) to colors on the display. If a single-band image is added to a map - which is our case- by default Earth Engine displays the band in grayscale, where the minimum value is assigned to black, and the maximum value is assigned to white. If you don't specify what the minimum and maximum should be, Earth Engine will use default values.
+
+```{r eval= FALSE}
+Map.addLayer(elevationImage);
+```
+
+*Do not worry! You can make it look better with custom visualization parameters!*
+
+To change the way the data are stretched, you can provide another parameter to the `Map.addLayer()` call. Specifically, the second parameter, `visParams`, lets you specify the minimum and maximum values to display. One way of gauging the range of values of an image is by activating the __Inspector__ tab and click around on the map. You will be able to see the value of that band for this dataset at that particular location:
+
+```{r Inspector, fig.cap="Inspector tab. Click in the image and the inspector tab will display the data for that point", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Inspector.png")
+```
+
+Click around the area of Liberia to have a sense of the range of values for this dataset. Suppose that, through further investigation, you determine that the best range of values to display elevation data in Liberia is [0,1000]. To display the data using this range, you can use a dictionary containing two keys: `min` and `max` and their respective values `0` and `1000`. A third parameter for `Map.addLayer()` is the name of the layer that is displayed in the Layer manager. Thus your code should be looking like the one below:
+
+```{r eval= FALSE}
+Map.addLayer(elevationImage, {min:0, max:1000}, 'Custom Visualization');
+```
+
+Run the code and you will see something like:
+
+```{r ImageVis, fig.cap="Custom Visualization for the SRTM data based on range of values.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-VisLayer.png")
+```
+
+You can further improve your image display by using a color palette. Palettes let you set the color scheme for single-band images. A palette is a comma delimited *list* of color strings which are linearly interpolated between the maximum and minimum values in the visualization parameters.
+
+To display this elevation band using a color palette, add a `palette` property to the `visParams` dictionary:
+
+``` {r eval=FALSE}
+Map.addLayer(elevationImage, {min:0, max:1000,palette: ['green', 'yellow', 'red']}, 'Custom Visualization - Color');
+```
+
+```{r ImageVisColor, fig.cap="Custom Visualization for the SRTM data based on range of values and color palette.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-VisLayerColor.png")
+```
+
+In the next section, you'll learn how to display multi-band imagery.
+
+*__B) Multi band image__*
+
+To ilustrate the concepts and codes in this section, we will use a Landsat 8 image from April 2022 over Cairo, Egypt. Landsat is a set of multispectral satellites developed by the NASA (National Aeronautics and Space Administration of USA), since the early 1970’s. Landsat images are very used for environmental research. These images have from 8 to 11 spectral bands (spectral resolution), with pixels of 30x30 meters (spatial resolution) and with a revisit time of 16 days (temporal resolution).
+
+Copy and paste the code below into the Code Editor:
+
+```{r eval=FALSE}
+var ImageL8 = ee.Image('LANDSAT/LC08/C02/T1_L2/LC08_176039_20220406');
+```
+
+As learned before, the code above is casting a Landsat 8 image into an `ee.Image` container using its ID into a `var` called 'ImageL8'. By clicking __Run__, Earth Engine will retrieve this image from its Landsat image catalog. You will not yet see any output.
+
+As you learned, you can retrieve additional information about this image by using `print()`.
+
+```{r eval=FALSE}
+print(ImageL8)
+```
+
+In the Console panel, you may need to click the expander arrows to show the information. You should be able to read that this image consists of 19 different bands (index 0 to 18). Each band will have 4 properties: *name*, *data type* (as in if the value is an integer, float, ect.), *projection* and *dimensions* (in rows and columns of pixels). For this example, simply note the first property of the first band:
+
+```{r L8Image, fig.cap="Landsat 8 image metadata.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-L8Image.png")
+```
+
+A satellite sensor like Landsat 8 measures the EMR in different portions of the electromagnetic spectrum. Six out of seven first bands in our image ("SR_B2" through "SR_B7") contain measurements for six different portions of the spectrum:
+
+```{r L8bands, fig.cap="Landsat 8 bands. Source: https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-L8Bands.png")
+```
+
+
+Now, let's visualize `ImageL8`. First, make sure your map is somewhere near Cairo, Egypt. To do this, click and drag the map towards Cairo, Egypt. (You can also jump there by typing “Cairo” into the __Search panel__ at the top of the Code Editor). Add `ImageL8` to the Map as a *layer* using the code below:
+
+```{r eval=FALSE}
+Map.addLayer(ImageL8);
+```
+
+You probably see a gray image with not a lot of details. From the previous section you learned that `Map.addLayer` take many parameters. One of them is the `visParams`, which lets you specify the minimum and maximum values to display. Similarly to the previous section, you can use the __Inspector__ tab to investigate the range of values for each location for each of `ImageL8`'s band. Now, specify a range of values to be displayed. Follow the code example below:
+
+```{r eval=FALSE}
+Map.addLayer(ImageL8, {min:8000, max:20000}, 'My First Image');
+```
+
+You should see something like this:
+
+```{r L8FalseColor, fig.cap="Landsat 8 image in false color .", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-L8FalseColor.png")
+```
+
+By default, if you do not specify the bands to be displayed within the `visParams`, Earth Engine will display the first three bands, each band on each RGB (red, green, blue) channel of your monitor screen. In other words, Earth Engine is displaying 'SR_B1' (Landsat 8's coastal aerosol band) in the red channel, 'SR_B2' (Landsat 8's blue band) in the green channel and 'SR_B3 (Landsat 8's green band). This is a case of a *false color* display, when spectral bands do not match the RGB channels in your screen. *False color* displays have many advantages and they will be explored later in the tutorial.
+
+For a *real color* display, you will need to define the bands within `visParams` to match the RGB channels:
+
+```{r eval=FALSE}
+Map.addLayer(ImageL8, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:8000, max:20000}, 'Real color');
+```
+
+In the code above, `visParams` contains a list (`bands`) with the names of the `ImageL8`'s bands to be displayed in the RGB channels of your screen. This band set up tells Earth Engine to display the red band in the red channel, the green band in the green channel and the blue band in blue channel. We call this composition a *RGB 432* or *Real color* composition. You should see an image like this when running the code above:
+
+```{r L8RealColor, fig.cap="Landsat 8 image displayed with a real color composition.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-L8Real.png")
+```
+
+You can easily change these values and settings within `visParams` by using the Layer setting option in the Map editor. You can find it by hovering your cursor over the Layer List (upper right corner of the Map editor, next to the *Map* and *Satellite* buttons) and clicking the *gear* icon of the layer:
+
+```{r L8LayerSetting, fig.cap="Layer settings window.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-L8LayerSetting.png")
+```
+
+Once you chose your settings, click __Apply__. Earth Engine will automatically apply the new settings and display the layer. Try using different band combinations and range values to see how the image changes. Different color compositions will highlight different features in the image based on their spectral signatures!
+
+*__C) Image collections__*
+
+An image collection refers to a set of Earth Engine images. For example, the collection of all Landsat 8 images! In this case, you will use `ee.ImageCollection()` instead of `ee.Image()` to retrieve a particular image collection . Like the SRTM image or the Landsat image you have been working with, image collections also have an ID. Similarly to the single images, you can discover the ID of an image collection by searching the Earth Engine data catalog from the Code Editor.
+
+Start by loading the Landsat 8 image collection into a `var` called 'collection using the `ee.ImageCollection` container. Then try to print this collection to the __Console__:
+
+```{r eval=FALSE}
+var collection = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2');
+print(collection);
+```
+
+You will notice that you will get an error when trying to print `collection` to the __Console__: 
+
+```{r L8Error, fig.cap="Trying to print an image collection without any filter.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-ErrorCollection.png")
+```
+
+It's worth noting that this collection represents every Landsat 8 scene collected, all over the Earth. Thus, Earth Engine is not able to print the information for every scene all over the globe since 2013 (when Landsat 8 started collecting data). In this case we need to filter this collection.
+Exploring the __Docs__ tab of the Code Editor to learn more about `ee.ImageCollection`, you will notice the methods `filterBounds()` and `filterDate()`. These are shortcut methods on a bigger `filter()` method. In this case, `filterBounds()` filters a collection by intersection with geometry (or a location) while `filterDate()` filters a collection by a date range, expressed as strings.
+
+__Location Filter__: To filter `collection` to images that cover a particular location, first define your area of interest with the geometry drawing tools. To create geometries, use the geometry drawing tools in the upper left corner of the map display.
+
+```{r Tools, fig.cap="The Geometry tools.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-GeometryTool.png")
+```
+
+For drawing points, use the place mark icon, for drawing lines, use the line icon, for drawing polygons, use the polygon icon, for drawing rectangles, use the rectangle icon. Using any of the drawing tools will automatically create a new geometry layer and add an import for that layer to the Imports section (top of the script). Once you finish drawing the geometry, click __Exit__. To rename the geometries that are imported to your script, click the settings icon next to it (or rename it directly in the Imports section).The geometry layer settings tool will be displayed in a dialog where you can change the geometry name.
+
+Use the point mark and create a point geometry named 'aoi' (area of interest) in a location of your interest. For this example, we will use a point mark location over Cairo, Egypt. Use the figure below as a guide: 1) Click on the point mark geometry; 2) Place it in your location of interest, and; 3) rename it 'aoi'.
+
+```{r point, fig.cap="Creating a point geometry.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-PointGeometry.png")
+```
+
+__Date filter__: Now that you have a location, create two variables `startDate` and `endDate` containing a data range expressed as strings.
+Use a date range of your choice. Dates are expressed as 'YYYY-MM-DD' in Earth Engine. For this example, we will use the first four months of 2022:
+
+```{r eval=FALSE}
+var startDate = '2022-01-01';
+var endDate = '2022-04-30';
+```
+
+Now that you have both filters for location and date range, you are ready to filter your image collection using `filterBounds()` and `filterDates()`:
+
+```{r eval=FALSE}
+var collectionFiltered = collection.filterBounds(aoi).filterDate(startDate,endDate);
+print(collectionFiltered);
+```
+
+When printing `collectionFiltered` to the __Console__ you will notice that now Earth Engine was able to retrieve the information of every Landsat scene based on your filters. Using the date range and the location filters from this example, there are the 13 images in the `collectionFiltered` for Cairo from January to April, 2022:
+
+```{r Collection, fig.cap="Filtered collection.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Collection.png")
+```
+
+If you want to retrieve a particular image from this collection you can simply use `ee.Image()` and the image ID printed in the __Console__ tab!
+
+## Image and Image Collection Manipulation
+
+Now that you know how to load and display an image, it's time to apply a computation to it. In the following sections you will learn some examples of computations for a single-band image and multi-band image (band math and vegetation index calculation) and for an image collection.
+
+### Image Math
+
+* __Single-band image__
+
+Considering our previous example, we will use the SRTM single-band image `elevationImage` and create a 'slope' image. Briefly, you calculate the slope by dividing the difference between the elevations of two points by the distance between them, then multiply the quotient by 100. The difference in elevation between points is called the rise. The distance between the points is called the run. Thus, percent slope equals (rise / run) x 100. Intuitively, you can think of doing this calculation manually by applying `.divide()` and `.multiply()`. However, as you will learn with this material, Google Earth Engine has specific methods within `ee` objects to perform computations such as slope, for example.
+Simply, you can create an the 'slope' image with the `slope` method of the `ee.Terrain` package:
+
+```{r eval=FALSE}
+var slope = ee.Terrain.slope(elevationImage);
+```
+Note that `elevationImage` was provided as an argument to the slope method! Add `slope` to the map and find Mount Nimba, in Liberia. Use a `min` and `max` values to reflect a resonable range of % slope.
+
+```{r eval=FALSE}
+Map.addLayer(slope, {min: 0, max :50}, 'Slope');
+```
+
+Explore the slope image around Mount Nimba, in Liberia. It should look like the figure below:
+
+```{r Slope, fig.cap="Slope image calculated with the `.slope()` method of the `ee.Terrain` package. Mount Nimba in Liberia is shown in white.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Slope.png")
+```
+
+As mentioned before, there are also methods in the `ee.Image` container that can be invoked on an image object. We call it *band math* when you do mathematical operations with image bands. Still considering the previous example, suppose you are interested in further processing the slope image into an aspect image and then perform some trigonometric operations on it. Aspect, in this case, refers to the orientation of a slope, measured clockwise in degrees, from 0 to 360. Similarly to `.slope()`, `.aspect()` is also an method from `ee.Terrain`.
+
+```{r eval=FALSE}
+var aspect = ee.Terrain.aspect(elevationImage);
+```
+
+Now, convert the image `aspect` into radians then calculate its sin:
+
+```{r eval=FALSE}
+var sinImage = aspect.divide(180).multiply(Math.PI).sin()
+```
+
+It is worth noting that the code above chained multiple methods. This way, you can perform complex mathematical operations. In other words, the code above is simply dividing the aspect by 180 (using the `.divide()` method), multiplying (with `.multiply()`) the result of that by π (that can be retrieved using `Math.PI`), and finally taking the sin (with `.sin()`). The result should look something like the figure below:
+
+```{r Sin, fig.cap="Aspect image calculated with the `.aspect()` method of the `ee.Terrain` package. The resulting SIN image from aspect reveals Mount Nimba in greater detail.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Sin.png")
+```
+
+* __Band math with multi-band image__
+
+As mentioned previously, you can do mathematical operations with bands from a given image. One of the most common examples of band math with remote sensing imagery is the calculation of *spectral indices*. A *spectral index* is a mathematical equation that is applied on the various spectral bands of an image per pixel, with the objective of highlighting pixels showing the relative abundance or lack of the feature of interest. There are several categories of spectral indices that have been developed, using a variety of spectral bands to highlight different phenomena, such as water, snow, soil and vegetation. For example, *Vegetation Indices* (VIs) are combinations of surface reflectance at two or more wavelengths designed to highlight a particular property of vegetation.
+
+*A) NDVI*
+
+The most used index in this category is the __Normalized Difference Vegetation Index (NDVI)__, which provides an indication of abundance of live green vegetation (or abundance of chlorophyll). The pigment in plant leaves, chlorophyll, strongly absorbs visible light (from 0.4 to 0.7 µm) for use in photosynthesis. The cell structure of the leaves, on the other hand, strongly reflects near-infrared light (from 0.7 to 1.1 µm) (See Figure \@ref(fig:SpectralSignature)). Thus, NDVI is calculated by comparing the different reflectance values of the red and near-infrared bands (normalized such that the minimum value is -1.0, and the maximum is +1.0).
+
+Bringing this concept to the context of a Landsat 8 image, we can produce an NDVI image by computing the normalized difference between its bands 5 (near-infrared) and 4 (red) (See Figure \@ref(fig:L8bands)).
+
+For this example, we will use `ImageL8` created in the previous sections to create a NDVI image. We can use the method `.select()` on a `ee.Image` object to select any given band. The `.select()` method will take a string as an argument for the band name you want to select. Then we can use the mathematical operators to perform a normalized difference using these bands:
+
+```{r eval=FALSE}
+var nirBand = ImageL8.select('SR_B5');
+var redBand = ImageL8.select('SR_B4');
+var NDVI = nirBand.subtract(redBand).divide(nirBand.add(redBand));
+```
+
+There is another way of doing the same calculation from the code above. As we seen previously, Earth Engine usually have methods for widely used operations and computations with remote sensing data. In this case, the normalized difference operation is available as a shortcut method `.normalizedDifference()` for a `ee.Image()` object. It take as an argument a list with the names of the bands you wish to calculate the normalized difference with. Thus, `NDVI` can be rewritten as:
+
+```{r eval=FALSE}
+var NDVI = ImageL8.normalizedDifference(['SR_B5', 'SR_B4'])
+```
+
+You can then visualize this NDVI image by adding it to the Map Editor. Add it to the map and use the __Inspector__ tab to investigate the range of values of NDVI around Cairo:
+
+```{R eval=FALSE}
+Map.addLayer(NDVI, {min: 0, max: 0.3, palette: ['a6611a', 'f5f5f5', '4dac26']}, 'NDVI Image');
+```
+
+You should see something like this:
+
+```{r NDVI, fig.cap="NDVI Image highlighting the agricultural area in the Nile Delta. With the visualization parameters provided above, higher values of NDVI (that is, higher content of chlorophyll in live green leaves) is shown in green. ", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-NDVI.png")
+```
+
+*A) EVI*
+
+EVI, or __Enhanced Vegetation Index__, is similar to NDVI and can be used to quantify vegetation greenness. However, EVI corrects for some atmospheric conditions and canopy background noise and *is more sensitive in areas with dense vegetation* where NDVI usually saturates. It incorporates an “L” value to adjust for canopy background, “C” values as coefficients for atmospheric resistance, and values from the blue band (B):
+
+__EVI = 2.5 * ((Near-infrared - Red) / (Near-infrared + C1 * Red – C2 * Blue + L))__, where C1, C2 and L are usually 6, 7.5 and 1, respectively.
+
+You can see that an expression like this can become hard to be expressed using mathematical operators such as the ones used to calculate a normalized difference. To implement more complex mathematical expressions, consider using the `.expression()` method for a `ee.Image` object. the first argument to `.expression()` is the textual representation (string) of the math operation, the second argument is a dictionary where the *keys* are variable names used in the expression and the *values* are the image bands to be used in the operation. Using the same `ImageL8` as an example, EVI would be defined as:
+
+```{r eval=FALSE}
+var EVI = ImageL8.expression(
+    '2.5 * ((NIR - RED) / (NIR + 6 * RED - 7.5 * BLUE + 1))', {
+      'NIR': ImageL8.select('SR_B5'),
+      'RED': ImageL8.select('SR_B4'),
+      'BLUE': ImageL8.select('SR_B2')
+});
+```
+
+The code above is able to regonize operators (+, -, *, /, %, **: Add, Subtract, Multiply, Divide, Modulus, Exponent) and the numbers; everything else is defined as keys in the dictionary.
+
+Can you think of how you can calculate the NDVI using the code structure above?
+
+### Compositing and Mosaicking
+
+Compositing is an example of a computation that can be done to a image collection. In general, _compositing_ refers to the process of combining spatially overlapping images into a single image based on an aggregation function while _mosaicking_ usually refers to the assembly of these images to produce a spatially contiguous one. In Earth Engine, when you composite two scenes that do not overlap completely, the resulting composite will be a composited mosaic: 
+
+```{r Composite, fig.cap="Compositing images in Earth Engine. When applying a compositing function to scenes that do not overlap completely (B), the resulting composite will be a spatially contiguous image.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Composite.png")
+```
+
+Thefore, in the context of Earth Engine these terms are used interchangeably. We illustrate these concepts with the examples below.
+
+* __Example 1: Compositing the same scene (100% overlap)__
+
+In this example, we will use `collectionFiltered` (a Landsat 8 image collection filtered for Cairo from January to April 2022. *See* \@ref(fig:Collection)). There are several aggregation functions that can be used to composite an image collection, most notably `.max()` for a maximum value composite and `.mendian()` for a median value composite. All these functions will aggregate the values on a per-pixel, per-band basis. In other words, `.max()` will select the maximum value of a given pixel for each image band to create the final composite while `.median()` will calculate the median value of each band for this pixel.
+
+```{r eval=FALSE}
+var compositeMax = collectionFiltered.max();
+var compositeMedian = collectionFiltered.median();
+```
+
+```{block, type='rmdcomment'}
+If you print these composites to the __Console__ you will notice that they are a 19-band single image and no longer a collection with 13 images with 19 bands each! 
+```
+
+Add these composites to the Map Editor to investigate their differences:
+
+```{r eval=FALSE}
+Map.addLayer(compositeMax, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:8000, max:30000}, 'Composite Max');
+Map.addLayer(compositeMedian, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:8000, max:30000}, 'Composite Median');
+```
+
+*Question*: What is the most evident difference between these composites?
+
+__Answer__: The max value composite is mostly covered by clouds. Clouds and snow are very reflective and will always have high reflectance values for the regions of the electromagnetic spectrum covered by the Landsat spectral bands. Therefore, a maximum value composite will likely highlight these features - which is not desireable in most cases.
+
+```{r Composites, fig.cap="Maximum and median value composites. Clouds are evident in the maximum value composite due to their high reflectance values.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Composites.png")
+```
+
+```{block, type='rmdcomment'}
+Although there are different methods for compositing, the median composite method is the state of the art in Google Earth Engine and has been applied to a multitude of studies using multitemporal remote sensing data.
+```
+
+* __Example 2: Compositing (mosaicking) different scenes__
+
+Consider the need to composite (mosaic) four different Landsat scenes at different locations. For that we will edit the location parameter from `.filterBounds()` to include extra Landsat scenes from different locations. Use the information from figures \@ref(fig:Tools) and \@ref(fig:point) to create a geometry covering a larger area. Remember that `.filterBounds()` will filter an image collection to all the scenes that intercept the boundaries of a geometry, whether it is a line, point mark or polygon. 
+Rename this as 'aoi2'. For this example, we will use the polygon tool to draw a large polygon over a large area in Egypt.
+
+```{r aoi2, fig.cap="Area of interest (aoi) for filtering image collection.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-aoi2.png")
+```
+
+We will use this geometry to filter `collection` to this new spatial filter `aoi2`:
+
+```{r eval=FALSE}
+var collectionFiltered2 = collection.filterBounds(aoi2).filterDate(startDate,endDate);
+print(collectionFiltered2);
+```
+
+```{block, type='rmdcomment'}
+Note that if you print `collectionFiltered2` to the __Console__ you will notice that it includes more images than when we filtered for a single location using a point geometry.
+```
+
+Using the same compositing functions described earlier in this section, we will composite this new collection to two new composites. Also, we will use the `.mosaic()` method as a comparison. This method composites overlapping images according to their order in the collection (last on top):
+
+```{r eval=FALSE}
+var compositeMax2 = collectionFiltered2.max();
+var compositeMedian2 = collectionFiltered2.median();
+var mosaic = collectionFiltered2.mosaic();
+
+Map.addLayer(compositeMax2, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:8000, max:30000}, 'Composite Max 2');
+Map.addLayer(compositeMedian2, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:8000, max:30000}, 'Composite Median 2');
+Map.addLayer(mosaic, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:8000, max:30000}, 'Mosaic');
+```
+
+```{r mosaics, fig.cap="Composites of an image collection filtered by the bounds of `aoi2`.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Mosaics.png")
+```
+
+Whether you are compositing using an aggregation function or mosaicking with `.mosaic()` the result will be similar in respect to the output type (i.e. an ee.Image object) and spatial extent. Thus, explaining why compositing and mosaicking are used interchangeably in Earth Engine.
+
+Suppose you are only interested in the composite within the bounds of your area of interest. The method `.clip()` of an `ee.Image()` allows you to clip (or cut) any image to the shape of a geometry. We will use `compositeMedian2` and `aoi2` as an example:
+
+```{r eval=FALSE}
+var compositeClipped = compositeMedian2.clip(aoi2);
+Map.addLayer(compositeClipped, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:8000, max:30000}, 'Composite Median 2 clipped');
+```
+
+```{r clip, fig.cap="Median composite clipped by the extent of `aoi2`.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartI-Clip.png")
+```
+
+```{block, type='caution'}
+You can only clip an ee.Image() object, __never an image collection!__
+```
