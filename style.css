@@ -63,7 +63,7 @@ div.FOO {
 }
 
 .starcomment:before {
-    content: "\f055";
+    content: "\e28b";
     font-family: FontAwesome;
     left:10px;
     position:absolute;
