@@ -2,38 +2,266 @@
 
 ## Advanced Image Manipulation: Pre-classification
 
+In this section we will provide functions and lines of code to assist the user to prepare, process and analyze Landsat 8 data for classification purposes.
+
 ### Cloud and cloud shadow masking
-```{block, type='rmdcomment'}
-[*Section Snapshot at GEE*](https://code.earthengine.google.com/cd7747671a8a2d411ae86afd1aebf084){target="_blank"}
+
+This sub-section demonstrates a way of masking clouds and cloud shadow pixels from Landsat 8 Surface Reflectance Collection 2 data based on file metadata. You may have noticed when exploring Landsat images in the __Console__ tab that these images have a band called `QA_PIXEL` or *Quality Assessment* band. Briefly, this band contains values that represent bit-packed combinations of surface, atmospheric, and sensor conditions that can affect the overall usefulness of a given pixel. One of the many bits represented in this band is *cloud* (bit 3) and *cloud shadow* (bit 4):
+
+```{r QA, fig.cap="Landsat's Quality Assessment (QA) band.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartII-QABand.png")
 ```
 
-This section demonstrates a way of masking clouds and cloud shadow pixels from Landsat 8/7 Surface Reflectance data based on file metadata. This function was created based on the documentation available for Landsat 8/7. Values for pixel bit and pixel band were found [*here.*](https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1-level-1-quality-assessment-band?qt-science_support_page_related_con=0#qt-science_support_page_related_con){target="_blank"}
+In essence, these values indicate which pixels might be affected by surface conditions such as cloud contamination. Therefore, this band can be used to construct filters to mask (or remove) pixels flagged as 'affected' by that condition. Here, we will provide a function for masking clouds and cloud shadow from Landsat 8 images based on the information stored in the *Quality Assessment* band. This function was created based on the documentation available for Landsat 8. Values for pixel bit and pixel band were found [*here.*](https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1-level-1-quality-assessment-band?qt-science_support_page_related_con=0#qt-science_support_page_related_con){target="_blank"}
 
 The cloud masking function is as follows:
+
 ```{r eval=FALSE}
-function maskL8sr(image) {
-  // #Bits 3 and 5 are cloud shadow and cloud, respectively.
+function maskClouds(image) {
   var cloudShadowBitMask = ee.Number(2).pow(3).int();
-  var cloudsBitMask = ee.Number(2).pow(5).int();
-  // #Get the pixel QA band.
-  var qa = image.select('pixel_qa');
-  // #Both flags should be set to zero, indicating clear conditions.
-  var mask = qa.bitwiseAnd(cloudShadowBitMask).eq(0)
-      .and(qa.bitwiseAnd(cloudsBitMask).eq(0));
-  // #Return the masked image, scaled to [0, 1].
-  return image.updateMask(mask).divide(10000).copyProperties(image, ["system:time_start"]);
-};
+  var cloudsBitMask = ee.Number(2).pow(4).int();
+  var QA = image.select('QA_PIXEL');
+  var mask = QA.bitwiseAnd(cloudShadowBitMask).eq(0)
+      .and(QA.bitwiseAnd(cloudsBitMask).eq(0));
+  return image.updateMask(mask).divide(100000).select("SR_B[0-9]*").copyProperties(image, ["system:time_start"]);
+}
 ```
+
+Do not worry about the new methods within this function. What you need to know is that this function was constructed in a way that we are selecting the `QA_PIXEL` band from the Landsat image and creating a mask where only pixels flagged to 0 (indicating clear conditions) for bits 3 and 4 will be included; The function will return `image` - in this case the Landsat 8 image - masked for pixels that are not flagged 0 for bits 3 and 4. The `.divide()` was used simply to scale the band values to [0,1] and `.select()` to only select the spectral bands from Landsat (SR_B1-9). These steps are not necessary for the cloud masking to work! However, we can add these extra steps to further improve our image collection.
+
+
+Now, to apply a function to every image in an image collection, we use the `.map()` method from the `ee.ImageCollection()` object. You can refer to the __Docs__ tab for more information on the methods available for `ee.ImageCollection()`. The only argument to `map()` is a function which takes one single parameter: an `ee.Image()`. Using `.map(maskClouds)` over an image collection will result in a collection where every image is masked for clouds and cloud shadows. 
+
+To illustrate this, we will apply `maskClouds` over `collection` (created in the previous chapter) along with the same temporal and spatial filters to recreate `collectionFiltered`. Feel free to use your previous chapter's script and simply add `.map()` to the collections using the code below as an example:
+
+```{r eval=FALSE}
+var collection = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2');
+var startDate = '2022-01-01';
+var endDate = '2022-04-30';
+
+var collectionFilteredMasked = collection.filterBounds(aoi)
+                                   .filterDate(startDate,endDate)
+                                   .map(maskClouds);
+```
+
+Now, we will create a max value composite and compare it to the previous composite created with an image collection that __was not masked for clouds and cloud shadows__:
+
+```{r eval=FALSE}
+var compositeMax = collectionFilteredMasked.max();
+Map.addLayer(compositeMax, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:0, max:0.25}, 'Composite Max Value');
+```
+
+```{r CompositesMasked, fig.cap="A maximum value composite created with an image collection masked by clouds compared to a composite created using an unmasked collection.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartII-CompositesMasked.png")
+```
+
+As mentioned in the previous chapter, a maximum value composite will likely highlight clouds as they are very reflective. However, by removing the cloud pixels from the images based on the Quality Assessment band information, the resulting maximum value composite greatly improves.
 
 ### Spectral indices
 
-### Compositing
+In the previous sub-section, we presented a function to mask cloud and cloud shadows from Landsat image collections. A function can also be created to perform band math to every image in an image collection. Building on the concepts of vegetation indices presented on the previous chapter, we will create a function that will calculate several vegetation indices for Landsat 8 images. You will recognize the NDVI and EVI indices from the previous chapters. This function includes other commonly used spectral indices to highlight features like open water, moisture, vegetation and soil:
 
-## Supervised Classification: Random Forest
+* NDVI - Normalized Difference Vegetation Index;
+* NBR - Normalized Burn Ratio;
+* NDMI - Normalized Difference Mangrove Index;
+* MNDWI - Modified Normalized Difference Water Index;
+* SR - Simple Ratio;
+* BI - Bare soil Index;
+* GCVI - Green Chlorophyll Vegetation Index;
+* EVI - Enhanced Vegetation Index, and;
+* MSAVI - Modified Soil-Adjusted Vegetation Index.
 
-### Land-cover classification using Random Forest
+```{r eval=FALSE}
+function addIndices(image) {
+  var ndvi = image.normalizedDifference(['SR_B5','SR_B4']).rename('NDVI');
+  var nbr = image.normalizedDifference(['SR_B5','SR_B7']).rename('NBR');
+  var ndmi = image.normalizedDifference(['SR_B7','SR_B3']).rename('NDMI');
+  var mndwi = image.normalizedDifference(['SR_B3','SR_B6']).rename('MNDWI');
+  var sr = image.select('SR_B5').divide(image.select('SR_B4')).rename('SR');
+  var bare = image.normalizedDifference(['SR_B6','SR_B7']).rename('BI');
+  var gcvi = image.expression('(NIR/GREEN)-1',{
+    'NIR':image.select('SR_B5'),
+    'GREEN':image.select('SR_B3')
+  }).rename('GCVI');
+  var evi = image.expression(
+  '2.5 * ((NIR-RED) / (NIR + 6 * RED - 7.5* SR_BLUE +1))', {
+    'NIR':image.select('SR_B5'),
+    'RED':image.select('SR_B4'),
+    'SR_BLUE':image.select('SR_B2')
+  }).rename('EVI');
+  var msavi = image.expression(
+  '(2 * NIR + 1 - sqrt(pow((2 * NIR + 1), 2) - 8 * (NIR - RED)) ) / 2', {
+    'NIR': image.select('SR_B5'), 
+    'RED': image.select('SR_B4')}
+).rename('MSAVI');
+    return image
+    .addBands(ndvi)
+    .addBands(nbr)
+    .addBands(ndmi)
+    .addBands(mndwi)
+    .addBands(sr)
+    .addBands(evi)
+    .addBands(msavi)
+    .addBands(gcvi)
+    .addBands(bare);
+}
+```
+
+The `.addBands()` method is used to include an `ee.Image()` as a band to an existing image. Therefore, this function will calculate each index and include them as extra bands to every image in the image collection. 
+
+As in the previous sub-section, we can use `.map()` to map this function over `collection`:
+
+```{r eval=FALSE}
+var collectionFilteredwithIndex = collection.filterBounds(aoi)
+                                   .filterDate(startDate,endDate)
+                                   .map(maskClouds)
+                                   .map (addIndices);
+```
+
+Then we will create median composite based on this new collection. We will add it to the __Map Editor__ and will use the __Inspector__ tab to explore its band values at a given location:
+
+```{r eval=FALSE}
+var compositeMedian = collectionFilteredwithIndex.median();
+Map.addLayer(compositeMedian, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:0, max:0.25}, 'Composite Median');
+```
+
+You can toggle the data view from chart to values with the chart/value view button:
+
+```{r VIS, fig.cap="A median composite created from the `collectionFilteredwithIndex` image collection. The function `addIndices` was used to calculate each index and add them as separate bands to every image in the collection. In this example, the spectral bands and spectral index values for a pixel at an arbitrary location within `compositeMedian`. You can toggle between the chart view and value view using the chart button (red circle).", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartII-VIS.png")
+```
+
+## Supervised Classification using Random Forest
+
+As seen in Part I, Interpretation and Analysis is one of the building blocks of any remote sensing system (see \@ref(fig:FigBuildingBlocks)).
+Image classification is one of the many methods of image processing and it is the sole focus of this training material. So far, you have learned the basics of Java Script and Google Earth Engine and some pre-processing steps to perform an image classification using the Random Forest (RF) Classifier. Briefly, classifier is an ensemble of classification trees, where each tree contributes with a single vote for the assignment of the most frequent class to the input data. Different from Decision Trees, which use the best predictive variables at the split, RF uses a random subset of the predictive variables. The RF is one of the most used and robust classifiers and it is fully implemented in GEE. In the following examples we will present the steps for land cover classification using the RF classifier and present some basic analysis that can be done using the classification output.
+
+### Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2022
+
+The general steps for an image classification process with Landsat image is:
+
+a) To use a cloud-masking function to mask clouds on Landsat 8 Imagery;
+
+b) To calculate spectral indices that will be used as predictors for the Random Forest;
+
+c) To produce a cloud-free composite mosaic using the median reducer, and;
+
+d) To select training samples;
+
+e) To classify the cloud-free composite mosaic of Landsat 8 scenes using Random Forest.
+
+In this example we will classify the median composite (`compositeMedian`) created in the previous section. You can find the code for creating it [here.](https://code.earthengine.google.com/f6d329bb7a6dcec10609c118e0af57e7){target="_blank"}
+
+```{block, type='rmdcomment'}
+You have the option to classify the entire scene or clip it to an area of interest. You can create a geometry `AreaOfInterest` and clip your composite using `.clip(AreaOfInterest)`. You can also customize the composite visualization parameters by clicking on the settings icon (gear \u2⚙) next to the layer name (in this example: 'Composite Median')
+```
+
+So far, we have covered the steps *__a__*, *__b__* and *__c__*. 
+
+* __Training sample selection__
+
+For this example, let’s classify the 'composite' into four classes: *water*, *agricultural land*, *sand and bare areas* and *urbanization*. The first step is to create the training samples set to use into the Random Forest Model.
+
+__Step 1__ - In the Geometry Imports, click *__+new layer__* and make four sets of geometries, each set will represent samples from the classes 'water', 'cropland', 'sand' and 'urban'.
+
+```{r my-figGeom,   fig.cap="Geometry sets to hold samples for each of the four classes.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/Geometries.PNG")
+```
+
+__Step 2__  - For each geometry in the list, click on the settings icon⚙: name them accordingly using the 'Name' box, choose a color for it using the color picker and import each geometry as *FeatureCollection*. Add a property called *landcover* by clicking on the *__+ Property__* and set a consecutive integer starting from 0 or 1 for each of the classes. You should achieve something similar to this:
+
+```{r my-figGeom2,   fig.cap="Geometries used to create the training sample sets.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/Geometries2.PNG")
+```
+
+Your Geometry Imports should look like this:
+
+```{r my-figGeom3,   fig.cap="Geometry Imports after creating geometry sets to hold training samples", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/Geo3.PNG")
+```
+
+Start selecting samples by clicking on the ‘Water’ geometry in the Geometry Imports. Choose the point drawing tool and place some points along the River Nile:
+
+```{block, type='starcomment'}
+Take advantage of the high resolution imagery to help you select samples for each class. You can toggle in between map and Google Earth imagery by using the buttons *__Map__* and *__Satellite__* in the upper right corner of the Map Editor. You can also toggle the Landsat composite ON and OFF by using the layer manager.
+```
+
+Instead of single points (i.e pixels), we can also use polygons containing a variable number of relatively homogenous pixels of a given land cover class. Switch to the polygon drawing tool and draw a few polygons over the River Nile:
+
+```{r my-figNile,   fig.cap="Sample points and polygons for the Water class", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/Nile.PNG")
+```
+
+```{block, type='starcomment'}
+Once you finish selecting samples, click the *__Exit__* button on the polygon editor dialogue box . 
+Repeat the process for each of the other class. Make sure you select samples that are representative of each land cover class by selecting points and polygons of homogenous pixels.
+```
+
+
+```{r my-figAllSamples,   fig.cap="Example of sample points and polygons for ‘Water’ (blue), ‘Cropland’ (yellow), ‘Urban’ (red) and ‘Sand’ (pink). Each pixel within the polygons will be used as training inputs for the RF classifier.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/AllSamples.PNG")
+```
+
+After selecting the samples, we will merge all the geometries together into an object var classes using the `.merge` method of the `ee.FeatureCollection() object`:
+
+```{r eval=FALSE}
+var classes = Water.merge(Cropland)
+                   .merge(Sand)
+                   .merge(Urban);
+
+```
+
+[Code Checkpoint](https://code.earthengine.google.com/0666bce96ffb1bd350cfc738f7b2aeab){target="_blank"}
+
+* __Sample sets__
+
+In this section, we will create the training (and testing) sample sets to be used in the classification with Random Forest. First, we will select the predictors to assign to each sample point in the sample sets. For this example, we will create a list `var bands` with the names of three spectral bands (`'SR_B4'`,`'SR_B5'`,`'SR_B6'`) and the spectral indices (`'NDVI'`,`'NBR'`,`'MNDWI'`,`'SR'`,`'GCVI'` and `'MSAVI'`).
+
+```{r eval=FALSE}
+var bands = ['B4','B5','B6','NDVI','NBR','MNDWI','SR','GCVI','MSAVI'];
+```
+
+Next, we will sample the Landsat pixels by overlaying the geometries with the composite using `.sampleRegions()`. The main arguments of this method is the image to sample (in this case, `compositeMedian`), the regions to sample over (in this case, `classes`) and the list of properties to copy from each geometry (in this case __landcover__):
+
+```{r eval=FALSE}
+var samples = compositeMedian.select(bands).sampleRegions({
+  collection: classes,       
+  properties: ['landcover'],
+  scale: 30                  
+}).randomColumn('random');
+```
+
+In the `samples` object we have just created, each sample will include a column with the values from the list `bands` inherited from the `compositeMedian` and a column with their respective class label. Optionally, you can perform an accuracy assessment of the classifier by taking advantage of the identifiers assigned to the samples by the `.randomColumn('random')` within `samples`. This method adds a column to the feature collection populated with random numbers in the range of 0 to 1.
+For this example, we will randomly partition the sample set into `training` (80% of the samples) and `testing` (20% of the samples) samples by filtering the samples by its random number column using the lower (`.lt`) and greater than or equal (`.gte`) filters:
+
+```{r eval=FALSE}
+var split = 0.8;
+var training = samples.filter(ee.Filter.lt('random', split));
+var testing = samples.filter(ee.Filter.gte('random', split));
+```
+
+For your information, you can inspect the size of a `ee.FeatureCollection` using the `.aggregate_count()` method. This method only takes a property of the feature collection being counted as its argument. In this case, we have a property called 'landcover' in our feature collection.
+`.aggregate_count()` It is a useful tool to extract the number of features on your sample set: 
+
+```{r eval=FALSE}
+print('Samples n =', samples.aggregate_count('landcover'));
+print('Training n =', training.aggregate_count('landcover'));
+print('Testing n =', testing.aggregate_count('landcover'));
+```
+
+```{block, type='rmdcomment'}
+If a feature collection do not have a property defined, you can still count its feature by using `'.all'` as an argument for `.aggregate_count()`
+```
+
+Using the split value above, roughtly 80% of the features in `samples` will be `training` and 20% will be in `testing`:
+
+```{r my-fig39,   fig.cap="Sample sets size for this example. Note that the number will vary based on the number of geometries (polygons and points) and the sample split value.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/Figure39.PNG")
+```
 
 ### Map-to-Map Change
+
+
 
 ## Post-classification processing
 
