@@ -58,12 +58,12 @@ div.FOO {
 .starcomment {
   padding: 1em 1em 1em 4em;
   margin-bottom: 0px;
-  background: #DEEDF0;
+  background: #d1f2cf;
   position:relative;
 }
 
 .starcomment:before {
-    content: "\e28b";
+    content: "\f005";
     font-family: FontAwesome;
     left:10px;
     position:absolute;
