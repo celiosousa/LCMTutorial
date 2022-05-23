@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa (celio.h.resendedesousa@nasa.gov)" />
 
 
-<meta name="date" content="2022-05-05" />
+<meta name="date" content="2022-05-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -128,7 +128,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="2.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#supervised-classification-using-random-forest"><i class="fa fa-check"></i><b>2.2</b> Supervised Classification using Random Forest</a><ul>
 <li class="chapter" data-level="2.2.1" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2022"><i class="fa fa-check"></i><b>2.2.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2022</a></li>
-<li class="chapter" data-level="2.2.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#map-to-map-change"><i class="fa fa-check"></i><b>2.2.2</b> Map-to-Map Change</a></li>
+<li class="chapter" data-level="2.2.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#example-2-2015---2022-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>2.2.2</b> Example 2: 2015 - 2022 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#post-classification-processing"><i class="fa fa-check"></i><b>2.3</b> Post-classification processing</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#re-classification"><i class="fa fa-check"></i><b>2.3.1</b> Re-classification</a></li>
@@ -136,13 +136,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html"><i class="fa fa-check"></i><b>3</b> PART 3 - Country-specific Applications</a><ul>
-<li class="chapter" data-level="3.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#liberia"><i class="fa fa-check"></i><b>3.1</b> Liberia</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#class-by-class-land-cover-mapping"><i class="fa fa-check"></i><b>3.1.1</b> Class-by-class land cover mapping</a></li>
-<li class="chapter" data-level="3.1.2" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#multi-class-land-cover-mapping"><i class="fa fa-check"></i><b>3.1.2</b> Multi-class land cover mapping</a></li>
-<li class="chapter" data-level="3.1.3" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#land-cover-to-ecosystems-a-map-merging-approach"><i class="fa fa-check"></i><b>3.1.3</b> Land cover to ecosystems: a map merging approach</a></li>
-</ul></li>
-<li class="chapter" data-level="3.2" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#guinea"><i class="fa fa-check"></i><b>3.2</b> Guinea</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#mangrove-mapping-in-guinea-west-africa"><i class="fa fa-check"></i><b>3.2.1</b> Mangrove mapping in Guinea, West Africa</a></li>
+<li class="chapter" data-level="3.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#guinea"><i class="fa fa-check"></i><b>3.1</b> Guinea</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#mangrove-mapping-in-guinea-west-africa"><i class="fa fa-check"></i><b>3.1.1</b> Mangrove mapping in Guinea, West Africa</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html"><i class="fa fa-check"></i><b>4</b> Part 4 - Ecosystem Accounting</a><ul>
@@ -290,7 +285,36 @@ Figure 2.3: A median composite created from the <code>collectionFilteredwithInde
 </div>
 <div id="supervised-classification-using-random-forest" class="section level2">
 <h2><span class="header-section-number">2.2</span> Supervised Classification using Random Forest</h2>
-<p>As seen in Part I, Interpretation and Analysis is one of the building blocks of any remote sensing system (see <a href="part-1-basics-fundamentals.html#fig:FigBuildingBlocks">1.1</a>). Image classification is one of the many methods of image processing and it is the sole focus of this training material. So far, you have learned the basics of Java Script and Google Earth Engine and some pre-processing steps to perform an image classification using the Random Forest (RF) Classifier. Briefly, classifier is an ensemble of classification trees, where each tree contributes with a single vote for the assignment of the most frequent class to the input data. Different from Decision Trees, which use the best predictive variables at the split, RF uses a random subset of the predictive variables. The RF is one of the most used and robust classifiers and it is fully implemented in GEE. In the following examples we will present the steps for land cover classification using the RF classifier and present some basic analysis that can be done using the classification output.</p>
+<p>As seen in Part 1, <em>Interpretation and Analysis</em> is one of the building blocks of any remote sensing system (see <a href="part-1-basics-fundamentals.html#fig:FigBuildingBlocks">1.1</a>). Image classification is one of the many methods of image processing and it is the sole focus of this training material. So far, you have learned the basics of Java Script and Google Earth Engine and some pre-processing steps to perform an image classification using the Random Forest (RF) Classifier. Briefly, classifier is an ensemble of classification trees, where each tree contributes with a single vote for the assignment of the most frequent class to the input data. Different from Decision Trees, which use the best predictive variables at the split, RF uses a random subset of the predictive variables. To illustrate this concept, we will use a rather simplistic example:</p>
+<p>Suppose you were given this list of attributes from three edible fruits:</p>
+<div class="figure"><span id="fig:fruit"></span>
+<img src="images/PartII-FruitList.png" alt="Simplistic list of predictive variables from three types of fruits." width="676" />
+<p class="caption">
+Figure 2.4: Simplistic list of predictive variables from three types of fruits.
+</p>
+</div>
+<p>A random forest classifier can be created (or trained) using the sample above as a training sample set:</p>
+<div class="figure"><span id="fig:RF"></span>
+<img src="images/PartII-RF.png" alt="A Machine Learning Random Forest Classifier with 3 trees trained with the sample set above. Note that algorithm was able to 'learn' about each fruit separate them based on their attributes." width="983" />
+<p class="caption">
+Figure 2.5: A Machine Learning Random Forest Classifier with 3 trees trained with the sample set above. Note that algorithm was able to 'learn' about each fruit separate them based on their attributes.
+</p>
+</div>
+<p>You can test this classifier and its accuracy using a testing sample set. A testing set is usually a subset of the training set that will be used only for testing the performance of the trained classifier. These testing samples will be run through each tree of the ensemble and the accuracy of the classifier will be based on whether or not it was able to classify that sample correctly:</p>
+<div class="figure"><span id="fig:RFTesting"></span>
+<img src="images/PartII-RFTesting.png" alt="Testing a trained Random Forest Classifier. A testing sample is used to assess whether or not the classifier is able to correctly classify them. In this example, this sample was correctly classified by 2 out of the 3 trees in the ensenble." width="994" />
+<p class="caption">
+Figure 2.6: Testing a trained Random Forest Classifier. A testing sample is used to assess whether or not the classifier is able to correctly classify them. In this example, this sample was correctly classified by 2 out of the 3 trees in the ensenble.
+</p>
+</div>
+<p>You can then classify unlabeled samples using the trained classfier. The final classification of a sample is based upon the majority of the votes of the trees in the ensemble:</p>
+<div class="figure"><span id="fig:RFClass"></span>
+<img src="images/PartII-RFClass.png" alt="The trained RF classifier is used to classify an unlabeled fruit sample. In this case, the majority of the votes (2 out of 3) was BANANA. Therefore, the final classification of this sample is BANANA." width="968" />
+<p class="caption">
+Figure 2.7: The trained RF classifier is used to classify an unlabeled fruit sample. In this case, the majority of the votes (2 out of 3) was BANANA. Therefore, the final classification of this sample is BANANA.
+</p>
+</div>
+<p>Even though this is a rather simplistic example, it can be easily translated into a land cover classification context: Instead of fruits, each unit being classified is a <strong>Landsat image pixel</strong>. Each pixel from each land cover class will contain different <strong>spectral attributes</strong>. These spectral attributes will be used at each branch of the trees in the ensemble. We can then used a trained Random Forest classifier to label hundreds of thousands Landsat pixels into different land cover classes. The RF is one of the most used and robust classifiers and it is fully implemented in GEE. In the following examples we will present the steps for land cover classification using the RF classifier and present some basic analysis that can be done using the classification output.</p>
 <div id="example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2022" class="section level3">
 <h3><span class="header-section-number">2.2.1</span> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2022</h3>
 <p>The general steps for an image classification process with Landsat image is:</p>
@@ -316,21 +340,21 @@ You have the option to classify the entire scene or clip it to an area of intere
 <div class="figure"><span id="fig:my-figGeom"></span>
 <img src="images/Geometries.PNG" alt="Geometry sets to hold samples for each of the four classes." width="1550" />
 <p class="caption">
-Figure 2.4: Geometry sets to hold samples for each of the four classes.
+Figure 2.8: Geometry sets to hold samples for each of the four classes.
 </p>
 </div>
 <p><strong>Step 2</strong> - For each geometry in the list, click on the settings icon⚙: name them accordingly using the 'Name' box, choose a color for it using the color picker and import each geometry as <em>FeatureCollection</em>. Add a property called <em>landcover</em> by clicking on the <em><strong>+ Property</strong></em> and set a consecutive integer starting from 0 or 1 for each of the classes. You should achieve something similar to this:</p>
 <div class="figure"><span id="fig:my-figGeom2"></span>
 <img src="images/Geometries2.PNG" alt="Geometries used to create the training sample sets." width="830" />
 <p class="caption">
-Figure 2.5: Geometries used to create the training sample sets.
+Figure 2.9: Geometries used to create the training sample sets.
 </p>
 </div>
 <p>Your Geometry Imports should look like this:</p>
 <div class="figure"><span id="fig:my-figGeom3"></span>
 <img src="images/Geo3.PNG" alt="Geometry Imports after creating geometry sets to hold training samples" width="994" />
 <p class="caption">
-Figure 2.6: Geometry Imports after creating geometry sets to hold training samples
+Figure 2.10: Geometry Imports after creating geometry sets to hold training samples
 </p>
 </div>
 <p>Start selecting samples by clicking on the ‘Water’ geometry in the Geometry Imports. Choose the point drawing tool and place some points along the River Nile:</p>
@@ -343,7 +367,7 @@ Take advantage of the high resolution imagery to help you select samples for eac
 <div class="figure"><span id="fig:my-figNile"></span>
 <img src="images/Nile.PNG" alt="Sample points and polygons for the Water class" width="1152" />
 <p class="caption">
-Figure 2.7: Sample points and polygons for the Water class
+Figure 2.11: Sample points and polygons for the Water class
 </p>
 </div>
 <div class="starcomment">
@@ -354,7 +378,7 @@ Once you finish selecting samples, click the <em><strong>Exit</strong></em> butt
 <div class="figure"><span id="fig:my-figAllSamples"></span>
 <img src="images/AllSamples.PNG" alt="Example of sample points and polygons for ‘Water’ (blue), ‘Cropland’ (yellow), ‘Urban’ (red) and ‘Sand’ (pink). Each pixel within the polygons will be used as training inputs for the RF classifier." width="1370" />
 <p class="caption">
-Figure 2.8: Example of sample points and polygons for ‘Water’ (blue), ‘Cropland’ (yellow), ‘Urban’ (red) and ‘Sand’ (pink). Each pixel within the polygons will be used as training inputs for the RF classifier.
+Figure 2.12: Example of sample points and polygons for ‘Water’ (blue), ‘Cropland’ (yellow), ‘Urban’ (red) and ‘Sand’ (pink). Each pixel within the polygons will be used as training inputs for the RF classifier.
 </p>
 </div>
 <p>After selecting the samples, we will merge all the geometries together into an object var classes using the <code>.merge</code> method of the <code>ee.FeatureCollection() object</code>:</p>
@@ -365,8 +389,8 @@ Figure 2.8: Example of sample points and polygons for ‘Water’ (blue), ‘Cro
 <ul>
 <li><strong>Sample sets</strong></li>
 </ul>
-<p>In this section, we will create the training (and testing) sample sets to be used in the classification with Random Forest. First, we will select the predictors to assign to each sample point in the sample sets. For this example, we will create a list <code>var bands</code> with the names of three spectral bands (<code>'SR_B4'</code>,<code>'SR_B5'</code>,<code>'SR_B6'</code>) and the spectral indices (<code>'NDVI'</code>,<code>'NBR'</code>,<code>'MNDWI'</code>,<code>'SR'</code>,<code>'GCVI'</code> and <code>'MSAVI'</code>).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var bands =<span class="st"> </span>[<span class="st">&#39;B4&#39;</span>,<span class="st">&#39;B5&#39;</span>,<span class="st">&#39;B6&#39;</span>,<span class="st">&#39;NDVI&#39;</span>,<span class="st">&#39;NBR&#39;</span>,<span class="st">&#39;MNDWI&#39;</span>,<span class="st">&#39;SR&#39;</span>,<span class="st">&#39;GCVI&#39;</span>,<span class="st">&#39;MSAVI&#39;</span>];</code></pre></div>
+<p>In this section, we will create the training (and testing) sample sets to be used in the classification with Random Forest. First, we will select the predictors to assign to each sample point in the sample sets. For this example, we will create a list 'bands' with the names of three spectral bands (<code>'SR_B4'</code>,<code>'SR_B5'</code>,<code>'SR_B6'</code>) and the spectral indices (<code>'NDVI'</code>,<code>'NBR'</code>,<code>'MNDWI'</code>,<code>'SR'</code>,<code>'GCVI'</code> and <code>'MSAVI'</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var bands =<span class="st"> </span>[<span class="st">&#39;SR_B4&#39;</span>,<span class="st">&#39;SR_B5&#39;</span>,<span class="st">&#39;SR_B6&#39;</span>,<span class="st">&#39;NDVI&#39;</span>,<span class="st">&#39;NBR&#39;</span>,<span class="st">&#39;MNDWI&#39;</span>,<span class="st">&#39;SR&#39;</span>,<span class="st">&#39;GCVI&#39;</span>,<span class="st">&#39;MSAVI&#39;</span>];</code></pre></div>
 <p>Next, we will sample the Landsat pixels by overlaying the geometries with the composite using <code>.sampleRegions()</code>. The main arguments of this method is the image to sample (in this case, <code>compositeMedian</code>), the regions to sample over (in this case, <code>classes</code>) and the list of properties to copy from each geometry (in this case <strong>landcover</strong>):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var samples =<span class="st"> </span><span class="kw">compositeMedian.select</span>(bands)<span class="kw">.sampleRegions</span>({
   collection<span class="op">:</span><span class="st"> </span>classes,       
@@ -383,28 +407,440 @@ var testing =<span class="st"> </span><span class="kw">samples.filter</span>(<sp
 <span class="kw">print</span>(<span class="st">&#39;Testing n =&#39;</span>, <span class="kw">testing.aggregate_count</span>(<span class="st">&#39;landcover&#39;</span>));</code></pre></div>
 <div class="rmdcomment">
 <p>
-If a feature collection do not have a property defined, you can still count its feature by using <code>'.all'</code> as an argument for <code>.aggregate_count()</code>
+If a feature collection do not have a property defined, you can still count its feature by using <code>'.all'</code> as an argument for <code>.aggregate_count()</code>.
 </p>
 </div>
 <p>Using the split value above, roughtly 80% of the features in <code>samples</code> will be <code>training</code> and 20% will be in <code>testing</code>:</p>
 <div class="figure"><span id="fig:my-fig39"></span>
 <img src="images/Figure39.PNG" alt="Sample sets size for this example. Note that the number will vary based on the number of geometries (polygons and points) and the sample split value." width="628" />
 <p class="caption">
-Figure 2.9: Sample sets size for this example. Note that the number will vary based on the number of geometries (polygons and points) and the sample split value.
+Figure 2.13: Sample sets size for this example. Note that the number will vary based on the number of geometries (polygons and points) and the sample split value.
+</p>
+</div>
+<ul>
+<li><strong>Classification</strong></li>
+</ul>
+<p>Next, we will train a Random Forest classifier using the training sample set <code>training</code>. The Random Forest classifier <code>ee.Classifier.smileRandomForest</code> has several user-defined parameters. However, two of them are the most usually defined: the number of trees in the ensemble (a.k.a ‘forest’) and the number of predictors to randomly tested at each tree. Predictors, in this case, are the spectral bands and spectral indices associated to each training sample. If unspecified, it uses the square root of the number of predictors.</p>
+<div class="caution">
+<p>
+<strong>Higher number of trees and number of predictors tested at each node do not mean better performance and overall accuracy</strong>.
+</p>
+</div>
+<p>For this example, we will use <code>200</code> trees and <code>8</code> randomly selected predictors to use in each tree and train Random Forest model called 'classifier' using the <code>.train()</code> method on the <code>.ee.Classifier.smileRandomForest()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var classifier =<span class="st"> </span><span class="kw">ee.Classifier.smileRandomForest</span>(<span class="dv">100</span>,<span class="dv">5</span>)<span class="kw">.train</span>({
+  features<span class="op">:</span><span class="st"> </span>training,
+  classProperty<span class="op">:</span><span class="st"> &#39;landcover&#39;</span>, 
+  inputProperties<span class="op">:</span><span class="st"> </span>bands
+});</code></pre></div>
+<p>In the <code>features</code> argument of the code above, make sure to select the predictors you want to use from the sample set (in this example, <code>training</code>) to train the model. In this case we are providing all of them. However, if you want to select a particular group of variables, you can use <code>.select(['variableName1','variableName2',..])</code>. Also, you must include the class property (<code>classProperty</code>) in which the class label is stored (in this example <code>'landcover'</code>).</p>
+<p>You can test the accuracy of classifier by classifying the <code>testing</code> samples using <code>.classify()</code> method. Then, you can compute a 2D error matrix for the classified testing samples using <code>.errorMatrix()</code>. This method will output an <code>ee.ConfusionMatrix()</code> object by comparing the two columns of the classified testing samples: one containing the actual labels (in our case, the property called 'landcover'), and one containing predicted values by the classifier (which defaults to 'classification'). Finally, you can use <code>.accuracy()</code> method of the <code>ee.ConfusionMatrix()</code> object to compute the overall accuracy of the classifier:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var validation =<span class="st"> </span><span class="kw">testing.classify</span>(classifier);
+var testAccuracy =<span class="st"> </span><span class="kw">validation.errorMatrix</span>(<span class="st">&#39;landcover&#39;</span>, <span class="st">&#39;classification&#39;</span>);
+
+<span class="kw">print</span>(<span class="st">&#39;Validation error matrix RF: &#39;</span>, testAccuracy);
+<span class="kw">print</span>(<span class="st">&#39;Validation overall accuracy RF in %: &#39;</span>, <span class="kw">testAccuracy.accuracy</span>()<span class="kw">.multiply</span>(<span class="dv">100</span>));</code></pre></div>
+<p>As explained earlier, the trained classifier can be used to classify the <code>compositeMedian</code>. Google Earth Engine will run each pixel through each of the 200 trees in the classifier and assing it the label which had the majority of votes among all the tree:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var classification =<span class="st"> </span><span class="kw">compositeMedian.select</span>(bands)<span class="kw">.classify</span>(classifier);</code></pre></div>
+<p>For visualization of the resulting classification output, we will create a color palette object <code>paletteMAP</code> with a list of colors for each class of the map. The order of the colors in the palette will follow the order of the classes:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var paletteMAP =<span class="st"> </span>[
+  <span class="st">&#39;#0040ff&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="kw">Water</span> (Class value <span class="dv">0</span>)
+  <span class="st">&#39;#00ab0c&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Croplands <span class="op">/</span><span class="st"> </span>Cultivated <span class="kw">Areas</span> (Class value <span class="dv">1</span>)
+  <span class="st">&#39;#fbf2ad&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Sand and bare <span class="kw">areas</span> (Class value <span class="dv">2</span>)
+  <span class="st">&#39;#878587&#39;</span>   <span class="op">/</span><span class="er">/</span><span class="st"> </span>Built<span class="op">-</span>up and Urban <span class="kw">Areas</span> (Class value <span class="dv">3</span>)
+];</code></pre></div>
+<p>Finally, we will add <code>classification</code> to the map using <code>Map.addLayer()</code>: use <code>min: 0</code> (first class), <code>max: 3</code> (last class), add the color palette <code>paletteMAP</code> and a name for the layer:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span> (classification, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Classification&#39;</span>);</code></pre></div>
+<p>After several seconds, you should see something similar to the figure below:</p>
+<div class="figure"><span id="fig:ClassificationResult"></span>
+<img src="images/PartII-ClassificationResult.png" alt="Random Forest classification output for 2022." width="857" />
+<p class="caption">
+Figure 2.14: Random Forest classification output for 2022.
+</p>
+</div>
+<p><a href="https://code.earthengine.google.com/0444f1f7cc9783f36f6f6cb9626713c5" target="_blank">Code Checkpoint</a></p>
+<p>As an optional step, you can export your classification output as a Google Earth Engine asset. You can save geospatial datasets and analysis outputs into your Google Earth Engine account through the <strong>Assets</strong> tab and the left side of the code Editor.</p>
+<div class="figure"><span id="fig:Assets"></span>
+<img src="images/PartII-Assets.png" alt="Assets manager. Your Google Earth Engine account will be able to host around 200GB worth of assets. Externally imported assets as well as datasets exported from Earth Engine scripts will be found here." width="354" />
+<p class="caption">
+Figure 2.15: Assets manager. Your Google Earth Engine account will be able to host around 200GB worth of assets. Externally imported assets as well as datasets exported from Earth Engine scripts will be found here.
+</p>
+</div>
+<div class="starcomment">
+<p>
+You can also upload external datasets into your Google Earth Engine Assets with the <strong>NEW</strong> button. (See Earth Engine's <a href="https://developers.google.com/earth-engine/guides/image_upload" target="_blank">Importing Raster Data</a> for instructions on uploading an image to your assets or <a href="https://developers.google.com/earth-engine/guides/table_upload" target="_blank">Importing Table/Shapefile Data</a> for more details).
+</p>
+</div>
+<p>We will export <code>classification</code> with the <code>Export.image.toAsset()</code> method. This method takes a dictionary with several parameters such as:</p>
+<ul>
+<li><p><code>image</code>: the image object you want to export;</p></li>
+<li><p><code>description</code>: a description to be showing on the <strong>Task</strong> tab. No spaces allowed;</p></li>
+<li><p><code>assetId</code>: A name for your asset. No spaces allowed;</p></li>
+<li><p><code>scale</code>: A scale to export;</p></li>
+<li><p><code>region</code>: the region or area of your <code>image</code> you want to export. It takes a geometry/ feature collection;</p></li>
+<li><p><code>maxPixels</code>: This is somewhat important argument. In order to avoid memory errors, the Earth Engine detault is 1x10e8 pixels. If you do not define your max pixels and your exports exceeds the default, you will get an error.</p></li>
+</ul>
+<p>We will create a geometry 'region' to encompass the entire classified scene in order to export the entire area. The code below will export the classification:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Export.image.toAsset</span>({
+  image<span class="op">:</span><span class="st"> </span>classification,
+  description<span class="op">:</span><span class="st"> &#39;ClassificationOutput&#39;</span>, 
+  assetId<span class="op">:</span><span class="st"> &#39;Cairo2022&#39;</span>,
+  scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>,
+  region<span class="op">:</span><span class="st"> </span>region,
+  maxPixels<span class="op">:</span><span class="fl">1e12</span>
+});</code></pre></div>
+<p>Running the code above, will create the exporting task named <em><strong>ClassificationOutput</strong></em> in the <strong>Tasks</strong> tab.</p>
+<div class="figure"><span id="fig:Tasks"></span>
+<img src="images/PartII-Tasks.png" alt="Tasks manager." width="540" />
+<p class="caption">
+Figure 2.16: Tasks manager.
+</p>
+</div>
+<p>Clicking the <strong>Run</strong> button will start exporting your classification. You can check some of the parameters of the <code>Export.image.toAsset()</code> one more time before exporting the asset. You are allowed to change some of these parameters at this point. For our example, everything will follow the parameters we defined previously.</p>
+<div class="figure"><span id="fig:ExportingAssets"></span>
+<img src="images/PartII-ExportingAsset.png" alt="Tasks manager: Image Export." width="634" />
+<p class="caption">
+Figure 2.17: Tasks manager: Image Export.
+</p>
+</div>
+<p>The time elapsed of your exporting task will be shown in the <strong>Tasks</strong> tab.</p>
+<div class="figure"><span id="fig:TimeElapsed"></span>
+<img src="images/PartII-TimeElapsed.png" alt="Once a task has started the time elapsed will be shown in the __Tasks__ tab." width="798" />
+<p class="caption">
+Figure 2.18: Once a task has started the time elapsed will be shown in the <strong>Tasks</strong> tab.
+</p>
+</div>
+<p>I may take several minutes to export your classification image to your assets. Once your task is completed, it will be shown at the <strong>Task</strong> tab as:</p>
+<div class="figure"><span id="fig:Exported"></span>
+<img src="images/PartII-Exported.png" alt="Exported asset." width="800" />
+<p class="caption">
+Figure 2.19: Exported asset.
+</p>
+</div>
+<p>Finally, your export will be available as an Earth Engine asset:</p>
+<div class="figure"><span id="fig:ExportedAsset"></span>
+<img src="images/PartII-FirstAsset.png" alt="Assets will be available through the __Assets__ tab. If they are not showing, try refreshing the folder with the refresh button." width="740" />
+<p class="caption">
+Figure 2.20: Assets will be available through the <strong>Assets</strong> tab. If they are not showing, try refreshing the folder with the refresh button.
 </p>
 </div>
 </div>
-<div id="map-to-map-change" class="section level3">
-<h3><span class="header-section-number">2.2.2</span> Map-to-Map Change</h3>
+<div id="example-2-2015---2022-map-to-map-change-of-greater-cairo-and-giza-area-egypt" class="section level3">
+<h3><span class="header-section-number">2.2.2</span> Example 2: 2015 - 2022 Map-to-Map change of greater Cairo and Giza area, Egypt</h3>
+<p>In this example, we will use the codes from <em><strong>Example 1</strong></em> to create a land cover classification for the year 2015 period. Following are the changes to be made on the codes from <em><strong>Example 1</strong></em>:</p>
+<ol style="list-style-type: lower-alpha">
+<li>The <code>year</code> object will have a value of <code>'2015'</code>;</li>
+<li>Repeat the training sample selection to make sure the samples reflect the correct land cover class for the L8 composite in the year 2015.</li>
+</ol>
+<div class="rmdcomment">
+<p>
+You can access the edited script for two steps above <a href="https://code.earthengine.google.com/f2291692f2d12a7d6d80813e0436bad9" target="_blank">here.</a>
+</p>
+</div>
+<p>After following the 2 steps above, you should achieve a similar output as before:</p>
+<div class="figure"><span id="fig:Cairo2015"></span>
+<img src="images/PartII-Cairo2015.png" alt="Random Forest classification output for 2015." width="858" />
+<p class="caption">
+Figure 2.21: Random Forest classification output for 2015.
+</p>
+</div>
+<p>Export this new classification to you assets. Next, <a href="https://code.earthengine.google.com/" target="_blank">open a new code editor page</a> and add the classification exports to this script by clicking the <em><strong>Import into script</strong></em> button (blue arrow) for both classification assets in the <strong>Assets</strong> tab:</p>
+<div class="figure"><span id="fig:imports"></span>
+<img src="images/PartII-Imports.png" alt="Assets tab with classification maps. Clicking in the __Import into script__ button will add the assets to the script." width="764" />
+<p class="caption">
+Figure 2.22: Assets tab with classification maps. Clicking in the <strong>Import into script</strong> button will add the assets to the script.
+</p>
+</div>
+<p>Finally, rename each import by clicking on their names at the <em><strong>Imports</strong></em> header:</p>
+<div class="figure"><span id="fig:importsheader"></span>
+<img src="images/PartII-ImportsHeader.png" alt="Imports header. You can rename imported assets by clicking on its name." width="756" />
+<p class="caption">
+Figure 2.23: Imports header. You can rename imported assets by clicking on its name.
+</p>
+</div>
+<p>Alternatively, you can import assets to your scripts by using <code>ee.Image()</code> and their respective asset directory. For this example, you can use:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var Cairo2015 =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&quot;users/capacityBuilding/Cairo2015&quot;</span>);
+var Cairo2022 =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&quot;users/capacityBuilding/Cairo2022&quot;</span>);</code></pre></div>
+<p>Add <code>Cairo2015</code> and <code>Cairo2022</code> to the map using the code below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var paletteMAP =<span class="st"> </span>[
+  <span class="st">&#39;#0040ff&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Water <span class="op">-</span><span class="st"> </span>pixel value =<span class="st"> </span><span class="dv">0</span>
+  <span class="st">&#39;#00ab0c&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Croplands <span class="op">/</span><span class="st"> </span>Cultivated Areas <span class="op">-</span><span class="st"> </span>pixel value =<span class="st"> </span><span class="dv">1</span>
+  <span class="st">&#39;#fbf2ad&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Sand and bare areas <span class="op">-</span><span class="st"> </span>pixel value =<span class="st"> </span><span class="dv">2</span>
+  <span class="st">&#39;#878587&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Built<span class="op">-</span>up and Urban Areas <span class="op">-</span><span class="st"> </span>pixel value =<span class="st"> </span><span class="dv">3</span>
+];
+
+<span class="kw">Map.addLayer</span>(Cairo2015, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo2015&#39;</span>);
+<span class="kw">Map.addLayer</span>(Cairo2022, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo2022&#39;</span>);</code></pre></div>
+<p>You can examine both layers on the map and try to identify areas where classes have changed in the 7 years period. However, we can use a transition error matrix to quickly quantify these changes. This matrix can be used to assess how much each class has changed and to what they have changed based on sampling design of your choosing. To do that, we will start by stacking both maps <code>Cairo2015</code> and <code>Cairo20222</code> into a single object <code>stackedClassifications</code> and rename Cairo2015 and Cairo2022 as <code>'before'</code> and <code>'later'</code>, respectively:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var stackedClassifications =<span class="st"> </span><span class="kw">Cairo2018.rename</span>(<span class="st">&#39;later&#39;</span>)<span class="kw">.addBands</span>(<span class="kw">Cairo2000.rename</span>(<span class="st">&#39;before&#39;</span>));</code></pre></div>
+<p>Next, we will create a testing sample set with 1000 points for each class using a stratified random sampling design. In this sampling design each class has the same weight. Therefore, the same number of points will be placed in each class, regardless of its relative extent. This is important to consider as some classes may have very small area extent to be captured by a random sampling design. In this example, water bodies is relatively small compared to the other three land cover classes. Thus, a stratified sampling design will ensure that this class will have the same number of points. We can used <code>.stratifiedSample()</code> method. This method takes a dictionary with several parameters such as:</p>
+<ul>
+<li><p><code>numPoints</code>: Number of points you want to select by each class;</p></li>
+<li><p><code>classBand</code>: The classification you want the sample points to inherit the class labels from;</p></li>
+<li><p><code>scale</code>: Always remember to set the scale to match Landsat nomimal spatial resolution (30 m)</p></li>
+</ul>
+<div class="rmdcomment">
+<p>
+Always remember to check the <strong>Docs</strong> tab for more information on the parameters each method takes!
+</p>
+</div>
+<p>Using the information above, a stratified sample set can be created as following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var samples =<span class="st"> </span><span class="kw">stackedClassifications.stratifiedSample</span>({
+numPoints<span class="op">:</span><span class="st"> </span><span class="dv">1000</span>,        
+classBand<span class="op">:</span><span class="st"> &quot;before&quot;</span>,   
+scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>,             
+geometries<span class="op">:</span><span class="st"> </span>true
+});</code></pre></div>
+<p>Once the points are placed, they will inherit the class label (pixel value) from <code>Cairo2015</code> (<code>'before'</code>):</p>
+<p>We can add the samples to the map using <code>Map.addLayer()</code>. To colorize geometries, you use the <code>color</code> paramenter instead of <code>palette</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(samples, {color<span class="op">:</span><span class="st">&#39;black&#39;</span>}, <span class="st">&#39;Stratified samples&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:StratSamples"></span>
+<img src="images/PartII-StratSamples.png" alt="Stratified samples. 1000 samples were randomly selected within each strata (class)." width="855" />
+<p class="caption">
+Figure 2.24: Stratified samples. 1000 samples were randomly selected within each strata (class).
+</p>
+</div>
+<p>Next, we will create a transition matrix using the samples above. This matrix will show how many of these 1000 remained the same land cover class 7 years later (<code>Cairo2022</code>) and how many of them changed to a given class. You can use <code>.accuracy()</code> to calculate the % of these samples remained unchanged between the two periods:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var transitionMatrix =<span class="st"> </span><span class="kw">samples.errorMatrix</span>({
+  actual<span class="op">:</span><span class="st"> &#39;before&#39;</span>,
+  predicted<span class="op">:</span><span class="st"> &#39;later&#39;</span>
+});
+
+<span class="kw">print</span>(<span class="st">&#39;Transition Matrix&#39;</span>, transitionMatrix);
+<span class="kw">print</span>(<span class="st">&#39;% of Unchanged Samples: &#39;</span>, <span class="kw">transitionMatrix.accuracy</span>()<span class="kw">.multiply</span>(<span class="dv">100</span>));</code></pre></div>
+<p>The matrix will be printed to the <em><strong>Console</strong></em> tab. The code above should produce something similar to figure below:</p>
+<div class="figure"><span id="fig:matrix"></span>
+<img src="images/PartII-Matrix.png" alt="Transition matrix based on the 4000 (1000 for each class) samples." width="800" />
+<p class="caption">
+Figure 2.25: Transition matrix based on the 4000 (1000 for each class) samples.
+</p>
+</div>
+<p>In the transition matrix above you can draw information about how many samples transitioned to each class from 2015 to 2022. For example, from the 1000 samples of agriculture class (pixel value 1), 4 was classified (or ‘transitioned’) to water, 8 to sand and 53 to urban areas in 2022. 935 of them remained unchanged. Overall, 87% of these samples from all classes remained unchanged.</p>
+<ul>
+<li><strong>Cropland area expansion and conversion in the Nile Delta from 2015-2022</strong></li>
+</ul>
+<p>Another quick analysis that can be done with land cover class maps in two points in time is highlighting areas in which a particular class has changed. In this example, we will assess the cultivated/cropland change between the 2015 and 2022. First, we will isolate the agricultural land class (pixel value <code>1</code>) from both years into separate objects <code>class2015</code> and <code>class2022</code> using the <code>.select()</code> and <code>.eq()</code> methods. Secondly, we will calculate the change by simply subtracting both objects:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var class2015 =<span class="st"> </span><span class="kw">Cairo2015.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>);
+var class2022 =<span class="st"> </span><span class="kw">Cairo2022.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>);
+var change =<span class="st"> </span><span class="kw">class2022.subtract</span>(class2015);</code></pre></div>
+<p>By default, the new objects <code>class2015</code> and <code>class2022</code> will have values of 1 where the <code>'classification'</code> has the label equals (<code>.eq</code>) to 1 (agriculture) in the land cover map. <strong>This will be the case regardless of the label value</strong>. By using the <code>.select()</code> and <code>.eq()</code>, the new image object will default to value of 1 where that condition was met. Thus, the object <code>change</code> will have values of <code>-1</code>, <code>0</code> and <code>1</code>, that represents loss/conversion, no change and gains, respectively:</p>
+<ul>
+<li><p><code>-1</code> = No crops in 2022 - crops in 2015 (0 - 1 = -1);</p></li>
+<li><p><code>0</code> = crops in 2022 - crops in 2015 (1 - 1 = 0);</p></li>
+<li><p><code>1</code> = crops in 2022 - no crops in 2015 (1 - 0 = 1)</p></li>
+</ul>
+<p>We will add <code>change</code> to the map.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var paletteCHANGE =<span class="st"> </span>[
+  <span class="st">&#39;red&#39;</span>,    <span class="op">/</span><span class="er">/</span><span class="st"> </span>Loss<span class="op">/</span>conversion
+  <span class="st">&#39;white&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>No Change
+  <span class="st">&#39;green&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Gain<span class="op">/</span>Expansion
+];
+
+<span class="kw">Map.addLayer</span>(change, {palette<span class="op">:</span><span class="st"> </span>paletteCHANGE}, <span class="st">&#39;Change 2015-2022&#39;</span>);</code></pre></div>
+<p>The resulting change map will look similar to figure below. Green pixels represent 'gains' while red pixels represent 'conversions':</p>
+<div class="figure"><span id="fig:change"></span>
+<img src="images/PartII-Change.png" alt="Subset of the 2015-2022 Change Map. Conversion/loss of classifiedagricultural areas." width="1460" />
+<p class="caption">
+Figure 2.26: Subset of the 2015-2022 Change Map. Conversion/loss of classifiedagricultural areas.
+</p>
+</div>
+<p>This code can easily be used to investigate the other classes as well. Simply change the class value within <code>.select(['classification']).eq(classValueHere)</code>.</p>
+<p>In the example below, we changed the value from <code>1</code> to <code>3</code> to highlight the expansion of urban/built up areas.</p>
+<div class="figure"><span id="fig:change2"></span>
+<img src="images/PartII-Change2.png" alt="Subset of the 2015-2022 Change Map. Expansion of the future capital of Egypt, New Cairo City." width="1452" />
+<p class="caption">
+Figure 2.27: Subset of the 2015-2022 Change Map. Expansion of the future capital of Egypt, New Cairo City.
+</p>
+</div>
+<p>You can calculate the area of expansion/conversion by isolating the pixels of gain/loss from the <code>change</code> object into <code>gain</code> and <code>loss</code>. Then, calculate the area of each pixel using <code>ee.Image.pixelArea()</code> and multiplying by the count of pixels in <code>gain</code> and <code>loss</code> using <code>multiply</code>. The default unit is square meters (m²). You can use <code>.divide()</code> to transform into square kilometers (<code>.divide(1000000)</code>) or hectares (<code>.divide(10000)</code>):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var gainArea =<span class="st"> </span><span class="kw">gain.multiply</span>(<span class="kw">ee.Image.pixelArea</span>()<span class="kw">.divide</span>(<span class="dv">1000000</span>));
+var lossArea =<span class="st"> </span><span class="kw">loss.multiply</span>(<span class="kw">ee.Image.pixelArea</span>()<span class="kw">.divide</span>(<span class="dv">1000000</span>));</code></pre></div>
+<p>These objects will hold the area calculation for a single pixel. Then, we can use <code>.reduceRegion()</code> method, from the <code>ee.Image()</code> container. This will apply a reducer to all the pixels in a specific region. This method will take the <code>reducer</code> parameter, which will contain the type of mathematical operation you wish to compute for all these pixels. In this case, we will use <code>ee.Reducer.sum()</code>, to sum up all the single area values for all the pixels within <code>gainArea</code> and <code>lossArea</code>:</p>
+<div class="starcomment">
+<p>
+Make sure to create a geometry around an area of interest in order to calculate the area (extent) for the pixels of a given class within that geometry! In this example, we used a geometry around New Cairo City called 'AOI'.
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var statsgain =<span class="st"> </span><span class="kw">gainArea.reduceRegion</span>({
+  reducer<span class="op">:</span><span class="st"> </span><span class="kw">ee.Reducer.sum</span>(), <span class="op">/</span><span class="er">/</span><span class="st"> </span>Sum of all the area values.
+  scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>,                 <span class="op">/</span><span class="er">/</span><span class="st"> </span>Landsat scale.
+  geometry<span class="op">:</span><span class="st"> </span>AOI,
+  maxPixels<span class="op">:</span><span class="st"> </span><span class="fl">1e14</span>
+});
+
+var statsloss =<span class="st"> </span><span class="kw">lossArea.reduceRegion</span>({
+  reducer<span class="op">:</span><span class="st"> </span><span class="kw">ee.Reducer.sum</span>(),
+  scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>,
+  geometry<span class="op">:</span><span class="st"> </span>AOI,
+  maxPixels<span class="op">:</span><span class="st"> </span><span class="fl">1e14</span>
+});</code></pre></div>
+<p>Finally, you can print these values using the code below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(<span class="kw">statsgain.get</span>(<span class="st">&#39;classification&#39;</span>), <span class="st">&#39;km² of new built up areas in New Cairo City&#39;</span>); </code></pre></div>
+<div class="figure"><span id="fig:AreaCairo"></span>
+<img src="images/PartII-AreaCairo.png" alt="Subset of the 2015-2022 Change Map. Expansion of the future capital of Egypt, New Cairo City. The `.reduceRegion()` method was used to calculate the extent of gains for the urban/built up class. Finally `print()` was used to print the result to the __Console__ tab. " width="1015" />
+<p class="caption">
+Figure 2.28: Subset of the 2015-2022 Change Map. Expansion of the future capital of Egypt, New Cairo City. The <code>.reduceRegion()</code> method was used to calculate the extent of gains for the urban/built up class. Finally <code>print()</code> was used to print the result to the <strong>Console</strong> tab.
+</p>
+</div>
 </div>
 </div>
 <div id="post-classification-processing" class="section level2">
 <h2><span class="header-section-number">2.3</span> Post-classification processing</h2>
+<p>So far you have learned the basics of creating a classification output using a machine learning algorithm such as Random Forest. The objective of this section is to provide useful post-classification steps for corrections and general improvement of a random forest classification output.</p>
 <div id="re-classification" class="section level3">
 <h3><span class="header-section-number">2.3.1</span> Re-classification</h3>
+<p>Classification outputs often times will need some degree of correction or adjustment. Some of these corrections and adjustments include, for example, the Correction for missclassification erros in specific areas and changing class labels (pixel values) or class order. In this section we will explore the function <code>remap()</code>. This function maps from input values to output values, represented by two parallel lists: one includes the original number of classes and their value; the other represents which class (or classes) is being remapped and what it is being remapped to. To ilustrate this concept, consider the following example:</p>
+<ul>
+<li>The previously produced land cover maps include four classes: Water (pixel value = 0), Cropland / Cultivated Areas (pixel value = 1), Sand and bare areas (pixel value = 2) and Built-up and Urban Areas (pixel value = 3) (List 1). If any of these class values needs to be changed, the new value for that class is placed in the <em>List 2</em>, in the position of the class that needs changing (Figure 1).</li>
+</ul>
+<div class="figure"><span id="fig:my-remap"></span>
+<img src="images/remap.PNG" alt="The `remap` function for the land cover classification of the Greater Cairo. " width="881" />
+<p class="caption">
+Figure 2.29: The <code>remap</code> function for the land cover classification of the Greater Cairo.
+</p>
+</div>
+<p>To test this function, start by <a href="https://code.earthengine.google.com/" target="_blank">opening a new code editor page</a> and importing one of the classification assets you used <a href="part-2-advanced-google-earth-engine.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2022">in the previous section</a>. In this example, we will importe the latest land cover map from the year 2022 as a variable called 'Cairo2022' and we will add it to the map editor using the same color scheme from <code>paletteMAP</code> used in the previous section:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var Cairo2022 =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&quot;users/capacityBuilding/Cairo2022&quot;</span>);
+var paletteMAP =<span class="st"> </span>[
+  <span class="st">&#39;#0040ff&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Water
+  <span class="st">&#39;#00ab0c&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Croplands <span class="op">/</span><span class="st"> </span>Cultivated Areas
+  <span class="st">&#39;#fbf2ad&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Sand and bare areas
+  <span class="st">&#39;#878587&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span>Built<span class="op">-</span>up and Urban Areas
+];
+
+<span class="kw">Map.centerObject</span>(Cairo2022);
+<span class="kw">Map.addLayer</span>(Cairo2022, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo2022&#39;</span>);</code></pre></div>
+<div class="starcomment">
+<p>
+Using <code>Map.centerObject()</code> will center the map view on a given object you click the <strong>Run</strong> button. It is always a good practice to set the center on your main object so you can always come back to it! In this example you can center the map view to your classification object <code>Cairo2022</code>.
+</p>
+</div>
+<p>Now, to illustrate the <code>.remap()</code> method, let's consider the following scenarios:</p>
+<p>*<strong>Scenario 1</strong></p>
+<p>A new version of the <code>Cairo2022</code> map where <em><strong>Sand and bare areas (pixel value = 2)</strong></em> and <em><strong>Built-up and Urban Areas (pixel value = 3)</strong></em> switch orders in the final map. In this case, we can use the <code>.remap()</code> method to change the pixel value of <em>Built-up and Urban Areas</em> to <strong>2</strong> and <em>Sand and bare areas</em> to <strong>3</strong> in their respective position on list 2:</p>
+<div class="figure"><span id="fig:my-remap2"></span>
+<img src="images/remap2.PNG" alt="Sand (2) and Cities (3) changing orders in the image output using `.remap` " width="877" />
+<p class="caption">
+Figure 2.30: Sand (2) and Cities (3) changing orders in the image output using <code>.remap</code>
+</p>
+</div>
+<p>As a guide, the figure above can be used to create a new variable <code>CairoV1</code> with the new order for the classes using <code>.remap()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var CairoV1 =<span class="st"> </span><span class="kw">Cairo2022.remap</span>([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>]);</code></pre></div>
+<p>Add the <code>CairoV1</code> to the the map using the original color scheme <code>paletteMAP</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(CairoV1, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo V1&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:my-CairoV1"></span>
+<img src="images/CairoV1.png" alt="`Cairo2022` and `CairoV1` maps using the original `paletteMap`. Note that Sand and bare areas and Built-up and Urban areas switched colors as we switched their order.  " width="1202" />
+<p class="caption">
+Figure 2.31: <code>Cairo2022</code> and <code>CairoV1</code> maps using the original <code>paletteMap</code>. Note that Sand and bare areas and Built-up and Urban areas switched colors as we switched their order.
+</p>
+</div>
+<p>*<strong>Scenario 2</strong></p>
+<p>A new version of the <code>Cairo2022</code> map where <em><strong>Sand and bare areas (pixel value = 2)</strong></em> and <em><strong>Built-up and Urban Areas (pixel value = 3)</strong></em> are merged into a new class called <em><strong>Barren land and Articicial Surfaces (pixel value = 2)</strong></em>. Note that this new class can assume any value when merging, as long as both classes have the same value:</p>
+<div class="figure"><span id="fig:my-remap3"></span>
+<img src="images/remap3.PNG" alt="Sand and bare areas merging with Built-up and Urban area into a new class value (2). New classes can assume any value when merging, as long as these values are the same for both classes." width="874" />
+<p class="caption">
+Figure 2.32: Sand and bare areas merging with Built-up and Urban area into a new class value (2). New classes can assume any value when merging, as long as these values are the same for both classes.
+</p>
+</div>
+<p>For this example, we will keep the value <em><strong>2</strong></em> for this new class in a new variable <code>CairoV2</code> for the new map:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var CairoV2 =<span class="st"> </span><span class="kw">Cairo2022.remap</span>([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],[<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>]);</code></pre></div>
+<p>We will add the <code>CairoV2</code> to the the map using the original color scheme <code>paletteMAP</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(CairoV2, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo V2&#39;</span>);</code></pre></div>
+<div class="rmdcomment">
+<p>
+Note that the <code>min</code> and <code>max</code> range of values changed from 0-3 (4 classes) to 0-2 (three classes) in <code>CairoV2</code>. You can still maintain the original <code>min</code> and <code>max</code> range of values in this particular case because <code>Map.addLayer()</code> would only map the color scheme to the first three values of<code>Cairov2</code> (0, 1 and 2). However, it is always good practice to set the <code>min</code> and <code>max</code> range of values to match the actual number of classes along with editing the color palette to have the same number of colors as the number of classes in your map.
+</p>
+</div>
+<div class="figure"><span id="fig:my-CairoV2"></span>
+<img src="images/CairoV2.png" alt="`Cairo2022` and `CairoV2` maps using the original `paletteMap`. Note that *Sand and bare areas* and *Built-up and Urban areas* have the same color as they were merged under the same pixel value (2)." width="1202" />
+<p class="caption">
+Figure 2.33: <code>Cairo2022</code> and <code>CairoV2</code> maps using the original <code>paletteMap</code>. Note that <em>Sand and bare areas</em> and <em>Built-up and Urban areas</em> have the same color as they were merged under the same pixel value (2).
+</p>
+</div>
+<p>*<strong>Scenario 2</strong></p>
+<p>A new version of the <code>Cairo2022</code> map where only a portion of it is remapped to a given class. This scenario is one of the most commonly used post-classification procedure where the goal is to remap specific areas to fix for classification errors. To ilustrate, we will consider the following example:</p>
+<p><em>Upon close inspection, the <code>Cairo2022</code> map showed some cropland/cultivated areas within zones of dense urbanization of New Cairo City. A team on the ground went to the area and confirmed that is indeed dense urbanization and no agricultural land was found in that area. Therefore, that portion of the map needs to be rectified in order to reflect the actual land cover. In this case, the <code>.where()</code> method of an <code>ee.Image()</code> object is used. This function performs conditional replacement of values, following the formula <code>input.where(test,value)</code>. For each pixel in each band of <code>input</code>, if the corresponding pixel in <code>test</code> is nonzero, Google Earth Engine will output the corresponding pixel in <code>value</code>, otherwise it will output the <code>input</code> pixel. Translating this function to this example, <code>input</code> is the land cover map in which we aim to perform the reclassification - in this case <code>Cairo2020</code>; <code>test</code> is the area or region of the map <code>value</code> will take place, and; <code>value</code> is the correct classification that will be included in the final map:</em></p>
+<div class="figure"><span id="fig:my-where"></span>
+<img src="images/WhereFunction.PNG" alt=" The `.where` function applied to this example." width="899" />
+<p class="caption">
+Figure 2.34:  The <code>.where</code> function applied to this example.
+</p>
+</div>
+<p>In your own version of <code>Cairo2022</code> map, create an new geometry over an area of your interest and name it <code>aoi</code>:</p>
+<div class="figure"><span id="fig:my-regionwhere"></span>
+<img src="images/RegionWhere.png" alt="A geometry over an area of `Cairo2020` highlighting cultivated areas next to urbanization." width="864" />
+<p class="caption">
+Figure 2.35: A geometry over an area of <code>Cairo2020</code> highlighting cultivated areas next to urbanization.
+</p>
+</div>
+<p>The method <code>.where()</code> only uses <code>ee.Image()</code> objects as <code>test</code>. Therefore, using the geometry/feature <code>aoi</code> is not allowed. An easy and effective way to go around this rule is to create an image with <code>ee.Image()</code> and clip it for the region of interest:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var region =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>)<span class="kw">.clip</span>(aoi);</code></pre></div>
+<p>The function above will create an image with value of 1 and will clip it for the area of interest <code>aoi</code>. Next, using the same approach from <em>Scenario 1</em> and <em>2</em>, we will create a new version of <code>Cairo2022</code> called ''subistitute', where the <em><strong>Cropland/Cultivated Areas</strong></em> class is remapped to <em><strong>Built-up and Urban Areas</strong></em>: the position 2 on list 2 (belonging to agricultural/cultivated areas) receives the value <em><strong>3</strong></em> from <em><strong>Built-up and Urban Areas</strong></em> on list 1:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var substitute =<span class="st"> </span><span class="kw">Cairo2020.remap</span>([<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>],[<span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">3</span>]);</code></pre></div>
+<p>Now, using <code>.where()</code> we will create a new map <code>CairoV3</code> following the formula (<a href="part-2-advanced-google-earth-engine.html#fig:my-where">2.34</a>) and add it to the map editor:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var CairoV3 =<span class="st"> </span><span class="kw">Cairo2022.where</span>(region,substitute);
+<span class="kw">Map.addLayer</span>(CairoV3, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo V3&#39;</span>);</code></pre></div>
+<p>Compare the two classification objects: you will notice that every pixel of <em><strong>Cropland/Cultivated Areas</strong></em> (green, pixel value = 2) within the <code>aoi</code> in <code>Cairo2022</code> is now remapped to <em><strong>Built-up and Urban Areas</strong></em> (grey, pixel value = 3) in <code>CairoV3</code>:</p>
+<div class="figure"><span id="fig:my-cairov3"></span>
+<img src="images/CairoV3.png" alt="`CairoV3` showing the pixels of Cropland/Cultivated Areas remapped as Built-up and Urban Areas within `aoi`." width="850" />
+<p class="caption">
+Figure 2.36: <code>CairoV3</code> showing the pixels of Cropland/Cultivated Areas remapped as Built-up and Urban Areas within <code>aoi</code>.
+</p>
+</div>
 </div>
 <div id="map-spatial-smoothing" class="section level3">
 <h3><span class="header-section-number">2.3.2</span> Map spatial smoothing</h3>
+<p>Spatial smoothing is another post-classification procedure to enhance the quality of a land cover classification output. A common issue that arises from the pixel-based classification of fine/medium spatial resolution imagery is the “salt-and-pepper” effect. This happens when individual pixels are classified differently from their neighbors, creating speckles of isolated pixels of different classes. There are several ways to minimize this issue, such as:</p>
+<ul>
+<li><p>image pre-processing, such as low-pass filter and texture analysis;</p></li>
+<li><p>contextual classification, and;</p></li>
+<li><p>post-classification processing, such as median and mode filtering.</p></li>
+</ul>
+<p>In this section, we will focus on a post-classification technique to reduce the salt and pepper effect and edge roughness of land cover maps using focal median filtering (<code>ee.Image.focal_median()</code>).</p>
+<p>We will apply the <code>.focal_median()</code> method to <code>Cairo2022</code>. This method is a simple sliding-window spatial filter that replaces the center value (or class) in the window with the median of all the pixel values in the window. The window, or kernel, is usually square but can be any shape. The <code>.focal_median()</code> method usually is expressed as:</p>
+<div class="figure"><span id="fig:my-focal"></span>
+<img src="images/focal.PNG" alt="`.focal_median` spatial filter." width="1015" />
+<p class="caption">
+Figure 2.37: <code>.focal_median</code> spatial filter.
+</p>
+</div>
+<p>In the function above, the <code>radius</code> parameter specifies the number of pixels from the center that the kernel will cover. This radius value can be expressed as number of pixels or meters. The <code>kernelType</code> specifies the type of kernel to use.</p>
+<div class="rmdcomment">
+<p>
+Either <code>.focal_median(1, 'square', 'pixels')</code> or <code>.focal_median(30, 'square', 'meters')</code> will produce a 3x3 pixel sliding-window, as you are specifing 1 pixel (or 30 meters which is equal to one Landsat pixel) in each direction from the center pixel. Similarly, a <code>radius</code> of 2 pixels or 60 meters will produce a 5x5 sliding-window: a center pixel plus 2 pixels in each direction.
+</p>
+</div>
+<p>Following Figure <a href="part-2-advanced-google-earth-engine.html#fig:my-focal">2.37</a> and the example above, we will apply the <code>.focal_median()</code> filtering with two <code>radius</code> sizes (30 and 60 meters) to <code>Cairo2022</code>, add <code>Cairo30</code> and <code>Cairo60</code> to the map editor and compare the results:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var Cairo30 =<span class="st"> </span><span class="kw">Cairo2022.focal_median</span>(<span class="dv">30</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;meters&#39;</span>);
+var Cairo60 =<span class="st"> </span><span class="kw">Cairo2022.focal_median</span>(<span class="dv">60</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;meters&#39;</span>);
+<span class="kw">Map.addLayer</span>(Cairo30, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo 3x3&#39;</span>);
+<span class="kw">Map.addLayer</span>(Cairo60, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">3</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Cairo 5x5&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:my-smooth1"></span>
+<img src="images/cairosmooth1b.png" alt="`Cairo2022` processed with `.focal_median` spatial filter two radius sizes." width="1208" />
+<p class="caption">
+Figure 2.38: <code>Cairo2022</code> processed with <code>.focal_median</code> spatial filter two radius sizes.
+</p>
+</div>
+<div class="caution">
+<p>
+<strong>IMPORTANT:</strong> The <code>.focal_median(1, 'square', 'pixels')</code>* and <code>.focal_median(30, 'square', 'meters')</code> will only achieve the intended final result if you reproject it back to the original scale and projection from the original map. Note that this technique while effective in removing the &quot;salt-and-pepper&quot; effect from the original map, it creates edges that are not in the same resolution and projection as the original map. Therefore, creating fairly rounded boundaries for the classes. This is not ideal as it is usually intended for these maps to keep the same resolution as the original map, as well as to preserve the boundaries between classes. To account for this issue, you can reproject this output back the original scale so it is formed by 30 x 30 meter pixels. To do that, simply use <code>.reproject(projection.atScale(scale))</code> within the <code>.focal_median</code> filter. The <code>.reproject</code> function will take two arguments: projection and scale. You can extract this information from the original map with <code>.projection()</code> and <code>.nominalScale()</code>:
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var projection =<span class="st"> </span><span class="kw">Cairo2022.projection</span>();
+var scale =<span class="st"> </span><span class="kw">projection.nominalScale</span>();</code></pre></div>
+<p>Then, we re-aply the <code>.focal_median()</code> filter with <code>.reproject(projection.atScale(scale))</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var newCairo30 =<span class="st"> </span><span class="kw">Cairo2022.focal_median</span>(<span class="dv">1</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;pixels&#39;</span>)
+                       <span class="kw">.reproject</span>(<span class="kw">projection.atScale</span>(scale));
+                       
+var newCairo60 =<span class="st"> </span><span class="kw">Cairo2022.focal_median</span>(<span class="dv">60</span>,<span class="st">&#39;square&#39;</span>, <span class="st">&#39;meters&#39;</span>)
+                       <span class="kw">.reproject</span>(<span class="kw">prj.atScale</span>(scale));</code></pre></div>
+<div class="figure"><span id="fig:my-smooth2"></span>
+<img src="images/cairosmooth2.png" alt="`Cairo2022` processed with `.focal_median` spatial filter with 3x3 and 5x5 pixel windows. Note that the function was reprojected to match `Cairo2022`'s projection and scale. Now the discrete boundaries of classes are pixelated back to 30 meters." width="1234" />
+<p class="caption">
+Figure 2.39: <code>Cairo2022</code> processed with <code>.focal_median</code> spatial filter with 3x3 and 5x5 pixel windows. Note that the function was reprojected to match <code>Cairo2022</code>'s projection and scale. Now the discrete boundaries of classes are pixelated back to 30 meters.
+</p>
+</div>
+<p>Note that even though the boundaries of the classes are smoother, they are formed by the 30 x 30 meter pixels. Usually, a <code>radius</code> of 1 (3x3 square window) removes most of the salt-and-pepper effect, smoothens the boundaries in between classes while preserving the overall shape of the classes.</p>
+<p>Access the full scrip for this section <a href="https://code.earthengine.google.com/c1151eecd2e21f2ae43aa37cf1fd80d2" target="_blank">here.</a></p>
 
 </div>
 </div>

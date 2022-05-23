@@ -1,13 +1,404 @@
 # PART 3 - Country-specific Applications
 
-## Liberia
-
-### Class-by-class land cover mapping
-
-### Multi-class land cover mapping
-
-### Land cover to ecosystems: a map merging approach
+In this part we will explore examples of class-specific classification using previously used functions as well as useful land cover classification-based analysis.
 
 ## Guinea
 
 ### Mangrove mapping in Guinea, West Africa
+
+In this example, we will use the codes from the previous parts for mangrove mapping in Guinea, in West Africa. We will also introduce the use of other datasets for masking and sample selection to assist in the classification workflow.
+
+We will start by [opening a new code editor page](https://code.earthengine.google.com/){target="_blank"} and
+by defining the spatial and temporal parameters of the composite you wish to classify, just like the other examples. For the temporal parameters, let’s use an annual 2021 composite:
+
+```{r eval=FALSE}
+var year = 2021;
+var startDay = (year)+'-01-01';
+var endDay = (year)+'-12-30';
+```
+
+For the spatial parameters, we can use the *Large Scale International Boundary (LSIB)* dataset and select Guinea’s national border. First, we will load the dataset into an object  called 'countries' using the `ee.FeatureCollection()` object and the feature collection ID 'USDOS/LSIB/2013'. Secondly, we will filter the dataset using `.filterMetadata()` and select Guinea from the list of countries and storing it in `aoi`:
+
+```{block, type='rmdcomment'}
+Note that you can select a any country border by filtering *'USDOS/LSIB/2013'* dataset by using *.filterMetadata('name' , 'equals', 'NAME OF THE COUNTRY IN CAPITAL LETTERS')*. 
+```
+
+Alternatively, you can use any previously uploaded Guinea's boundary datasets available [here.](https://code.earthengine.google.com/16fbfeb335381c203fed98eb81712dda){target="_blank"} Select a dataset from the list, copy its Asset ID and load it with `ee.FeatureCollection` into `aoi`. 
+
+```{r my-borders,  fig.cap="Examples of Guinea's administrative borders.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/borders.png")
+```
+
+In this example, we aim to map of Guinea's mangroves. Therefore, we will chose `prefecures5k` as it emcompasses the entirety of Guinea's coast:
+
+```{r eval=FALSE}
+var aoi = ee.FeatureCollection('users/capacityBuilding/Guinea/prefectures5k');
+```
+
+```{block, type='caution'}
+*__Important__*: All these datasets were made available through our collaboration with our colleagues in Guinea and the World Bank and they were modified with a GIS software for the sole purpose of this exercise. You can upload any geographical dataset (both raster or shapefile) into GEE with the *__NEW__* button in the __Assets__ table. 
+```
+
+As auxiliary functions for cloud masking and spectral index calculation, we will use the same functions provided in PART 2:
+
+```{r eval=FALSE}
+function maskClouds(image) {
+  var cloudShadowBitMask = ee.Number(2).pow(3).int();
+  var cloudsBitMask = ee.Number(2).pow(4).int();
+  var QA = image.select('QA_PIXEL');
+  var mask = QA.bitwiseAnd(cloudShadowBitMask).eq(0)
+      .and(QA.bitwiseAnd(cloudsBitMask).eq(0));
+  return image.updateMask(mask).divide(100000).select("SR_B[0-9]*").copyProperties(image, ["system:time_start"]);
+}
+
+function addIndices(image) {
+  var ndvi = image.normalizedDifference(['SR_B5','SR_B4']).rename('NDVI');
+  var nbr = image.normalizedDifference(['SR_B5','SR_B7']).rename('NBR');
+  var ndmi = image.normalizedDifference(['SR_B7','SR_B3']).rename('NDMI');
+  var mndwi = image.normalizedDifference(['SR_B3','SR_B6']).rename('MNDWI');
+  var sr = image.select('SR_B5').divide(image.select('SR_B4')).rename('SR');
+  var bare = image.normalizedDifference(['SR_B6','SR_B7']).rename('BI');
+  var gcvi = image.expression('(NIR/GREEN)-1',{
+    'NIR':image.select('SR_B5'),
+    'GREEN':image.select('SR_B3')
+  }).rename('GCVI');
+  var evi = image.expression(
+  '2.5 * ((NIR-RED) / (NIR + 6 * RED - 7.5* SR_BLUE +1))', {
+    'NIR':image.select('SR_B5'),
+    'RED':image.select('SR_B4'),
+    'SR_BLUE':image.select('SR_B2')
+  }).rename('EVI');
+  var msavi = image.expression(
+  '(2 * NIR + 1 - sqrt(pow((2 * NIR + 1), 2) - 8 * (NIR - RED)) ) / 2', {
+    'NIR': image.select('SR_B5'), 
+    'RED': image.select('SR_B4')}
+).rename('MSAVI');
+    return image
+    .addBands(ndvi)
+    .addBands(nbr)
+    .addBands(ndmi)
+    .addBands(mndwi)
+    .addBands(sr)
+    .addBands(evi)
+    .addBands(msavi)
+    .addBands(gcvi)
+    .addBands(bare);
+}
+```
+
+__1) Masking__
+
+In this example, we will focus on mangrove forest mapping. Therefore, other known classes can be masked from the analysis.  
+
+```{r eval=FALSE}
+var globalwater = ee.Image('JRC/GSW1_0/GlobalSurfaceWater');
+```
+
+The Global Water Dataset `'JRC/GSW1_0/GlobalSurfaceWater'` has different bands: one of them `'occurrence'`. This band shows how many times (expressed as %) a given pixel was classified as water relative to the total time span of the dataset. Let’s isolate the `'occurrence'` band from the globalwater object:
+
+```{r eval=FALSE}
+var occurrence = globalwater.select('occurrence');
+```
+
+__Masks__ are composed by zeros and non-zero values. When you set or apply a mask to an image, the output image will keep its original values where the mask has non-zero values and pixels will be masked where the mask has zeros:
+
+```{r my-mask,  fig.cap="Masking procedure. In this figure, the mask was applied to the raster image generating an output image where pixels are visible only where the correspondent mask pixel has non-zero values.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/maskexample.png")
+```
+
+For this example, we want to create a water mask. Thus, the water mask has to have zeros where there is water and non-zero values for non-water pixels. Consequently, when we apply this mask to a Landsat image, pixels of water will be invisible (transparent) while all the other pixels will remain visible in the composite. For the mask using the JRC Global Water dataset, make sure you are selecting "permanent" water. One way of doing this is by filtering the dataset for water pixels that occurred more than 50% of the time over the 35 years time spam for this dataset. You can be more or less restrictive with the water extent by changing the 50% threshold.
+
+```{r eval=FALSE}
+var waterMask = occurrence.lt(50).unmask(1);
+```
+
+Note that `.lt(50)` was used to select pixels from `occurrence` that are __smaller__ (or lower) than 50%. Automatically, the values above 50% will be set to 0 which is what is needed for this mask. In this particular case, we use `.unmask(1)` to set to 1 (or unmask) all the other areas that were originally masked in the JRC Global Water dataset.
+
+```{r my-watermask,  fig.cap="Global water mask produced with JRC’s Global Surface Water dataset and Guinea's coastal prefectures (`aoi`) in red for reference. You can add this mask to the map editor (and clip for `aoi`) using `Map.addLayer(waterMask.clip(aoi), {}, 'Water Mask')`. Areas in black (0) will be masked in the composite while areas in white (1) will remain.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/watermask.png")
+```
+
+- *__Elevation mask__*
+
+The purpose of this mask is to further remove pixels that are unlikely to be mangrove forests based on altitude values. Generally, mangroves will occur near shore where elevation and slope are relatively low. Similar to the water mask, we will create a mask using the SRTM Elevation Data:
+
+```{r eval=FALSE}
+var srtm = ee.Image('USGS/SRTMGL1_003');
+```
+
+Similarly to the previous dataset, we will select the band of interest by using the `.select()` method. The altitude values for the SRTM dataset are stored in the elevation band  called 'elevation'. We will create a mask 'elevMask' where pixels that have elevation values *greater than 25 meters* are removed. For that, you select everything that is *__lower__* than (`.lte`) 25 meters; any other value above 25 meters will be set to 0 automatically when using `.select()`:
+
+```{r eval=FALSE}
+var elevation = srtm.select('elevation');
+var elevMask = elevation.lte(25);
+```
+
+```{r my-elevmask,  fig.cap="Global elevation (> 25 m) mask produced with the Shuttle Radar Topography Mission dataset and Guinea's coastal prefectures (`aoi`) in red for reference. You can add this mask to the map editor (and clip for `aoi`) using *Map.addLayer(elevMask.clip(aoi), {}, 'Elevation Mask')*. Areas in black (0) will be masked in the composite while areas in white (1) will remain.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/elevmask.PNG")
+```
+
+[Code Checkpoint](https://code.earthengine.google.com/62a8bbb4bef12c7c998dd7fe665a6d66){target="_blank"}
+
+__2) Landsat 8 Image Collection and Cloud-free Mosaic__
+
+Similarly to the examples from PART 2, we will load the Landsat 8 Surface Reflectance data archive into an object called 'collection' by using the container `ee.ImageCollection()` and the collection ID `'LANDSAT/LC08/C02/T1_L2'`. Secondly, we will filter this image collection for the temporal parameters by using the method `.filterDate()`. Finally, we will map the cloud-masking and spectral indices functions to the collection:
+
+```{r eval=FALSE}
+var collection = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2')
+                   .filterDate(startDay,endDay)
+                   .map(maskClouds)
+                   .map(addIndices);
+```
+
+Then, in an object called 'composite', we will reduce the image collection into an annual composite using the `.median()` method. Next, we will mask the composite using the masks `waterMask` and `elevMask` using `.mask()` method for the first mask and then `.updateMask()` for the second. This container is necessary as we are *__updating__* the raster that will have been masked by the first mask.  
+
+```{r my-updatemask,  fig.cap="Output raster from .`mask()` and `.updateMask()` of a previously masked input raster. `.updateMask()` will only mask areas that have not been masked previously; if `.mask()` is used for a second mask, areas that have been previously invisible (i.e masked) will then assume the values of the mask used.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/updateMask.png")
+```
+
+```{block, type='rmdcomment'}
+As a rule of thumb: the *first* mask applied to the raster is done by *.mask()* and then use *.updateMask()* for any subsequent masks.
+```
+
+Finally, we will clip the composite to our area of interest `aoi` using the container `.clip()` method:
+
+```{r eval=FALSE}
+var composite = collection
+                .median()
+                .mask(waterMask)
+                .updateMask(elevMask)
+                .clip(aoi);
+```
+
+```{block, type='starcomment'}
+Setting your code with indents is very helpful!. It will allow you to "turn on" and "turn off" certain portions of a code with comment bars. In the example above, you can turn off any mask by just adding // before the full period.
+```
+
+```{r eval=FALSE}
+var composite = collection
+                .median()
+                //.mask(waterMask)
+                //.updateMask(elevMask)
+                .clip(aoi);
+```
+
+```{block, type='starcomment'}
+The code above is just for illustration purposes! Remember to remove the // from the portion of the code that you want Earth Engine to read.
+```
+
+Finally, add the composite to the Map editor using the code below.
+
+```{r eval=FALSE}
+Map.centerObject(aoi);
+Map.addLayer(composite, {bands: ['SR_B5', 'SR_B6', 'SR_B4'], min:0.1, max:0.2}, 'Composite');
+```
+
+This band composition (RGB 564) is a good composition to highlight mangrove forests:
+
+```{r CompositeMaskedGuinea,  fig.cap="Masked composite displayed with an RGB564 composition highlighting mangrove forests in dark red. Notice that areas of open water and higher altitudes were masked as they are not relevant to our example. Unmasked composite was added for comparison purposes: you can take advantage of indenting to turn masks on/off with // comment bars.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-CompositeMaskedGuinea.png")
+```
+
+[Code Checkpoint](https://code.earthengine.google.com/912be20630ba0aa4c86d0d12b3d76f94){target="_blank"}
+
+__3) Supervised Classification with Random Forest__
+
+- *__Strata for Sample Selection__*
+
+As shown in Part 1 and Part 2, the first step to perform a supervised classification is to select the training samples. One way of selecting the training samples for the Random Forest classifier was shown in the training sample selection section of Part 2. Alternatively, you can automatically select random points based on a stratification map using `.stratifiedSample()`. In this case, the stratification map will have two classes: Mangroves and Non-mangroves. You can create a mangrove stratum for sample selection using available mangrove datasets, such as:
+
+- Global Mangrove Forest Distribution dataset (raster) for the year 2000, available through Google Earth Engine (`ee.ImageCollection('LANDSAT/MANGROVE_FORESTS')`), or;
+
+- The latest global Mangrove Extent from the [Global Mangrove Watch](https://www.globalmangrovewatch.org/country/GIN?map=eyJiYXNlbWFwIjoibGlnaHQiLCJ2aWV3cG9ydCI6eyJsYXRpdHVkZSI6OS45NDcyMTU4OTUwNDI0NzIsImxvbmdpdHVkZSI6LTE1Ljk0Njk3MjgyMzgwNzMzOCwiem9vbSI6Ni4xMzk0MjcyMjU1NDAzMjcsImJlYXJpbmciOjAsInBpdGNoIjowfX0%3D){target="_blank"}, available for download [here.](https://data.unep-wcmc.org/datasets/45){target="_blank"}
+
+- Or any other dataset that you may have available;
+
+a) *Mangroves*: For this example, we will use the GMW Global mangrove extent dataset for 2016 that was previously downloaded and added as an asset to Google Earth Engine. First, load the mangrove extent shapefile into a `ee.FeatureCollection` object:
+
+```{r eval=FALSE}
+var mangroveDataset = ee.FeatureCollection('users/capacityBuilding/Guinea/Mangroves2016');
+```
+
+As seen in Part 2, to create the mangrove stratification class, we simply create an image with `ee.Image(1)` and clip it using `mangroveDataset`:
+
+```{r eval = FALSE}
+var mangrove = ee.Image(1).clip(mangroveDataset);
+```
+
+b) *Non-mangroves*: Using `.where()` (See its formula here: \@ref(fig:my-where)), we will create an image of zeros where the value two (2) will be added where there is a pixel of any band from the `composite`:
+
+```{r eval = FALSE}
+var nonmangrove = ee.Image(0).where(composite.select('SR_B1'),2).selfMask();
+```
+
+```{block, type='starcomment'}
+Notice that a new method was used in the code above. The method `.selfMask()` is an method from an `ee.Image()` object that is used when you want to mask an image with itself. In other words, when an ee.Image has zeros in it, you can use `.selfMask()` to remove the zeros, just like an other mask.
+```
+
+Finally, to create a stratification classes map called 'strata', we will use `.where()` to set `nonmangrove` pixels to *1* where it overlaps with pixels of the mangrove stratum (`mangrove`) and use `.rename()` to rename it to `'stratificationClass'`:
+
+```{r eval = FALSE}
+var strata = nonmangrove.where(mangrove,1).rename('stratificationClass');
+```
+
+The object `strata` is an image with one band called `'stratificationClass'`, with Mangrove pixes have value of 1 and non-mangrove pixels have value of 2. It is good practice to rename this band to something easy to remember because `.stratifiedSample()` requires the image and the band name with which the samples will be selected.
+
+Add `strata` to the map editor to visualize:
+
+```{r eval = FALSE}
+Map.addLayer (strata, {palette:['#6D8B74','#D0C9C0'], min:1, max:2}, 'Stratification Map');
+```
+
+```{r my-strata,  fig.cap="Stratification map `strata` showing Global Mangrove Watch's 2016 Mangrove extent (`stratificationClass: 1`) and non-mangrove areas (`stratificationClass: 2`). The `.stratifiedSample()` method will generate a set of random points to each of these classes.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-StratificationMap.png")
+```
+
+- *__Random training sample selection__*
+
+Now that we have the stratification map `strata` for mangroves and all other areas, we will use `.stratifiedSample()` method below to select 1000 points (`classPoints`) for each of the two classes (`classValues`):
+
+
+```{r eval = FALSE}
+var stratified = strata.addBands(ee.Image.pixelLonLat()).stratifiedSample({
+      numPoints: 1,
+      classBand: 'stratificationClass',
+      scale: 30,
+      region: aoi,
+      classValues:[1,2],       
+      classPoints:[1000,1000]  
+    }).map(function(f) {       
+       return f.setGeometry(ee.Geometry.Point([f.get('longitude'), f.get('latitude')]));
+    });
+```
+
+The code above includes:
+
+a) `.addBands(ee.Image.pixelLonLat())` to add a band to `strata` that will have the latitude and longitude for each pixel;
+
+b) `numPoints` is the default number of points to sample in each class in `strata`. If `numPoints` is set to 2000, 1000 points will be selected for each of the two classes in `strata`. This, however, can be overridden for specific classes using the `classValues` and `classPoints` properties. In this case, these properties allow which classes you want to use from your stratification map and how many points for each of these classes you want to select.
+
+c) `classBand: 'stratificationClass'` to define the band from `strata` that will be used to select the random samples;
+
+d) `scale` sets the scale to 30 meters to match Landsat nominal spatial resolution;
+
+e) The rest of the code will set these samples as geometry and get their lat/long coordinates.
+
+You can use the code below to colorize these point samples based on a color palette for visualization. First, the color pallete for this particular case will be slightly different that the color palettes that have been used throught this tutorial so far: it will be created as a `ee.List()` of colors including a null color:
+
+```{r eval=FALSE}
+var paletteSamples = ee.List([
+  'FFFFFF',  // NULL
+  '6D8B74',  // Mangrove
+  'D0C9C0',  // Non-Mangrove
+ ]);
+```
+
+Then, a 'features' object will be created to include the colorized version of `stratified` based on the code:
+
+```{r eval=FALSE}
+var features = stratified.map(function(f) {
+  var landcover = f.get('stratificationClass');
+  return ee.Feature(ee.Geometry.Point([f.get('longitude'), f.get('latitude')]), f.toDictionary()).set({style: {color: paletteSamples.get(landcover) }}); 
+}); 
+```
+
+Finally, we will add `features` to the map editor using `Map.addLayer` and `.style()` following the formula below:
+
+```{r eval = FALSE}
+Map.addLayer(features.style({styleProperty: "style"}),{}, 'Samples/Location');
+```
+
+```{block, type='rmdcomment'}
+Remember, __these steps are not necessary to the classification workflow__. However, it allows you to visualize the selected samples with a color palette of your choice.
+```
+
+```{r StratificationSamples,  fig.cap="Stratified random samples. The `.stratifiedSample()` method generates a set of random points to each of these strata.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-StratificationSamples.png")
+```
+
+[Code Checkpoint](https://code.earthengine.google.com/9eebb9a441f2e4e6cff74329e8aa9563){target="_blank"}
+
+- *__Classification__*
+
+As seen in in Part 2, one of the first steps to train a Random Forest classifier is select the predictors to assign to each sample point in the sample set. For this example, we will create a list ('bands') with the names of three spectral bands (`'SR_B4'`,`'SR_B5'`,`'SR_B6'`) and the spectral indices (`'NDVI'`,`'NBR'`,`'MNDWI'`,`'SR'`,`'GCVI'` and `'MSAVI'`).
+
+```{r eval=FALSE}
+var bands = ['SR_B4','SR_B5','SR_B6','NDVI','NBR','MNDWI','SR','GCVI','MSAVI'];
+```
+
+
+```{r eval=FALSE}
+var samplesAutomatic = composite.select(bands).sampleRegions({
+  collection: stratified,   
+  properties: ['stratificationClass'],
+  scale: 30,
+  geometries: true,
+});
+```
+
+A second sample set ('groundtruth') will be used to illusrate a validation process for the mangrove extent map. First, we will load a pre-selected set of samples using `ee.FeatureCollection()` then create 'samplesgroundtruth' similarly to the previous set of samples:
+
+```{r eval=FALSE}
+var groundtruth = ee.FeatureCollection('users/capacityBuilding/Guinea/Groundtruth');
+```
+
+If you print `groundtruth` to the __Console__ tab, you will see that its property is called `landcover`. Therefore, in the code below, the argument `properties` will be a 'landcover':
+
+```{r eval=FALSE}
+var samplesgroundtruth = composite.select(bands).sampleRegions({
+  collection: groundtruth,
+  properties: ['landcover'],
+  scale: 30,
+  geometries: true,
+});
+```
+
+Next, we will train a Random Forest classifier using the `samplesAutomatic` as training samples. In this example, we will use 200 trees and 8 predictors tested at each tree node:
+
+```{r eval=FALSE}
+var RandomForest = ee.Classifier.smileRandomForest(200,8).train({
+  features: samplesAutomatic, 
+  classProperty: 'stratificationClass', 
+  inputProperties: bands
+});
+```
+
+Finally, we will classify `composite` into a mangrove extent map using the trained classifier and add the output to the map editor using a color palette of your choice:
+
+```{r eval=FALSE}
+var classification = composite.select(bands).classify(RandomForest);
+
+var paletteMAP = [
+  '01937C', // Mangrove
+  'B6C867', // Non-Mangrove
+];
+
+Map.addLayer (classification, {min: 1, max: 2, palette:paletteMAP}, 'Classification with Automatic Samples');
+```
+
+```{r my-classficationmangrove,  fig.cap="Random forest classification output produced with automatic sample selection", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-RFMangroveGuinea.png")
+```
+
+[Code Checkpoint](https://code.earthengine.google.com/0a0e15f94c78cb1516c90de46ec1fe10){target="_blank"}
+
+- *__Validation__*
+
+For the validation of the mangrove extent map we will use `.classify()` and `.errorMatrix()`.The `.classify` method will classify the ground truth samples with the trained random forest classifier; `.errorMatrix()` will compare the result of this classification with their own class label: 
+
+```{r eval=FALSE}
+var validation = samplesgroundtruth.classify(RandomForest);
+var testAccuracy = validation.errorMatrix('landcover', 'classification');
+```
+
+Print the results to the __Console__:
+
+```{r eval=FALSE}
+print('Map Overall Accuracy: ', testAccuracy.accuracy());
+print('Kappa: ', testAccuracy.kappa());
+print('Validation error matrix Map: ', testAccuracy);
+```
+
+```{r ValidationGuinea,  fig.cap="Validation results for this example. Ground truth data (in this context it refers to independent samples) were used to calculate the overall accuracy and kappa values.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-ValidationGuinea.png")
+```
