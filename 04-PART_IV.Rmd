@@ -2,7 +2,7 @@
 
 ## Introduction to Ecosystem Accounting
 
-This section introduces the System of Environmental Economic Accounting (SEEA) and how remote sensing derived products can be used for ecosystem accounting.
+This section introduces Ecosystem Accounting which is a part of the System of Environmental Economic Accounting (SEEA).
 
 ### Essentials
 
@@ -48,6 +48,4 @@ This section explores the use of Microsoft Excel to do basic data analytics usin
 
 ### Essentials
 
-**A) Macros**
-If you have tasks in Microsoft Excel that you do repeatedly, you can record a macro to automate those tasks. A macro is an action or a set of actions that you can run as many times as you want. When you create a macro, you are recording your mouse clicks and keystrokes.
-
+**A) Macros** If you have tasks in Microsoft Excel that you do repeatedly, you can record a macro to automate those tasks. A macro is an action or a set of actions that you can run as many times as you want. When you create a macro, you are recording your mouse clicks and keystrokes.
