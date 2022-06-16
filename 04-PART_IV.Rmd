@@ -26,51 +26,59 @@ knitr::include_graphics("images/EcosystemAccounts.png")
 
 The primary spatial units for ecosystem accounting are ecosystem assets. Ecosystem assets are contiguous spaces of a specific ecosystem type characterized by a distinct set of biotic and abiotic components and their interactions:
 
-<Figure>
-
-</Figure>
+\<Figure\>
 
 Information about ecosystem assets includes their extent, condition, and services they provide. This information may be expressed in physical and/or monetary units.
 
 **D) Ecosystem types**
 
-For the purpose of accounting, all ecosystem assets need to be classified into ecosystem types. It is recommended that existing national ecosystem classifications schemes be used wherever possible. However, cross-referencing of national classifications with the [IUCN Global Ecosystem Typology (GET)](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://portals.iucn.org/library/sites/library/files/documents/2020-037-En.pdf) will enable accounts to be compared between countries.
+For the purpose of accounting, all ecosystem assets need to be classified into ecosystem types. It is recommended that existing national ecosystem classifications schemes be used wherever possible. However, cross-referencing of national classifications with the [IUCN Global Ecosystem Typology (IUCN GET)](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://portals.iucn.org/library/sites/library/files/documents/2020-037-En.pdf) will enable accounts to be compared between countries.
 
-<Figure>
+\<Figure\>
 
-</Figure>
+The IUCN GET comprises six hierarchical levels ranging from broad classes that differentiate the functional properties of ecosystems to finer levels of ecosystem types that will be relevant in national and sub-national scales. It is recommended that compilation of ecosystem accounts at the national level should take place for ecosystem functional groups (level 3) or even finer classification reflecting data availability and policy demands.
 
-The IUCN GET comprises six hierachical levels ranging from broad classes that differentiate the functional properties of ecosystems to finer levels of ecosystem types that will be relevant in national and sub-national scales. It is recommended that compilation of ecosystem accounts at the national level should take place for ecosystem functional groups (level 3) or even finer classification reflecting data availability and policy demands.
+\<Figure\>
 
 **E) Ecosystem extent**
 
-The size of an ecosystem asset is defined as ecosystem extent. Depending on the type of an asset, the size can be recorded as the area -- or the length and volume of a river or a lake.
+Ecosystem extent is the size of an ecosystem asset. It is usually measured in terms of area but may also be measured in terms of length or volume in case of rivers and lakes. In practice, basic spatial units (BSU) -- geometrical constructs representing a small spatial area -- are used for measuring the size of ecosystem assets. For example we use grid cells (pixels) from a satellite image or other BSU shapes such as polygons, lines or points. The size of BSU is smaller or equal in size to any ecosystem asset.
 
-**F) Ecosystem extent accounts**
+\<Figure\>
 
-Ecosystem extent accounts represent a common starting point for ecosystem accounting by providing information about the size, composition of, and changes in, ecosystem types within an ecosystem accounting area (EAA).
+**F) Ecosystem extent account**
 
-## Compiling Ecosystem Extent Accounts
+Ecosystem extent accounts represent a common starting point for ecosystem accounting by providing information about the area, composition of, and changes in, ecosystem types within an ecosystem accounting area (EAA). At the national level, The EAA extends to cover all terrestrial, freshwater and marine ecosystems within the country's boarders and its marine exclusive economic zone (EEZ). In practice, EAAs may be smaller in geographical size covering just terrestrial or marine realm or a sub-national region such as a coastal zone or a protected area.
+
+## Ecosystem Extent Account
 
 In this section we will learn about the basic structure of ecosystem extent accounts. The compilation process will be demonstrated on simple examples followed by practical exercises.
 
-### Essentials
+### Structure of ecosystem extent account
 
-**A) Projections**
+**A) Ecosystem extent (units of area) -- Table 1**
 
-## Ecosystem Extent Account Tables
+**B) Ecosystem type change matrix -- Table 2**
 
-This section demonstrates the process of deriving ecosystem extent accounts using scripts developed in GEE Python Colab and/or Jupyter Notebook for ArcGIS Pro.
+### Examples and exercises
 
-### Specific Tools
+**A) Ecosystem extent (units of area) -- Table 1**
 
-**A) GEE Python Colab** Google Earth Engine Application Programming Interface (API) Colab, or "Colaboratory" is a web-based interactive development environment that allows you to write and execute Python in your browser with Zero configuration required, and an access to graphics processing units (GPU) free of charge.
+**B) Ecosystem type change matrix -- Table 2**
 
-It can be accessed here: <https://colab.research.google.com/github/google/earthengine-api/blob/master/python/examples/ipynb/ee-api-colab-setup.ipynb>
+## Tools for Compiling Ecosystem Extent Account Tables
 
-**B) Jupyter Notebook** Jupyter Notebook is the latest web-based interactive development environment for notebooks, code, and data. Its flexible interface allows users to configure and arrange workflows in data science, scientific computing, computational journalism, and machine learning.
+This section demonstrates the process of deriving ecosystem extent account tables using Python scripts developed to run within Google Earth Engine Python Colab and Jupyter Notebook with ArcGIS libraries.
 
-It can be accessed here: <https://jupyter.org/>
+### Platforms for running Python scripts
+
+**A) GEE Python Colab**
+
+[Google Earth Engine Application Programming Interface (API) Colab](https://colab.research.google.com/github/google/earthengine-api/blob/master/python/examples/ipynb/ee-api-colab-setup.ipynb), or "Colaboratory" is a web-based interactive development environment that allows you to write and execute Python in your browser with zero configuration required, and an access to graphics processing units (GPU) free of charge.
+
+**B) Jupyter Notebook**
+
+[Jupyter Notebook](https://jupyter.org/) is the latest web-based interactive development environment for notebooks, code, and data. Its flexible interface allows users to configure and arrange workflows in data science, scientific computing, computational journalism, and machine learning. It was designed to work with a large number of libraries including those developed for ArcGIS.
 
 ## Compiling Ecosystem Extent Account Tables
 
