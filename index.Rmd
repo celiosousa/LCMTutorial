@@ -1,19 +1,15 @@
 --- 
-title: "Supervised Classification with Google Earth Engine"
-author: "Celio Sousa (celio.h.resendedesousa@nasa.gov)"
+title: "Supervised Land Cover Classification with Google Earth Engine"
+author: "Celio Sousa (celio.h.resendedesousa@nasa.gov) and Miroslav Honzak (mhonzak@conservation.org)"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
 
-
-# Introduction and overview {-}
-
 __Disclaimer__:
 
-__This training material has been developed free-of-charge for educational purposes only and without any commercial interest. Some images and figures of this tutorial may have been reproduced from open sources and are citted accordingly, unless they were created by the author. If you believe any material shown in this course may be infriging a copyright, please let us know and we will remove it or take appropriate corrective action__.
+__This training material has been developed free-of-charge for educational purposes only and without any commercial interest. Some images and figures of this tutorial may have been reproduced from open sources and are cited accordingly, unless they were created by the author. If you believe any material shown in this course may be infriging a copyright, please let us know and we will remove it or take appropriate corrective action__.
 
-
-
+# Introduction and overview {-}
 
 Write something like: In part 1 of this course we will cover yada yada yada.
 In part 2.....

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 PART 3 - Country-specific Applications | Supervised Classification with Google Earth Engine</title>
-  <meta name="description" content="Chapter 3 PART 3 - Country-specific Applications | Supervised Classification with Google Earth Engine" />
+  <title>Chapter 3 PART 3 - Country-specific Applications | Supervised Land Cover Classification with Google Earth Engine</title>
+  <meta name="description" content="Chapter 3 PART 3 - Country-specific Applications | Supervised Land Cover Classification with Google Earth Engine" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 3 PART 3 - Country-specific Applications | Supervised Classification with Google Earth Engine" />
+  <meta property="og:title" content="Chapter 3 PART 3 - Country-specific Applications | Supervised Land Cover Classification with Google Earth Engine" />
   <meta property="og:type" content="book" />
   
   
@@ -16,15 +16,15 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 PART 3 - Country-specific Applications | Supervised Classification with Google Earth Engine" />
+  <meta name="twitter:title" content="Chapter 3 PART 3 - Country-specific Applications | Supervised Land Cover Classification with Google Earth Engine" />
   
   
   
 
-<meta name="author" content="Celio Sousa (celio.h.resendedesousa@nasa.gov)" />
+<meta name="author" content="Celio Sousa (celio.h.resendedesousa@nasa.gov) and Miroslav Honzak (mhonzak@conservation.org)" />
 
 
-<meta name="date" content="2022-05-17" />
+<meta name="date" content="2022-06-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -139,6 +139,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#guinea"><i class="fa fa-check"></i><b>3.1</b> Guinea</a><ul>
 <li class="chapter" data-level="3.1.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#mangrove-mapping-in-guinea-west-africa"><i class="fa fa-check"></i><b>3.1.1</b> Mangrove mapping in Guinea, West Africa</a></li>
 </ul></li>
+<li class="chapter" data-level="3.2" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#liberia"><i class="fa fa-check"></i><b>3.2</b> Liberia</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#class-by-class-land-cover-mapping"><i class="fa fa-check"></i><b>3.2.1</b> Class-by-class land cover mapping</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html"><i class="fa fa-check"></i><b>4</b> Part 4 - Ecosystem Accounting</a><ul>
 <li class="chapter" data-level="4.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#introduction-to-ecosystem-accounting"><i class="fa fa-check"></i><b>4.1</b> Introduction to Ecosystem Accounting</a><ul>
@@ -165,7 +168,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Supervised Classification with Google Earth Engine</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Supervised Land Cover Classification with Google Earth Engine</a>
           </h1>
         </div>
 
@@ -178,6 +181,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>In this part we will explore examples of class-specific classification using previously used functions as well as useful land cover classification-based analysis.</p>
 <div id="guinea" class="section level2">
 <h2><span class="header-section-number">3.1</span> Guinea</h2>
+<p>Description of Guinea here</p>
 <div id="mangrove-mapping-in-guinea-west-africa" class="section level3">
 <h3><span class="header-section-number">3.1.1</span> Mangrove mapping in Guinea, West Africa</h3>
 <p>In this example, we will use the codes from the previous parts for mangrove mapping in Guinea, in West Africa. We will also introduce the use of other datasets for masking and sample selection to assist in the classification workflow.</p>
@@ -473,6 +477,430 @@ var testAccuracy =<span class="st"> </span><span class="kw">validation.errorMatr
 <img src="images/PartIII-ValidationGuinea.png" alt="Validation results for this example. Ground truth data (in this context it refers to independent samples) were used to calculate the overall accuracy and kappa values." width="888" />
 <p class="caption">
 Figure 3.10: Validation results for this example. Ground truth data (in this context it refers to independent samples) were used to calculate the overall accuracy and kappa values.
+</p>
+</div>
+</div>
+</div>
+<div id="liberia" class="section level2">
+<h2><span class="header-section-number">3.2</span> Liberia</h2>
+<p>In this example, we will use the codes from the previous sections for a class by class land cover mapping in Liberia, in West Africa. We will also take advantage of other datasets for masking and sample selection to assist in the classification workflow.</p>
+<div id="class-by-class-land-cover-mapping" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> Class-by-class land cover mapping</h3>
+<p>We will start by <a href="https://code.earthengine.google.com/" target="_blank">opening a new code editor page</a> and by defining the spatial and temporal parameters of the composite you wish to classify, just like the other examples. As explained in Part 1, GEE’s cloud screening algorithm based on quality assessment bands (QA) can be applied to remove cloud and cloud shadow contaminated pixels for each of the Landsat scene covering y. This method greatly improves the final composite (See <a href="part-2-advanced-google-earth-engine.html#fig:CompositesMasked">2.2</a>). However, creating an annual <em>completely cloud-free</em> imagery composition for Liberia is a challenging task because of the west African monsoon, which causes constant clouds across the Gulf of Guinea most of the time. The rainy season in Liberia ranges from May to October and it frequently rains in other months, except in the short dry season that runs from December to February/March. Hence, <strong>multi-year composites are necessary in attaining wall-to-wall cloud-free mosaics over Liberia</strong>.</p>
+<p>In order to ensure that an adequate cloud-free composite is achieved, we will use a composite circa 2021-2022. Then the temporal parameters can be defined as:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var year =<span class="st"> </span><span class="dv">2021</span>;
+var startDay =<span class="st"> </span>(year)<span class="op">+</span><span class="st">&#39;-01-01&#39;</span>;
+var endDay =<span class="st"> </span>(year<span class="op">+</span><span class="dv">1</span>)<span class="op">+</span><span class="st">&#39;-05-30&#39;</span>;</code></pre></div>
+<p>Note that this time range will include all available Landsat 8 Surface Reflectance images from January 2021 through May 2022 (<code>year+1</code>).</p>
+<p>For the spatial parameters, we can use the <em>Large Scale International Boundary (LSIB)</em> dataset and select Liberia’s national border. First, we will load the dataset into an object called 'countries' using the <code>ee.FeatureCollection()</code> object and the feature collection ID 'USDOS/LSIB/2013'. Secondly, we will filter the dataset using <code>.filterMetadata()</code> and select Liberia from the list of countries and storing it in <code>nationalBorder</code>:</p>
+<div class="rmdcomment">
+<p>
+Note that you can select a any country border by filtering <em>'USDOS/LSIB/2013'</em> dataset by using <em>.filterMetadata('name' , 'equals', 'NAME OF THE COUNTRY IN CAPITAL LETTERS')</em>.
+</p>
+</div>
+<p>If you want to visualize your feature collection, you can add it to the map using the <code>Map.addLayer()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var countries =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;USDOS/LSIB/2013&#39;</span>);
+var nationalBorder =<span class="st"> </span><span class="kw">countries.filterMetadata</span>(<span class="st">&#39;name&#39;</span> , <span class="st">&#39;equals&#39;</span>, <span class="st">&#39;LIBERIA&#39;</span>);
+<span class="kw">Map.centerObject</span>(nationalBorder);
+<span class="kw">Map.addLayer</span>(nationalBorder, {color<span class="op">:</span><span class="st"> &#39;Blue&#39;</span>}, <span class="st">&#39;Liberia National Borders&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:LiberiaBorder"></span>
+<img src="images/PartIII-LiberiaBorder.png" alt="Liberia border extracted from the *Large Scale International Boundary (LSIB)* dataset." width="857" />
+<p class="caption">
+Figure 3.11: Liberia border extracted from the <em>Large Scale International Boundary (LSIB)</em> dataset.
+</p>
+</div>
+<p>Alternatively, you can import your own border shapefile to your assets using the <strong>NEW</strong> button in the <strong>Assets</strong> tab. (See Earth Engine's <a href="https://developers.google.com/earth-engine/guides/image_upload" target="_blank">Importing Raster Data</a> for instructions on uploading an image to your assets or <a href="https://developers.google.com/earth-engine/guides/table_upload" target="_blank">Importing Table/Shapefile Data</a> for more details).</p>
+<p>In this example, we imported a shapefile containing all of Liberia's counties to our assets:</p>
+<div class="figure"><span id="fig:ImportingShapefile"></span>
+<img src="images/PartIII-ImportingShapefile.png" alt="Importing shapefiles to your assets." width="340" />
+<p class="caption">
+Figure 3.12: Importing shapefiles to your assets.
+</p>
+</div>
+<p>Once the upload is completed, the imported dataset can be accessed in the <strong>Assets</strong> tab. We will import it to the script using its 'ID' and add to the map editor:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var aoi =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/LiberiaCounties&#39;</span>);
+<span class="kw">Map.addLayer</span>(aoi, {color<span class="op">:</span><span class="st"> &#39;red&#39;</span>}, <span class="st">&#39;LiberiaCounties&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:Counties"></span>
+<img src="images/PartIII-Counties.png" alt="`aoi` and its multiple features (counties)" width="856" />
+<p class="caption">
+Figure 3.13: <code>aoi</code> and its multiple features (counties)
+</p>
+</div>
+<p>In this particular case, this dataset includes multiple features (or polygons) with several properties for each feature. One of them is called 'NAME_1', which includes the names of each county in Liberia:</p>
+<div class="figure"><span id="fig:AssetDetail"></span>
+<img src="images/PartIII-AssetDetail.png" alt="Asset information. This imported dataset includes multiple features." width="886" />
+<p class="caption">
+Figure 3.14: Asset information. This imported dataset includes multiple features.
+</p>
+</div>
+<p>You can also print <code>aoi</code> to the <strong>Console</strong> tab:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(aoi);</code></pre></div>
+<div class="figure"><span id="fig:FCProperties"></span>
+<img src="images/PartIII-FCProperties.png" alt="Feature collection information printed to the console. This imported dataset includes multiple features." width="683" />
+<p class="caption">
+Figure 3.15: Feature collection information printed to the console. This imported dataset includes multiple features.
+</p>
+</div>
+<p>This type of metadata can be used to filter a feature collection. The <code>ee.Filter.inList()</code> method is very helpful when you want to filter multiple properties at once. First, we will create an object called 'filterCounties' with a list of 4 of the 15 counties in Liberia. In this example, we selected the counties of Bomi, Montserrado, Margibi and Grand Bassa. Finally, we use <code>filter()</code> to filter <code>aoi</code> for the list of counties provided in <code>filterCounties</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var filterCounties =<span class="st"> </span><span class="kw">ee.Filter.inList</span>(<span class="st">&#39;NAME_1&#39;</span>, [<span class="st">&#39;Bomi&#39;</span>, <span class="st">&#39;Montserrado&#39;</span>,<span class="st">&#39;Margibi&#39;</span>,<span class="st">&#39;GrandBassa&#39;</span>]);
+var filteredAOI =<span class="st"> </span><span class="kw">aoi.filter</span>(filterCounties);
+<span class="kw">Map.addLayer</span>(filteredAOI, {color<span class="op">:</span><span class="st"> &#39;green&#39;</span>}, <span class="st">&#39;filteredArea&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:FilteredCounties"></span>
+<img src="images/PartIII-FilteredCounties.png" alt="The `aoi` feature collection filtered by metadata. Here, a filter to select the counties of Bomi, Montserrado, Margibi and Grand Bassa was used. " width="856" />
+<p class="caption">
+Figure 3.16: The <code>aoi</code> feature collection filtered by metadata. Here, a filter to select the counties of Bomi, Montserrado, Margibi and Grand Bassa was used.
+</p>
+</div>
+<p>Now that both temporal and spatial parameters are defined, As auxiliary functions for cloud masking and spectral index calculation, we will use the same functions provided in PART 2:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">function</span> <span class="kw">maskClouds</span>(image) {
+  var cloudShadowBitMask =<span class="st"> </span><span class="kw">ee.Number</span>(<span class="dv">2</span>)<span class="kw">.pow</span>(<span class="dv">3</span>)<span class="kw">.int</span>();
+  var cloudsBitMask =<span class="st"> </span><span class="kw">ee.Number</span>(<span class="dv">2</span>)<span class="kw">.pow</span>(<span class="dv">4</span>)<span class="kw">.int</span>();
+  var QA =<span class="st"> </span><span class="kw">image.select</span>(<span class="st">&#39;QA_PIXEL&#39;</span>);
+  var mask =<span class="st"> </span><span class="kw">QA.bitwiseAnd</span>(cloudShadowBitMask)<span class="kw">.eq</span>(<span class="dv">0</span>)
+      <span class="kw">.and</span>(<span class="kw">QA.bitwiseAnd</span>(cloudsBitMask)<span class="kw">.eq</span>(<span class="dv">0</span>));
+  return <span class="kw">image.updateMask</span>(mask)<span class="kw">.divide</span>(<span class="dv">100000</span>)<span class="kw">.select</span>(<span class="st">&quot;SR_B[0-9]*&quot;</span>)<span class="kw">.copyProperties</span>(image, [<span class="st">&quot;system:time_start&quot;</span>]);
+}
+
+<span class="cf">function</span> <span class="kw">addIndices</span>(image) {
+  var ndvi =<span class="st"> </span><span class="kw">image.normalizedDifference</span>([<span class="st">&#39;SR_B5&#39;</span>,<span class="st">&#39;SR_B4&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;NDVI&#39;</span>);
+  var nbr =<span class="st"> </span><span class="kw">image.normalizedDifference</span>([<span class="st">&#39;SR_B5&#39;</span>,<span class="st">&#39;SR_B7&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;NBR&#39;</span>);
+  var ndmi =<span class="st"> </span><span class="kw">image.normalizedDifference</span>([<span class="st">&#39;SR_B7&#39;</span>,<span class="st">&#39;SR_B3&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;NDMI&#39;</span>);
+  var mndwi =<span class="st"> </span><span class="kw">image.normalizedDifference</span>([<span class="st">&#39;SR_B3&#39;</span>,<span class="st">&#39;SR_B6&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;MNDWI&#39;</span>);
+  var sr =<span class="st"> </span><span class="kw">image.select</span>(<span class="st">&#39;SR_B5&#39;</span>)<span class="kw">.divide</span>(<span class="kw">image.select</span>(<span class="st">&#39;SR_B4&#39;</span>))<span class="kw">.rename</span>(<span class="st">&#39;SR&#39;</span>);
+  var bare =<span class="st"> </span><span class="kw">image.normalizedDifference</span>([<span class="st">&#39;SR_B6&#39;</span>,<span class="st">&#39;SR_B7&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;BI&#39;</span>);
+  var gcvi =<span class="st"> </span><span class="kw">image.expression</span>(<span class="st">&#39;(NIR/GREEN)-1&#39;</span>,{
+    <span class="st">&#39;NIR&#39;</span><span class="op">:</span><span class="kw">image.select</span>(<span class="st">&#39;SR_B5&#39;</span>),
+    <span class="st">&#39;GREEN&#39;</span><span class="op">:</span><span class="kw">image.select</span>(<span class="st">&#39;SR_B3&#39;</span>)
+  })<span class="kw">.rename</span>(<span class="st">&#39;GCVI&#39;</span>);
+  var evi =<span class="st"> </span><span class="kw">image.expression</span>(
+  <span class="st">&#39;2.5 * ((NIR-RED) / (NIR + 6 * RED - 7.5* SR_BLUE +1))&#39;</span>, {
+    <span class="st">&#39;NIR&#39;</span><span class="op">:</span><span class="kw">image.select</span>(<span class="st">&#39;SR_B5&#39;</span>),
+    <span class="st">&#39;RED&#39;</span><span class="op">:</span><span class="kw">image.select</span>(<span class="st">&#39;SR_B4&#39;</span>),
+    <span class="st">&#39;SR_BLUE&#39;</span><span class="op">:</span><span class="kw">image.select</span>(<span class="st">&#39;SR_B2&#39;</span>)
+  })<span class="kw">.rename</span>(<span class="st">&#39;EVI&#39;</span>);
+  var msavi =<span class="st"> </span><span class="kw">image.expression</span>(
+  <span class="st">&#39;(2 * NIR + 1 - sqrt(pow((2 * NIR + 1), 2) - 8 * (NIR - RED)) ) / 2&#39;</span>, {
+    <span class="st">&#39;NIR&#39;</span><span class="op">:</span><span class="st"> </span><span class="kw">image.select</span>(<span class="st">&#39;SR_B5&#39;</span>), 
+    <span class="st">&#39;RED&#39;</span><span class="op">:</span><span class="st"> </span><span class="kw">image.select</span>(<span class="st">&#39;SR_B4&#39;</span>)}
+)<span class="kw">.rename</span>(<span class="st">&#39;MSAVI&#39;</span>);
+    return image
+    <span class="kw">.addBands</span>(ndvi)
+    <span class="kw">.addBands</span>(nbr)
+    <span class="kw">.addBands</span>(ndmi)
+    <span class="kw">.addBands</span>(mndwi)
+    <span class="kw">.addBands</span>(sr)
+    <span class="kw">.addBands</span>(evi)
+    <span class="kw">.addBands</span>(msavi)
+    <span class="kw">.addBands</span>(gcvi)
+    <span class="kw">.addBands</span>(bare);
+}</code></pre></div>
+<p><strong>1) Landsat 8 Image Collection and Cloud-free Mosaic</strong></p>
+<p>Similarly to the examples from PART 2 and PART 3.1, we will load the Landsat 8 Surface Reflectance data archive into an object called 'collection' by using the container <code>ee.ImageCollection()</code> and the collection ID <code>'LANDSAT/LC08/C02/T1_L2'</code>. Secondly, we will filter this image collection for the temporal parameters by using the method <code>.filterDate()</code>. Finally, we will map the cloud-masking and spectral indices functions to the collection:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var collection =<span class="st"> </span><span class="kw">ee.ImageCollection</span>(<span class="st">&#39;LANDSAT/LC08/C02/T1_L2&#39;</span>)
+                   <span class="kw">.filterDate</span>(startDay,endDay)
+                   <span class="kw">.map</span>(maskClouds)
+                   <span class="kw">.map</span>(addIndices);</code></pre></div>
+<p>Then, in an object called 'composite', we will reduce the image collection into a 2021/2022 composite using the <code>.median()</code> method. Finally, we will clip the composite to our area of interest <code>filteredAOI</code> using the container <code>.clip()</code> method:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var composite =<span class="st"> </span>collection
+                <span class="kw">.median</span>()
+                <span class="kw">.clip</span>(filteredAOI);</code></pre></div>
+<p>We will add <code>composite</code> to the Map editor:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(composite, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B5&#39;</span>, <span class="st">&#39;SR_B6&#39;</span>, <span class="st">&#39;SR_B4&#39;</span>], min<span class="op">:</span><span class="fl">0.1</span>, max<span class="op">:</span><span class="fl">0.2</span>}, <span class="st">&#39;Composite&#39;</span>,false);</code></pre></div>
+<div class="figure"><span id="fig:LiberiaComposite"></span>
+<img src="images/PartIII-LiberiaComposite.png" alt="A RGB564 composition of `composite`. " width="856" />
+<p class="caption">
+Figure 3.17: A RGB564 composition of <code>composite</code>.
+</p>
+</div>
+<p>Finally, we can export this composite as an asset. This will save you some time in the next steps where we will be using this same composite for classifying multiple land cover. For this example, we will use the <code>Export.image.toAsset()</code> as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Export.image.toAsset</span>({
+  image<span class="op">:</span><span class="st"> </span>composite,
+  description<span class="op">:</span><span class="st"> &#39;CompositeLiberia2021&#39;</span>,
+  assetId<span class="op">:</span><span class="st"> &#39;CompositeLiberia2021&#39;</span>,
+  crs<span class="op">:</span><span class="st">&#39;EPSG:4326&#39;</span>,
+  crsTransform<span class="op">:</span>[<span class="fl">0.0002777777777777778</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">180.0001388888889</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">0.0002777777777777778</span>,<span class="fl">60.00013888888889</span>],
+  maxPixels<span class="op">:</span><span class="fl">1e13</span>,
+  });</code></pre></div>
+<p>The code above will export the <code>composite</code> to your asset folder using the coordinate reference system (crs) and its affine. This is a necessary step to avoid a 15 meter pixel shift when using the default export parameters. Choose your folder and your asset ID anc click run:</p>
+<div class="figure"><span id="fig:PartIII-CompositeExport"></span>
+<img src="images/PartIII-CompositeExport.png" alt="Exporting the composite as an asset. " width="580" />
+<p class="caption">
+Figure 3.18: Exporting the composite as an asset.
+</p>
+</div>
+<p><a href="https://code.earthengine.google.com/714db6d9b8c8d00fd4473ac627b7cf3b" target="_blank">Code Checkpoint</a></p>
+<p><strong>2) Classification: Class-by-class</strong></p>
+<p>A class-by-class classification approach will follow the steps depicted in the figure below:</p>
+<div class="figure"><span id="fig:ClassificationApproach"></span>
+<img src="images/PartIII-ClassByClassApproach.png" alt="A class by class classification approach. " width="900" />
+<p class="caption">
+Figure 3.19: A class by class classification approach.
+</p>
+</div>
+<p>So, far we have covered a multi-class classification approach. This is the most common way to perform a classification of multiple classes: feed the classifier all the samples from the different classes and post-process the outputs. However, we can include a pre-classification step to isolate the class of interest and then perform the classification for that particular land cover. Later, we will mask this class from the composite in order to exclude those pixels from the classification process and potentially avoid comission and omission errors. Why is this relevant/important? - Answer: Pixel-based classification may generate a large number of misclassified pixels (the &quot;salt-and-pepper effect&quot;) due to the spectral diversity within the same land cover type and spectral confusion between land cover types. For that, a spectral signature analysis can be performed for identifying potential spectral bands and reflectance-based spectral indices thresholds for differentiating between two classes: the land cover class being mapped and the remaining land cover classes merged as a single class called “Other”.</p>
+<p><strong><em>Water bodies</em></strong></p>
+<p>Water bodies are usually the easiest class to start with. Not many other land cover classes will have a similar spectral signature. Therefore, it is good practice to start with classes that are easily classifiable. As mentioned previously, we will use a pre-classification step to isolate the class of interest and then perform the classification for that particular land cover. We can do that by using a Masking Phase (Se Figure <a href="part-3-country-specific-applications.html#fig:ClassificationApproach">3.19</a>). In this phase, we use a band/ index threshold analysis to create a mask that will remove most pixels that are unlikely to be the class of interest - in this particular case, water bodies. In this example we will use the Modified Normalized Difference Water Index (MNDWI) that was calculated and added as a separate band to the <code>composite</code> using the <code>addIndices</code> function. This index will usually have mostly positive values for wet areas and negative values for other land cover classes. Therefore we can creat a 'wetMask' using a value thresold:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var wetMask =<span class="st"> </span><span class="kw">composite.select</span>(<span class="st">&#39;MNDWI&#39;</span>)<span class="kw">.gte</span>(<span class="op">-</span><span class="fl">0.1</span>)<span class="kw">.clip</span>(filteredAOI);</code></pre></div>
+<p>The code above is selecting the pixels from the band &quot;MNDWI&quot; from <code>composite</code> that has values that are equal or greater than -0.1. Automatically, <code>wetMask</code> will be an image of ones (1) where the pixels meet the criteria above (MNDWI values greater than -0.1) and zeros (0) everywhere else. You can add <code>wetMask</code> to the map to check how constrictive your threshold values are:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(<span class="kw">wetMask.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;blue&#39;</span>}, <span class="st">&#39;WetMask&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-Watermask"></span>
+<img src="images/PartIII-Watermask.png" alt="A mask created based on the MNDWI values that are equal or greater than -0.1. " width="568" />
+<p class="caption">
+Figure 3.20: A mask created based on the MNDWI values that are equal or greater than -0.1.
+</p>
+</div>
+<p>Note that this mask includes all the water pixels (in black as seen in the RGB 564 color composition) plus other areas that area not open water bodies but include some level of wetness to them (usually mangroves and wetlands). The objective of this phase <em><strong>IS NOT</strong></em> to remove <em><strong>ALL</strong></em> pixels that are not water; rather, is to remove <em><strong>MOST</strong></em> pixels that are not water. You can think of this as a classification process that preceeds the actual random forest classification. Instead of having to classify the entire composite into two classes, this way you can reduce the number of pixels going into the Random Forest Classification, speeding up the process. Also, this process already eliminated pixels that are unlikely to be water, reducing even further the chances of missclassification.</p>
+<p>We will use this mask to mask <code>composite</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var compositemasked =<span class="st"> </span><span class="kw">composite.mask</span>(wetMask);
+<span class="kw">Map.addLayer</span>(compositemasked, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B5&#39;</span>, <span class="st">&#39;SR_B6&#39;</span>, <span class="st">&#39;SR_B4&#39;</span>], min<span class="op">:</span><span class="fl">0.1</span>, max<span class="op">:</span><span class="fl">0.2</span>}, <span class="st">&#39;Composite Masked&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-MaskedComposite"></span>
+<img src="images/PartIII-MaskedComposite.png" alt="`composite` masked using `wetMask`. " width="853" />
+<p class="caption">
+Figure 3.21: <code>composite</code> masked using <code>wetMask</code>.
+</p>
+</div>
+<p>This is the resulting Landsat composite that will be used in this first classification iteration! The next steps should be familiar to you: * Selecting training samples - here we will create the two geometries to hold the 'water' and 'other' samples. Remember to set a property called 'landcover':</p>
+<div class="figure"><span id="fig:PartIII-WaterSamples"></span>
+<img src="images/PartIII-WaterSamples.png" alt=" Geometry imports to hold the training samples. " width="1166" />
+<p class="caption">
+Figure 3.22:  Geometry imports to hold the training samples.
+</p>
+</div>
+<p><a href="https://code.earthengine.google.com/4a32727cbaefeb2d4f60037073884618" target="_blank">Code Checkpoint</a></p>
+<ul>
+<li>Training a random forest classifier:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var classes =<span class="st"> </span><span class="kw">Water.merge</span>(Other);
+var bands =<span class="st"> </span>[<span class="st">&#39;SR_B4&#39;</span>,<span class="st">&#39;SR_B5&#39;</span>,<span class="st">&#39;SR_B6&#39;</span>,<span class="st">&#39;NDVI&#39;</span>,<span class="st">&#39;NBR&#39;</span>,<span class="st">&#39;MNDWI&#39;</span>,<span class="st">&#39;SR&#39;</span>,<span class="st">&#39;GCVI&#39;</span>,<span class="st">&#39;MSAVI&#39;</span>];
+
+var samples =<span class="st"> </span><span class="kw">compositemasked.select</span>(bands)<span class="kw">.sampleRegions</span>({
+  collection<span class="op">:</span><span class="st"> </span>classes,       
+  properties<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;landcover&#39;</span>],
+  scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>                  
+})<span class="kw">.randomColumn</span>(<span class="st">&#39;random&#39;</span>);
+
+var split =<span class="st"> </span><span class="fl">0.8</span>;
+var training =<span class="st"> </span><span class="kw">samples.filter</span>(<span class="kw">ee.Filter.lt</span>(<span class="st">&#39;random&#39;</span>, split));
+var testing =<span class="st"> </span><span class="kw">samples.filter</span>(<span class="kw">ee.Filter.gte</span>(<span class="st">&#39;random&#39;</span>, split));
+
+<span class="kw">print</span>(<span class="st">&#39;Samples n =&#39;</span>, <span class="kw">samples.aggregate_count</span>(<span class="st">&#39;landcover&#39;</span>));
+<span class="kw">print</span>(<span class="st">&#39;Training n =&#39;</span>, <span class="kw">training.aggregate_count</span>(<span class="st">&#39;landcover&#39;</span>));
+<span class="kw">print</span>(<span class="st">&#39;Testing n =&#39;</span>, <span class="kw">testing.aggregate_count</span>(<span class="st">&#39;landcover&#39;</span>));
+
+var classifier =<span class="st"> </span><span class="kw">ee.Classifier.smileRandomForest</span>(<span class="dv">100</span>,<span class="dv">5</span>)<span class="kw">.train</span>({
+  features<span class="op">:</span><span class="st"> </span>training,
+  classProperty<span class="op">:</span><span class="st"> &#39;landcover&#39;</span>, 
+  inputProperties<span class="op">:</span><span class="st"> </span>bands
+});
+
+var validation =<span class="st"> </span><span class="kw">testing.classify</span>(classifier);
+var testAccuracy =<span class="st"> </span><span class="kw">validation.errorMatrix</span>(<span class="st">&#39;landcover&#39;</span>, <span class="st">&#39;classification&#39;</span>);
+
+<span class="kw">print</span>(<span class="st">&#39;Validation error matrix RF: &#39;</span>, testAccuracy);
+<span class="kw">print</span>(<span class="st">&#39;Validation overall accuracy RF in %: &#39;</span>, <span class="kw">testAccuracy.accuracy</span>()<span class="kw">.multiply</span>(<span class="dv">100</span>));</code></pre></div>
+<ul>
+<li>Classifying <code>compositemasked</code> into 'Water' and 'Others'.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var classification =<span class="st"> </span><span class="kw">compositemasked.select</span>(bands)<span class="kw">.classify</span>(classifier);
+
+var paletteMAP =<span class="st"> </span>[
+  <span class="st">&#39;#35ff17&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="kw">Other</span> (Class value <span class="dv">0</span>)
+  <span class="st">&#39;#1c48d6&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="kw">Water</span> (Class value <span class="dv">1</span>)
+];
+
+<span class="kw">Map.addLayer</span> (classification, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">1</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Classification&#39;</span>);</code></pre></div>
+<p>You should get something similar to this:</p>
+<div class="figure"><span id="fig:PartIII-WaterClass"></span>
+<img src="images/PartIII-WaterClass.png" alt=" Classification output. " width="862" />
+<p class="caption">
+Figure 3.23:  Classification output.
+</p>
+</div>
+<p>Finally, we will save this output to our Assets folder using the <code>Export.image.toAsset()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Export.image.toAsset</span>({
+  image<span class="op">:</span><span class="st"> </span>classification,
+  description<span class="op">:</span><span class="st"> &#39;WaterClassification&#39;</span>,
+  assetId<span class="op">:</span><span class="st"> &#39;1-Water&#39;</span>,
+  crs<span class="op">:</span><span class="st">&#39;EPSG:4326&#39;</span>,
+  crsTransform<span class="op">:</span>[<span class="fl">0.0002777777777777778</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">180.0001388888889</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">0.0002777777777777778</span>,<span class="fl">60.00013888888889</span>],
+  maxPixels<span class="op">:</span><span class="fl">1e13</span>,
+  });</code></pre></div>
+<p>This export may take several minutes. This asset will be used in the next classification to mask the composite for this class!</p>
+<p><a href="https://code.earthengine.google.com/8487823c78141fce13374e5c060902e0" target="_blank">Code Checkpoint</a></p>
+<p><strong><em>Mangroves</em></strong></p>
+<p>Congratulations! You have classified your first land cover class! Next on the list is 'Mangroves'. This one is fairly straighforward to classify as this type of vegetation will have traces of the water spectral signature. We can use a similar index threshold approach for this class. Adittionally, we can use other datasets to mask other pixels that are unlikely to be Mangroves, such as elevation (Please refer to the Guinea section of this chapter for more information).</p>
+<p>First, we will open a <a href="https://code.earthengine.google.com/" target="_blank">new Code Editor page</a> and import the Landsat composite, the feature collection of Liberia counties and the water classification:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var composite =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/CompositeLiberia2021&#39;</span>);
+var aoi =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/LiberiaCounties&#39;</span>);
+var filterCounties =<span class="st"> </span><span class="kw">ee.Filter.inList</span>(<span class="st">&#39;NAME_1&#39;</span>, [<span class="st">&#39;Bomi&#39;</span>, <span class="st">&#39;Montserrado&#39;</span>,<span class="st">&#39;Margibi&#39;</span>,<span class="st">&#39;GrandBassa&#39;</span>]);
+var filteredAOI =<span class="st"> </span><span class="kw">aoi.filter</span>(filterCounties);
+var waterClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/1-Water&#39;</span>);
+<span class="kw">Map.addLayer</span>(composite, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B5&#39;</span>, <span class="st">&#39;SR_B6&#39;</span>, <span class="st">&#39;SR_B4&#39;</span>], min<span class="op">:</span><span class="fl">0.1</span>, max<span class="op">:</span><span class="fl">0.2</span>}, <span class="st">&#39;Composite&#39;</span>);</code></pre></div>
+<p>In this step, we will create three masks: one based the class we already have (water class),one based on elevation (mangroves tend to ocurr in flat areas near the shore. Thus an elevation cut off can be use to eliminate most of other pixels) and, finally, one based on spectral threshold (similarly to what we have done in the previous step). The resulting composite will be what we will use for classifying Mangroves:</p>
+<ol style="list-style-type: upper-alpha">
+<li>Mask I - Water Class</li>
+</ol>
+<p>Here, we will create a mask based on the water classification. For that, we will create a <code>ee.Image</code> populate it with 1 and where it overlaps with the water class, populate it with 0. This way, when we apply this mask to the <code>composite</code>, the classified water pixels will be masked, leaving only the other pixels available for classification:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var waterMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">waterClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+<span class="kw">Map.addLayer</span>(<span class="kw">waterMask.selfMask</span>(), {palette<span class="op">:</span>[<span class="st">&#39;yellow&#39;</span>]}, <span class="st">&#39;Water Mask&#39;</span>);</code></pre></div>
+<p>Note that the value provided within <code>eq()</code> needs to match the value of your class.</p>
+<ol start="2" style="list-style-type: upper-alpha">
+<li>Mask II - Elevation (See <a href="part-3-country-specific-applications.html#fig:my-elevmask">3.4</a>)</li>
+</ol>
+<p>For the elevation mask, we will take advantage of the Shuttle Radar Topography Mission's elevation data available on GEE. We will use an elevation cut off of 25 meters: the composite will be masked where pixels have values &gt; 25 m of elevation:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var elevation =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;USGS/SRTMGL1_003&#39;</span>)<span class="kw">.select</span>(<span class="st">&#39;elevation&#39;</span>);
+var elevationMask =<span class="st"> </span><span class="kw">elevation.lte</span>(<span class="dv">25</span>)<span class="kw">.clip</span>(filteredAOI);
+<span class="kw">Map.addLayer</span>(<span class="kw">elevationMask.selfMask</span>(), {palette<span class="op">:</span>[<span class="st">&#39;pink&#39;</span>]}, <span class="st">&#39;Elevation Mask&#39;</span>);</code></pre></div>
+<ol start="3" style="list-style-type: upper-alpha">
+<li>Mask III - Index Threshold For the threshold mask, we will use the same index we used in the Water classification masking phase:</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var wetMask =<span class="st"> </span><span class="kw">composite.select</span>(<span class="st">&#39;MNDWI&#39;</span>)<span class="kw">.gte</span>(<span class="op">-</span><span class="fl">0.12</span>);
+<span class="kw">Map.addLayer</span>(<span class="kw">wetMask.selfMask</span>(), {palette<span class="op">:</span>[<span class="st">&#39;blue&#39;</span>]}, <span class="st">&#39;Wet Mask&#39;</span>);</code></pre></div>
+<p>These are the three masks that will be applied to <code>composite</code>:</p>
+<div class="figure"><span id="fig:PartIII-MASKS"></span>
+<img src="images/PartIII-MASKS.png" alt="When applying these three masks to the composite, pixels will only remain where the three masks overlap." width="854" />
+<p class="caption">
+Figure 3.24: When applying these three masks to the composite, pixels will only remain where the three masks overlap.
+</p>
+</div>
+<p>Finally, we will apply these masks to the <code>composite</code> using <code>.mask()</code> for the first mask and <code>.updateMask()</code> for the others:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var compositemasked =<span class="st"> </span><span class="kw">composite.mask</span>(waterMask)
+                               <span class="kw">.updateMask</span>(elevationMask)
+                               <span class="kw">.updateMask</span>(wetMask);
+
+<span class="kw">Map.addLayer</span>(compositemasked, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B5&#39;</span>, <span class="st">&#39;SR_B6&#39;</span>, <span class="st">&#39;SR_B4&#39;</span>], min<span class="op">:</span><span class="fl">0.1</span>, max<span class="op">:</span><span class="fl">0.2</span>}, <span class="st">&#39;Composite Masked&#39;</span>);</code></pre></div>
+<p>You should achieve something like this:</p>
+<div class="figure"><span id="fig:PartIII-CompositeMaskedII"></span>
+<img src="images/PartIII-CompositeMaskedII.png" alt="Masked composite." width="866" />
+<p class="caption">
+Figure 3.25: Masked composite.
+</p>
+</div>
+<p>Next, we will repeat the sampling selection and classification. As a tip for selection accurate samples, mangroves will be in a darker shade of red/orange in this RGB 564 color composition while other vegetative classes (e.g. evergreen forests) will have a lighter red/orange shade. Make sure to take advantage of the high resolution imagery using the <strong>Satellite</strong> button:</p>
+<div class="figure"><span id="fig:PartIII-Mangrove"></span>
+<img src="images/PartIII-Mangrove.png" alt="Mangroves and other vegetation classes in Liberia." width="862" />
+<p class="caption">
+Figure 3.26: Mangroves and other vegetation classes in Liberia.
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var classes =<span class="st"> </span><span class="kw">Mangrove.merge</span>(Other);
+var bands =<span class="st"> </span>[<span class="st">&#39;SR_B4&#39;</span>,<span class="st">&#39;SR_B5&#39;</span>,<span class="st">&#39;SR_B6&#39;</span>,<span class="st">&#39;NDVI&#39;</span>,<span class="st">&#39;NBR&#39;</span>,<span class="st">&#39;MNDWI&#39;</span>,<span class="st">&#39;SR&#39;</span>,<span class="st">&#39;GCVI&#39;</span>,<span class="st">&#39;MSAVI&#39;</span>];
+
+var samples =<span class="st"> </span><span class="kw">compositemasked.select</span>(bands)<span class="kw">.sampleRegions</span>({
+  collection<span class="op">:</span><span class="st"> </span>classes,       
+  properties<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;landcover&#39;</span>],
+  scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>                  
+})<span class="kw">.randomColumn</span>(<span class="st">&#39;random&#39;</span>);
+
+var split =<span class="st"> </span><span class="fl">0.8</span>;
+var training =<span class="st"> </span><span class="kw">samples.filter</span>(<span class="kw">ee.Filter.lt</span>(<span class="st">&#39;random&#39;</span>, split));
+var testing =<span class="st"> </span><span class="kw">samples.filter</span>(<span class="kw">ee.Filter.gte</span>(<span class="st">&#39;random&#39;</span>, split));
+
+<span class="kw">print</span>(<span class="st">&#39;Samples n =&#39;</span>, <span class="kw">samples.aggregate_count</span>(<span class="st">&#39;landcover&#39;</span>));
+<span class="kw">print</span>(<span class="st">&#39;Training n =&#39;</span>, <span class="kw">training.aggregate_count</span>(<span class="st">&#39;landcover&#39;</span>));
+<span class="kw">print</span>(<span class="st">&#39;Testing n =&#39;</span>, <span class="kw">testing.aggregate_count</span>(<span class="st">&#39;landcover&#39;</span>));
+
+var classifier =<span class="st"> </span><span class="kw">ee.Classifier.smileRandomForest</span>(<span class="dv">100</span>,<span class="dv">5</span>)<span class="kw">.train</span>({
+  features<span class="op">:</span><span class="st"> </span>training,
+  classProperty<span class="op">:</span><span class="st"> &#39;landcover&#39;</span>, 
+  inputProperties<span class="op">:</span><span class="st"> </span>bands
+});
+
+var validation =<span class="st"> </span><span class="kw">testing.classify</span>(classifier);
+var testAccuracy =<span class="st"> </span><span class="kw">validation.errorMatrix</span>(<span class="st">&#39;landcover&#39;</span>, <span class="st">&#39;classification&#39;</span>);
+
+<span class="kw">print</span>(<span class="st">&#39;Validation error matrix RF: &#39;</span>, testAccuracy);
+<span class="kw">print</span>(<span class="st">&#39;Validation overall accuracy RF in %: &#39;</span>, <span class="kw">testAccuracy.accuracy</span>()<span class="kw">.multiply</span>(<span class="dv">100</span>));
+
+var classification =<span class="st"> </span><span class="kw">compositemasked.select</span>(bands)<span class="kw">.classify</span>(classifier);
+
+var paletteMAP =<span class="st"> </span>[
+  <span class="st">&#39;#35ff17&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="kw">Other</span> (Class value <span class="dv">0</span>)
+  <span class="st">&#39;#ce0dd6&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="kw">Mangroves</span> (Class value <span class="dv">1</span>)
+];
+
+<span class="kw">Map.addLayer</span> (classification, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">1</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Classification&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-Mangroves"></span>
+<img src="images/PartIII-Mangroves.png" alt="Classification output." width="862" />
+<p class="caption">
+Figure 3.27: Classification output.
+</p>
+</div>
+<p>Finally, we will export the classification:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Export.image.toAsset</span>({
+  image<span class="op">:</span><span class="st"> </span>classification,
+  description<span class="op">:</span><span class="st"> &#39;MangroveClassification&#39;</span>,
+  assetId<span class="op">:</span><span class="st"> &#39;2-Mangroves&#39;</span>,
+  crs<span class="op">:</span><span class="st">&#39;EPSG:4326&#39;</span>,
+  crsTransform<span class="op">:</span>[<span class="fl">0.0002777777777777778</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">180.0001388888889</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">0.0002777777777777778</span>,<span class="fl">60.00013888888889</span>],
+  maxPixels<span class="op">:</span><span class="fl">1e13</span>,
+  });</code></pre></div>
+<p><a href="https://code.earthengine.google.com/91448c680e2b1a24414c6f97984edf1d" target="_blank">Code Checkpoint</a></p>
+<p><strong><em>Settlements</em></strong></p>
+<p>Now, we are moving into classes that require not only a spectral analysis but also a contextual one to be accurately classified. A good example is the artificial surfaces/ settlements class. In the case of Liberia, these areas will have very similar spectral behavior as exposed soil and bare areas, as most of the villages and small towns are usually located within these land cover classes. Therefore, a contextual evaluation needs to be included to ensure that bare areas are not being missclassified as settlements. In this case, we can use datasets like the location of these settlements and population density. These are extra pieces of information that we can use to constrain the classification to the correct area. In this example, we will use the <a href="https://energydata.info/dataset/liberia-populated-settlements" target="_blank">Liberia census population dataset from 2007-2008</a> created by Liberia Institute of Statistics and Geo-Information Services (LISGIS). The dataset contains a list of all the settlements that are geo-located and have attributes with their administrative units and population data (total, male, female and number of households). Additionally, we can use the Global Population Density dataset to further refine our classification.</p>
+<p>Similarly to the last classification, we will open a <a href="https://code.earthengine.google.com/" target="_blank">new Code Editor page</a> and import the Landsat composite, the feature collection of Liberia counties, the feature collection of Liberia settlements, the global population density dataset (available through GEE) and the water and mangrove classification outputs:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var composite =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/CompositeLiberia2021&#39;</span>);
+var aoi =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/LiberiaCounties&#39;</span>);
+var filterCounties =<span class="st"> </span><span class="kw">ee.Filter.inList</span>(<span class="st">&#39;NAME_1&#39;</span>, [<span class="st">&#39;Bomi&#39;</span>, <span class="st">&#39;Montserrado&#39;</span>,<span class="st">&#39;Margibi&#39;</span>,<span class="st">&#39;GrandBassa&#39;</span>]);
+var filteredAOI =<span class="st"> </span><span class="kw">aoi.filter</span>(filterCounties);
+
+var settlements =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/PopulatedSettlements2007&#39;</span>);
+var PopulationCount =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;JRC/GHSL/P2016/POP_GPW_GLOBE_V1/2015&#39;</span>);
+
+var waterClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/1-Water&#39;</span>);
+var mangroveClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/2-Mangroves&#39;</span>);</code></pre></div>
+<p>You can add these layers to the Map Editor for inspection:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(composite, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B5&#39;</span>, <span class="st">&#39;SR_B6&#39;</span>, <span class="st">&#39;SR_B4&#39;</span>], min<span class="op">:</span><span class="fl">0.1</span>, max<span class="op">:</span><span class="fl">0.2</span>}, <span class="st">&#39;Composite&#39;</span>);
+<span class="kw">Map.addLayer</span>(<span class="kw">PopulationCount.clip</span>(filteredAOI), {palette<span class="op">:</span>[<span class="st">&quot;ffffe7&quot;</span>,<span class="st">&quot;FFc869&quot;</span>,<span class="st">&quot;ffac1d&quot;</span>,<span class="st">&quot;e17735&quot;</span>,<span class="st">&quot;f2552c&quot;</span>,<span class="st">&quot;9f0c21&quot;</span>], min<span class="op">:</span><span class="dv">0</span>, max<span class="op">:</span><span class="dv">500</span>}, <span class="st">&#39;Population Count&#39;</span>);
+<span class="kw">Map.addLayer</span>(settlements, {}, <span class="st">&#39;Settlements&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-Pop"></span>
+<img src="images/PartIII-Pop.png" alt="Ancillary datasets for classification of human settlements in Liberia. The population density and small settlement locations is helpful to constrain the classification in certain areas and help reduce misclassification errors with spectrally similar classes such as bare soil." width="1458" />
+<p class="caption">
+Figure 3.28: Ancillary datasets for classification of human settlements in Liberia. The population density and small settlement locations is helpful to constrain the classification in certain areas and help reduce misclassification errors with spectrally similar classes such as bare soil.
+</p>
+</div>
+<p>Similarly to the previous classification, we will create the masks based on these datasets to apply to the composite:</p>
+<ol style="list-style-type: upper-alpha">
+<li>Mask I - Water and Mangrove class masks</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var waterMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">waterClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+var mangroveMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">mangroveClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);</code></pre></div>
+<ol start="2" style="list-style-type: upper-alpha">
+<li>Mask II - Population Masks</li>
+</ol>
+<p>In this particular case, we are using two different datasets: one is an <code>ee.Image()</code> (<code>PopulationCount</code>) and the other is a <code>ee.FeatureCollection()</code> (<code>settlements</code>). Fot that we will create two different masks and merge them together as a single mask. First, we will create a population count mask based on the number of people per pixel. Using the same construction as before, we will create a <code>ee.Image()</code> of value 1 and populate it with zeros where <code>PopulationCount</code> is equal or lower than 100 people. In other words, we are creating a mask to remove pixels where there is less than 100 people, which is an indication that this area may not be a fully established settlement:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var popMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">PopulationCount.select</span>([<span class="st">&#39;population_count&#39;</span>])<span class="kw">.lte</span>(<span class="dv">100</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+<span class="kw">Map.addLayer</span>(<span class="kw">popMask.selfMask</span>(), {palette<span class="op">:</span>[<span class="st">&#39;green&#39;</span>]}, <span class="st">&#39;Population Mask&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-PopMask"></span>
+<img src="images/PartIII-PopMask.png" alt="Population mask created by selecting areas that have more than 100 people/pixel. Once this mask is applied, areas with less than 100 people per pixel will be masked." width="858" />
+<p class="caption">
+Figure 3.29: Population mask created by selecting areas that have more than 100 people/pixel. Once this mask is applied, areas with less than 100 people per pixel will be masked.
+</p>
+</div>
+<p>Next, we will use <code>settlements</code>. As you may have noticed, <code>settlements</code> contains the location of each small human settlement based on the 2007 census. We can then create a buffer of a certain size around each of these locations to create areas of likelihood for human settlements. We will first create a function to apply a buffer of a 1000 meters around the feature and then map it to <code>settlements</code> using <code>.map()</code> method:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var bufferSet =<span class="st"> </span><span class="cf">function</span>(feature) {
+  return <span class="kw">feature.buffer</span>(<span class="dv">1000</span>);   
+};
+var setLocation =<span class="st"> </span><span class="kw">settlements.map</span>(bufferSet);
+<span class="kw">Map.addLayer</span>(setLocation, {color<span class="op">:</span><span class="st">&#39;purple&#39;</span>}, <span class="st">&#39;Settlements&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-SetBuffer"></span>
+<img src="images/PartIII-SetBuffer.png" alt="1000 m buffer around each settlement location." width="856" />
+<p class="caption">
+Figure 3.30: 1000 m buffer around each settlement location.
+</p>
+</div>
+<p>Now, we can merge them into a final mask by creating an <code>ee.Image()</code> of 1 and clip it using the buffered locations and the <code>.clip()</code> method and add it to <code>popMask</code> using <code>.add()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var populationMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>)<span class="kw">.clip</span>(setLocation)<span class="kw">.unmask</span>()<span class="kw">.add</span>(popMask);
+<span class="kw">Map.addLayer</span>(<span class="kw">populationMask.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;blue&#39;</span>}, <span class="st">&#39;Population Mask Final&#39;</span>);</code></pre></div>
+<div class="starcomment">
+<p>
+Note that the code above used <code>.unmask()</code> after <code>.clip()</code>. In order to mathematically add two images, they have to have values. <code>.clip()</code> will cut an image for the extent of the feature used. Therefore, the rest will be automatically masked. Using <code>.unmask()</code> allows you to reaply 0 values to the masked areas, allowing you to do mathematical operations with it!
+</p>
+</div>
+<div class="figure"><span id="fig:PartIII-PopMaskFinal"></span>
+<img src="images/PartIII-PopMaskFinal.png" alt="Final population Mask." width="858" />
+<p class="caption">
+Figure 3.31: Final population Mask.
 </p>
 </div>
 

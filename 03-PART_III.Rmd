@@ -4,6 +4,8 @@ In this part we will explore examples of class-specific classification using pre
 
 ## Guinea
 
+Description of Guinea here
+
 ### Mangrove mapping in Guinea, West Africa
 
 In this example, we will use the codes from the previous parts for mangrove mapping in Guinea, in West Africa. We will also introduce the use of other datasets for masking and sample selection to assist in the classification workflow.
@@ -401,4 +403,553 @@ print('Validation error matrix Map: ', testAccuracy);
 
 ```{r ValidationGuinea,  fig.cap="Validation results for this example. Ground truth data (in this context it refers to independent samples) were used to calculate the overall accuracy and kappa values.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/PartIII-ValidationGuinea.png")
+```
+
+## Liberia
+
+In this example, we will use the codes from the previous sections for a class by class land cover mapping in Liberia, in West Africa. We will also take advantage of other datasets for masking and sample selection to assist in the classification workflow.
+
+### Class-by-class land cover mapping
+
+We will start by [opening a new code editor page](https://code.earthengine.google.com/){target="_blank"} and
+by defining the spatial and temporal parameters of the composite you wish to classify, just like the other examples. As explained in Part 1, GEE’s cloud screening algorithm based on quality assessment bands (QA) can be applied to remove cloud and cloud shadow contaminated pixels for each of the Landsat scene covering y. This method greatly improves the final composite (See \@ref(fig:CompositesMasked)). However, creating an annual *completely cloud-free* imagery composition for Liberia is a challenging task because of the west African monsoon, which causes constant clouds across the Gulf of Guinea most of the time. The rainy season in Liberia ranges from May to October and it frequently rains in other months, except in the short dry season that runs from December to February/March. Hence, __multi-year composites are necessary in attaining wall-to-wall cloud-free mosaics over Liberia__. 
+
+In order to ensure that an adequate cloud-free composite is achieved, we will use a composite circa 2021-2022. Then the temporal parameters can be defined as:
+
+```{r eval=FALSE}
+var year = 2021;
+var startDay = (year)+'-01-01';
+var endDay = (year+1)+'-05-30';
+```
+
+Note that this time range will include all available Landsat 8 Surface Reflectance images from January 2021 through May 2022 (`year+1`).
+
+For the spatial parameters, we can use the *Large Scale International Boundary (LSIB)* dataset and select Liberia’s national border. First, we will load the dataset into an object called 'countries' using the `ee.FeatureCollection()` object and the feature collection ID 'USDOS/LSIB/2013'. Secondly, we will filter the dataset using `.filterMetadata()` and select Liberia from the list of countries and storing it in `nationalBorder`:
+
+```{block, type='rmdcomment'}
+Note that you can select a any country border by filtering *'USDOS/LSIB/2013'* dataset by using *.filterMetadata('name' , 'equals', 'NAME OF THE COUNTRY IN CAPITAL LETTERS')*. 
+```
+
+If you want to visualize your feature collection, you can add it to the map using the `Map.addLayer()`:
+
+```{r eval=FALSE}
+var countries = ee.FeatureCollection('USDOS/LSIB/2013');
+var nationalBorder = countries.filterMetadata('name' , 'equals', 'LIBERIA');
+Map.centerObject(nationalBorder);
+Map.addLayer(nationalBorder, {color: 'Blue'}, 'Liberia National Borders');
+```
+
+```{r LiberiaBorder,  fig.cap="Liberia border extracted from the *Large Scale International Boundary (LSIB)* dataset.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-LiberiaBorder.png")
+```
+
+Alternatively, you can import your own border shapefile to your assets using the __NEW__ button in the __Assets__ tab. (See Earth Engine's [Importing Raster Data](https://developers.google.com/earth-engine/guides/image_upload){target="_blank"} for instructions on uploading an image to your assets or [Importing Table/Shapefile Data](https://developers.google.com/earth-engine/guides/table_upload){target="_blank"} for more details).
+
+In this example, we imported a shapefile containing all of Liberia's counties to our assets:
+
+```{r ImportingShapefile,  fig.cap="Importing shapefiles to your assets.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-ImportingShapefile.png")
+```
+
+Once the upload is completed, the imported dataset can be accessed in the __Assets__ tab. We will import it to the script using its 'ID' and add to the map editor: 
+
+```{r eval=FALSE}
+var aoi = ee.FeatureCollection('users/capacityBuilding/Liberia/LiberiaCounties');
+Map.addLayer(aoi, {color: 'red'}, 'LiberiaCounties');
+```
+
+```{r Counties,  fig.cap="`aoi` and its multiple features (counties)", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-Counties.png")
+```
+
+In this particular case, this dataset includes multiple features (or polygons) with several properties for each feature. One of them is called 'NAME_1', which includes the names of each county in Liberia: 
+
+```{r AssetDetail,  fig.cap="Asset information. This imported dataset includes multiple features.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-AssetDetail.png")
+```
+
+You can also print `aoi` to the __Console__ tab:
+
+```{r eval=FALSE}
+print(aoi);
+```
+
+```{r FCProperties,  fig.cap="Feature collection information printed to the console. This imported dataset includes multiple features.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-FCProperties.png")
+```
+
+This type of metadata can be used to filter a feature collection. The `ee.Filter.inList()` method is very helpful when you want to filter multiple properties at once. First, we will create an object called 'filterCounties' with a list of 4 of the 15 counties in Liberia. In this example, we selected the counties of Bomi, Montserrado, Margibi and Grand Bassa. Finally, we use `filter()` to filter `aoi` for the list of counties provided in `filterCounties`:
+
+```{r eval=FALSE}
+var filterCounties = ee.Filter.inList('NAME_1', ['Bomi', 'Montserrado','Margibi','GrandBassa']);
+var filteredAOI = aoi.filter(filterCounties);
+Map.addLayer(filteredAOI, {color: 'green'}, 'filteredArea');
+```
+
+```{r FilteredCounties,  fig.cap="The `aoi` feature collection filtered by metadata. Here, a filter to select the counties of Bomi, Montserrado, Margibi and Grand Bassa was used. ", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-FilteredCounties.png")
+```
+
+Now that both temporal and spatial parameters are defined, As auxiliary functions for cloud masking and spectral index calculation, we will use the same functions provided in PART 2:
+
+```{r eval=FALSE}
+function maskClouds(image) {
+  var cloudShadowBitMask = ee.Number(2).pow(3).int();
+  var cloudsBitMask = ee.Number(2).pow(4).int();
+  var QA = image.select('QA_PIXEL');
+  var mask = QA.bitwiseAnd(cloudShadowBitMask).eq(0)
+      .and(QA.bitwiseAnd(cloudsBitMask).eq(0));
+  return image.updateMask(mask).divide(100000).select("SR_B[0-9]*").copyProperties(image, ["system:time_start"]);
+}
+
+function addIndices(image) {
+  var ndvi = image.normalizedDifference(['SR_B5','SR_B4']).rename('NDVI');
+  var nbr = image.normalizedDifference(['SR_B5','SR_B7']).rename('NBR');
+  var ndmi = image.normalizedDifference(['SR_B7','SR_B3']).rename('NDMI');
+  var mndwi = image.normalizedDifference(['SR_B3','SR_B6']).rename('MNDWI');
+  var sr = image.select('SR_B5').divide(image.select('SR_B4')).rename('SR');
+  var bare = image.normalizedDifference(['SR_B6','SR_B7']).rename('BI');
+  var gcvi = image.expression('(NIR/GREEN)-1',{
+    'NIR':image.select('SR_B5'),
+    'GREEN':image.select('SR_B3')
+  }).rename('GCVI');
+  var evi = image.expression(
+  '2.5 * ((NIR-RED) / (NIR + 6 * RED - 7.5* SR_BLUE +1))', {
+    'NIR':image.select('SR_B5'),
+    'RED':image.select('SR_B4'),
+    'SR_BLUE':image.select('SR_B2')
+  }).rename('EVI');
+  var msavi = image.expression(
+  '(2 * NIR + 1 - sqrt(pow((2 * NIR + 1), 2) - 8 * (NIR - RED)) ) / 2', {
+    'NIR': image.select('SR_B5'), 
+    'RED': image.select('SR_B4')}
+).rename('MSAVI');
+    return image
+    .addBands(ndvi)
+    .addBands(nbr)
+    .addBands(ndmi)
+    .addBands(mndwi)
+    .addBands(sr)
+    .addBands(evi)
+    .addBands(msavi)
+    .addBands(gcvi)
+    .addBands(bare);
+}
+```
+
+__1) Landsat 8 Image Collection and Cloud-free Mosaic__
+
+Similarly to the examples from PART 2 and PART 3.1, we will load the Landsat 8 Surface Reflectance data archive into an object called 'collection' by using the container `ee.ImageCollection()` and the collection ID `'LANDSAT/LC08/C02/T1_L2'`. Secondly, we will filter this image collection for the temporal parameters by using the method `.filterDate()`. Finally, we will map the cloud-masking and spectral indices functions to the collection:
+
+```{r eval=FALSE}
+var collection = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2')
+                   .filterDate(startDay,endDay)
+                   .map(maskClouds)
+                   .map(addIndices);
+```
+
+Then, in an object called 'composite', we will reduce the image collection into a 2021/2022 composite using the `.median()` method. Finally, we will clip the composite to our area of interest `filteredAOI` using the container `.clip()` method:
+
+```{r eval=FALSE}
+var composite = collection
+                .median()
+                .clip(filteredAOI);
+```
+
+We will add `composite` to the Map editor:
+
+```{r eval=FALSE}
+Map.addLayer(composite, {bands: ['SR_B5', 'SR_B6', 'SR_B4'], min:0.1, max:0.2}, 'Composite',false);
+```
+
+```{r LiberiaComposite,  fig.cap="A RGB564 composition of `composite`. ", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-LiberiaComposite.png")
+```
+
+Finally, we can export this composite as an asset. This will save you some time in the next steps where we will be using this same composite for classifying multiple land cover. For this example, we will use the `Export.image.toAsset()` as follows:
+
+```{r eval=FALSE}
+Export.image.toAsset({
+  image: composite,
+  description: 'CompositeLiberia2021',
+  assetId: 'CompositeLiberia2021',
+  crs:'EPSG:4326',
+  crsTransform:[0.0002777777777777778,0,-180.0001388888889,0,-0.0002777777777777778,60.00013888888889],
+  maxPixels:1e13,
+  });
+```
+
+The code above will export the `composite` to your asset folder using the coordinate reference system (crs) and its affine. This is a necessary step to avoid a 15 meter pixel shift when using the default export parameters. Choose your folder and your asset ID anc click run:
+
+```{r PartIII-CompositeExport,  fig.cap="Exporting the composite as an asset. ", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-CompositeExport.png")
+```
+
+[Code Checkpoint](https://code.earthengine.google.com/714db6d9b8c8d00fd4473ac627b7cf3b){target="_blank"}
+
+__2) Classification: Class-by-class__
+
+A class-by-class classification approach will follow the steps depicted in the figure below:
+
+```{r ClassificationApproach,  fig.cap="A class by class classification approach. ", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-ClassByClassApproach.png")
+```
+
+So, far we have covered a multi-class classification approach. This is the most common way to perform a classification of multiple classes: feed the classifier all the samples from the different classes and post-process the outputs.
+However, we can include a pre-classification step to isolate the class of interest and then perform the classification for that particular land cover. Later, we will mask this class from the composite in order to exclude those pixels from the classification process and potentially avoid comission and omission errors. Why is this relevant/important? - Answer: Pixel-based classification may generate a large number of misclassified pixels (the "salt-and-pepper effect") due to the spectral diversity within the same land cover type and spectral confusion between land cover types.
+For that, a spectral signature analysis can be performed for identifying potential spectral bands and reflectance-based spectral indices thresholds for differentiating between two classes: the land cover class being mapped and the remaining land cover classes merged as a single class called “Other”.
+
+__*Water bodies*__
+
+Water bodies are usually the easiest class to start with. Not many other land cover classes will have a similar spectral signature. Therefore, it is good practice to start with classes that are easily classifiable.
+As mentioned previously, we will use a pre-classification step to isolate the class of interest and then perform the classification for that particular land cover. We can do that by using a Masking Phase (Se Figure \@ref(fig:ClassificationApproach)). In this phase, we use a band/ index threshold analysis to create a mask that will remove most pixels that are unlikely to be the class of interest - in this particular case, water bodies.
+In this example we will use the Modified Normalized Difference Water Index (MNDWI) that was calculated and added as a separate band to the `composite` using the `addIndices` function. This index will usually have mostly positive values for wet areas and negative values for other land cover classes.
+Therefore we can creat a 'wetMask' using a value thresold:
+
+```{r eval=FALSE}
+var wetMask = composite.select('MNDWI').gte(-0.1).clip(filteredAOI);
+```
+
+The code above is selecting the pixels from the band "MNDWI" from `composite` that has values that are equal or greater than -0.1. Automatically, `wetMask` will be an image of ones (1) where the pixels meet the criteria above (MNDWI values greater than -0.1) and zeros (0) everywhere else. You can add `wetMask` to the map to check how constrictive your threshold values are:
+
+``` {r eval=FALSE}
+Map.addLayer(wetMask.selfMask(), {palette:'blue'}, 'WetMask');
+```
+
+```{r PartIII-Watermask,  fig.cap="A mask created based on the MNDWI values that are equal or greater than -0.1. ", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-Watermask.png")
+```
+
+Note that this mask includes all the water pixels (in black as seen in the RGB 564 color composition) plus other areas that area not open water bodies but include some level of wetness to them (usually mangroves and wetlands). The objective of this phase *__IS NOT__* to remove *__ALL__* pixels that are not water; rather, is to remove *__MOST__* pixels that are not water. You can think of this as a classification process that preceeds the actual random forest classification. Instead of having to classify the entire composite into two classes, this way you can reduce the number of pixels going into the Random Forest Classification, speeding up the process. Also, this process already eliminated pixels that are unlikely to be water, reducing even further the chances of missclassification.
+
+We will use this mask to mask `composite`:
+
+``` {r eval=FALSE}
+var compositemasked = composite.mask(wetMask);
+Map.addLayer(compositemasked, {bands: ['SR_B5', 'SR_B6', 'SR_B4'], min:0.1, max:0.2}, 'Composite Masked');
+```
+
+```{r PartIII-MaskedComposite,  fig.cap="`composite` masked using `wetMask`. ", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-MaskedComposite.png")
+```
+
+This is the resulting Landsat composite that will be used in this first classification iteration! The next steps should be familiar to you:
+* Selecting training samples - here we will create the two geometries to hold the 'water' and 'other' samples. Remember to set a property called 'landcover':
+
+```{r PartIII-WaterSamples,  fig.cap=" Geometry imports to hold the training samples. ", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-WaterSamples.png")
+```
+
+[Code Checkpoint](https://code.earthengine.google.com/4a32727cbaefeb2d4f60037073884618){target="_blank"}
+
+* Training a random forest classifier:
+
+``` {r eval=FALSE}
+var classes = Water.merge(Other);
+var bands = ['SR_B4','SR_B5','SR_B6','NDVI','NBR','MNDWI','SR','GCVI','MSAVI'];
+
+var samples = compositemasked.select(bands).sampleRegions({
+  collection: classes,       
+  properties: ['landcover'],
+  scale: 30                  
+}).randomColumn('random');
+
+var split = 0.8;
+var training = samples.filter(ee.Filter.lt('random', split));
+var testing = samples.filter(ee.Filter.gte('random', split));
+
+print('Samples n =', samples.aggregate_count('landcover'));
+print('Training n =', training.aggregate_count('landcover'));
+print('Testing n =', testing.aggregate_count('landcover'));
+
+var classifier = ee.Classifier.smileRandomForest(100,5).train({
+  features: training,
+  classProperty: 'landcover', 
+  inputProperties: bands
+});
+
+var validation = testing.classify(classifier);
+var testAccuracy = validation.errorMatrix('landcover', 'classification');
+
+print('Validation error matrix RF: ', testAccuracy);
+print('Validation overall accuracy RF in %: ', testAccuracy.accuracy().multiply(100));
+```
+
+* Classifying `compositemasked` into 'Water' and 'Others'.
+
+```{r eval=FALSE}
+var classification = compositemasked.select(bands).classify(classifier);
+
+var paletteMAP = [
+  '#35ff17',  // Other (Class value 0)
+  '#1c48d6',  // Water (Class value 1)
+];
+
+Map.addLayer (classification, {min: 0, max: 1, palette:paletteMAP}, 'Classification');
+```
+
+You should get something similar to this:
+
+```{r PartIII-WaterClass,  fig.cap=" Classification output. ", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-WaterClass.png")
+```
+
+Finally, we will save this output to our Assets folder using the `Export.image.toAsset()`:
+
+```{r eval=FALSE}
+Export.image.toAsset({
+  image: classification,
+  description: 'WaterClassification',
+  assetId: '1-Water',
+  crs:'EPSG:4326',
+  crsTransform:[0.0002777777777777778,0,-180.0001388888889,0,-0.0002777777777777778,60.00013888888889],
+  maxPixels:1e13,
+  });
+```
+
+This export may take several minutes. This asset will be used in the next classification to mask the composite for this class!
+
+[Code Checkpoint](https://code.earthengine.google.com/8487823c78141fce13374e5c060902e0){target="_blank"}
+
+__*Mangroves*__
+
+Congratulations! You have classified your first land cover class! Next on the list is 'Mangroves'. This one is fairly straighforward to classify as this type of vegetation will have traces of the water spectral signature. We can use a similar index threshold approach for this class. Adittionally, we can use other datasets to mask other pixels that are unlikely to be Mangroves, such as elevation (Please refer to the Guinea section of this chapter for more information).
+
+First, we will open a [new Code Editor page](https://code.earthengine.google.com/){target="_blank"} and import the Landsat composite, the feature collection of Liberia counties and the water classification:
+
+```{r eval=FALSE}
+var composite = ee.Image('users/capacityBuilding/Liberia/CompositeLiberia2021');
+var aoi = ee.FeatureCollection('users/capacityBuilding/Liberia/LiberiaCounties');
+var filterCounties = ee.Filter.inList('NAME_1', ['Bomi', 'Montserrado','Margibi','GrandBassa']);
+var filteredAOI = aoi.filter(filterCounties);
+var waterClass = ee.Image('users/capacityBuilding/Liberia/1-Water');
+Map.addLayer(composite, {bands: ['SR_B5', 'SR_B6', 'SR_B4'], min:0.1, max:0.2}, 'Composite');
+```
+
+In this step, we will create three masks: one based the class we already have (water class),one based on elevation (mangroves tend to ocurr in flat areas near the shore. Thus an elevation cut off can be use to eliminate most of other pixels) and, finally, one based on spectral threshold (similarly to what we have done in the previous step). The resulting composite will be what we will use for classifying Mangroves:
+
+A) Mask I - Water Class
+
+Here, we will create a mask based on the water classification. For that, we will create a `ee.Image` populate it with 1 and where it overlaps with the water class, populate it with 0. This way, when we apply this mask to the `composite`, the classified water pixels will be masked, leaving only the other pixels available for classification:
+
+```{r eval = FALSE}
+var waterMask = ee.Image(1). where(waterClass.select(['classification']).eq(1),0).clip(filteredAOI);
+Map.addLayer(waterMask.selfMask(), {palette:['yellow']}, 'Water Mask');
+```
+
+Note that the value provided within `eq()` needs to match the value of your class.
+
+B) Mask II - Elevation (See \@ref(fig:my-elevmask))
+
+For the elevation mask, we will take advantage of the Shuttle Radar Topography Mission's elevation data available on GEE. We will use an elevation cut off of 25 meters: the composite will be masked where pixels have values > 25 m of elevation: 
+
+```{r eval=FALSE}
+var elevation = ee.Image('USGS/SRTMGL1_003').select('elevation');
+var elevationMask = elevation.lte(25).clip(filteredAOI);
+Map.addLayer(elevationMask.selfMask(), {palette:['pink']}, 'Elevation Mask');
+```
+
+C) Mask III - Index Threshold
+For the threshold mask, we will use the same index we used in the Water classification masking phase:
+
+```{r eval=FALSE}
+var wetMask = composite.select('MNDWI').gte(-0.12);
+Map.addLayer(wetMask.selfMask(), {palette:['blue']}, 'Wet Mask');
+```
+
+These are the three masks that will be applied to `composite`:
+
+```{r PartIII-MASKS,  fig.cap= "When applying these three masks to the composite, pixels will only remain where the three masks overlap.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-MASKS.png")
+```
+
+Finally, we will apply these masks to the `composite` using `.mask()` for the first mask and `.updateMask()` for the others:
+```{r eval=FALSE}
+var compositemasked = composite.mask(waterMask)
+                               .updateMask(elevationMask)
+                               .updateMask(wetMask);
+
+Map.addLayer(compositemasked, {bands: ['SR_B5', 'SR_B6', 'SR_B4'], min:0.1, max:0.2}, 'Composite Masked');
+```
+
+You should achieve something like this:
+
+```{r PartIII-CompositeMaskedII,  fig.cap= "Masked composite.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-CompositeMaskedII.png")
+```
+
+Next, we will repeat the sampling selection and classification. As a tip for selection accurate samples, mangroves will be in a darker shade of red/orange in this RGB 564 color composition while other vegetative classes (e.g. evergreen forests) will have a lighter red/orange shade. Make sure to take advantage of the high resolution imagery using the __Satellite__ button:
+
+```{r PartIII-Mangrove,  fig.cap= "Mangroves and other vegetation classes in Liberia.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-Mangrove.png")
+```
+
+```{r eval=FALSE}
+var classes = Mangrove.merge(Other);
+var bands = ['SR_B4','SR_B5','SR_B6','NDVI','NBR','MNDWI','SR','GCVI','MSAVI'];
+
+var samples = compositemasked.select(bands).sampleRegions({
+  collection: classes,       
+  properties: ['landcover'],
+  scale: 30                  
+}).randomColumn('random');
+
+var split = 0.8;
+var training = samples.filter(ee.Filter.lt('random', split));
+var testing = samples.filter(ee.Filter.gte('random', split));
+
+print('Samples n =', samples.aggregate_count('landcover'));
+print('Training n =', training.aggregate_count('landcover'));
+print('Testing n =', testing.aggregate_count('landcover'));
+
+var classifier = ee.Classifier.smileRandomForest(100,5).train({
+  features: training,
+  classProperty: 'landcover', 
+  inputProperties: bands
+});
+
+var validation = testing.classify(classifier);
+var testAccuracy = validation.errorMatrix('landcover', 'classification');
+
+print('Validation error matrix RF: ', testAccuracy);
+print('Validation overall accuracy RF in %: ', testAccuracy.accuracy().multiply(100));
+
+var classification = compositemasked.select(bands).classify(classifier);
+
+var paletteMAP = [
+  '#35ff17',  // Other (Class value 0)
+  '#ce0dd6',  // Mangroves (Class value 1)
+];
+
+Map.addLayer (classification, {min: 0, max: 1, palette:paletteMAP}, 'Classification');
+```
+
+```{r PartIII-Mangroves,  fig.cap= "Classification output.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-Mangroves.png")
+```
+
+Finally, we will export the classification:
+
+```{r eval=FALSE}
+Export.image.toAsset({
+  image: classification,
+  description: 'MangroveClassification',
+  assetId: '2-Mangroves',
+  crs:'EPSG:4326',
+  crsTransform:[0.0002777777777777778,0,-180.0001388888889,0,-0.0002777777777777778,60.00013888888889],
+  maxPixels:1e13,
+  });
+```
+
+[Code Checkpoint](https://code.earthengine.google.com/91448c680e2b1a24414c6f97984edf1d){target="_blank"}
+
+__*Settlements*__
+
+Now, we are moving into classes that require not only a spectral analysis but also a contextual one to be accurately classified. A good example is the artificial surfaces/ settlements class. In the case of Liberia, these areas will have very similar spectral behavior as exposed soil and bare areas, as most of the villages and small towns are usually located within these land cover classes. Therefore, a contextual evaluation needs to be included to ensure that bare areas are not being missclassified as settlements. In this case, we can use datasets like the location of these settlements and population density. These are extra pieces of information that we can use to constrain the classification to the correct area. In this example, we will use the [Liberia census population dataset from 2007-2008](https://energydata.info/dataset/liberia-populated-settlements){target="_blank"} created by Liberia Institute of Statistics and Geo-Information Services (LISGIS). The dataset contains a list of all the settlements that are geo-located and have attributes with their administrative units and population data (total, male, female and number of households). 
+Additionally, we can use the Global Population Density dataset to further refine our classification.
+
+Similarly to the last classification, we will open a [new Code Editor page](https://code.earthengine.google.com/){target="_blank"} and import the Landsat composite, the feature collection of Liberia counties, the feature collection of Liberia settlements, the global population density dataset (available through GEE) and the water and mangrove classification outputs:
+
+```{r eval= FALSE}
+var composite = ee.Image('users/capacityBuilding/Liberia/CompositeLiberia2021');
+var aoi = ee.FeatureCollection('users/capacityBuilding/Liberia/LiberiaCounties');
+var filterCounties = ee.Filter.inList('NAME_1', ['Bomi', 'Montserrado','Margibi','GrandBassa']);
+var filteredAOI = aoi.filter(filterCounties);
+
+var settlements = ee.FeatureCollection('users/capacityBuilding/Liberia/PopulatedSettlements2007');
+var PopulationCount = ee.Image('JRC/GHSL/P2016/POP_GPW_GLOBE_V1/2015');
+
+var waterClass = ee.Image('users/capacityBuilding/Liberia/1-Water');
+var mangroveClass = ee.Image('users/capacityBuilding/Liberia/2-Mangroves');
+```
+
+You can add these layers to the Map Editor for inspection:
+
+```{r eval=FALSE}
+Map.addLayer(composite, {bands: ['SR_B5', 'SR_B6', 'SR_B4'], min:0.1, max:0.2}, 'Composite');
+Map.addLayer(PopulationCount.clip(filteredAOI), {palette:["ffffe7","FFc869","ffac1d","e17735","f2552c","9f0c21"], min:0, max:500}, 'Population Count');
+Map.addLayer(settlements, {}, 'Settlements');
+```
+
+```{r PartIII-Pop,  fig.cap= "Ancillary datasets for classification of human settlements in Liberia. The population density and small settlement locations is helpful to constrain the classification in certain areas and help reduce misclassification errors with spectrally similar classes such as bare soil.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-Pop.png")
+```
+
+Similarly to the previous classification, we will create the masks based on these datasets to apply to the composite:
+
+A) Mask I - Water and Mangrove class masks
+
+```{r eval=FALSE}
+var waterMask = ee.Image(1). where(waterClass.select(['classification']).eq(1),0).clip(filteredAOI);
+var mangroveMask = ee.Image(1). where(mangroveClass.select(['classification']).eq(1),0).clip(filteredAOI);
+```
+
+B) Mask II - Population Masks
+
+In this particular case, we are using two different datasets: one is an `ee.Image()` (`PopulationCount`) and the other is a `ee.FeatureCollection()` (`settlements`). Fot that we will create two different masks and merge them together as a single mask. First, we will create a population count mask based on the number of people per pixel. Using the same construction as before, we will create a `ee.Image()` of value 1 and populate it with zeros where `PopulationCount` is equal or lower than 100 people. In other words, we are creating a mask to remove pixels where there is less than 100 people, which is an indication that this area may not be a fully established settlement:
+
+```{r eval=FALSE}
+var popMask = ee.Image(1). where(PopulationCount.select(['population_count']).lte(100),0).clip(filteredAOI);
+Map.addLayer(popMask.selfMask(), {palette:['green']}, 'Population Mask');
+```
+
+```{r PartIII-PopMask,  fig.cap= "Population mask created by selecting areas that have more than 100 people/pixel. Once this mask is applied, areas with less than 100 people per pixel will be masked.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-PopMask.png")
+```
+
+Next, we will use `settlements`. As you may have noticed, `settlements` contains the location of each small human settlement based on the 2007 census. We can then create a buffer of a certain size around each of these locations to create areas of likelihood for human settlements. We will first create a function to apply a buffer of a 1000 meters around the feature and then map it to `settlements` using `.map()` method:
+
+```{r eval=FALSE}
+var bufferSet = function(feature) {
+  return feature.buffer(1000);   
+};
+var setLocation = settlements.map(bufferSet);
+Map.addLayer(setLocation, {color:'purple'}, 'Settlements');
+```
+
+```{r PartIII-SetBuffer,  fig.cap= "1000 m buffer around each settlement location.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-SetBuffer.png")
+```
+
+Now, we can merge them into a final mask by creating an `ee.Image()` of 1 and clip it using the buffered locations and the `.clip()` method and add it to `popMask` using `.add()`:
+
+```{r eval=FALSE}
+var populationMask = ee.Image(1).clip(setLocation).unmask().add(popMask);
+Map.addLayer(populationMask.selfMask(), {palette:'blue'}, 'Population Mask Final');
+```
+
+```{block, type='starcomment'}
+Note that the code above used `.unmask()` after `.clip()`. In order to mathematically add two images, they have to have values. `.clip()` will cut an image for the extent of the feature used. Therefore, the rest will be automatically masked. Using `.unmask()` allows you to reaply 0 values to the masked areas, allowing you to do mathematical operations with it!
+```
+
+```{r PartIII-PopMaskFinal,  fig.cap= "Final population Mask.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-PopMaskFinal.png")
+```
+
+Finally, we will apply these masks to the composite:
+
+```{r eval=FALSE}
+var compositemasked = composite.mask(waterMask)
+                              .updateMask(mangroveMask)
+                              .updateMask(populationMask);
+
+Map.addLayer(compositemasked, {bands: ['SR_B5', 'SR_B6', 'SR_B4'], min:0.1, max:0.2}, 'Composite Masked');
+```
+
+```{r PartIII-MaskedCompositeII,  fig.cap= "Masked composite using `waterMask`, `mangroveMask` and `populationMask`.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-MaskedCompositeII.png")
+```
+
+C) Mask III - Index Threshold
+
+As an additional mask, you can create a NBR-based mask to only highlight areas that are exposed and has no vegetation to it. Since we already applied the population and location based masks, this one can further remove extra pixels that are not likely to be human settlements, for instance, highly vegetated areas:
+
+```{r eval=FALSE}
+var bareMask = compositemasked.select('NBR').lte(0.25);
+var compositeMasked = compositemasked.updateMask(bareMask);
+Map.addLayer(compositeMasked, {bands: ['SR_B5', 'SR_B6', 'SR_B4'], min:0.1, max:0.2}, 'Composite Masked Final');
+```
+
+```{r PartIII-MaskedCompositeIII,  fig.cap= "Masked composite using `waterMask`, `mangroveMask` and `populationMask` and `bareMask` showing areas of higher likelihood to be human settlements.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-MaskedCompositeIII.png")
 ```
