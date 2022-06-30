@@ -11,5 +11,4 @@ __This training material has been developed free-of-charge for educational purpo
 
 # Introduction and overview {-}
 
-Write something like: In part 1 of this course we will cover yada yada yada.
-In part 2.....
+

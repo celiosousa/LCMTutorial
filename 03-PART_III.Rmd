@@ -911,7 +911,7 @@ Map.addLayer(setLocation, {color:'purple'}, 'Settlements');
 knitr::include_graphics("images/PartIII-SetBuffer.png")
 ```
 
-Now, we can merge them into a final mask by creating an `ee.Image()` of 1 and clip it using the buffered locations and the `.clip()` method and add it to `popMask` using `.add()`:
+Now, we can merge them into a final mask by creating an `ee.Image()` of 1 and clip it using the buffered locations, the `.clip()` method and add it to `popMask` using `.add()`:
 
 ```{r eval=FALSE}
 var populationMask = ee.Image(1).clip(setLocation).unmask().add(popMask);
@@ -953,3 +953,181 @@ Map.addLayer(compositeMasked, {bands: ['SR_B5', 'SR_B6', 'SR_B4'], min:0.1, max:
 ```{r PartIII-MaskedCompositeIII,  fig.cap= "Masked composite using `waterMask`, `mangroveMask` and `populationMask` and `bareMask` showing areas of higher likelihood to be human settlements.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/PartIII-MaskedCompositeIII.png")
 ```
+
+[Code Checkpoint](https://code.earthengine.google.com/d60cf84c3a0e870b51c7c9f469c96139){target="_blank"}
+
+Similarly to the other classes, we will collect samples of urban areas and other classes and train a classifier. Finally, We can apply the random forest classifier to this resulting composite.
+
+```{r eval=FALSE}
+var classes = City.merge(Other);
+var bands = ['SR_B4','SR_B5','SR_B6','NDVI','NBR','MNDWI','SR','GCVI','MSAVI'];
+
+var samples = compositeMasked.select(bands).sampleRegions({
+  collection: classes,       
+  properties: ['landcover'],
+  scale: 30                  
+}).randomColumn('random');
+
+var split = 0.8;
+var training = samples.filter(ee.Filter.lt('random', split));
+var testing = samples.filter(ee.Filter.gte('random', split));
+
+print('Samples n =', samples.aggregate_count('landcover'));
+print('Training n =', training.aggregate_count('landcover'));
+print('Testing n =', testing.aggregate_count('landcover'));
+
+var classifier = ee.Classifier.smileRandomForest(100,5).train({
+  features: training,
+  classProperty: 'landcover', 
+  inputProperties: bands
+});
+
+var validation = testing.classify(classifier);
+var testAccuracy = validation.errorMatrix('landcover', 'classification');
+
+print('Validation error matrix RF: ', testAccuracy);
+print('Validation overall accuracy RF in %: ', testAccuracy.accuracy().multiply(100));
+
+var classification = compositeMasked.select(bands).classify(classifier);
+
+var paletteMAP = [
+  '#ffc82d',  // Other (Class value 0)
+  '#0c4f95',  // Settlements (Class value 1)
+];
+
+Map.addLayer (classification, {min: 0, max: 1, palette:paletteMAP}, 'Classification');
+```
+
+```{r PartIII-Settlements,  fig.cap= "Classification Output.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-Settlements.png")
+```
+
+[Code Checkpoint](https://code.earthengine.google.com/6c955c227802dd65606864f4792392b7){target="_blank"}
+
+__*Grasslands/ Herbaceous Vegetation*__
+
+After classifying Human Settlements, the next class we will be focusing on is Grasslands/ Herbaceous Vegetation. Similarly to the previous class, this one have a spectral signature that follows the overall behavior of bare soil. Barren Lands and Grasslands are likely to be very heterogeneous and often show intermixing with other land cover classes and with each other.
+In this case, we can take advantage of bareness-related indices to highlight these areas and use them as potential masks to assist in the classification. For example, the Normalized Burn Ratio is often used to highlight burned and bare areas:
+
+```{r PartIII-Grasslands,  fig.cap= "The Normalized Burn Ratio and Grasslands. Areas with little to no vegetation cover is shown in black.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-Grasslands.png")
+```
+
+First, we will start importing the same assets as before and the classes we have so far: water bodies, mangroves and human settlements:
+
+```{r eval=FALSE}
+var composite = ee.Image('users/capacityBuilding/Liberia/CompositeLiberia2021');
+var aoi = ee.FeatureCollection('users/capacityBuilding/Liberia/LiberiaCounties');
+var filterCounties = ee.Filter.inList('NAME_1', ['Bomi', 'Montserrado','Margibi','GrandBassa']);
+var filteredAOI = aoi.filter(filterCounties);
+
+var waterClass = ee.Image('users/capacityBuilding/Liberia/1-Water');
+var mangroveClass = ee.Image('users/capacityBuilding/Liberia/2-Mangroves');
+var settlementClass = ee.Image('users/capacityBuilding/Liberia/3-Settlements');
+```
+
+Next, we will create the masks based on the classes we have so far and applying to the `composite`:
+
+```{r eval=FALSE}
+var waterMask = ee.Image(1). where(waterClass.select(['classification']).eq(1),0).clip(filteredAOI);
+var mangroveMask = ee.Image(1). where(mangroveClass.select(['classification']).eq(1),0).clip(filteredAOI);
+var settlementMask = ee.Image(1). where(settlementClass.select(['classification']).eq(1),0).clip(filteredAOI);
+var compositemasked = composite.mask(waterMask)
+                               .updateMask(mangroveMask)
+                               .updateMask(settlementMask);
+Map.addLayer(compositemasked, {bands: ['SR_B5', 'SR_B6', 'SR_B4'], min:0.1, max:0.2}, 'Composite Masked');
+```
+
+At this point, the composite is masked for three classes and what is left is mostly vegetative classes (ever green forests and plantation) with the exception of little to no vegetation cover classes such as herbaceous vegetation/ grasslands and bare areas.
+For these low biomass/bare classes, we can still use the random forest classification route: collecting training samples and classifying `composite`.
+However, due to their distinct spectral signature compare do their surrounding classes and their distinct pattern (particularly in the area highlighted in this example), you may even be able to separate them with index threshold.
+In this example, we will use this technique for the sake of demonstration. We will use the NBR index as an example:
+
+__The lower the values of NBR, the more exposed/bare that particular area is. Therefore, after inspecting the values over areas of bare soil and grasslands, we concluded that bare soil had, in average, lower values than 0.05, while grasslands had between 0.05 and 0.2. Remember to always use the Inspector tab if you want to learn more about the values of a particular pixel in that image!__
+
+```{block, type='starcomment'}
+You can check the average value of pixels within a region by using `ee.ReduceRegions()` and `ee.Reducer.mean()`:
+```{r eval=FALSE}
+var averageNBR = compositemasked.select('NBR').reduceRegions({
+  collection: Bare.geometry(),
+  reducer: ee.Reducer.mean(),
+  scale: 30,
+});
+
+print(averageNBR)
+```
+
+Thus we can apply the conditionals `.lte()` and `.gt()` to the NBR band from `composite` to extract these classes:
+
+```{r eval=FALSE}
+var bareClass = compositemasked.select('NBR').lte(0.05).rename('bare');
+Map.addLayer(bareClass.selfMask(), {palette:'red'}, 'bareClass');
+```
+
+For grasslands, we can combine conditionals using `.and()`:
+
+```{r eval=FALSE}
+var grassClass = compositemasked.select('NBR').gt(0.05).and(compositemasked.select('NBR').lte(0.2)).rename('grass');
+Map.addLayer(grassClass.selfMask(), {palette:'green'}, 'grassClass');
+```
+
+```{r PartIII-GrasslandsandBare,  fig.cap= "Extracting the herbaceous vegetation/grass and bare areas using NBR thresholds.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-GrasslandsandBare.png")
+```
+
+Finally, we will export these classes to the assets following the same code as before:
+
+```{r eval=FALSE}
+Export.image.toAsset({
+  image: bareClass,
+  description: 'BareClassification',
+  assetId: '4-Bareareas',
+  crs:'EPSG:4326',
+  crsTransform:[0.0002777777777777778,0,-180.0001388888889,0,-0.0002777777777777778,60.00013888888889],
+  maxPixels:1e13,
+  });
+
+Export.image.toAsset({
+  image: grassClass,
+  description: 'GrassClassification',
+  assetId: '5-Grasslands',
+  crs:'EPSG:4326',
+  crsTransform:[0.0002777777777777778,0,-180.0001388888889,0,-0.0002777777777777778,60.00013888888889],
+  maxPixels:1e13,
+  });
+```
+
+[Code Checkpoint](https://code.earthengine.google.com/6bbff33c6ccde7e494b36f5f3205ece2){target="_blank"}
+
+__*Plantation*__
+
+Cultivated land in Liberia primarily consists of woody commodity crops (oil palm and rubber trees). The spectra of these woody crops are identical with those of natural vegetation. However, these areas generally have regular distribution patterns such as square or rectangles. The availability of forest concessions datasets is of paramount importance to constrain the classification of woody crop areas within the area they are likely to be found and avoid misclassification with other vegetation classes, such as evergreen forest.
+
+Here, we are going to constrain the classification within areas of Rubber and Oil Palm Concessions. The data was previously uploaded into GEE and you can have access to it by loading it into your script with `ee.FeatureCollection('users/capacityBuilding/Liberia/Rubber')` and `ee.FeatureCollection('users/capacityBuilding/Liberia/OilPalm')`.
+
+We will import these concessions along with the rest of the assets:
+
+```{r eval=FALSE}
+var composite = ee.Image('users/capacityBuilding/Liberia/CompositeLiberia2021');
+var aoi = ee.FeatureCollection('users/capacityBuilding/Liberia/LiberiaCounties');
+var filterCounties = ee.Filter.inList('NAME_1', ['Bomi', 'Montserrado','Margibi','GrandBassa']);
+var filteredAOI = aoi.filter(filterCounties);
+var rubber = ee.FeatureCollection('users/capacityBuilding/Liberia/Rubber');
+var oilpalm = ee.FeatureCollection('users/capacityBuilding/Liberia/OilPalm');
+var concessions = rubber.merge(oilpalm);
+
+Map.addLayer(composite, {bands: ['SR_B5', 'SR_B6', 'SR_B4'], min:0.1, max:0.2}, 'Composite');
+Map.addLayer(rubber, {color:'red'});
+Map.addLayer(oilpalm, {color:'green'});
+
+var waterClass = ee.Image('users/capacityBuilding/Liberia/1-Water');
+var mangroveClass = ee.Image('users/capacityBuilding/Liberia/2-Mangroves');
+var settlementClass = ee.Image('users/capacityBuilding/Liberia/3-Settlements');
+var bareClass = ee.Image('users/capacityBuilding/Liberia/4-Bareareas');
+var grassClass = ee.Image('users/capacityBuilding/Liberia/5-Grasslands');
+```
+
+```{r PartIII-Concessions,  fig.cap= "Rubber (red) and Oil Palm (green) concessions in Liberia. The spectral signature of these woody crops are identical with those of natural vegetation making it very challenging to classify.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-Concessions.png")
+```
+

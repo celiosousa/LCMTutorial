@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa (celio.h.resendedesousa@nasa.gov) and Miroslav Honzak (mhonzak@conservation.org)" />
 
 
-<meta name="date" content="2022-06-28" />
+<meta name="date" content="2022-06-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -147,14 +147,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#introduction-to-ecosystem-accounting"><i class="fa fa-check"></i><b>4.1</b> Introduction to Ecosystem Accounting</a><ul>
 <li class="chapter" data-level="4.1.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#essentials"><i class="fa fa-check"></i><b>4.1.1</b> Essentials</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#introduction-to-ecosystem-extent-account"><i class="fa fa-check"></i><b>4.2</b> Introduction to Ecosystem Extent Account</a><ul>
-<li class="chapter" data-level="4.2.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#essentials-1"><i class="fa fa-check"></i><b>4.2.1</b> Essentials</a></li>
+<li class="chapter" data-level="4.2" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#ecosystem-extent-account"><i class="fa fa-check"></i><b>4.2</b> Ecosystem Extent Account</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#structure-of-ecosystem-extent-account"><i class="fa fa-check"></i><b>4.2.1</b> Structure of ecosystem extent account</a></li>
+<li class="chapter" data-level="4.2.2" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#examples-and-exercises"><i class="fa fa-check"></i><b>4.2.2</b> Examples and exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#compiling-ecosystem-extent-account-tables"><i class="fa fa-check"></i><b>4.3</b> Compiling Ecosystem Extent Account Tables</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#essentials-2"><i class="fa fa-check"></i><b>4.3.1</b> Essentials</a></li>
+<li class="chapter" data-level="4.3" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#tools-for-compiling-ecosystem-extent-account-tables"><i class="fa fa-check"></i><b>4.3</b> Tools for Compiling Ecosystem Extent Account Tables</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#platforms-for-running-python-scripts"><i class="fa fa-check"></i><b>4.3.1</b> Platforms for running Python scripts</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#compiling-ecosystem-extent-account-tables-1"><i class="fa fa-check"></i><b>4.4</b> Compiling Ecosystem Extent Account Tables</a><ul>
-<li class="chapter" data-level="4.4.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#essentials-3"><i class="fa fa-check"></i><b>4.4.1</b> Essentials</a></li>
+<li class="chapter" data-level="4.4" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#compiling-ecosystem-extent-account-tables"><i class="fa fa-check"></i><b>4.4</b> Compiling Ecosystem Extent Account Tables</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#essentials-1"><i class="fa fa-check"></i><b>4.4.1</b> Essentials</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -889,7 +890,7 @@ var setLocation =<span class="st"> </span><span class="kw">settlements.map</span
 Figure 3.30: 1000 m buffer around each settlement location.
 </p>
 </div>
-<p>Now, we can merge them into a final mask by creating an <code>ee.Image()</code> of 1 and clip it using the buffered locations and the <code>.clip()</code> method and add it to <code>popMask</code> using <code>.add()</code>:</p>
+<p>Now, we can merge them into a final mask by creating an <code>ee.Image()</code> of 1 and clip it using the buffered locations, the <code>.clip()</code> method and add it to <code>popMask</code> using <code>.add()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var populationMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>)<span class="kw">.clip</span>(setLocation)<span class="kw">.unmask</span>()<span class="kw">.add</span>(popMask);
 <span class="kw">Map.addLayer</span>(<span class="kw">populationMask.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;blue&#39;</span>}, <span class="st">&#39;Population Mask Final&#39;</span>);</code></pre></div>
 <div class="starcomment">
@@ -901,6 +902,174 @@ Note that the code above used <code>.unmask()</code> after <code>.clip()</code>.
 <img src="images/PartIII-PopMaskFinal.png" alt="Final population Mask." width="858" />
 <p class="caption">
 Figure 3.31: Final population Mask.
+</p>
+</div>
+<p>Finally, we will apply these masks to the composite:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var compositemasked =<span class="st"> </span><span class="kw">composite.mask</span>(waterMask)
+                              <span class="kw">.updateMask</span>(mangroveMask)
+                              <span class="kw">.updateMask</span>(populationMask);
+
+<span class="kw">Map.addLayer</span>(compositemasked, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B5&#39;</span>, <span class="st">&#39;SR_B6&#39;</span>, <span class="st">&#39;SR_B4&#39;</span>], min<span class="op">:</span><span class="fl">0.1</span>, max<span class="op">:</span><span class="fl">0.2</span>}, <span class="st">&#39;Composite Masked&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-MaskedCompositeII"></span>
+<img src="images/PartIII-MaskedCompositeII.png" alt="Masked composite using `waterMask`, `mangroveMask` and `populationMask`." width="856" />
+<p class="caption">
+Figure 3.32: Masked composite using <code>waterMask</code>, <code>mangroveMask</code> and <code>populationMask</code>.
+</p>
+</div>
+<ol start="3" style="list-style-type: upper-alpha">
+<li>Mask III - Index Threshold</li>
+</ol>
+<p>As an additional mask, you can create a NBR-based mask to only highlight areas that are exposed and has no vegetation to it. Since we already applied the population and location based masks, this one can further remove extra pixels that are not likely to be human settlements, for instance, highly vegetated areas:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var bareMask =<span class="st"> </span><span class="kw">compositemasked.select</span>(<span class="st">&#39;NBR&#39;</span>)<span class="kw">.lte</span>(<span class="fl">0.25</span>);
+var compositeMasked =<span class="st"> </span><span class="kw">compositemasked.updateMask</span>(bareMask);
+<span class="kw">Map.addLayer</span>(compositeMasked, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B5&#39;</span>, <span class="st">&#39;SR_B6&#39;</span>, <span class="st">&#39;SR_B4&#39;</span>], min<span class="op">:</span><span class="fl">0.1</span>, max<span class="op">:</span><span class="fl">0.2</span>}, <span class="st">&#39;Composite Masked Final&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-MaskedCompositeIII"></span>
+<img src="images/PartIII-MaskedCompositeIII.png" alt="Masked composite using `waterMask`, `mangroveMask` and `populationMask` and `bareMask` showing areas of higher likelihood to be human settlements." width="859" />
+<p class="caption">
+Figure 3.33: Masked composite using <code>waterMask</code>, <code>mangroveMask</code> and <code>populationMask</code> and <code>bareMask</code> showing areas of higher likelihood to be human settlements.
+</p>
+</div>
+<p><a href="https://code.earthengine.google.com/d60cf84c3a0e870b51c7c9f469c96139" target="_blank">Code Checkpoint</a></p>
+<p>Similarly to the other classes, we will collect samples of urban areas and other classes and train a classifier. Finally, We can apply the random forest classifier to this resulting composite.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var classes =<span class="st"> </span><span class="kw">City.merge</span>(Other);
+var bands =<span class="st"> </span>[<span class="st">&#39;SR_B4&#39;</span>,<span class="st">&#39;SR_B5&#39;</span>,<span class="st">&#39;SR_B6&#39;</span>,<span class="st">&#39;NDVI&#39;</span>,<span class="st">&#39;NBR&#39;</span>,<span class="st">&#39;MNDWI&#39;</span>,<span class="st">&#39;SR&#39;</span>,<span class="st">&#39;GCVI&#39;</span>,<span class="st">&#39;MSAVI&#39;</span>];
+
+var samples =<span class="st"> </span><span class="kw">compositeMasked.select</span>(bands)<span class="kw">.sampleRegions</span>({
+  collection<span class="op">:</span><span class="st"> </span>classes,       
+  properties<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;landcover&#39;</span>],
+  scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>                  
+})<span class="kw">.randomColumn</span>(<span class="st">&#39;random&#39;</span>);
+
+var split =<span class="st"> </span><span class="fl">0.8</span>;
+var training =<span class="st"> </span><span class="kw">samples.filter</span>(<span class="kw">ee.Filter.lt</span>(<span class="st">&#39;random&#39;</span>, split));
+var testing =<span class="st"> </span><span class="kw">samples.filter</span>(<span class="kw">ee.Filter.gte</span>(<span class="st">&#39;random&#39;</span>, split));
+
+<span class="kw">print</span>(<span class="st">&#39;Samples n =&#39;</span>, <span class="kw">samples.aggregate_count</span>(<span class="st">&#39;landcover&#39;</span>));
+<span class="kw">print</span>(<span class="st">&#39;Training n =&#39;</span>, <span class="kw">training.aggregate_count</span>(<span class="st">&#39;landcover&#39;</span>));
+<span class="kw">print</span>(<span class="st">&#39;Testing n =&#39;</span>, <span class="kw">testing.aggregate_count</span>(<span class="st">&#39;landcover&#39;</span>));
+
+var classifier =<span class="st"> </span><span class="kw">ee.Classifier.smileRandomForest</span>(<span class="dv">100</span>,<span class="dv">5</span>)<span class="kw">.train</span>({
+  features<span class="op">:</span><span class="st"> </span>training,
+  classProperty<span class="op">:</span><span class="st"> &#39;landcover&#39;</span>, 
+  inputProperties<span class="op">:</span><span class="st"> </span>bands
+});
+
+var validation =<span class="st"> </span><span class="kw">testing.classify</span>(classifier);
+var testAccuracy =<span class="st"> </span><span class="kw">validation.errorMatrix</span>(<span class="st">&#39;landcover&#39;</span>, <span class="st">&#39;classification&#39;</span>);
+
+<span class="kw">print</span>(<span class="st">&#39;Validation error matrix RF: &#39;</span>, testAccuracy);
+<span class="kw">print</span>(<span class="st">&#39;Validation overall accuracy RF in %: &#39;</span>, <span class="kw">testAccuracy.accuracy</span>()<span class="kw">.multiply</span>(<span class="dv">100</span>));
+
+var classification =<span class="st"> </span><span class="kw">compositeMasked.select</span>(bands)<span class="kw">.classify</span>(classifier);
+
+var paletteMAP =<span class="st"> </span>[
+  <span class="st">&#39;#ffc82d&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="kw">Other</span> (Class value <span class="dv">0</span>)
+  <span class="st">&#39;#0c4f95&#39;</span>,  <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="kw">Settlements</span> (Class value <span class="dv">1</span>)
+];
+
+<span class="kw">Map.addLayer</span> (classification, {min<span class="op">:</span><span class="st"> </span><span class="dv">0</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">1</span>, palette<span class="op">:</span>paletteMAP}, <span class="st">&#39;Classification&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-Settlements"></span>
+<img src="images/PartIII-Settlements.png" alt="Classification Output." width="856" />
+<p class="caption">
+Figure 3.34: Classification Output.
+</p>
+</div>
+<p><a href="https://code.earthengine.google.com/6c955c227802dd65606864f4792392b7" target="_blank">Code Checkpoint</a></p>
+<p><strong><em>Grasslands/ Herbaceous Vegetation</em></strong></p>
+<p>After classifying Human Settlements, the next class we will be focusing on is Grasslands/ Herbaceous Vegetation. Similarly to the previous class, this one have a spectral signature that follows the overall behavior of bare soil. Barren Lands and Grasslands are likely to be very heterogeneous and often show intermixing with other land cover classes and with each other. In this case, we can take advantage of bareness-related indices to highlight these areas and use them as potential masks to assist in the classification. For example, the Normalized Burn Ratio is often used to highlight burned and bare areas:</p>
+<div class="figure"><span id="fig:PartIII-Grasslands"></span>
+<img src="images/PartIII-Grasslands.png" alt="The Normalized Burn Ratio and Grasslands. Areas with little to no vegetation cover is shown in black." width="857" />
+<p class="caption">
+Figure 3.35: The Normalized Burn Ratio and Grasslands. Areas with little to no vegetation cover is shown in black.
+</p>
+</div>
+<p>First, we will start importing the same assets as before and the classes we have so far: water bodies, mangroves and human settlements:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var composite =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/CompositeLiberia2021&#39;</span>);
+var aoi =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/LiberiaCounties&#39;</span>);
+var filterCounties =<span class="st"> </span><span class="kw">ee.Filter.inList</span>(<span class="st">&#39;NAME_1&#39;</span>, [<span class="st">&#39;Bomi&#39;</span>, <span class="st">&#39;Montserrado&#39;</span>,<span class="st">&#39;Margibi&#39;</span>,<span class="st">&#39;GrandBassa&#39;</span>]);
+var filteredAOI =<span class="st"> </span><span class="kw">aoi.filter</span>(filterCounties);
+
+var waterClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/1-Water&#39;</span>);
+var mangroveClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/2-Mangroves&#39;</span>);
+var settlementClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/3-Settlements&#39;</span>);</code></pre></div>
+<p>Next, we will create the masks based on the classes we have so far and applying to the <code>composite</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var waterMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">waterClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+var mangroveMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">mangroveClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+var settlementMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">settlementClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+var compositemasked =<span class="st"> </span><span class="kw">composite.mask</span>(waterMask)
+                               <span class="kw">.updateMask</span>(mangroveMask)
+                               <span class="kw">.updateMask</span>(settlementMask);
+<span class="kw">Map.addLayer</span>(compositemasked, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B5&#39;</span>, <span class="st">&#39;SR_B6&#39;</span>, <span class="st">&#39;SR_B4&#39;</span>], min<span class="op">:</span><span class="fl">0.1</span>, max<span class="op">:</span><span class="fl">0.2</span>}, <span class="st">&#39;Composite Masked&#39;</span>);</code></pre></div>
+<p>At this point, the composite is masked for three classes and what is left is mostly vegetative classes (ever green forests and plantation) with the exception of little to no vegetation cover classes such as herbaceous vegetation/ grasslands and bare areas. For these low biomass/bare classes, we can still use the random forest classification route: collecting training samples and classifying <code>composite</code>. However, due to their distinct spectral signature compare do their surrounding classes and their distinct pattern (particularly in the area highlighted in this example), you may even be able to separate them with index threshold. In this example, we will use this technique for the sake of demonstration. We will use the NBR index as an example:</p>
+<p><strong>The lower the values of NBR, the more exposed/bare that particular area is. Therefore, after inspecting the values over areas of bare soil and grasslands, we concluded that bare soil had, in average, lower values than 0.05, while grasslands had between 0.05 and 0.2. Remember to always use the Inspector tab if you want to learn more about the values of a particular pixel in that image!</strong></p>
+<div class="starcomment">
+<p>
+You can check the average value of pixels within a region by using <code>ee.ReduceRegions()</code> and <code>ee.Reducer.mean()</code>:
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var averageNBR =<span class="st"> </span><span class="kw">compositemasked.select</span>(<span class="st">&#39;NBR&#39;</span>)<span class="kw">.reduceRegions</span>({
+  collection<span class="op">:</span><span class="st"> </span><span class="kw">Bare.geometry</span>(),
+  reducer<span class="op">:</span><span class="st"> </span><span class="kw">ee.Reducer.mean</span>(),
+  scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>,
+});
+
+<span class="kw">print</span>(averageNBR)</code></pre></div>
+<p>Thus we can apply the conditionals <code>.lte()</code> and <code>.gt()</code> to the NBR band from <code>composite</code> to extract these classes:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var bareClass =<span class="st"> </span><span class="kw">compositemasked.select</span>(<span class="st">&#39;NBR&#39;</span>)<span class="kw">.lte</span>(<span class="fl">0.05</span>)<span class="kw">.rename</span>(<span class="st">&#39;bare&#39;</span>);
+<span class="kw">Map.addLayer</span>(<span class="kw">bareClass.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;red&#39;</span>}, <span class="st">&#39;bareClass&#39;</span>);</code></pre></div>
+<p>For grasslands, we can combine conditionals using <code>.and()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var grassClass =<span class="st"> </span><span class="kw">compositemasked.select</span>(<span class="st">&#39;NBR&#39;</span>)<span class="kw">.gt</span>(<span class="fl">0.05</span>)<span class="kw">.and</span>(<span class="kw">compositemasked.select</span>(<span class="st">&#39;NBR&#39;</span>)<span class="kw">.lte</span>(<span class="fl">0.2</span>))<span class="kw">.rename</span>(<span class="st">&#39;grass&#39;</span>);
+<span class="kw">Map.addLayer</span>(<span class="kw">grassClass.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;green&#39;</span>}, <span class="st">&#39;grassClass&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-GrasslandsandBare"></span>
+<img src="images/PartIII-GrasslandsandBare.png" alt="Extracting the herbaceous vegetation/grass and bare areas using NBR thresholds." width="1452" />
+<p class="caption">
+Figure 3.36: Extracting the herbaceous vegetation/grass and bare areas using NBR thresholds.
+</p>
+</div>
+<p>Finally, we will export these classes to the assets following the same code as before:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Export.image.toAsset</span>({
+  image<span class="op">:</span><span class="st"> </span>bareClass,
+  description<span class="op">:</span><span class="st"> &#39;BareClassification&#39;</span>,
+  assetId<span class="op">:</span><span class="st"> &#39;4-Bareareas&#39;</span>,
+  crs<span class="op">:</span><span class="st">&#39;EPSG:4326&#39;</span>,
+  crsTransform<span class="op">:</span>[<span class="fl">0.0002777777777777778</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">180.0001388888889</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">0.0002777777777777778</span>,<span class="fl">60.00013888888889</span>],
+  maxPixels<span class="op">:</span><span class="fl">1e13</span>,
+  });
+
+<span class="kw">Export.image.toAsset</span>({
+  image<span class="op">:</span><span class="st"> </span>grassClass,
+  description<span class="op">:</span><span class="st"> &#39;GrassClassification&#39;</span>,
+  assetId<span class="op">:</span><span class="st"> &#39;5-Grasslands&#39;</span>,
+  crs<span class="op">:</span><span class="st">&#39;EPSG:4326&#39;</span>,
+  crsTransform<span class="op">:</span>[<span class="fl">0.0002777777777777778</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">180.0001388888889</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">0.0002777777777777778</span>,<span class="fl">60.00013888888889</span>],
+  maxPixels<span class="op">:</span><span class="fl">1e13</span>,
+  });</code></pre></div>
+<p><a href="https://code.earthengine.google.com/6bbff33c6ccde7e494b36f5f3205ece2" target="_blank">Code Checkpoint</a></p>
+<p><strong><em>Plantation</em></strong></p>
+<p>Cultivated land in Liberia primarily consists of woody commodity crops (oil palm and rubber trees). The spectra of these woody crops are identical with those of natural vegetation. However, these areas generally have regular distribution patterns such as square or rectangles. The availability of forest concessions datasets is of paramount importance to constrain the classification of woody crop areas within the area they are likely to be found and avoid misclassification with other vegetation classes, such as evergreen forest.</p>
+<p>Here, we are going to constrain the classification within areas of Rubber and Oil Palm Concessions. The data was previously uploaded into GEE and you can have access to it by loading it into your script with <code>ee.FeatureCollection('users/capacityBuilding/Liberia/Rubber')</code> and <code>ee.FeatureCollection('users/capacityBuilding/Liberia/OilPalm')</code>.</p>
+<p>We will import these concessions along with the rest of the assets:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var composite =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/CompositeLiberia2021&#39;</span>);
+var aoi =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/LiberiaCounties&#39;</span>);
+var filterCounties =<span class="st"> </span><span class="kw">ee.Filter.inList</span>(<span class="st">&#39;NAME_1&#39;</span>, [<span class="st">&#39;Bomi&#39;</span>, <span class="st">&#39;Montserrado&#39;</span>,<span class="st">&#39;Margibi&#39;</span>,<span class="st">&#39;GrandBassa&#39;</span>]);
+var filteredAOI =<span class="st"> </span><span class="kw">aoi.filter</span>(filterCounties);
+var rubber =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/Rubber&#39;</span>);
+var oilpalm =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/OilPalm&#39;</span>);
+var concessions =<span class="st"> </span><span class="kw">rubber.merge</span>(oilpalm);
+
+<span class="kw">Map.addLayer</span>(composite, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B5&#39;</span>, <span class="st">&#39;SR_B6&#39;</span>, <span class="st">&#39;SR_B4&#39;</span>], min<span class="op">:</span><span class="fl">0.1</span>, max<span class="op">:</span><span class="fl">0.2</span>}, <span class="st">&#39;Composite&#39;</span>);
+<span class="kw">Map.addLayer</span>(rubber, {color<span class="op">:</span><span class="st">&#39;red&#39;</span>});
+<span class="kw">Map.addLayer</span>(oilpalm, {color<span class="op">:</span><span class="st">&#39;green&#39;</span>});
+
+var waterClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/1-Water&#39;</span>);
+var mangroveClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/2-Mangroves&#39;</span>);
+var settlementClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/3-Settlements&#39;</span>);
+var bareClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/4-Bareareas&#39;</span>);
+var grassClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/5-Grasslands&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-Concessions"></span>
+<img src="images/PartIII-Concessions.png" alt="Rubber (red) and Oil Palm (green) concessions in Liberia. The spectral signature of these woody crops are identical with those of natural vegetation making it very challenging to classify." width="856" />
+<p class="caption">
+Figure 3.37: Rubber (red) and Oil Palm (green) concessions in Liberia. The spectral signature of these woody crops are identical with those of natural vegetation making it very challenging to classify.
 </p>
 </div>
 
