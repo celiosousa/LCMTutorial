@@ -11,4 +11,7 @@ __This training material has been developed free-of-charge for educational purpo
 
 # Introduction and overview {-}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9b5cc9ec6e2ffd5d76ac5b59528b5f9b3761eed6
