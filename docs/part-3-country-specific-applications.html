@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa (celio.h.resendedesousa@nasa.gov) and Miroslav Honzak (mhonzak@conservation.org)" />
 
 
-<meta name="date" content="2022-06-29" />
+<meta name="date" content="2022-07-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -140,7 +140,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.1.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#mangrove-mapping-in-guinea-west-africa"><i class="fa fa-check"></i><b>3.1.1</b> Mangrove mapping in Guinea, West Africa</a></li>
 </ul></li>
 <li class="chapter" data-level="3.2" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#liberia"><i class="fa fa-check"></i><b>3.2</b> Liberia</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#class-by-class-land-cover-mapping"><i class="fa fa-check"></i><b>3.2.1</b> Class-by-class land cover mapping</a></li>
+<li class="chapter" data-level="3.2.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#anomaly-based-plantation-detection"><i class="fa fa-check"></i><b>3.2.1</b> Anomaly-based plantation detection</a></li>
+<li class="chapter" data-level="3.2.2" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#class-by-class-land-cover-mapping"><i class="fa fa-check"></i><b>3.2.2</b> Class-by-class land cover mapping</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html"><i class="fa fa-check"></i><b>4</b> Part 4 - Ecosystem Accounting</a><ul>
@@ -484,9 +485,270 @@ Figure 3.10: Validation results for this example. Ground truth data (in this con
 </div>
 <div id="liberia" class="section level2">
 <h2><span class="header-section-number">3.2</span> Liberia</h2>
-<p>In this example, we will use the codes from the previous sections for a class by class land cover mapping in Liberia, in West Africa. We will also take advantage of other datasets for masking and sample selection to assist in the classification workflow.</p>
+<p>In this example, we will use the codes from the previous sections for (a) mapping and detecting individual classes such as plantations; (b) a class by class land cover mapping approach.</p>
+<div id="anomaly-based-plantation-detection" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> Anomaly-based plantation detection</h3>
+<p>Spectral confusion between planted tree crops with native vegetation is a well-known challenge in using moderate resolution optical remote sensing data for mapping plantations. Cultivated land in Liberia primarily consists of woody commodity crops (oil palm and rubber trees). Even with the availability of forest concessions datasets to constrain the classification of these crops, the Random Forest relies on spectral predictors that are almost identical to native vegetation. Aditionally, small scale plantations intermixed with evergreen forest will also add to the challenges of separating these classes. However, areas of plantation usually undergo harvesting cycles, which creates a temporal signature that is different than evergreen natural vegetation: every few years, the spectral signature of these areas will show traces of bare soil due to harvesting and replanting. We can take advantage of this interannual differences by doing an <strong>anomaly analysis</strong>. By definition, anomaly is anything that deviates from what is standard, normal, or expected. Usually, anomalies are calculated by subtracting a long-term average of a variable from the actual value of that variable at a given time. For example, if X = actual value of average NDVI for vegetation in 2020, and Y = long-term average NDVI of vegetation (an average over many years), then the anomaly = X − Y. If the anomaly values are zero (or very close to zero), it means that NDVI remained relatively stable in that period, which indicates that there has not been any significant disturbance in that area. On the other hand, a positive anomaly means that the NDVI signal is greater than its long-term average, which indicates that vegetation has shown growth in that area; similarly, a negative anomaly means that the NDVI signal is weaker than its long-term average, indicating a potential loss in the area.</p>
+<p>This is a very useful tool to detect changes over time. Depending on where and how these changes happen over time, you can then conclude that that area is being planted and harvested.</p>
+<p>Next, we will provide several blocks of code to perform a quick anomaly analysis over Liberia and potentially identifying areas of plantation.</p>
+<ul>
+<li>Harmonizing Landsat 5/7/8 Image Collections</li>
+</ul>
+<p>The Landsat TM/ETM+ and OLI sensors present differences between their spectral characteristics. Thus, to ensure inter-sensor harmonized spectral information and temporal continuity, we will harmonize the entire Landsat image archive using the statistical functions presented in Roy et al. (2016). For that, we will start by defining the temporal parameters for the harmonization:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var startYear =<span class="st"> </span><span class="dv">1984</span>;    
+var endyear   =<span class="st"> </span><span class="dv">2021</span>;   
+var startDay  =<span class="st"> &#39;01-01&#39;</span>;
+var endDay    =<span class="st"> &#39;12-31&#39;</span>;</code></pre></div>
+<p>Here we used the entire Landsat archive. Next, we will create several functions for the harmonization of the Landsat archive:</p>
+<p><strong>Harmonization Function</strong>: <code>harmonizationRoy</code> uses the regression coefficients (slopes and intercepts) retrieved from Roy et al. (2016) and performs a linear transformation of ETM+ spectral space to OLI spectral space:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var harmonizationRoy =<span class="st"> </span><span class="cf">function</span>(oli) {
+var slopes =<span class="st"> </span><span class="kw">ee.Image.constant</span>([<span class="fl">0.9785</span>, <span class="fl">0.9542</span>, <span class="fl">0.9825</span>, <span class="fl">1.0073</span>, <span class="fl">1.0171</span>, <span class="fl">0.9949</span>]);        
+var itcp =<span class="st"> </span><span class="kw">ee.Image.constant</span>([<span class="op">-</span><span class="fl">0.0095</span>, <span class="op">-</span><span class="fl">0.0016</span>, <span class="op">-</span><span class="fl">0.0022</span>, <span class="op">-</span><span class="fl">0.0021</span>, <span class="op">-</span><span class="fl">0.0030</span>, <span class="fl">0.0029</span>]);     
+var y =<span class="st"> </span><span class="kw">oli.select</span>([<span class="st">&#39;B2&#39;</span>,<span class="st">&#39;B3&#39;</span>,<span class="st">&#39;B4&#39;</span>,<span class="st">&#39;B5&#39;</span>,<span class="st">&#39;B6&#39;</span>,<span class="st">&#39;B7&#39;</span>],[<span class="st">&#39;B1&#39;</span>, <span class="st">&#39;B2&#39;</span>, <span class="st">&#39;B3&#39;</span>, <span class="st">&#39;B4&#39;</span>, <span class="st">&#39;B5&#39;</span>, <span class="st">&#39;B7&#39;</span>]) 
+            <span class="kw">.resample</span>(<span class="st">&#39;bicubic&#39;</span>)                                                         
+            <span class="kw">.subtract</span>(<span class="kw">itcp.multiply</span>(<span class="dv">10000</span>))<span class="kw">.divide</span>(slopes)                                
+            <span class="kw">.set</span>(<span class="st">&#39;system:time_start&#39;</span>, <span class="kw">oli.get</span>(<span class="st">&#39;system:time_start&#39;</span>));
+return <span class="kw">y.toShort</span>();                                                                       
+};</code></pre></div>
+<p><strong>Retrieve a Particular Sensor Function</strong>: <code>getSRcollection</code> will be used to retrieve individual sensor collections based on the temporal parameters and the harmonization function above. Additionally, this function will mask cloud, cloud shadow, and snow based on the Landsat quality assessment bands:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var getSRcollection =<span class="st"> </span><span class="cf">function</span>(year, startDay, endYear, endDay, sensor) {
+    var srCollection =<span class="st"> </span><span class="kw">ee.ImageCollection</span>(<span class="st">&#39;LANDSAT/&#39;</span><span class="op">+</span><span class="st"> </span>sensor <span class="op">+</span><span class="st"> &#39;/C01/T1_SR&#39;</span>)
+                                         <span class="kw">.filterDate</span>(year<span class="op">+</span><span class="st">&#39;-&#39;</span><span class="op">+</span>startDay, endYear<span class="op">+</span><span class="st">&#39;-&#39;</span><span class="op">+</span>endDay);
+        srCollection =<span class="st"> </span><span class="kw">srCollection.map</span>(<span class="cf">function</span>(img) {
+          var dat =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="kw">ee.Algorithms.If</span>(
+                    sensor <span class="op">==</span><span class="st"> &#39;LC08&#39;</span>,                                                  
+                    <span class="kw">harmonizationRoy</span>(<span class="kw">img.unmask</span>()),                                    
+                    <span class="kw">img.select</span>([<span class="st">&#39;B1&#39;</span>, <span class="st">&#39;B2&#39;</span>, <span class="st">&#39;B3&#39;</span>, <span class="st">&#39;B4&#39;</span>, <span class="st">&#39;B5&#39;</span>, <span class="st">&#39;B7&#39;</span>])
+                       <span class="kw">.unmask</span>()  
+                       <span class="kw">.resample</span>(<span class="st">&#39;bicubic&#39;</span>)
+                       <span class="kw">.set</span>(<span class="st">&#39;system:time_start&#39;</span>, <span class="kw">img.get</span>(<span class="st">&#39;system:time_start&#39;</span>))
+                  )
+                );
+    <span class="op">/</span><span class="er">/</span><span class="st"> </span>Cloud, cloud shadow and snow mask
+    var qa =<span class="st"> </span><span class="kw">img.select</span>(<span class="st">&#39;pixel_qa&#39;</span>);                                       
+      var mask =<span class="st"> </span><span class="kw">qa.bitwiseAnd</span>(<span class="dv">8</span>)<span class="kw">.eq</span>(<span class="dv">0</span>)<span class="kw">.and</span>(
+                 <span class="kw">qa.bitwiseAnd</span>(<span class="dv">16</span>)<span class="kw">.eq</span>(<span class="dv">0</span>))<span class="kw">.and</span>(
+                 <span class="kw">qa.bitwiseAnd</span>(<span class="dv">32</span>)<span class="kw">.eq</span>(<span class="dv">0</span>));
+      return <span class="kw">dat.mask</span>(mask); 
+      });
+return srCollection;
+};</code></pre></div>
+<p><strong>Combining the Collections Function</strong>: <code>getCombinedSRcollection</code> will merge all the individual L5/L7/L8 collections into one:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var getCombinedSRcollection =<span class="st"> </span><span class="cf">function</span>(year, startDay, endYear,endDay) {
+  var lt5 =<span class="st"> </span><span class="kw">getSRcollection</span>(year, startDay, endYear, endDay, <span class="st">&#39;LT05&#39;</span>);
+  var le7 =<span class="st"> </span><span class="kw">getSRcollection</span>(year, startDay, endYear, endDay, <span class="st">&#39;LE07&#39;</span>);
+  var lc8 =<span class="st"> </span><span class="kw">getSRcollection</span>(year, startDay, endYear, endDay, <span class="st">&#39;LC08&#39;</span>);
+  var mergedCollection =<span class="st"> </span><span class="kw">ee.ImageCollection</span>(<span class="kw">le7.merge</span>(lc8)<span class="kw">.merge</span>(lt5));
+return mergedCollection;
+};</code></pre></div>
+<p><strong>Vegetation Indices</strong>: <code>addIndices</code> calculates several vegetation/spectral indices based on the harmonized Landsat bands. In this example, we are including the Normalized Difference Vegetation Index (NDVI), the Enhanced Vegetation Index (EVI), the Soil Adjusted Vegetation Index (SAVI), the Normalized Difference Mangrove Index (NDMI), the Normalized Difference Water index (NDWI), the Modified Normalized Difference Water Index (MNDWI) and many others. Here is where you can include your own vegetation indices:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var addIndices =<span class="st"> </span><span class="cf">function</span>(image) {
+  var ndvi =<span class="st"> </span><span class="kw">image.normalizedDifference</span>([<span class="st">&#39;B4&#39;</span>, <span class="st">&#39;B3&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;NDVI&#39;</span>);
+  var evi =<span class="st"> </span><span class="kw">image.expression</span>(
+      <span class="st">&#39;2.5 * ((NIR - RED) / (NIR + 6 * RED - 7.5 * BLUE + 1))&#39;</span>, {
+      <span class="st">&#39;NIR&#39;</span><span class="op">:</span><span class="st"> </span><span class="kw">image.select</span>(<span class="st">&#39;B4&#39;</span>),
+      <span class="st">&#39;RED&#39;</span><span class="op">:</span><span class="st"> </span><span class="kw">image.select</span>(<span class="st">&#39;B3&#39;</span>),
+      <span class="st">&#39;BLUE&#39;</span><span class="op">:</span><span class="st"> </span><span class="kw">image.select</span>(<span class="st">&#39;B1&#39;</span>)
+})<span class="kw">.rename</span>(<span class="st">&#39;EVI&#39;</span>);
+  var savi =<span class="st"> </span><span class="kw">image.expression</span>(
+      <span class="st">&#39;((NIR - RED) / (NIR + RED + 0.5) * (0.5 + 1))&#39;</span>, {
+      <span class="st">&#39;NIR&#39;</span><span class="op">:</span><span class="st"> </span><span class="kw">image.select</span>(<span class="st">&#39;B4&#39;</span>),
+      <span class="st">&#39;RED&#39;</span><span class="op">:</span><span class="st"> </span><span class="kw">image.select</span>(<span class="st">&#39;B3&#39;</span>),
+      <span class="st">&#39;BLUE&#39;</span><span class="op">:</span><span class="st"> </span><span class="kw">image.select</span>(<span class="st">&#39;B1&#39;</span>)
+})<span class="kw">.rename</span>(<span class="st">&#39;SAVI&#39;</span>);
+  var ndmi =<span class="st"> </span><span class="kw">image.normalizedDifference</span>([<span class="st">&#39;B7&#39;</span>,<span class="st">&#39;B2&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;NDMI&#39;</span>);
+  var nbr =<span class="st"> </span><span class="kw">image.normalizedDifference</span>([<span class="st">&#39;B4&#39;</span>, <span class="st">&#39;B7&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;NBR&#39;</span>);
+  var ndwi =<span class="st"> </span><span class="kw">image.normalizedDifference</span>([<span class="st">&#39;B5&#39;</span>,<span class="st">&#39;B4&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;NDWI&#39;</span>);
+  var mndwi =<span class="st"> </span><span class="kw">image.normalizedDifference</span>([<span class="st">&#39;B2&#39;</span>,<span class="st">&#39;B5&#39;</span>])<span class="kw">.rename</span>(<span class="st">&#39;MNDWI&#39;</span>);
+return <span class="kw">image.addBands</span>(ndvi)
+            <span class="kw">.addBands</span>(evi)
+            <span class="kw">.addBands</span>(savi)
+            <span class="kw">.addBands</span>(ndmi)
+            <span class="kw">.addBands</span>(nbr)
+            <span class="kw">.addBands</span>(ndwi)
+            <span class="kw">.addBands</span>(mndwi);
+};</code></pre></div>
+<p>Finally, <code>collectionL5L7L8</code> will include the final harmonized collection with all the sensors based on the temporal parameters defined previously, with all spectral bands and vegetation/spectral indices, filtered to include only scenes over Liberia:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var aoi =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/LiberiaCounties&#39;</span>);
+var collectionL5L7L8 =<span class="st"> </span><span class="kw">getCombinedSRcollection</span>(startYear, startDay,
+    endyear, endDay)<span class="kw">.map</span>(addIndices)<span class="kw">.filterBounds</span>(aoi);</code></pre></div>
+<p><a href="https://code.earthengine.google.com/2b0953555f853f377200d7ed8d3954a4" target="_blank">Code Checkpoint</a></p>
+<ul>
+<li>Vegetation Index Anomaly</li>
+</ul>
+<p>To calculate the anomaly, we will start by defining the index we want to compute the anomaly for and the reference period to get the average value of that index over time. In this example, we will use the Normalized Burn Ratio (NBR) index, which is useful to highligh burned / bare areas and</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var index =<span class="st"> &#39;NBR&#39;</span>;
+var ref_start =<span class="st"> &#39;1985-01-01&#39;</span>;
+var ref_end =<span class="st"> &#39;2010-12-31&#39;</span>;</code></pre></div>
+<p>Next, we will create the reference collection using <code>collectionL5L7L8</code> and the parameters above. You can print the size of this reference collection to the console using <code>print()</code> and <code>.size()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var reference =<span class="st"> </span>collectionL5L7L8
+    <span class="kw">.filterDate</span>(ref_start, ref_end)
+    <span class="kw">.select</span>(index)
+    <span class="kw">.sort</span>(<span class="st">&#39;system:time_start&#39;</span>, true);
+    
+<span class="kw">print</span>(<span class="st">&#39;Number of images in Reference Collection&#39;</span>, <span class="kw">reference.size</span>());</code></pre></div>
+<div class="figure"><span id="fig:PartIII-ReferenceColSize"></span>
+<img src="images/PartIII-ReferenceColSize.png" alt="Number of scenes in the reference collection that will be used to calculate the reference value for the anomaly." width="781" />
+<p class="caption">
+Figure 3.11: Number of scenes in the reference collection that will be used to calculate the reference value for the anomaly.
+</p>
+</div>
+<p>We can now calculate the mean value (and other statistics) for the reference collection reference using the <code>.median()</code> and <code>.mean()</code> methods:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var mean =<span class="st"> </span><span class="kw">reference.mean</span>()<span class="kw">.clip</span>(aoi);
+var median =<span class="st"> </span><span class="kw">reference.median</span>()<span class="kw">.clip</span>(aoi);</code></pre></div>
+<p>Now that we have the long-term reference metrics, we can define the period for which you want to compute the the anomaly. In this example, we will use yearly intervals starting in 2016 until 2020. We are interested to see where we can observe cycles of planting and harvesting for plantations in Liberia. However, any combination of years is possible depending on what period you are interested in. Then, an anomaly function can be created to subtract the metric from the average of your period of interest:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var period_start =<span class="st"> &#39;2016-01-01&#39;</span>;
+var period_end =<span class="st">  &#39;2016-12-30&#39;</span>;
+
+var anomalyFunction =<span class="st"> </span><span class="cf">function</span>(image){
+              return <span class="kw">image.subtract</span>(median)
+              <span class="kw">.set</span>(<span class="st">&#39;system:time_start&#39;</span>, 
+              <span class="kw">image.get</span>(<span class="st">&#39;system:time_start&#39;</span>))};</code></pre></div>
+<p>Finally, we will map the <code>anomalyFunction</code> to the Landsat collection <code>collectionL5L7L8</code> filtered by the <code>period_start</code> and <code>period_end</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var series =<span class="st"> </span><span class="kw">collectionL5L7L8.filterDate</span>(period_start, period_end)<span class="kw">.map</span>(anomalyFunction);</code></pre></div>
+<p>The object <code>series</code> will have all the spectral bands and vegetation/spectral indices for the time period defined above. Their values, however, will be different from the original collection since we subtracted the average value of the reference period. The next step is to sum all the values for the index from series and divide by the number of images available. You can achieve that by using the <code>.sum()</code> and <code>.count()</code> methods:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var seriesSum =<span class="st"> </span><span class="kw">series.select</span>(index)<span class="kw">.sum</span>();
+var numImages =<span class="st"> </span><span class="kw">series.select</span>(index)<span class="kw">.count</span>();
+var anomaly =<span class="st"> </span><span class="kw">seriesSum.divide</span>(numImages);</code></pre></div>
+<p>So far, the steps we have taken were:</p>
+<ul>
+<li>Created a reference value (median) for the NBR index for the 1985-2010 period;</li>
+<li>Then subtracted this median value from every scene in the period of interest (year 2016)</li>
+<li>Averaged the anomaly values for that year by adding all values and dividing by the number of observations (images within that period).</li>
+</ul>
+<p>We can add the object <code>anomaly</code> to the Map Editor using a color ramp:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var visAnom =<span class="st"> </span>{
+    min<span class="op">:</span><span class="st"> </span><span class="op">-</span><span class="fl">0.20</span>,
+    max<span class="op">:</span><span class="st"> </span><span class="fl">0.20</span>,
+    palette<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;#481567FF&#39;</span>, <span class="st">&#39;#482677FF&#39;</span>, <span class="st">&#39;#453781FF&#39;</span>, <span class="st">&#39;#404788FF&#39;</span>,
+              <span class="st">&#39;#39568CFF&#39;</span>, <span class="st">&#39;#33638DFF&#39;</span>, <span class="st">&#39;#2D708EFF&#39;</span>, <span class="st">&#39;#287D8EFF&#39;</span>,<span class="st">&#39;#238A8DFF&#39;</span>,
+              <span class="st">&#39;#1F968BFF&#39;</span>, <span class="st">&#39;#20A387FF&#39;</span>, <span class="st">&#39;#29AF7FFF&#39;</span>, <span class="st">&#39;#3CBB75FF&#39;</span>,<span class="st">&#39;#55C667FF&#39;</span>,
+              <span class="st">&#39;#73D055FF&#39;</span>, <span class="st">&#39;#95D840FF&#39;</span>, <span class="st">&#39;#B8DE29FF&#39;</span>, <span class="st">&#39;#DCE319FF&#39;</span>,<span class="st">&#39;#FDE725FF&#39;</span> ]
+};
+<span class="kw">Map.addLayer</span>(anomaly, visAnom, index <span class="op">+</span><span class="st"> &#39; anomaly&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:Anomally"></span>
+<img src="images/PartIII-Anomally.png" alt="Normalized Burn Ratio (NBR) index anomaly over Liberia. Areas of negative anomaly are shown in purple/dark blue." width="1194" />
+<p class="caption">
+Figure 3.12: Normalized Burn Ratio (NBR) index anomaly over Liberia. Areas of negative anomaly are shown in purple/dark blue.
+</p>
+</div>
+<p>A negative anomaly (in purple in the figure above) means that the NBR signal in 2016 is weaker than its long-term average, indicating a potential loss in the area for that year. Notice that in some areas you can see regular shapes, which means that those losses are potential harvested plantation. On the other hand, positive anomaly (in yellow) will show areas where soil is no longer exposed, giving us an indication of potential areas being replanted.</p>
+<div class="caution">
+<p>
+<strong>Not every negative anomaly will be harvesting of planted areas nor every positive anomaly will be areas being replanted. The anomaly can give us an indication of where these areas MAY be, based on the pattern observed</strong>.
+</p>
+</div>
+<p>Investigate the following years by changing the values for <code>period_start</code> and <code>period_end</code>. By doing so, we can have an informed idea where these planted areas are, which would be rather challenging to detected using only the Landsat composite.</p>
+<p>We will export each anomaly individually. For that, change the values for <code>period_start</code> and <code>period_end</code> for the year 2016 and use the code below to export the anomaly:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Export.image.toAsset</span>({
+  image<span class="op">:</span><span class="st"> </span>anomaly,
+  description<span class="op">:</span><span class="st"> &#39;Anomaly2016&#39;</span>,
+  assetId<span class="op">:</span><span class="st"> &#39;Anomaly2016&#39;</span>,
+  crs<span class="op">:</span><span class="st">&#39;EPSG:4326&#39;</span>,
+  crsTransform<span class="op">:</span>[<span class="fl">0.0002777777777777778</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">180.0001388888889</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">0.0002777777777777778</span>,<span class="fl">60.00013888888889</span>],
+  maxPixels<span class="op">:</span><span class="fl">1e13</span>,
+  region<span class="op">:</span><span class="st"> </span>aoi,
+  });</code></pre></div>
+<p>Repeat the process for 2017, 2018, 2019 and 2020.</p>
+<p><strong>* Planted areas</strong></p>
+<p>On a <a href="https://code.earthengine.google.com/" target="_blank">new Code Editor page</a>, import the anomalies to the script.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var nbr16 =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/celiohelder/Liberia/NBR_Anomaly2016&#39;</span>);
+var nbr17 =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/celiohelder/Liberia/NBR_Anomaly2017&#39;</span>);
+var nbr18 =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/celiohelder/Liberia/NBR_Anomaly2018&#39;</span>);
+var nbr19 =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/celiohelder/Liberia/NBR_Anomaly2019&#39;</span>);
+var nbr20 =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/celiohelder/Liberia/NBR_Anomaly2020&#39;</span>);</code></pre></div>
+<p>As mentioned previously, not every negative anomaly will be harvesting of planted areas nor every positive anomaly will be areas being replanted. The anomaly can give us an indication of where these areas may be, based on the pattern observed. We can also focus on concessions. A concession is a license, permit, or other contract that gives private companies the rights to establish a plantation on public land. Here we will also focus on areas of Rubber and Oil Palm Concessions. The data was previously uploaded into GEE and you can have access to it by loading it into your script with <code>ee.FeatureCollection('users/capacityBuilding/Liberia/Rubber')</code> and <code>ee.FeatureCollection('users/capacityBuilding/Liberia/OilPalm')</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var rubber =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/Rubber&#39;</span>);
+var oilpalm =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/OilPalm&#39;</span>);
+var concessions =<span class="st"> </span><span class="kw">rubber.merge</span>(oilpalm);</code></pre></div>
+<p>Add the anomalies and the concessions data to the <strong>Map Editor</strong>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var visAnom =<span class="st"> </span>{
+    min<span class="op">:</span><span class="st"> </span><span class="op">-</span><span class="fl">0.20</span>,
+    max<span class="op">:</span><span class="st"> </span><span class="fl">0.20</span>,
+    palette<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;#481567FF&#39;</span>, <span class="st">&#39;#482677FF&#39;</span>, <span class="st">&#39;#453781FF&#39;</span>, <span class="st">&#39;#404788FF&#39;</span>,
+              <span class="st">&#39;#39568CFF&#39;</span>, <span class="st">&#39;#33638DFF&#39;</span>, <span class="st">&#39;#2D708EFF&#39;</span>, <span class="st">&#39;#287D8EFF&#39;</span>,<span class="st">&#39;#238A8DFF&#39;</span>,
+              <span class="st">&#39;#1F968BFF&#39;</span>, <span class="st">&#39;#20A387FF&#39;</span>, <span class="st">&#39;#29AF7FFF&#39;</span>, <span class="st">&#39;#3CBB75FF&#39;</span>,<span class="st">&#39;#55C667FF&#39;</span>,
+              <span class="st">&#39;#73D055FF&#39;</span>, <span class="st">&#39;#95D840FF&#39;</span>, <span class="st">&#39;#B8DE29FF&#39;</span>, <span class="st">&#39;#DCE319FF&#39;</span>,<span class="st">&#39;#FDE725FF&#39;</span> ]
+};
+
+<span class="kw">Map.addLayer</span>(nbr16,visAnom, <span class="st">&#39;NBR anomaly 2016&#39;</span>);
+<span class="kw">Map.addLayer</span>(nbr17,visAnom, <span class="st">&#39;NBR anomaly 2017&#39;</span>);
+<span class="kw">Map.addLayer</span>(nbr18,visAnom, <span class="st">&#39;NBR anomaly 2018&#39;</span>);
+<span class="kw">Map.addLayer</span>(nbr19,visAnom, <span class="st">&#39;NBR anomaly 2019&#39;</span>);
+<span class="kw">Map.addLayer</span>(nbr20,visAnom, <span class="st">&#39;NBR anomaly 2020&#39;</span>);
+
+<span class="kw">Map.addLayer</span>(<span class="kw">ee.Image</span>()<span class="kw">.paint</span>(oilpalm, <span class="dv">0</span>, <span class="dv">2</span>), {palette<span class="op">:</span>[<span class="st">&#39;black&#39;</span>]}, <span class="st">&#39;OilPalm&#39;</span>);
+<span class="kw">Map.addLayer</span>(<span class="kw">ee.Image</span>()<span class="kw">.paint</span>(rubber, <span class="dv">0</span>, <span class="dv">2</span>), {palette<span class="op">:</span>[<span class="st">&#39;purple&#39;</span>]}, <span class="st">&#39;Rubber&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-Anomally2"></span>
+<img src="images/PartIII-Anomally2.png" alt="2016 NBR Anomaly and the oil palm and rubber plantation concessions." width="856" />
+<p class="caption">
+Figure 3.13: 2016 NBR Anomaly and the oil palm and rubber plantation concessions.
+</p>
+</div>
+<p>Note that even before the addition of the concession dataset, we could outline potential areas of plantation based on the anomaly values. Now, overlaying these concessions borders with the anomaly layer, we have strong evidence that those are indeed planted areas.</p>
+<p>Due to their distinct anomaly values compare do their surrounding classes and their distinct pattern (particularly in the area within the concessions), we are able to separate them with value threshold. Using the <strong>Inspector</strong> tab, investigate the anomaly values for the dark blue/purple (negative anomaly) and the yellow (positive anomaly) areas. Upon close inspection, we concluded lower values than -0.1 can capture the areas of losses; on the other hand, values greater than 0.1 capture the areas of gains.</p>
+<p>We can apply the conditionals <code>.lte()</code> and <code>.gt()</code> to the NBR Anomaly layers to extract these areas:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var lossanomaly1617 =<span class="st"> </span><span class="kw">nbr16.lt</span>(<span class="op">-</span><span class="fl">0.10</span>);
+var gainanomaly1617 =<span class="st"> </span><span class="kw">nbr16.gt</span>(<span class="fl">0.10</span>);
+
+var lossanomaly1718 =<span class="st"> </span><span class="kw">nbr17.lt</span>(<span class="op">-</span><span class="fl">0.10</span>);
+var gainanomaly1718 =<span class="st"> </span><span class="kw">nbr17.gt</span>(<span class="fl">0.10</span>);
+
+var lossanomaly1819 =<span class="st"> </span><span class="kw">nbr18.lt</span>(<span class="op">-</span><span class="fl">0.10</span>);
+var gainanomaly1819 =<span class="st"> </span><span class="kw">nbr18.gt</span>(<span class="fl">0.10</span>);
+
+var lossanomaly1920 =<span class="st"> </span><span class="kw">nbr19.lt</span>(<span class="op">-</span><span class="fl">0.10</span>);
+var gainanomaly1920 =<span class="st"> </span><span class="kw">nbr19.gt</span>(<span class="fl">0.10</span>);
+
+var lossanomaly2021 =<span class="st"> </span><span class="kw">nbr20.lt</span>(<span class="op">-</span><span class="fl">0.10</span>);
+var gainanomaly2021 =<span class="st"> </span><span class="kw">nbr20.gt</span>(<span class="fl">0.10</span>);
+
+<span class="kw">Map.addLayer</span>(<span class="kw">lossanomaly1617.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;F94C66&#39;</span>}, <span class="st">&#39;LossNBRanomaly2016-2017&#39;</span>);
+<span class="kw">Map.addLayer</span>(<span class="kw">gainanomaly1617.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;F7EC09&#39;</span>}, <span class="st">&#39;GainNBRanomaly2016-2017&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-AnomallyPlantation"></span>
+<img src="images/PartIII-AnomallyPlantation.png" alt="Areas of losses/harvest and gains/planting based on threshold values of NBR anomaly." width="1321" />
+<p class="caption">
+Figure 3.14: Areas of losses/harvest and gains/planting based on threshold values of NBR anomaly.
+</p>
+</div>
+<p>By stacking 2016, 2017, 2018, 2019 and 2020 losses and gains and using the concession datasets as a constraint, we can create a Plantation layer for Liberia. We can construct this layer in a way to include the years where harvest and planting was observed. To do so, we will add the layers together. However, we have to set a flag value to each year. The steps below presents a simplistic way to create this flag:</p>
+<p>First, we will multiply each loss and gains layer by 10000,1000,100,10 and 1:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var loss16 =<span class="st"> </span><span class="kw">lossanomaly1617.multiply</span>(<span class="dv">10000</span>);
+var loss17 =<span class="st"> </span><span class="kw">lossanomaly1718.multiply</span>(<span class="dv">1000</span>);
+var loss18 =<span class="st"> </span><span class="kw">lossanomaly1819.multiply</span>(<span class="dv">100</span>);
+var loss19 =<span class="st"> </span><span class="kw">lossanomaly1920.multiply</span>(<span class="dv">10</span>);
+var loss20 =<span class="st"> </span><span class="kw">lossanomaly2021.multiply</span>(<span class="dv">1</span>);</code></pre></div>
+<p>Now, we can stack these layers using <code>.add()</code>. The result will be a layer with values raging from 1 to 11111, where the position of the digit represents the year and the value 0 and 1 represent absence and presence, respectively. For example, a pixel with value of 10110 in this flag will mean that losses/harvest derived from the negative anomaly were observed in 2016, not in 2017, in 2018 and in 2019 and not in 2020.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var lossFlag =<span class="st"> </span><span class="kw">loss16.add</span>(loss17)
+                     <span class="kw">.add</span>(loss18)
+                     <span class="kw">.add</span>(loss19)
+                     <span class="kw">.add</span>(loss20);</code></pre></div>
+<p>Similarly, we can create a gains flag:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var gain16 =<span class="st"> </span><span class="kw">gainanomaly1617.multiply</span>(<span class="dv">10000</span>);
+var gain17 =<span class="st"> </span><span class="kw">gainanomaly1718.multiply</span>(<span class="dv">1000</span>);
+var gain18 =<span class="st"> </span><span class="kw">gainanomaly1819.multiply</span>(<span class="dv">100</span>);
+var gain19 =<span class="st"> </span><span class="kw">gainanomaly1920.multiply</span>(<span class="dv">10</span>);
+var gain20 =<span class="st"> </span><span class="kw">gainanomaly2021.multiply</span>(<span class="dv">1</span>);
+
+var recoveryFlag =<span class="st"> </span><span class="kw">gain16.add</span>(gain17)
+                     <span class="kw">.add</span>(gain18)
+                     <span class="kw">.add</span>(gain19)
+                     <span class="kw">.add</span>(gain20);</code></pre></div>
+<p>Several information can be inferred based on the combination of years and each individual flag. For example, one can decide that a plantation class will be anything that shows clearing in one year and recovery in the next; or, two consecutive years of exposed soil followed by 3 years of recovery. Also, extending the anomaly analysis to years prior to 2015, increasing the study period. Thus, it is up to the user to come up to a rule to define the final plantation layer. Finally, as you may have noticed, this technique can also be used to inspect changes elsewhere, chief among them <strong>areas of native vegetation that has been cleared</strong>. This is a very versitile analysis that can provide very useful information about vegetation change.</p>
+<p>Export these flags (<code>lossFlag</code> and <code>recoveryFlag</code>):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Export.image.toAsset</span>({
+  image<span class="op">:</span><span class="st"> </span>recoveryFlag,
+  description<span class="op">:</span><span class="st"> &#39;RecoveryFlag&#39;</span>,
+  assetId<span class="op">:</span><span class="st"> &#39;RecoveryFlag&#39;</span>,
+  crs<span class="op">:</span><span class="st">&#39;EPSG:4326&#39;</span>,
+  crsTransform<span class="op">:</span>[<span class="fl">0.0002777777777777778</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">180.0001388888889</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">0.0002777777777777778</span>,<span class="fl">60.00013888888889</span>],
+  maxPixels<span class="op">:</span><span class="fl">1e13</span>,
+  });</code></pre></div>
+<p><a href="https://code.earthengine.google.com/1cf253a5bdd30568fd693f89076f11a0" target="_blanket">Code Checkpoint</a></p>
+<hr />
+</div>
 <div id="class-by-class-land-cover-mapping" class="section level3">
-<h3><span class="header-section-number">3.2.1</span> Class-by-class land cover mapping</h3>
+<h3><span class="header-section-number">3.2.2</span> Class-by-class land cover mapping</h3>
 <p>We will start by <a href="https://code.earthengine.google.com/" target="_blank">opening a new code editor page</a> and by defining the spatial and temporal parameters of the composite you wish to classify, just like the other examples. As explained in Part 1, GEE’s cloud screening algorithm based on quality assessment bands (QA) can be applied to remove cloud and cloud shadow contaminated pixels for each of the Landsat scene covering y. This method greatly improves the final composite (See <a href="part-2-advanced-google-earth-engine.html#fig:CompositesMasked">2.2</a>). However, creating an annual <em>completely cloud-free</em> imagery composition for Liberia is a challenging task because of the west African monsoon, which causes constant clouds across the Gulf of Guinea most of the time. The rainy season in Liberia ranges from May to October and it frequently rains in other months, except in the short dry season that runs from December to February/March. Hence, <strong>multi-year composites are necessary in attaining wall-to-wall cloud-free mosaics over Liberia</strong>.</p>
 <p>In order to ensure that an adequate cloud-free composite is achieved, we will use a composite circa 2021-2022. Then the temporal parameters can be defined as:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var year =<span class="st"> </span><span class="dv">2021</span>;
@@ -507,7 +769,7 @@ var nationalBorder =<span class="st"> </span><span class="kw">countries.filterMe
 <div class="figure"><span id="fig:LiberiaBorder"></span>
 <img src="images/PartIII-LiberiaBorder.png" alt="Liberia border extracted from the *Large Scale International Boundary (LSIB)* dataset." width="857" />
 <p class="caption">
-Figure 3.11: Liberia border extracted from the <em>Large Scale International Boundary (LSIB)</em> dataset.
+Figure 3.15: Liberia border extracted from the <em>Large Scale International Boundary (LSIB)</em> dataset.
 </p>
 </div>
 <p>Alternatively, you can import your own border shapefile to your assets using the <strong>NEW</strong> button in the <strong>Assets</strong> tab. (See Earth Engine's <a href="https://developers.google.com/earth-engine/guides/image_upload" target="_blank">Importing Raster Data</a> for instructions on uploading an image to your assets or <a href="https://developers.google.com/earth-engine/guides/table_upload" target="_blank">Importing Table/Shapefile Data</a> for more details).</p>
@@ -515,7 +777,7 @@ Figure 3.11: Liberia border extracted from the <em>Large Scale International Bou
 <div class="figure"><span id="fig:ImportingShapefile"></span>
 <img src="images/PartIII-ImportingShapefile.png" alt="Importing shapefiles to your assets." width="340" />
 <p class="caption">
-Figure 3.12: Importing shapefiles to your assets.
+Figure 3.16: Importing shapefiles to your assets.
 </p>
 </div>
 <p>Once the upload is completed, the imported dataset can be accessed in the <strong>Assets</strong> tab. We will import it to the script using its 'ID' and add to the map editor:</p>
@@ -524,14 +786,14 @@ Figure 3.12: Importing shapefiles to your assets.
 <div class="figure"><span id="fig:Counties"></span>
 <img src="images/PartIII-Counties.png" alt="`aoi` and its multiple features (counties)" width="856" />
 <p class="caption">
-Figure 3.13: <code>aoi</code> and its multiple features (counties)
+Figure 3.17: <code>aoi</code> and its multiple features (counties)
 </p>
 </div>
 <p>In this particular case, this dataset includes multiple features (or polygons) with several properties for each feature. One of them is called 'NAME_1', which includes the names of each county in Liberia:</p>
 <div class="figure"><span id="fig:AssetDetail"></span>
 <img src="images/PartIII-AssetDetail.png" alt="Asset information. This imported dataset includes multiple features." width="886" />
 <p class="caption">
-Figure 3.14: Asset information. This imported dataset includes multiple features.
+Figure 3.18: Asset information. This imported dataset includes multiple features.
 </p>
 </div>
 <p>You can also print <code>aoi</code> to the <strong>Console</strong> tab:</p>
@@ -539,7 +801,7 @@ Figure 3.14: Asset information. This imported dataset includes multiple features
 <div class="figure"><span id="fig:FCProperties"></span>
 <img src="images/PartIII-FCProperties.png" alt="Feature collection information printed to the console. This imported dataset includes multiple features." width="683" />
 <p class="caption">
-Figure 3.15: Feature collection information printed to the console. This imported dataset includes multiple features.
+Figure 3.19: Feature collection information printed to the console. This imported dataset includes multiple features.
 </p>
 </div>
 <p>This type of metadata can be used to filter a feature collection. The <code>ee.Filter.inList()</code> method is very helpful when you want to filter multiple properties at once. First, we will create an object called 'filterCounties' with a list of 4 of the 15 counties in Liberia. In this example, we selected the counties of Bomi, Montserrado, Margibi and Grand Bassa. Finally, we use <code>filter()</code> to filter <code>aoi</code> for the list of counties provided in <code>filterCounties</code>:</p>
@@ -549,7 +811,7 @@ var filteredAOI =<span class="st"> </span><span class="kw">aoi.filter</span>(fil
 <div class="figure"><span id="fig:FilteredCounties"></span>
 <img src="images/PartIII-FilteredCounties.png" alt="The `aoi` feature collection filtered by metadata. Here, a filter to select the counties of Bomi, Montserrado, Margibi and Grand Bassa was used. " width="856" />
 <p class="caption">
-Figure 3.16: The <code>aoi</code> feature collection filtered by metadata. Here, a filter to select the counties of Bomi, Montserrado, Margibi and Grand Bassa was used.
+Figure 3.20: The <code>aoi</code> feature collection filtered by metadata. Here, a filter to select the counties of Bomi, Montserrado, Margibi and Grand Bassa was used.
 </p>
 </div>
 <p>Now that both temporal and spatial parameters are defined, As auxiliary functions for cloud masking and spectral index calculation, we will use the same functions provided in PART 2:</p>
@@ -610,7 +872,7 @@ Figure 3.16: The <code>aoi</code> feature collection filtered by metadata. Here,
 <div class="figure"><span id="fig:LiberiaComposite"></span>
 <img src="images/PartIII-LiberiaComposite.png" alt="A RGB564 composition of `composite`. " width="856" />
 <p class="caption">
-Figure 3.17: A RGB564 composition of <code>composite</code>.
+Figure 3.21: A RGB564 composition of <code>composite</code>.
 </p>
 </div>
 <p>Finally, we can export this composite as an asset. This will save you some time in the next steps where we will be using this same composite for classifying multiple land cover. For this example, we will use the <code>Export.image.toAsset()</code> as follows:</p>
@@ -626,7 +888,7 @@ Figure 3.17: A RGB564 composition of <code>composite</code>.
 <div class="figure"><span id="fig:PartIII-CompositeExport"></span>
 <img src="images/PartIII-CompositeExport.png" alt="Exporting the composite as an asset. " width="580" />
 <p class="caption">
-Figure 3.18: Exporting the composite as an asset.
+Figure 3.22: Exporting the composite as an asset.
 </p>
 </div>
 <p><a href="https://code.earthengine.google.com/714db6d9b8c8d00fd4473ac627b7cf3b" target="_blank">Code Checkpoint</a></p>
@@ -635,19 +897,19 @@ Figure 3.18: Exporting the composite as an asset.
 <div class="figure"><span id="fig:ClassificationApproach"></span>
 <img src="images/PartIII-ClassByClassApproach.png" alt="A class by class classification approach. " width="900" />
 <p class="caption">
-Figure 3.19: A class by class classification approach.
+Figure 3.23: A class by class classification approach.
 </p>
 </div>
 <p>So, far we have covered a multi-class classification approach. This is the most common way to perform a classification of multiple classes: feed the classifier all the samples from the different classes and post-process the outputs. However, we can include a pre-classification step to isolate the class of interest and then perform the classification for that particular land cover. Later, we will mask this class from the composite in order to exclude those pixels from the classification process and potentially avoid comission and omission errors. Why is this relevant/important? - Answer: Pixel-based classification may generate a large number of misclassified pixels (the &quot;salt-and-pepper effect&quot;) due to the spectral diversity within the same land cover type and spectral confusion between land cover types. For that, a spectral signature analysis can be performed for identifying potential spectral bands and reflectance-based spectral indices thresholds for differentiating between two classes: the land cover class being mapped and the remaining land cover classes merged as a single class called “Other”.</p>
 <p><strong><em>Water bodies</em></strong></p>
-<p>Water bodies are usually the easiest class to start with. Not many other land cover classes will have a similar spectral signature. Therefore, it is good practice to start with classes that are easily classifiable. As mentioned previously, we will use a pre-classification step to isolate the class of interest and then perform the classification for that particular land cover. We can do that by using a Masking Phase (Se Figure <a href="part-3-country-specific-applications.html#fig:ClassificationApproach">3.19</a>). In this phase, we use a band/ index threshold analysis to create a mask that will remove most pixels that are unlikely to be the class of interest - in this particular case, water bodies. In this example we will use the Modified Normalized Difference Water Index (MNDWI) that was calculated and added as a separate band to the <code>composite</code> using the <code>addIndices</code> function. This index will usually have mostly positive values for wet areas and negative values for other land cover classes. Therefore we can creat a 'wetMask' using a value thresold:</p>
+<p>Water bodies are usually the easiest class to start with. Not many other land cover classes will have a similar spectral signature. Therefore, it is good practice to start with classes that are easily classifiable. As mentioned previously, we will use a pre-classification step to isolate the class of interest and then perform the classification for that particular land cover. We can do that by using a Masking Phase (Se Figure <a href="part-3-country-specific-applications.html#fig:ClassificationApproach">3.23</a>). In this phase, we use a band/ index threshold analysis to create a mask that will remove most pixels that are unlikely to be the class of interest - in this particular case, water bodies. In this example we will use the Modified Normalized Difference Water Index (MNDWI) that was calculated and added as a separate band to the <code>composite</code> using the <code>addIndices</code> function. This index will usually have mostly positive values for wet areas and negative values for other land cover classes. Therefore we can creat a 'wetMask' using a value thresold:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var wetMask =<span class="st"> </span><span class="kw">composite.select</span>(<span class="st">&#39;MNDWI&#39;</span>)<span class="kw">.gte</span>(<span class="op">-</span><span class="fl">0.1</span>)<span class="kw">.clip</span>(filteredAOI);</code></pre></div>
 <p>The code above is selecting the pixels from the band &quot;MNDWI&quot; from <code>composite</code> that has values that are equal or greater than -0.1. Automatically, <code>wetMask</code> will be an image of ones (1) where the pixels meet the criteria above (MNDWI values greater than -0.1) and zeros (0) everywhere else. You can add <code>wetMask</code> to the map to check how constrictive your threshold values are:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(<span class="kw">wetMask.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;blue&#39;</span>}, <span class="st">&#39;WetMask&#39;</span>);</code></pre></div>
 <div class="figure"><span id="fig:PartIII-Watermask"></span>
 <img src="images/PartIII-Watermask.png" alt="A mask created based on the MNDWI values that are equal or greater than -0.1. " width="568" />
 <p class="caption">
-Figure 3.20: A mask created based on the MNDWI values that are equal or greater than -0.1.
+Figure 3.24: A mask created based on the MNDWI values that are equal or greater than -0.1.
 </p>
 </div>
 <p>Note that this mask includes all the water pixels (in black as seen in the RGB 564 color composition) plus other areas that area not open water bodies but include some level of wetness to them (usually mangroves and wetlands). The objective of this phase <em><strong>IS NOT</strong></em> to remove <em><strong>ALL</strong></em> pixels that are not water; rather, is to remove <em><strong>MOST</strong></em> pixels that are not water. You can think of this as a classification process that preceeds the actual random forest classification. Instead of having to classify the entire composite into two classes, this way you can reduce the number of pixels going into the Random Forest Classification, speeding up the process. Also, this process already eliminated pixels that are unlikely to be water, reducing even further the chances of missclassification.</p>
@@ -657,14 +919,14 @@ Figure 3.20: A mask created based on the MNDWI values that are equal or greater 
 <div class="figure"><span id="fig:PartIII-MaskedComposite"></span>
 <img src="images/PartIII-MaskedComposite.png" alt="`composite` masked using `wetMask`. " width="853" />
 <p class="caption">
-Figure 3.21: <code>composite</code> masked using <code>wetMask</code>.
+Figure 3.25: <code>composite</code> masked using <code>wetMask</code>.
 </p>
 </div>
 <p>This is the resulting Landsat composite that will be used in this first classification iteration! The next steps should be familiar to you: * Selecting training samples - here we will create the two geometries to hold the 'water' and 'other' samples. Remember to set a property called 'landcover':</p>
 <div class="figure"><span id="fig:PartIII-WaterSamples"></span>
 <img src="images/PartIII-WaterSamples.png" alt=" Geometry imports to hold the training samples. " width="1166" />
 <p class="caption">
-Figure 3.22:  Geometry imports to hold the training samples.
+Figure 3.26:  Geometry imports to hold the training samples.
 </p>
 </div>
 <p><a href="https://code.earthengine.google.com/4a32727cbaefeb2d4f60037073884618" target="_blank">Code Checkpoint</a></p>
@@ -714,7 +976,7 @@ var paletteMAP =<span class="st"> </span>[
 <div class="figure"><span id="fig:PartIII-WaterClass"></span>
 <img src="images/PartIII-WaterClass.png" alt=" Classification output. " width="862" />
 <p class="caption">
-Figure 3.23:  Classification output.
+Figure 3.27:  Classification output.
 </p>
 </div>
 <p>Finally, we will save this output to our Assets folder using the <code>Export.image.toAsset()</code>:</p>
@@ -761,7 +1023,7 @@ var elevationMask =<span class="st"> </span><span class="kw">elevation.lte</span
 <div class="figure"><span id="fig:PartIII-MASKS"></span>
 <img src="images/PartIII-MASKS.png" alt="When applying these three masks to the composite, pixels will only remain where the three masks overlap." width="854" />
 <p class="caption">
-Figure 3.24: When applying these three masks to the composite, pixels will only remain where the three masks overlap.
+Figure 3.28: When applying these three masks to the composite, pixels will only remain where the three masks overlap.
 </p>
 </div>
 <p>Finally, we will apply these masks to the <code>composite</code> using <code>.mask()</code> for the first mask and <code>.updateMask()</code> for the others:</p>
@@ -774,14 +1036,14 @@ Figure 3.24: When applying these three masks to the composite, pixels will only 
 <div class="figure"><span id="fig:PartIII-CompositeMaskedII"></span>
 <img src="images/PartIII-CompositeMaskedII.png" alt="Masked composite." width="866" />
 <p class="caption">
-Figure 3.25: Masked composite.
+Figure 3.29: Masked composite.
 </p>
 </div>
 <p>Next, we will repeat the sampling selection and classification. As a tip for selection accurate samples, mangroves will be in a darker shade of red/orange in this RGB 564 color composition while other vegetative classes (e.g. evergreen forests) will have a lighter red/orange shade. Make sure to take advantage of the high resolution imagery using the <strong>Satellite</strong> button:</p>
 <div class="figure"><span id="fig:PartIII-Mangrove"></span>
 <img src="images/PartIII-Mangrove.png" alt="Mangroves and other vegetation classes in Liberia." width="862" />
 <p class="caption">
-Figure 3.26: Mangroves and other vegetation classes in Liberia.
+Figure 3.30: Mangroves and other vegetation classes in Liberia.
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var classes =<span class="st"> </span><span class="kw">Mangrove.merge</span>(Other);
@@ -824,7 +1086,7 @@ var paletteMAP =<span class="st"> </span>[
 <div class="figure"><span id="fig:PartIII-Mangroves"></span>
 <img src="images/PartIII-Mangroves.png" alt="Classification output." width="862" />
 <p class="caption">
-Figure 3.27: Classification output.
+Figure 3.31: Classification output.
 </p>
 </div>
 <p>Finally, we will export the classification:</p>
@@ -857,7 +1119,7 @@ var mangroveClass =<span class="st"> </span><span class="kw">ee.Image</span>(<sp
 <div class="figure"><span id="fig:PartIII-Pop"></span>
 <img src="images/PartIII-Pop.png" alt="Ancillary datasets for classification of human settlements in Liberia. The population density and small settlement locations is helpful to constrain the classification in certain areas and help reduce misclassification errors with spectrally similar classes such as bare soil." width="1458" />
 <p class="caption">
-Figure 3.28: Ancillary datasets for classification of human settlements in Liberia. The population density and small settlement locations is helpful to constrain the classification in certain areas and help reduce misclassification errors with spectrally similar classes such as bare soil.
+Figure 3.32: Ancillary datasets for classification of human settlements in Liberia. The population density and small settlement locations is helpful to constrain the classification in certain areas and help reduce misclassification errors with spectrally similar classes such as bare soil.
 </p>
 </div>
 <p>Similarly to the previous classification, we will create the masks based on these datasets to apply to the composite:</p>
@@ -875,7 +1137,7 @@ var mangroveMask =<span class="st"> </span><span class="kw">ee.Image</span>(<spa
 <div class="figure"><span id="fig:PartIII-PopMask"></span>
 <img src="images/PartIII-PopMask.png" alt="Population mask created by selecting areas that have more than 100 people/pixel. Once this mask is applied, areas with less than 100 people per pixel will be masked." width="858" />
 <p class="caption">
-Figure 3.29: Population mask created by selecting areas that have more than 100 people/pixel. Once this mask is applied, areas with less than 100 people per pixel will be masked.
+Figure 3.33: Population mask created by selecting areas that have more than 100 people/pixel. Once this mask is applied, areas with less than 100 people per pixel will be masked.
 </p>
 </div>
 <p>Next, we will use <code>settlements</code>. As you may have noticed, <code>settlements</code> contains the location of each small human settlement based on the 2007 census. We can then create a buffer of a certain size around each of these locations to create areas of likelihood for human settlements. We will first create a function to apply a buffer of a 1000 meters around the feature and then map it to <code>settlements</code> using <code>.map()</code> method:</p>
@@ -887,7 +1149,7 @@ var setLocation =<span class="st"> </span><span class="kw">settlements.map</span
 <div class="figure"><span id="fig:PartIII-SetBuffer"></span>
 <img src="images/PartIII-SetBuffer.png" alt="1000 m buffer around each settlement location." width="856" />
 <p class="caption">
-Figure 3.30: 1000 m buffer around each settlement location.
+Figure 3.34: 1000 m buffer around each settlement location.
 </p>
 </div>
 <p>Now, we can merge them into a final mask by creating an <code>ee.Image()</code> of 1 and clip it using the buffered locations, the <code>.clip()</code> method and add it to <code>popMask</code> using <code>.add()</code>:</p>
@@ -901,7 +1163,7 @@ Note that the code above used <code>.unmask()</code> after <code>.clip()</code>.
 <div class="figure"><span id="fig:PartIII-PopMaskFinal"></span>
 <img src="images/PartIII-PopMaskFinal.png" alt="Final population Mask." width="858" />
 <p class="caption">
-Figure 3.31: Final population Mask.
+Figure 3.35: Final population Mask.
 </p>
 </div>
 <p>Finally, we will apply these masks to the composite:</p>
@@ -913,7 +1175,7 @@ Figure 3.31: Final population Mask.
 <div class="figure"><span id="fig:PartIII-MaskedCompositeII"></span>
 <img src="images/PartIII-MaskedCompositeII.png" alt="Masked composite using `waterMask`, `mangroveMask` and `populationMask`." width="856" />
 <p class="caption">
-Figure 3.32: Masked composite using <code>waterMask</code>, <code>mangroveMask</code> and <code>populationMask</code>.
+Figure 3.36: Masked composite using <code>waterMask</code>, <code>mangroveMask</code> and <code>populationMask</code>.
 </p>
 </div>
 <ol start="3" style="list-style-type: upper-alpha">
@@ -926,7 +1188,7 @@ var compositeMasked =<span class="st"> </span><span class="kw">compositemasked.u
 <div class="figure"><span id="fig:PartIII-MaskedCompositeIII"></span>
 <img src="images/PartIII-MaskedCompositeIII.png" alt="Masked composite using `waterMask`, `mangroveMask` and `populationMask` and `bareMask` showing areas of higher likelihood to be human settlements." width="859" />
 <p class="caption">
-Figure 3.33: Masked composite using <code>waterMask</code>, <code>mangroveMask</code> and <code>populationMask</code> and <code>bareMask</code> showing areas of higher likelihood to be human settlements.
+Figure 3.37: Masked composite using <code>waterMask</code>, <code>mangroveMask</code> and <code>populationMask</code> and <code>bareMask</code> showing areas of higher likelihood to be human settlements.
 </p>
 </div>
 <p><a href="https://code.earthengine.google.com/d60cf84c3a0e870b51c7c9f469c96139" target="_blank">Code Checkpoint</a></p>
@@ -971,7 +1233,7 @@ var paletteMAP =<span class="st"> </span>[
 <div class="figure"><span id="fig:PartIII-Settlements"></span>
 <img src="images/PartIII-Settlements.png" alt="Classification Output." width="856" />
 <p class="caption">
-Figure 3.34: Classification Output.
+Figure 3.38: Classification Output.
 </p>
 </div>
 <p><a href="https://code.earthengine.google.com/6c955c227802dd65606864f4792392b7" target="_blank">Code Checkpoint</a></p>
@@ -980,7 +1242,7 @@ Figure 3.34: Classification Output.
 <div class="figure"><span id="fig:PartIII-Grasslands"></span>
 <img src="images/PartIII-Grasslands.png" alt="The Normalized Burn Ratio and Grasslands. Areas with little to no vegetation cover is shown in black." width="857" />
 <p class="caption">
-Figure 3.35: The Normalized Burn Ratio and Grasslands. Areas with little to no vegetation cover is shown in black.
+Figure 3.39: The Normalized Burn Ratio and Grasslands. Areas with little to no vegetation cover is shown in black.
 </p>
 </div>
 <p>First, we will start importing the same assets as before and the classes we have so far: water bodies, mangroves and human settlements:</p>
@@ -1023,7 +1285,7 @@ You can check the average value of pixels within a region by using <code>ee.Redu
 <div class="figure"><span id="fig:PartIII-GrasslandsandBare"></span>
 <img src="images/PartIII-GrasslandsandBare.png" alt="Extracting the herbaceous vegetation/grass and bare areas using NBR thresholds." width="1452" />
 <p class="caption">
-Figure 3.36: Extracting the herbaceous vegetation/grass and bare areas using NBR thresholds.
+Figure 3.40: Extracting the herbaceous vegetation/grass and bare areas using NBR thresholds.
 </p>
 </div>
 <p>Finally, we will export these classes to the assets following the same code as before:</p>
@@ -1046,32 +1308,167 @@ Figure 3.36: Extracting the herbaceous vegetation/grass and bare areas using NBR
   });</code></pre></div>
 <p><a href="https://code.earthengine.google.com/6bbff33c6ccde7e494b36f5f3205ece2" target="_blank">Code Checkpoint</a></p>
 <p><strong><em>Plantation</em></strong></p>
-<p>Cultivated land in Liberia primarily consists of woody commodity crops (oil palm and rubber trees). The spectra of these woody crops are identical with those of natural vegetation. However, these areas generally have regular distribution patterns such as square or rectangles. The availability of forest concessions datasets is of paramount importance to constrain the classification of woody crop areas within the area they are likely to be found and avoid misclassification with other vegetation classes, such as evergreen forest.</p>
-<p>Here, we are going to constrain the classification within areas of Rubber and Oil Palm Concessions. The data was previously uploaded into GEE and you can have access to it by loading it into your script with <code>ee.FeatureCollection('users/capacityBuilding/Liberia/Rubber')</code> and <code>ee.FeatureCollection('users/capacityBuilding/Liberia/OilPalm')</code>.</p>
-<p>We will import these concessions along with the rest of the assets:</p>
+<p>Cultivated land in Liberia primarily consists of woody commodity crops (oil palm and rubber trees).</p>
+<div class="figure"><span id="fig:PartIII-Concessions"></span>
+<img src="images/PartIII-Concessions.png" alt="Rubber (red) and Oil Palm (green) concessions in Liberia. The spectral signature of these woody crops are identical with those of natural vegetation making it very challenging to classify." width="856" />
+<p class="caption">
+Figure 3.41: Rubber (red) and Oil Palm (green) concessions in Liberia. The spectral signature of these woody crops are identical with those of natural vegetation making it very challenging to classify.
+</p>
+</div>
+<p>As seen in the previous section (3.2.1), areas of plantation usually undergo harvesting cycles, which creates a temporal signature that is different than evergreen natural vegetation. We took the advantage of this interannual differences by doing an anomaly analysis and creating losses/harvest and gains/planting flag layers.</p>
+<p>We will start by opening a <a href="https://code.earthengine.google.com/" target="_blank">new Code Editor page</a> and importing the flag layers, the composite and the Liberia counties feature collection:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var lossFlag =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/LossFlag&#39;</span>);
+var recoveryFlag =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/RecoveryFlag&#39;</span>);
+
+var composite =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/CompositeLiberia2021&#39;</span>);
+var aoi =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/LiberiaCounties&#39;</span>);
+var filterCounties =<span class="st"> </span><span class="kw">ee.Filter.inList</span>(<span class="st">&#39;NAME_1&#39;</span>, [<span class="st">&#39;Bomi&#39;</span>, <span class="st">&#39;Montserrado&#39;</span>,<span class="st">&#39;Margibi&#39;</span>,<span class="st">&#39;GrandBassa&#39;</span>]);
+var filteredAOI =<span class="st"> </span><span class="kw">aoi.filter</span>(filterCounties);</code></pre></div>
+<p>These flag layers have pixels with 5 digit combinations of 0 and 1 value representing absence and presence, respectively It is up to the user to come up to a rule to define the final plantation layer based on the combination of years (see section (3.2.1)). Examples of this would be pixels that showed losses for at least 2 consecutive years, no matter what year:</p>
+<ul>
+<li><p>11000 - 2016 and 2017</p></li>
+<li><p>01100 - 2017 and 2018</p></li>
+<li><p>00110 - 2018 and 2019</p></li>
+<li><p>00011 - 2019 and 2020</p></li>
+<li><p>11100 - 2016, 2017 and 2018</p></li>
+<li><p>01110 - 2017, 2018 and 2019</p></li>
+<li><p>00111 - 2018, 2019 and 2020</p></li>
+<li><p>11110 - 2016, 2017, 2018 and 2019</p></li>
+<li><p>01111 - 2017, 2018, 2019 and 2020</p></li>
+</ul>
+<p>Or selecting pixels that showed losses on consecutive years:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var disturbance1year =<span class="st"> </span><span class="kw">lossFlag.eq</span>(<span class="dv">10000</span>); <span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="dv">2016</span>
+var disturbance2years =<span class="st"> </span><span class="kw">lossFlag.eq</span>(<span class="dv">11000</span>);<span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="dv">2016</span>, <span class="dv">2017</span>
+var disturbance3years =<span class="st"> </span><span class="kw">lossFlag.eq</span>(<span class="dv">11100</span>);<span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="dv">2016</span>, <span class="dv">2017</span>, <span class="dv">2018</span>
+var disturbance4years =<span class="st"> </span><span class="kw">lossFlag.eq</span>(<span class="dv">11110</span>);<span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="dv">2016</span>, <span class="dv">2017</span>, <span class="dv">2018</span>, <span class="dv">2019</span>
+var disturbance5years =<span class="st"> </span><span class="kw">lossFlag.eq</span>(<span class="dv">11111</span>);<span class="op">/</span><span class="er">/</span><span class="st"> </span><span class="dv">2016</span>, <span class="dv">2017</span>, <span class="dv">2018</span>, <span class="dv">2019</span>, <span class="dv">2020</span>
+
+<span class="kw">Map.addLayer</span>(<span class="kw">lossFlag.selfMask</span>(), {palette<span class="op">:</span>[<span class="st">&#39;white&#39;</span>]}, <span class="st">&#39;LossFlag&#39;</span>);
+<span class="kw">Map.addLayer</span>(<span class="kw">disturbance1year.selfMask</span>(), {palette<span class="op">:</span>[<span class="st">&#39;E0C097&#39;</span>]}, <span class="st">&#39;Disturbance 1 Year&#39;</span>);
+<span class="kw">Map.addLayer</span>(<span class="kw">disturbance2years.selfMask</span>(), {palette<span class="op">:</span>[<span class="st">&#39;D79771&#39;</span>]}, <span class="st">&#39;Disturbance 2 Years&#39;</span>);
+<span class="kw">Map.addLayer</span>(<span class="kw">disturbance3years.selfMask</span>(), {palette<span class="op">:</span>[<span class="st">&#39;B85C38&#39;</span>]}, <span class="st">&#39;Disturbance 3 Years&#39;</span>);
+<span class="kw">Map.addLayer</span>(<span class="kw">disturbance4years.selfMask</span>(), {palette<span class="op">:</span>[<span class="st">&#39;753422&#39;</span>]}, <span class="st">&#39;Disturbance 4 Years&#39;</span>);
+<span class="kw">Map.addLayer</span>(<span class="kw">disturbance5years.selfMask</span>(), {palette<span class="op">:</span>[<span class="st">&#39;2D2424&#39;</span>]}, <span class="st">&#39;Disturbance All Years&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-PlantationS"></span>
+<img src="images/PartIII-PlantationS.png" alt="The loss flag (in white) and selected flag values." width="858" />
+<p class="caption">
+Figure 3.42: The loss flag (in white) and selected flag values.
+</p>
+</div>
+<p>For this example, we will consider plantation, every pixel that showed at least 1 year of loss/harvest and at least 1 year of gain/planting in those flags. In other words, both loss/harvest and gain/planting flags. Thus, we will add <code>lossFlag</code> and <code>recoveryFlag</code>, create an image of 0 and where the sum overlaps this image, populate it with 1. Finally clip it for the area of study (<code>filteredAOI</code>):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var plantations =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">0</span>)<span class="kw">.where</span>(<span class="kw">lossFlag.add</span>(recoveryFlag),<span class="dv">1</span>)<span class="kw">.clip</span>(filteredAOI);
+<span class="kw">Map.addLayer</span>(<span class="kw">plantations.selfMask</span>(), {palette<span class="op">:</span>[<span class="st">&#39;green&#39;</span>]}, <span class="st">&#39;Plantation&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-PlantationClassI"></span>
+<img src="images/PartIII-PlantationClassI.png" alt="Plantation class derived from the `lossFlag` and `recoveryFlag`" width="1313" />
+<p class="caption">
+Figure 3.43: Plantation class derived from the <code>lossFlag</code> and <code>recoveryFlag</code>
+</p>
+</div>
+<p><em><strong>One last step remains to finalize the plantation class layer</strong></em>: Remember that every other class prior to this one was created from a classified Landsat composite that was masked each time using the previous class. Therefore, we need to mask <code>plantations</code> so it matches with how it would have been if it were created with the Landsat composite. Similarly to the previous classes, we will add the class assets, and use them to create masks for <code>plantations</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var waterClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/1-Water&#39;</span>);
+var mangroveClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/2-Mangroves&#39;</span>);
+var settlementClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/3-Settlements&#39;</span>);
+var bareClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/4-Bareareas&#39;</span>);
+var grassClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/5-Grasslands&#39;</span>);
+
+var waterMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">waterClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+var mangroveMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">mangroveClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+var settlementMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">settlementClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+var bareMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">bareClass.select</span>([<span class="st">&#39;bare&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+var grassMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">grassClass.select</span>([<span class="st">&#39;grass&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);</code></pre></div>
+<p>Then, mask <code>plantations</code> using the masks with the method <code>mask()</code> for the first and <code>.updateMask()</code> for the rest:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var plantationClass =<span class="st"> </span><span class="kw">plantations.mask</span>(waterMask)
+                                 <span class="kw">.updateMask</span>(mangroveMask)
+                                 <span class="kw">.updateMask</span>(settlementMask)
+                                 <span class="kw">.updateMask</span>(bareMask)
+                                 <span class="kw">.updateMask</span>(grassMask)
+                                 <span class="kw">.rename</span> (<span class="st">&#39;plantations&#39;</span>);</code></pre></div>
+<div class="rmdcomment">
+<p>
+It is a good practice to use <code>.rename()</code> to give a name to the image you just created. If you choose not to rename your image, its band name will default to 'constant'.
+</p>
+</div>
+<p>Finally, export this layer as an asset:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Export.image.toAsset</span>({
+  image<span class="op">:</span><span class="st"> </span>plantationClass,
+  description<span class="op">:</span><span class="st"> &#39;plantationClass&#39;</span>,
+  assetId<span class="op">:</span><span class="st"> &#39;6-Plantations&#39;</span>,
+  crs<span class="op">:</span><span class="st">&#39;EPSG:4326&#39;</span>,
+  crsTransform<span class="op">:</span>[<span class="fl">0.0002777777777777778</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">180.0001388888889</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">0.0002777777777777778</span>,<span class="fl">60.00013888888889</span>],
+  region<span class="op">:</span><span class="st"> </span>filteredAOI,
+  maxPixels<span class="op">:</span><span class="fl">1e13</span>,
+  });</code></pre></div>
+<p><a href="https://code.earthengine.google.com/4a7d0eef77edecce93805485a8b3a6f6" target="_blank">Code checkpoint</a></p>
+<p><em><strong>Forests</strong></em></p>
+<p>According to a <a href="https://openknowledge.worldbank.org/handle/10986/34438" target="_blank">report by the World Bank</a>, &quot;<em>Liberia is one of the most forested countries in West Africa, with more than two thirds of its land surface covered by forest. The National Forest Inventory, conducted by the Liberia Forestry Development Authority in 2018 and 2019, estimates the forest cover in Liberia to be 6.69 million hectares which is approximately 69 percent of the total landmass.</em>&quot;</p>
+<p>Thus, it comes as no surprise that the vast majority of the Landsat composite we have been using is comprised of tree covered areas. So far, we have have 6 land cover and land-use classes: <em>water bodies</em>, <em>mangroves</em>, <em>human settlements</em>, <em>bare areas</em>, <em>grasslands</em> and <em>plantations</em>. Then, the remaining of the composite is covered by trees. According to Liberia's forest definition, <em>forests are areas of at least 0.5 ha covered by trees that have more than 30% canopy cover and are at least 5 meters of height</em>. Forests can be classified in different ways and to different degrees of specificity.</p>
+<p>For this example, we will categorize the tree-cover/forest class in Liberia into three sub-classes: <strong>primary/dense</strong>, <strong>secondary/open</strong> and <strong>degraded/sparse</strong>.</p>
+<p>Separating different types of forests and/or different forest condition (e.g. primary and secondary) can become increasingly challenging because: (1) sometimes it requires the incorporation of complex physical models associated with specific forest types, making it difficult for widespread use, and (2) it requires multi-source high resolution auxiliary data such as 3D vegetation structure data. However, 3D vegetation structure datasets are vastly more scarce than spaceborne 2D data and, in most cases, only covers certain periods of time.</p>
+<p>In a previous study, we investigated the integrity of forests in Liberia in 2018, using the Global Ecosystem Dynamics Investigation (GEDI)'s L2B Canopy Cover and Vertical Profile metrics acquired between April 2018 and November 2020, available from the NASA/USGS Land Processes Distributed Active Archive Center (DAAC). At each GEDI footprint we extracted the relative height metric RH100 (100th percentile of beam return height in meters relative to the ground) and total canopy cover (percent) gridded to the Landsat 30-meter pixel. Using these metrics, we observed that the distribution of canopy height values of open/secondary forests will be shorter than older dense/primary forests. Similarly, open/secondary forests will be characterized by lower values of canopy cover compared to dense/primary forests. Finally, spase/degraded forests will have lower canopy cover and height values compared to the other classes:</p>
+<div class="figure"><span id="fig:PartIII-GEDIForests"></span>
+<img src="images/PartIII-GEDI%20Forests.png" alt="GEDI-based measurements of Liberia’s forest’s integrity. Canopy height (in meters) and canopy cover (in %) was extracted from each GEDI footprint within dense tree-covered areas (a), open tree-covered areas (b), mixed vegetation (c) and all other classes (d). The summary statistics for the canopy cover and canopy height values for each class (and all other classes) is also shown (SD = standard deviation; N = count; SE = standard error of the mean)." width="1294" />
+<p class="caption">
+Figure 3.44: GEDI-based measurements of Liberia’s forest’s integrity. Canopy height (in meters) and canopy cover (in %) was extracted from each GEDI footprint within dense tree-covered areas (a), open tree-covered areas (b), mixed vegetation (c) and all other classes (d). The summary statistics for the canopy cover and canopy height values for each class (and all other classes) is also shown (SD = standard deviation; N = count; SE = standard error of the mean).
+</p>
+</div>
+<p>We can use the information above to derive <strong>primary/dense</strong>, <strong>secondary/open</strong> and <strong>degraded/sparse</strong> based on height values or canopy cover.</p>
+<p>The <a href="https://glad.umd.edu/dataset/gedi">2019 Potapov’s (University of Maryland) global canopy height dataset</a>{target = &quot;_blank&quot;} offers a 30-m spatial resolution global forest canopy height map and was developed through the integration of the Global Ecosystem Dynamics Investigation (GEDI) lidar forest structure measurements and Landsat analysis-ready data time-series. Our previous study on forest structure in Liberia and this dataset are a good starting point to categorize the tree-cover/forest classes in Liberia.</p>
+<p>First, we will start by importing all the relevant datasets into a <a href="https://code.earthengine.google.com/">new Code Editor</a>{target =&quot;_blank&quot;} and creating their respective masks:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var composite =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/CompositeLiberia2021&#39;</span>);
 var aoi =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/LiberiaCounties&#39;</span>);
 var filterCounties =<span class="st"> </span><span class="kw">ee.Filter.inList</span>(<span class="st">&#39;NAME_1&#39;</span>, [<span class="st">&#39;Bomi&#39;</span>, <span class="st">&#39;Montserrado&#39;</span>,<span class="st">&#39;Margibi&#39;</span>,<span class="st">&#39;GrandBassa&#39;</span>]);
 var filteredAOI =<span class="st"> </span><span class="kw">aoi.filter</span>(filterCounties);
-var rubber =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/Rubber&#39;</span>);
-var oilpalm =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/OilPalm&#39;</span>);
-var concessions =<span class="st"> </span><span class="kw">rubber.merge</span>(oilpalm);
 
-<span class="kw">Map.addLayer</span>(composite, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B5&#39;</span>, <span class="st">&#39;SR_B6&#39;</span>, <span class="st">&#39;SR_B4&#39;</span>], min<span class="op">:</span><span class="fl">0.1</span>, max<span class="op">:</span><span class="fl">0.2</span>}, <span class="st">&#39;Composite&#39;</span>);
-<span class="kw">Map.addLayer</span>(rubber, {color<span class="op">:</span><span class="st">&#39;red&#39;</span>});
-<span class="kw">Map.addLayer</span>(oilpalm, {color<span class="op">:</span><span class="st">&#39;green&#39;</span>});
+<span class="kw">Map.addLayer</span>(composite, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B5&#39;</span>, <span class="st">&#39;SR_B6&#39;</span>, <span class="st">&#39;SR_B4&#39;</span>], min<span class="op">:</span><span class="fl">0.1</span>, max<span class="op">:</span><span class="fl">0.2</span>}, <span class="st">&#39;Composite&#39;</span>, false);
 
 var waterClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/1-Water&#39;</span>);
 var mangroveClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/2-Mangroves&#39;</span>);
 var settlementClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/3-Settlements&#39;</span>);
 var bareClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/4-Bareareas&#39;</span>);
-var grassClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/5-Grasslands&#39;</span>);</code></pre></div>
-<div class="figure"><span id="fig:PartIII-Concessions"></span>
-<img src="images/PartIII-Concessions.png" alt="Rubber (red) and Oil Palm (green) concessions in Liberia. The spectral signature of these woody crops are identical with those of natural vegetation making it very challenging to classify." width="856" />
+var grassClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/5-Grasslands&#39;</span>);
+var plantationClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/6-Plantations&#39;</span>);
+
+var waterMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">waterClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+var mangroveMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">mangroveClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+var settlementMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">settlementClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+var bareMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">bareClass.select</span>([<span class="st">&#39;bare&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+var grassMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">grassClass.select</span>([<span class="st">&#39;grass&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
+var plantationMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">plantationClass.select</span>([<span class="st">&#39;plantations&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);</code></pre></div>
+<p>Next, we will import the <a href="https://glad.umd.edu/dataset/gedi">2019 Potapov’s (University of Maryland) global canopy height dataset</a>{target = &quot;_blank&quot;} available through <code>'users/potapovpeter/GEDI_V27/GEDI_SAFR_v27'</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var potapovTreeHeight =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/potapovpeter/GEDI_V27/GEDI_SAFR_v27&#39;</span>)<span class="kw">.clip</span>(filteredAOI);</code></pre></div>
+<p>This dataset needs to match the projection we are using for our composite and land cover classes. Thus, we will use <code>.reproject()</code> to adjust for their projection differences.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var treeHeight =<span class="st"> </span><span class="kw">potapovTreeHeight.reproject</span>(<span class="kw">composite.projection</span>());</code></pre></div>
+<p>The <code>.projection()</code> method above retrives an image projection and affine transformation parameters. Thus, here we are using the Landsat composite projection information and reprojecting <code>potapovTreeHeight</code> to match it.</p>
+<p>Add <code>treeHeight</code> to the <strong>Map Editor</strong> using the parameters below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(treeHeight, {min<span class="op">:</span><span class="dv">0</span>, max<span class="op">:</span><span class="dv">30</span>, palette<span class="op">:</span><span class="st">&#39;ffffcc,c7e9b4,7fcdbb,41b6c4,1d91c0,225ea8,0c2c84&#39;</span>}, <span class="st">&#39;Tree Height Potapov&#39;</span>,false);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-TreeHeight"></span>
+<img src="images/PartIII-TreeHeight.png" alt="2019 Potapov’s (University of Maryland) global canopy height dataset over the study region in Liberia. Tree heights values straches from low (white) to high (dark blue)." width="850" />
 <p class="caption">
-Figure 3.37: Rubber (red) and Oil Palm (green) concessions in Liberia. The spectral signature of these woody crops are identical with those of natural vegetation making it very challenging to classify.
+Figure 3.45: 2019 Potapov’s (University of Maryland) global canopy height dataset over the study region in Liberia. Tree heights values straches from low (white) to high (dark blue).
 </p>
 </div>
+<p>Similarly to what was done to the plantation class, we need to mask this dataset for the classes that we already have:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var TreeHeightMasked =<span class="st"> </span><span class="kw">treeHeight.mask</span>(waterMask)
+                                 <span class="kw">.updateMask</span>(mangroveMask)
+                                 <span class="kw">.updateMask</span>(settlementMask)
+                                 <span class="kw">.updateMask</span>(bareMask)
+                                 <span class="kw">.updateMask</span>(grassMask)
+                                 <span class="kw">.updateMask</span>(plantationMask)</code></pre></div>
+<p>We can now extract potential areas of <strong>primary/dense</strong>, <strong>secondary/open</strong> and <strong>degraded/sparse</strong> forests based on the canopy height thresholds identified in our previous study: primary/dense forests are taller than 20 meters, secondary/open ranging from 10 to 20 meters, and degraded/sparse forests ar shorter than 10 meters:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var denseForest =<span class="st"> </span><span class="kw">TreeHeightMasked.gte</span>(<span class="dv">20</span>);
+var openForest =<span class="st"> </span><span class="kw">TreeHeightMasked.gte</span>(<span class="dv">10</span>)<span class="kw">.and</span>(<span class="kw">TreeHeightMasked.lt</span>(<span class="dv">20</span>));
+var degradedForest =<span class="st"> </span><span class="kw">TreeHeightMasked.lte</span>(<span class="dv">10</span>);
+
+<span class="kw">Map.addLayer</span>(<span class="kw">denseForest.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;287300&#39;</span>},<span class="st">&#39;Potential Mature&#39;</span>);
+<span class="kw">Map.addLayer</span>(<span class="kw">openForest.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;73B473&#39;</span>},<span class="st">&#39;Potential Secondary&#39;</span>);
+<span class="kw">Map.addLayer</span>(<span class="kw">degradedForest.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;EBFFBE&#39;</span>},<span class="st">&#39;Potential Degraded&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-Forests"></span>
+<img src="images/PartIII-Forests.png" alt="__Primary/dense__, __secondary/open__ and __degraded/sparse__ forests based on the canopy height thresholds." width="854" />
+<p class="caption">
+Figure 3.46: <strong>Primary/dense</strong>, <strong>secondary/open</strong> and <strong>degraded/sparse</strong> forests based on the canopy height thresholds.
+</p>
+</div>
+<p>PartIII-Forests</p>
 
 </div>
 </div>

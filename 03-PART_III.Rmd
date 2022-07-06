@@ -407,7 +407,365 @@ knitr::include_graphics("images/PartIII-ValidationGuinea.png")
 
 ## Liberia
 
-In this example, we will use the codes from the previous sections for a class by class land cover mapping in Liberia, in West Africa. We will also take advantage of other datasets for masking and sample selection to assist in the classification workflow.
+In this example, we will use the codes from the previous sections for (a) mapping and detecting individual classes such as plantations; (b) a class by class land cover mapping approach. 
+
+### Anomaly-based plantation detection
+
+Spectral confusion between planted tree crops with native vegetation is a well-known challenge in using moderate resolution optical remote sensing data for mapping plantations. Cultivated land in Liberia primarily consists of woody commodity crops (oil palm and rubber trees). Even with the availability of forest concessions datasets to constrain the classification of these crops, the Random Forest relies on spectral predictors that are almost identical to native vegetation. Aditionally, small scale plantations intermixed with evergreen forest will also add to the challenges of separating these classes. However, areas of plantation usually undergo harvesting cycles, which creates a temporal signature that is different than evergreen natural vegetation: every few years, the spectral signature of these areas will show traces of bare soil due to harvesting and replanting.
+We can take advantage of this interannual differences by doing an __anomaly analysis__. By definition, anomaly is anything that deviates from what is standard, normal, or expected. Usually, anomalies are calculated by subtracting a long-term average of a variable from the actual value of that variable at a given time. For example, if X = actual value of average NDVI for vegetation in 2020, and Y = long-term average NDVI of vegetation (an average over many years), then the anomaly = X − Y. If the anomaly values are zero (or very close to zero), it means that NDVI remained relatively stable in that period, which indicates that there has not been any significant disturbance in that area. On the other hand, a positive anomaly means that the NDVI signal is greater than its long-term average, which indicates that vegetation has shown growth in that area; similarly, a negative anomaly means that the NDVI signal is weaker than its long-term average, indicating a potential loss in the area.
+
+This is a very useful tool to detect changes over time. Depending on where and how these changes happen over time, you can then conclude that that area is being planted and harvested.
+
+Next, we will provide several blocks of code to perform a quick anomaly analysis over Liberia and potentially identifying areas of plantation.
+
+* Harmonizing Landsat 5/7/8 Image Collections
+
+The Landsat TM/ETM+ and OLI sensors present differences between their spectral characteristics. Thus, to ensure inter-sensor harmonized spectral information and temporal continuity, we will harmonize the entire Landsat image archive using the statistical functions presented in Roy et al. (2016). For that, we will start by defining the temporal parameters for the harmonization:
+
+```{r eval=FALSE}
+var startYear = 1984;    
+var endyear   = 2021;   
+var startDay  = '01-01';
+var endDay    = '12-31';
+```
+
+Here we used the entire Landsat archive. Next, we will create several functions for the harmonization of the Landsat archive:
+
+__Harmonization Function__: `harmonizationRoy` uses the regression coefficients (slopes and intercepts) retrieved from Roy et al. (2016) and performs a linear transformation of ETM+ spectral space to OLI spectral space:
+
+```{r eval=FALSE}
+var harmonizationRoy = function(oli) {
+var slopes = ee.Image.constant([0.9785, 0.9542, 0.9825, 1.0073, 1.0171, 0.9949]);        
+var itcp = ee.Image.constant([-0.0095, -0.0016, -0.0022, -0.0021, -0.0030, 0.0029]);     
+var y = oli.select(['B2','B3','B4','B5','B6','B7'],['B1', 'B2', 'B3', 'B4', 'B5', 'B7']) 
+            .resample('bicubic')                                                         
+            .subtract(itcp.multiply(10000)).divide(slopes)                                
+            .set('system:time_start', oli.get('system:time_start'));
+return y.toShort();                                                                       
+};
+```
+
+__Retrieve a Particular Sensor Function__: `getSRcollection` will be used to retrieve individual sensor collections based on the temporal parameters and the harmonization function above. Additionally, this function will mask cloud, cloud shadow, and snow based on the Landsat quality assessment bands:
+
+```{r eval=FALSE}
+var getSRcollection = function(year, startDay, endYear, endDay, sensor) {
+    var srCollection = ee.ImageCollection('LANDSAT/'+ sensor + '/C01/T1_SR')
+                                         .filterDate(year+'-'+startDay, endYear+'-'+endDay);
+        srCollection = srCollection.map(function(img) {
+          var dat = ee.Image(ee.Algorithms.If(
+                    sensor == 'LC08',                                                  
+                    harmonizationRoy(img.unmask()),                                    
+                    img.select(['B1', 'B2', 'B3', 'B4', 'B5', 'B7'])
+                       .unmask()  
+                       .resample('bicubic')
+                       .set('system:time_start', img.get('system:time_start'))
+                  )
+                );
+    // Cloud, cloud shadow and snow mask
+    var qa = img.select('pixel_qa');                                       
+      var mask = qa.bitwiseAnd(8).eq(0).and(
+                 qa.bitwiseAnd(16).eq(0)).and(
+                 qa.bitwiseAnd(32).eq(0));
+      return dat.mask(mask); 
+      });
+return srCollection;
+};
+```
+
+__Combining the Collections Function__: `getCombinedSRcollection` will merge all the individual L5/L7/L8 collections into one:
+
+```{r eval=FALSE}
+var getCombinedSRcollection = function(year, startDay, endYear,endDay) {
+  var lt5 = getSRcollection(year, startDay, endYear, endDay, 'LT05');
+  var le7 = getSRcollection(year, startDay, endYear, endDay, 'LE07');
+  var lc8 = getSRcollection(year, startDay, endYear, endDay, 'LC08');
+  var mergedCollection = ee.ImageCollection(le7.merge(lc8).merge(lt5));
+return mergedCollection;
+};
+```
+
+__Vegetation Indices__: `addIndices` calculates several vegetation/spectral indices based on the harmonized Landsat bands. In this example, we are including the Normalized Difference Vegetation Index (NDVI), the Enhanced Vegetation Index (EVI), the Soil Adjusted Vegetation Index (SAVI), the Normalized Difference Mangrove Index (NDMI), the Normalized Difference Water index (NDWI), the Modified Normalized Difference Water Index (MNDWI) and many others. Here is where you can include your own vegetation indices:
+
+```{r eval=FALSE}
+var addIndices = function(image) {
+  var ndvi = image.normalizedDifference(['B4', 'B3']).rename('NDVI');
+  var evi = image.expression(
+      '2.5 * ((NIR - RED) / (NIR + 6 * RED - 7.5 * BLUE + 1))', {
+      'NIR': image.select('B4'),
+      'RED': image.select('B3'),
+      'BLUE': image.select('B1')
+}).rename('EVI');
+  var savi = image.expression(
+      '((NIR - RED) / (NIR + RED + 0.5) * (0.5 + 1))', {
+      'NIR': image.select('B4'),
+      'RED': image.select('B3'),
+      'BLUE': image.select('B1')
+}).rename('SAVI');
+  var ndmi = image.normalizedDifference(['B7','B2']).rename('NDMI');
+  var nbr = image.normalizedDifference(['B4', 'B7']).rename('NBR');
+  var ndwi = image.normalizedDifference(['B5','B4']).rename('NDWI');
+  var mndwi = image.normalizedDifference(['B2','B5']).rename('MNDWI');
+return image.addBands(ndvi)
+            .addBands(evi)
+            .addBands(savi)
+            .addBands(ndmi)
+            .addBands(nbr)
+            .addBands(ndwi)
+            .addBands(mndwi);
+};
+```
+
+Finally, `collectionL5L7L8` will include the final harmonized collection with all the sensors based on the temporal parameters defined previously, with all spectral bands and vegetation/spectral indices, filtered to include only scenes over Liberia:
+
+``` {r eval=FALSE}
+var aoi = ee.FeatureCollection('users/capacityBuilding/Liberia/LiberiaCounties');
+var collectionL5L7L8 = getCombinedSRcollection(startYear, startDay,
+    endyear, endDay).map(addIndices).filterBounds(aoi);
+```
+
+[Code Checkpoint](https://code.earthengine.google.com/2b0953555f853f377200d7ed8d3954a4){target="_blank"}
+
+* Vegetation Index Anomaly
+
+To calculate the anomaly, we will start by defining the index we want to compute the anomaly for and the reference period to get the average value of that index over time. In this example, we will use the Normalized Burn Ratio (NBR) index, which is useful to highligh burned / bare areas and 
+
+``` {r eval = FALSE}
+var index = 'NBR';
+var ref_start = '1985-01-01';
+var ref_end = '2010-12-31';
+```
+
+Next, we will create the reference collection using `collectionL5L7L8` and the parameters above. You can print the size of this reference collection to the console using `print()` and `.size()`:
+
+```{r eval=FALSE}
+var reference = collectionL5L7L8
+    .filterDate(ref_start, ref_end)
+    .select(index)
+    .sort('system:time_start', true);
+    
+print('Number of images in Reference Collection', reference.size());
+```
+
+```{r PartIII-ReferenceColSize,  fig.cap="Number of scenes in the reference collection that will be used to calculate the reference value for the anomaly.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-ReferenceColSize.png")
+```
+
+We can now calculate the mean value (and other statistics) for the reference collection reference using the `.median()` and `.mean()` methods:
+
+```{r eval = FALSE}
+var mean = reference.mean().clip(aoi);
+var median = reference.median().clip(aoi);
+```
+
+Now that we have the long-term reference metrics, we can define the period for which you want to compute the the anomaly. In this example, we will use yearly intervals starting in 2016 until 2020. We are interested to see where we can observe cycles of planting and harvesting for plantations in Liberia. However, any combination of years is possible depending on what period you are interested in. Then, an anomaly function can be created to subtract the metric from the average of your period of interest:
+
+```{r eval= FALSE}
+var period_start = '2016-01-01';
+var period_end =  '2016-12-30';
+
+var anomalyFunction = function(image){
+              return image.subtract(median)
+              .set('system:time_start', 
+              image.get('system:time_start'))};
+```
+
+Finally, we will map the `anomalyFunction` to the Landsat collection `collectionL5L7L8` filtered by the `period_start` and `period_end`:
+
+```{r eval= FALSE}
+var series = collectionL5L7L8.filterDate(period_start, period_end).map(anomalyFunction);
+```
+
+The object `series` will have all the spectral bands and vegetation/spectral indices for the time period defined above. Their values, however, will be different from the original collection since we subtracted the average value of the reference period. The next step is to sum all the values for the index from series and divide by the number of images available. You can achieve that by using the `.sum()` and `.count()` methods:
+
+```{r eval=FALSE}
+var seriesSum = series.select(index).sum();
+var numImages = series.select(index).count();
+var anomaly = seriesSum.divide(numImages);
+```
+
+So far, the steps we have taken were:
+
+* Created a reference value (median) for the NBR index for the 1985-2010 period;
+* Then subtracted this median value from every scene in the period of interest (year 2016)
+* Averaged the anomaly values for that year by adding all values and dividing by the number of observations (images within that period).
+
+We can add the object `anomaly` to the Map Editor using a color ramp:
+
+```{r eval = FALSE}
+var visAnom = {
+    min: -0.20,
+    max: 0.20,
+    palette: ['#481567FF', '#482677FF', '#453781FF', '#404788FF',
+              '#39568CFF', '#33638DFF', '#2D708EFF', '#287D8EFF','#238A8DFF',
+              '#1F968BFF', '#20A387FF', '#29AF7FFF', '#3CBB75FF','#55C667FF',
+              '#73D055FF', '#95D840FF', '#B8DE29FF', '#DCE319FF','#FDE725FF' ]
+};
+Map.addLayer(anomaly, visAnom, index + ' anomaly');
+```
+
+```{r Anomally,  fig.cap="Normalized Burn Ratio (NBR) index anomaly over Liberia. Areas of negative anomaly are shown in purple/dark blue.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-Anomally.png")
+```
+
+A negative anomaly (in purple in the figure above) means that the NBR signal in 2016 is weaker than its long-term average, indicating a potential loss in the area for that year. Notice that in some areas you can see regular shapes, which means that those losses are potential harvested plantation. On the other hand, positive anomaly (in yellow) will show areas where soil is no longer exposed, giving us an indication of potential areas being replanted.
+
+```{block, type='caution'}
+__Not every negative anomaly will be harvesting of planted areas nor every positive anomaly will be areas being replanted. The anomaly can give us an indication of where these areas MAY be, based on the pattern observed__.
+```
+
+Investigate the following years by changing the values for `period_start` and `period_end`. By doing so, we can have an informed idea where these planted areas are, which would be rather challenging to detected using only the Landsat composite.
+
+We will export each anomaly individually. For that, change the values for `period_start` and `period_end` for the year 2016 and use the code below to export the anomaly:
+
+```{r eval=FALSE}
+Export.image.toAsset({
+  image: anomaly,
+  description: 'Anomaly2016',
+  assetId: 'Anomaly2016',
+  crs:'EPSG:4326',
+  crsTransform:[0.0002777777777777778,0,-180.0001388888889,0,-0.0002777777777777778,60.00013888888889],
+  maxPixels:1e13,
+  region: aoi,
+  });
+```
+
+Repeat the process for 2017, 2018, 2019 and 2020.
+
+__* Planted areas__
+
+On a [new Code Editor page](https://code.earthengine.google.com/){target="_blank"}, import the anomalies to the script. 
+
+``` {r eval = FALSE}
+var nbr16 = ee.Image('users/celiohelder/Liberia/NBR_Anomaly2016');
+var nbr17 = ee.Image('users/celiohelder/Liberia/NBR_Anomaly2017');
+var nbr18 = ee.Image('users/celiohelder/Liberia/NBR_Anomaly2018');
+var nbr19 = ee.Image('users/celiohelder/Liberia/NBR_Anomaly2019');
+var nbr20 = ee.Image('users/celiohelder/Liberia/NBR_Anomaly2020');
+```
+
+As mentioned previously, not every negative anomaly will be harvesting of planted areas nor every positive anomaly will be areas being replanted. The anomaly can give us an indication of where these areas may be, based on the pattern observed. We can also focus on concessions. A concession is a license, permit, or other contract that gives private companies the rights to establish a plantation on public land. Here we will also focus on areas of Rubber and Oil Palm Concessions. The data was previously uploaded into GEE and you can have access to it by loading it into your script with `ee.FeatureCollection('users/capacityBuilding/Liberia/Rubber')` and `ee.FeatureCollection('users/capacityBuilding/Liberia/OilPalm')`:
+
+``` {r eval=FALSE}
+var rubber = ee.FeatureCollection('users/capacityBuilding/Liberia/Rubber');
+var oilpalm = ee.FeatureCollection('users/capacityBuilding/Liberia/OilPalm');
+var concessions = rubber.merge(oilpalm);
+```
+
+Add the anomalies and the concessions data to the __Map Editor__:
+
+```{r eval = FALSE}
+var visAnom = {
+    min: -0.20,
+    max: 0.20,
+    palette: ['#481567FF', '#482677FF', '#453781FF', '#404788FF',
+              '#39568CFF', '#33638DFF', '#2D708EFF', '#287D8EFF','#238A8DFF',
+              '#1F968BFF', '#20A387FF', '#29AF7FFF', '#3CBB75FF','#55C667FF',
+              '#73D055FF', '#95D840FF', '#B8DE29FF', '#DCE319FF','#FDE725FF' ]
+};
+
+Map.addLayer(nbr16,visAnom, 'NBR anomaly 2016');
+Map.addLayer(nbr17,visAnom, 'NBR anomaly 2017');
+Map.addLayer(nbr18,visAnom, 'NBR anomaly 2018');
+Map.addLayer(nbr19,visAnom, 'NBR anomaly 2019');
+Map.addLayer(nbr20,visAnom, 'NBR anomaly 2020');
+
+Map.addLayer(ee.Image().paint(oilpalm, 0, 2), {palette:['black']}, 'OilPalm');
+Map.addLayer(ee.Image().paint(rubber, 0, 2), {palette:['purple']}, 'Rubber');
+```
+
+```{r PartIII-Anomally2,fig.cap="2016 NBR Anomaly and the oil palm and rubber plantation concessions.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-Anomally2.png")
+```
+
+Note that even before the addition of the concession dataset, we could outline potential areas of plantation based on the anomaly values. Now, overlaying these concessions borders with the anomaly layer, we have strong evidence that those are indeed planted areas.
+
+Due to their distinct anomaly values compare do their surrounding classes and their distinct pattern (particularly in the area within the concessions), we are able to separate them with value threshold. Using the __Inspector__ tab, investigate the anomaly values for the dark blue/purple (negative anomaly) and the yellow (positive anomaly) areas. Upon close inspection, we concluded lower values than -0.1 can capture the areas of losses; on the other hand, values greater than 0.1 capture the areas of gains.
+
+We can apply the conditionals `.lte()` and `.gt()` to the NBR Anomaly layers to extract these areas:
+
+```{r eval=FALSE}
+var lossanomaly1617 = nbr16.lt(-0.10);
+var gainanomaly1617 = nbr16.gt(0.10);
+
+var lossanomaly1718 = nbr17.lt(-0.10);
+var gainanomaly1718 = nbr17.gt(0.10);
+
+var lossanomaly1819 = nbr18.lt(-0.10);
+var gainanomaly1819 = nbr18.gt(0.10);
+
+var lossanomaly1920 = nbr19.lt(-0.10);
+var gainanomaly1920 = nbr19.gt(0.10);
+
+var lossanomaly2021 = nbr20.lt(-0.10);
+var gainanomaly2021 = nbr20.gt(0.10);
+
+Map.addLayer(lossanomaly1617.selfMask(), {palette:'F94C66'}, 'LossNBRanomaly2016-2017');
+Map.addLayer(gainanomaly1617.selfMask(), {palette:'F7EC09'}, 'GainNBRanomaly2016-2017');
+
+```
+
+
+```{r PartIII-AnomallyPlantation,fig.cap="Areas of losses/harvest and gains/planting based on threshold values of NBR anomaly.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-AnomallyPlantation.png")
+```
+
+By stacking 2016, 2017, 2018, 2019 and 2020 losses and gains and using the concession datasets as a constraint, we can create a Plantation layer for Liberia. We can construct this layer in a way to include the years where harvest and planting was observed.
+To do so, we will add the layers together. However, we have to set a flag value to each year. The steps below presents a simplistic way to create this flag:
+
+First, we will multiply each loss and gains layer by 10000,1000,100,10 and 1:
+
+```{r eval=FALSE}
+var loss16 = lossanomaly1617.multiply(10000);
+var loss17 = lossanomaly1718.multiply(1000);
+var loss18 = lossanomaly1819.multiply(100);
+var loss19 = lossanomaly1920.multiply(10);
+var loss20 = lossanomaly2021.multiply(1);
+```
+
+Now, we can stack these layers using `.add()`. The result will be a layer with values raging from 1 to 11111, where the position of the digit represents the year and the value 0 and 1 represent absence and presence, respectively. For example, a pixel with value of 10110 in this flag will mean that losses/harvest derived from the negative anomaly were observed in 2016, not in 2017, in 2018 and in 2019 and not in 2020.
+
+```{r eval = FALSE}
+var lossFlag = loss16.add(loss17)
+                     .add(loss18)
+                     .add(loss19)
+                     .add(loss20);
+```
+
+Similarly, we can create a gains flag:
+
+```{r eval=FALSE}
+var gain16 = gainanomaly1617.multiply(10000);
+var gain17 = gainanomaly1718.multiply(1000);
+var gain18 = gainanomaly1819.multiply(100);
+var gain19 = gainanomaly1920.multiply(10);
+var gain20 = gainanomaly2021.multiply(1);
+
+var recoveryFlag = gain16.add(gain17)
+                     .add(gain18)
+                     .add(gain19)
+                     .add(gain20);
+```
+
+Several information can be inferred based on the combination of years and each individual flag. For example, one can decide that a plantation class will be anything that shows clearing in one year and recovery in the next; or, two consecutive years of exposed soil followed by 3 years of recovery. Also, extending the anomaly analysis to years prior to 2015, increasing the study period.
+Thus, it is up to the user to come up to a rule to define the final plantation layer.
+Finally, as you may have noticed, this technique can also be used to inspect changes elsewhere, chief among them __areas of native vegetation that has been cleared__. This is a very versitile analysis that can provide very useful information about vegetation change.
+
+Export these flags (`lossFlag` and `recoveryFlag`):
+
+```{r eval=FALSE}
+Export.image.toAsset({
+  image: recoveryFlag,
+  description: 'RecoveryFlag',
+  assetId: 'RecoveryFlag',
+  crs:'EPSG:4326',
+  crsTransform:[0.0002777777777777778,0,-180.0001388888889,0,-0.0002777777777777778,60.00013888888889],
+  maxPixels:1e13,
+  });
+```
+
+[Code Checkpoint](https://code.earthengine.google.com/1cf253a5bdd30568fd693f89076f11a0){target="_blanket"}
+
+_____________________
 
 ### Class-by-class land cover mapping
 
@@ -1047,6 +1405,7 @@ __The lower the values of NBR, the more exposed/bare that particular area is. Th
 
 ```{block, type='starcomment'}
 You can check the average value of pixels within a region by using `ee.ReduceRegions()` and `ee.Reducer.mean()`:
+
 ```{r eval=FALSE}
 var averageNBR = compositemasked.select('NBR').reduceRegions({
   collection: Bare.geometry(),
@@ -1101,33 +1460,224 @@ Export.image.toAsset({
 
 __*Plantation*__
 
-Cultivated land in Liberia primarily consists of woody commodity crops (oil palm and rubber trees). The spectra of these woody crops are identical with those of natural vegetation. However, these areas generally have regular distribution patterns such as square or rectangles. The availability of forest concessions datasets is of paramount importance to constrain the classification of woody crop areas within the area they are likely to be found and avoid misclassification with other vegetation classes, such as evergreen forest.
+Cultivated land in Liberia primarily consists of woody commodity crops (oil palm and rubber trees). 
 
-Here, we are going to constrain the classification within areas of Rubber and Oil Palm Concessions. The data was previously uploaded into GEE and you can have access to it by loading it into your script with `ee.FeatureCollection('users/capacityBuilding/Liberia/Rubber')` and `ee.FeatureCollection('users/capacityBuilding/Liberia/OilPalm')`.
+```{r PartIII-Concessions,  fig.cap= "Rubber (red) and Oil Palm (green) concessions in Liberia. The spectral signature of these woody crops are identical with those of natural vegetation making it very challenging to classify.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-Concessions.png")
+```
 
-We will import these concessions along with the rest of the assets:
+As seen in the previous section (3.2.1), areas of plantation usually undergo harvesting cycles, which creates a temporal signature that is different than evergreen natural vegetation. We took the advantage of this interannual differences by doing an anomaly analysis and creating losses/harvest and gains/planting flag layers.
+
+We will start by opening a [new Code Editor page](https://code.earthengine.google.com/){target="_blank"} and importing the flag layers, the composite and the Liberia counties feature collection:
+
+```{r eval=FALSE}
+var lossFlag = ee.Image('users/capacityBuilding/Liberia/LossFlag');
+var recoveryFlag = ee.Image('users/capacityBuilding/Liberia/RecoveryFlag');
+
+var composite = ee.Image('users/capacityBuilding/Liberia/CompositeLiberia2021');
+var aoi = ee.FeatureCollection('users/capacityBuilding/Liberia/LiberiaCounties');
+var filterCounties = ee.Filter.inList('NAME_1', ['Bomi', 'Montserrado','Margibi','GrandBassa']);
+var filteredAOI = aoi.filter(filterCounties);
+```
+
+These flag layers have pixels with 5 digit combinations of 0 and 1 value representing absence and presence, respectively
+It is up to the user to come up to a rule to define the final plantation layer based on the combination of years (see section (3.2.1)). Examples of this would be pixels that showed losses for at least 2 consecutive years, no matter what year:
+
+* 11000 - 2016 and 2017
+
+* 01100 - 2017 and 2018
+
+* 00110 - 2018 and 2019
+
+* 00011 - 2019 and 2020
+
+* 11100 - 2016, 2017 and 2018
+
+* 01110 - 2017, 2018 and 2019
+
+* 00111 - 2018, 2019 and 2020
+
+* 11110 - 2016, 2017, 2018 and 2019
+
+* 01111 - 2017, 2018, 2019 and 2020
+
+Or selecting pixels that showed losses on consecutive years:
+
+```{r eval=FALSE}
+var disturbance1year = lossFlag.eq(10000); // 2016
+var disturbance2years = lossFlag.eq(11000);// 2016, 2017
+var disturbance3years = lossFlag.eq(11100);// 2016, 2017, 2018
+var disturbance4years = lossFlag.eq(11110);// 2016, 2017, 2018, 2019
+var disturbance5years = lossFlag.eq(11111);// 2016, 2017, 2018, 2019, 2020
+
+Map.addLayer(lossFlag.selfMask(), {palette:['white']}, 'LossFlag');
+Map.addLayer(disturbance1year.selfMask(), {palette:['E0C097']}, 'Disturbance 1 Year');
+Map.addLayer(disturbance2years.selfMask(), {palette:['D79771']}, 'Disturbance 2 Years');
+Map.addLayer(disturbance3years.selfMask(), {palette:['B85C38']}, 'Disturbance 3 Years');
+Map.addLayer(disturbance4years.selfMask(), {palette:['753422']}, 'Disturbance 4 Years');
+Map.addLayer(disturbance5years.selfMask(), {palette:['2D2424']}, 'Disturbance All Years');
+```
+
+```{r PartIII-PlantationS,  fig.cap= "The loss flag (in white) and selected flag values.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-PlantationS.png")
+```
+
+For this example, we will consider plantation, every pixel that showed at least 1 year of loss/harvest and at least 1 year of gain/planting in those flags. In other words, both loss/harvest and gain/planting flags. Thus, we will add `lossFlag` and `recoveryFlag`, create an image of 0 and where the sum overlaps this image, populate it with 1. Finally clip it for the area of study (`filteredAOI`):
+
+``` {r eval= FALSE}
+var plantations = ee.Image(0).where(lossFlag.add(recoveryFlag),1).clip(filteredAOI);
+Map.addLayer(plantations.selfMask(), {palette:['green']}, 'Plantation');
+```
+
+```{r PartIII-PlantationClassI,  fig.cap= "Plantation class derived from the `lossFlag` and `recoveryFlag`", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-PlantationClassI.png")
+```
+
+*__One last step remains to finalize the plantation class layer__*: Remember that every other class prior to this one was created from a classified Landsat composite that was masked each time using the previous class. Therefore, we need to mask `plantations` so it matches with how it would have been if it were created with the Landsat composite. Similarly to the previous classes, we will add the class assets, and use them to create masks for `plantations`:
+
+```{r eval=FALSE}
+var waterClass = ee.Image('users/capacityBuilding/Liberia/1-Water');
+var mangroveClass = ee.Image('users/capacityBuilding/Liberia/2-Mangroves');
+var settlementClass = ee.Image('users/capacityBuilding/Liberia/3-Settlements');
+var bareClass = ee.Image('users/capacityBuilding/Liberia/4-Bareareas');
+var grassClass = ee.Image('users/capacityBuilding/Liberia/5-Grasslands');
+
+var waterMask = ee.Image(1). where(waterClass.select(['classification']).eq(1),0).clip(filteredAOI);
+var mangroveMask = ee.Image(1). where(mangroveClass.select(['classification']).eq(1),0).clip(filteredAOI);
+var settlementMask = ee.Image(1). where(settlementClass.select(['classification']).eq(1),0).clip(filteredAOI);
+var bareMask = ee.Image(1). where(bareClass.select(['bare']).eq(1),0).clip(filteredAOI);
+var grassMask = ee.Image(1). where(grassClass.select(['grass']).eq(1),0).clip(filteredAOI);
+```
+
+Then, mask `plantations` using the masks with the method `mask()` for the first and `.updateMask()` for the rest:
+
+``` {r eval= FALSE}
+var plantationClass = plantations.mask(waterMask)
+                                 .updateMask(mangroveMask)
+                                 .updateMask(settlementMask)
+                                 .updateMask(bareMask)
+                                 .updateMask(grassMask)
+                                 .rename ('plantations');
+```
+
+```{block, type='rmdcomment'}
+It is a good practice to use `.rename()` to give a name to the image you just created. If you choose not to rename your image, its band name will default to 'constant'.
+```
+
+Finally, export this layer as an asset:
+
+```{r eval= FALSE}
+Export.image.toAsset({
+  image: plantationClass,
+  description: 'plantationClass',
+  assetId: '6-Plantations',
+  crs:'EPSG:4326',
+  crsTransform:[0.0002777777777777778,0,-180.0001388888889,0,-0.0002777777777777778,60.00013888888889],
+  region: filteredAOI,
+  maxPixels:1e13,
+  });
+```
+
+[Code checkpoint](https://code.earthengine.google.com/4a7d0eef77edecce93805485a8b3a6f6){target="_blank"}
+
+*__Forests__*
+
+According to a [report by the World Bank](https://openknowledge.worldbank.org/handle/10986/34438){target="_blank"}, "*Liberia is one of the most forested countries in West Africa, with more than two thirds of its land surface covered by forest. The National Forest Inventory, conducted by the Liberia Forestry Development Authority in 2018 and 2019, estimates the forest cover in Liberia to be 6.69 million hectares which is approximately 69 percent of the total landmass.*"
+
+Thus, it comes as no surprise that the vast majority of the Landsat composite we have been using is comprised of tree covered areas. So far, we have have 6 land cover and land-use classes: *water bodies*, *mangroves*, *human settlements*, *bare areas*, *grasslands* and *plantations*. Then, the remaining of the composite is covered by trees. According to Liberia's forest definition, *forests are areas of at least 0.5 ha covered by trees that have more than 30% canopy cover and are at least 5 meters of height*. Forests can be classified in different ways and to different degrees of specificity. 
+
+For this example, we will categorize the tree-cover/forest class in Liberia into three sub-classes: __primary/dense__, __secondary/open__ and __degraded/sparse__.
+
+Separating different types of forests and/or different forest condition (e.g. primary and secondary) can become increasingly challenging because: (1) sometimes it requires the incorporation of complex physical models associated with specific forest types, making it difficult for widespread use, and (2) it requires multi-source high resolution auxiliary data such as 3D vegetation structure data. However, 3D vegetation structure datasets are vastly more scarce than spaceborne 2D data and, in most cases, only covers certain periods of time.
+
+In a previous study, we investigated the integrity of forests in Liberia in 2018, using the Global Ecosystem Dynamics Investigation (GEDI)'s L2B Canopy Cover and Vertical Profile metrics acquired between April 2018 and November 2020, available from the NASA/USGS Land Processes Distributed Active Archive Center (DAAC). At each GEDI footprint we extracted the relative height metric RH100 (100th percentile of beam return height in meters relative to the ground) and total canopy cover (percent) gridded to the Landsat 30-meter pixel. Using these metrics, we observed that the distribution of canopy height values of open/secondary forests will be shorter than older dense/primary forests. Similarly, open/secondary forests will be characterized by lower values of canopy cover compared to dense/primary forests. Finally, spase/degraded forests will have lower canopy cover and height values compared to the other classes:
+
+```{r PartIII-GEDIForests,  fig.cap= "GEDI-based measurements of Liberia’s forest’s integrity. Canopy height (in meters) and canopy cover (in %) was extracted from each GEDI footprint within dense tree-covered areas (a), open tree-covered areas (b), mixed vegetation (c) and all other classes (d). The summary statistics for the canopy cover and canopy height values for each class (and all other classes) is also shown (SD = standard deviation; N = count; SE = standard error of the mean).", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-GEDI Forests.png")
+```
+
+We can use the information above to derive __primary/dense__, __secondary/open__ and __degraded/sparse__ based on height values or canopy cover.
+
+The [2019 Potapov’s (University of Maryland) global canopy height dataset](https://glad.umd.edu/dataset/gedi){target = "_blank"} offers a 30-m spatial resolution global forest canopy height map and was developed through the integration of the Global Ecosystem Dynamics Investigation (GEDI) lidar forest structure measurements and Landsat analysis-ready data time-series. Our previous study on forest structure in Liberia and this dataset are a good starting point to categorize the tree-cover/forest classes in Liberia.
+
+First, we will start by importing all the relevant datasets into a [new Code Editor](https://code.earthengine.google.com/){target ="_blank"} and creating their respective masks:
 
 ```{r eval=FALSE}
 var composite = ee.Image('users/capacityBuilding/Liberia/CompositeLiberia2021');
 var aoi = ee.FeatureCollection('users/capacityBuilding/Liberia/LiberiaCounties');
 var filterCounties = ee.Filter.inList('NAME_1', ['Bomi', 'Montserrado','Margibi','GrandBassa']);
 var filteredAOI = aoi.filter(filterCounties);
-var rubber = ee.FeatureCollection('users/capacityBuilding/Liberia/Rubber');
-var oilpalm = ee.FeatureCollection('users/capacityBuilding/Liberia/OilPalm');
-var concessions = rubber.merge(oilpalm);
 
-Map.addLayer(composite, {bands: ['SR_B5', 'SR_B6', 'SR_B4'], min:0.1, max:0.2}, 'Composite');
-Map.addLayer(rubber, {color:'red'});
-Map.addLayer(oilpalm, {color:'green'});
+Map.addLayer(composite, {bands: ['SR_B5', 'SR_B6', 'SR_B4'], min:0.1, max:0.2}, 'Composite', false);
 
 var waterClass = ee.Image('users/capacityBuilding/Liberia/1-Water');
 var mangroveClass = ee.Image('users/capacityBuilding/Liberia/2-Mangroves');
 var settlementClass = ee.Image('users/capacityBuilding/Liberia/3-Settlements');
 var bareClass = ee.Image('users/capacityBuilding/Liberia/4-Bareareas');
 var grassClass = ee.Image('users/capacityBuilding/Liberia/5-Grasslands');
+var plantationClass = ee.Image('users/capacityBuilding/Liberia/6-Plantations');
+
+var waterMask = ee.Image(1). where(waterClass.select(['classification']).eq(1),0).clip(filteredAOI);
+var mangroveMask = ee.Image(1). where(mangroveClass.select(['classification']).eq(1),0).clip(filteredAOI);
+var settlementMask = ee.Image(1). where(settlementClass.select(['classification']).eq(1),0).clip(filteredAOI);
+var bareMask = ee.Image(1). where(bareClass.select(['bare']).eq(1),0).clip(filteredAOI);
+var grassMask = ee.Image(1). where(grassClass.select(['grass']).eq(1),0).clip(filteredAOI);
+var plantationMask = ee.Image(1). where(plantationClass.select(['plantations']).eq(1),0).clip(filteredAOI);
 ```
 
-```{r PartIII-Concessions,  fig.cap= "Rubber (red) and Oil Palm (green) concessions in Liberia. The spectral signature of these woody crops are identical with those of natural vegetation making it very challenging to classify.", echo=FALSE, message=FALSE}
-knitr::include_graphics("images/PartIII-Concessions.png")
+Next, we will import the [2019 Potapov’s (University of Maryland) global canopy height dataset](https://glad.umd.edu/dataset/gedi){target = "_blank"} available through `'users/potapovpeter/GEDI_V27/GEDI_SAFR_v27'`
+
+```{r eval=FALSE}
+var potapovTreeHeight = ee.Image('users/potapovpeter/GEDI_V27/GEDI_SAFR_v27').clip(filteredAOI);
 ```
 
+This dataset needs to match the projection we are using for our composite and land cover classes. Thus, we will use `.reproject()` to adjust for their projection differences.
+
+```{r eval=FALSE}
+var treeHeight = potapovTreeHeight.reproject(composite.projection());
+```
+
+```{block starcomment}
+The `.projection()` method above retrives an image projection and affine transformation parameters. Thus, here we are using the Landsat composite projection information and reprojecting `potapovTreeHeight` to match it.
+```
+
+Add `treeHeight` to the __Map Editor__ using the parameters below:
+
+```{r eval=FALSE}
+Map.addLayer(treeHeight, {min:0, max:30, palette:'ffffcc,c7e9b4,7fcdbb,41b6c4,1d91c0,225ea8,0c2c84'}, 'Tree Height Potapov',false);
+```
+
+```{r PartIII-TreeHeight,  fig.cap= "2019 Potapov’s (University of Maryland) global canopy height dataset over the study region in Liberia. Tree heights values straches from low (white) to high (dark blue).", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-TreeHeight.png")
+```
+
+Similarly to what was done to the plantation class, we need to mask this dataset for the classes that we already have:
+
+```{r eval=FALSE}
+var TreeHeightMasked = treeHeight.mask(waterMask)
+                                 .updateMask(mangroveMask)
+                                 .updateMask(settlementMask)
+                                 .updateMask(bareMask)
+                                 .updateMask(grassMask)
+                                 .updateMask(plantationMask)
+```
+
+We can now extract potential areas of __primary/dense__, __secondary/open__ and __degraded/sparse__ forests based on the canopy height thresholds identified in our previous study: primary/dense forests are taller than 20 meters, secondary/open ranging from 10 to 20 meters, and degraded/sparse forests ar shorter than 10 meters:
+
+```{r eval = FALSE}
+var denseForest = TreeHeightMasked.gte(20);
+var openForest = TreeHeightMasked.gte(10).and(TreeHeightMasked.lt(20));
+var degradedForest = TreeHeightMasked.lte(10);
+
+Map.addLayer(denseForest.selfMask(), {palette:'287300'},'Potential Mature');
+Map.addLayer(openForest.selfMask(), {palette:'73B473'},'Potential Secondary');
+Map.addLayer(degradedForest.selfMask(), {palette:'EBFFBE'},'Potential Degraded');
+```
+
+
+```{r PartIII-Forests,  fig.cap= "_Primary/dense, secondary/open and degraded/sparse forests based on the canopy height thresholds.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-Forests.png")
+```
+
+
+PartIII-Forests

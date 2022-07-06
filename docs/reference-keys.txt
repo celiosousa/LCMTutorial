@@ -88,6 +88,10 @@ fig:my-strata
 fig:StratificationSamples
 fig:my-classficationmangrove
 fig:ValidationGuinea
+fig:PartIII-ReferenceColSize
+fig:Anomally
+fig:PartIII-Anomally2
+fig:PartIII-AnomallyPlantation
 fig:LiberiaBorder
 fig:ImportingShapefile
 fig:Counties
@@ -115,6 +119,11 @@ fig:PartIII-Settlements
 fig:PartIII-Grasslands
 fig:PartIII-GrasslandsandBare
 fig:PartIII-Concessions
+fig:PartIII-PlantationS
+fig:PartIII-PlantationClassI
+fig:PartIII-GEDIForests
+fig:PartIII-TreeHeight
+fig:PartIII-Forests
 fig:nameofFigure
 part-1---basics-fundamentals
 programming-and-remote-sensing-basics
@@ -138,6 +147,7 @@ part-3---country-specific-applications
 guinea
 mangrove-mapping-in-guinea-west-africa
 liberia
+anomaly-based-plantation-detection
 class-by-class-land-cover-mapping
 part-4---ecosystem-accounting
 introduction-to-ecosystem-accounting
