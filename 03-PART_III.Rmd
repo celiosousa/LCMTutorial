@@ -1598,9 +1598,9 @@ knitr::include_graphics("images/PartIII-GEDI Forests.png")
 
 We can use the information above to derive __primary/dense__, __secondary/open__ and __degraded/sparse__ based on height values or canopy cover.
 
-The [2019 Potapov’s (University of Maryland) global canopy height dataset](https://glad.umd.edu/dataset/gedi){target = "_blank"} offers a 30-m spatial resolution global forest canopy height map and was developed through the integration of the Global Ecosystem Dynamics Investigation (GEDI) lidar forest structure measurements and Landsat analysis-ready data time-series. Our previous study on forest structure in Liberia and this dataset are a good starting point to categorize the tree-cover/forest classes in Liberia.
+The [2019 Potapov’s (University of Maryland) global canopy height dataset](https://glad.umd.edu/dataset/gedi){target="_blank"} offers a 30-m spatial resolution global forest canopy height map and was developed through the integration of the Global Ecosystem Dynamics Investigation (GEDI) lidar forest structure measurements and Landsat analysis-ready data time-series. Our previous study on forest structure in Liberia and this dataset are a good starting point to categorize the tree-cover/forest classes in Liberia.
 
-First, we will start by importing all the relevant datasets into a [new Code Editor](https://code.earthengine.google.com/){target ="_blank"} and creating their respective masks:
+First, we will start by importing all the relevant datasets into a [new Code Editor](https://code.earthengine.google.com/){target="_blank"} and creating their respective masks:
 
 ```{r eval=FALSE}
 var composite = ee.Image('users/capacityBuilding/Liberia/CompositeLiberia2021');
@@ -1625,7 +1625,7 @@ var grassMask = ee.Image(1). where(grassClass.select(['grass']).eq(1),0).clip(fi
 var plantationMask = ee.Image(1). where(plantationClass.select(['plantations']).eq(1),0).clip(filteredAOI);
 ```
 
-Next, we will import the [2019 Potapov’s (University of Maryland) global canopy height dataset](https://glad.umd.edu/dataset/gedi){target = "_blank"} available through `'users/potapovpeter/GEDI_V27/GEDI_SAFR_v27'`
+Next, we will import the [2019 Potapov’s (University of Maryland) global canopy height dataset](https://glad.umd.edu/dataset/gedi){target="_blank"} available through `'users/potapovpeter/GEDI_V27/GEDI_SAFR_v27'`
 
 ```{r eval=FALSE}
 var potapovTreeHeight = ee.Image('users/potapovpeter/GEDI_V27/GEDI_SAFR_v27').clip(filteredAOI);
@@ -1665,19 +1665,260 @@ var TreeHeightMasked = treeHeight.mask(waterMask)
 We can now extract potential areas of __primary/dense__, __secondary/open__ and __degraded/sparse__ forests based on the canopy height thresholds identified in our previous study: primary/dense forests are taller than 20 meters, secondary/open ranging from 10 to 20 meters, and degraded/sparse forests ar shorter than 10 meters:
 
 ```{r eval = FALSE}
-var denseForest = TreeHeightMasked.gte(20);
-var openForest = TreeHeightMasked.gte(10).and(TreeHeightMasked.lt(20));
-var degradedForest = TreeHeightMasked.lte(10);
+var denseForest = TreeHeightMasked.gte(20).rename('dense');
+var openForest = TreeHeightMasked.gte(10).and(TreeHeightMasked.lt(20)).rename('open');
+var degradedForest = TreeHeightMasked.lte(10).rename('degraded');
 
 Map.addLayer(denseForest.selfMask(), {palette:'287300'},'Potential Mature');
 Map.addLayer(openForest.selfMask(), {palette:'73B473'},'Potential Secondary');
 Map.addLayer(degradedForest.selfMask(), {palette:'EBFFBE'},'Potential Degraded');
 ```
 
-
-```{r PartIII-Forests,  fig.cap= "_Primary/dense, secondary/open and degraded/sparse forests based on the canopy height thresholds.", echo=FALSE, message=FALSE}
+```{r PartIII-Forests,  fig.cap= "Primary/dense, secondary/open and degraded/sparse forests based on the canopy height thresholds.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/PartIII-Forests.png")
 ```
 
+Export these classes following the steps we used so far:
 
-PartIII-Forests
+```{r eval=FALSE}
+Export.image.toAsset({
+  image: denseForest,
+  description: 'DenseForest',
+  assetId: '7-DenseForests',
+  crs:'EPSG:4326',
+  crsTransform:[0.0002777777777777778,0,-180.0001388888889,0,-0.0002777777777777778,60.00013888888889],
+  region: filteredAOI,
+  maxPixels:1e13,
+  });
+  
+Export.image.toAsset({
+  image: openForest,
+  description: 'OpenForest',
+  assetId: '8-OpenForests',
+  crs:'EPSG:4326',
+  crsTransform:[0.0002777777777777778,0,-180.0001388888889,0,-0.0002777777777777778,60.00013888888889],
+  region: filteredAOI,
+  maxPixels:1e13,
+  });
+  
+Export.image.toAsset({
+  image: degradedForest,
+  description: 'DegradedForest',
+  assetId: '9-DegradedForests',
+  crs:'EPSG:4326',
+  crsTransform:[0.0002777777777777778,0,-180.0001388888889,0,-0.0002777777777777778,60.00013888888889],
+  region: filteredAOI,
+  maxPixels:1e13,
+  });  
+```
+
+[Code Checkpoint](https://code.earthengine.google.com/69b830b8f755a1ddb9294615ebc1661b){target="_blank""}
+
+__Post Classification I - Map Composition__
+
+Now that all the individual class maps were created, we can combine them into a final land cover map. We will start by opening a [New Code Editor page](https://code.earthengine.google.com/){target="_blank"} and adding all the assets we created so far:
+
+```{r eval= FALSE}
+var aoi = ee.FeatureCollection('users/capacityBuilding/Liberia/LiberiaCounties');
+var filterCounties = ee.Filter.inList('NAME_1', ['Bomi', 'Montserrado','Margibi','GrandBassa']);
+var filteredAOI = aoi.filter(filterCounties);
+
+var waterClass = ee.Image('users/capacityBuilding/Liberia/1-Water');
+var mangroveClass = ee.Image('users/capacityBuilding/Liberia/2-Mangroves');
+var settlementClass = ee.Image('users/capacityBuilding/Liberia/3-Settlements');
+var bareClass = ee.Image('users/capacityBuilding/Liberia/4-Bareareas');
+var grassClass = ee.Image('users/capacityBuilding/Liberia/5-Grasslands');
+var plantationClass = ee.Image('users/capacityBuilding/Liberia/6-Plantations');
+var denseClass = ee.Image('users/capacityBuilding/Liberia/7-DenseForests');
+var openClass = ee.Image('users/capacityBuilding/Liberia/8-OpenForests');
+var degradedClass = ee.Image('users/capacityBuilding/Liberia/9-DegradedForests');
+```
+
+Using the same logic we used to create the masks for masking the composites, we will create each individual class layer and assign a class value to each one of them. First we will create an `ee.Image()` of zeros where a different value will be assigned where a particular class overlaps it. For example:
+
+``` {r eval = FALSE}
+var WATER = ee.Image(0).where(waterClass.select(['classification']).eq(1),1).clip(filteredAOI);
+var MANGROVES = ee.Image(0). where(mangroveClass.select(['classification']).eq(1),2).clip(filteredAOI);
+var SETTLEMENTS = ee.Image(0). where(settlementClass.select(['classification']).eq(1),3).clip(filteredAOI);
+var BARE = ee.Image(0). where(bareClass.select(['bare']).eq(1),4).clip(filteredAOI);
+var GRASSLAND = ee.Image(0). where(grassClass.select(['grass']).eq(1),5).clip(filteredAOI);
+var PLANTATION = ee.Image(0). where(plantationClass.select(['plantations']).eq(1),6).clip(filteredAOI);
+var DENSE = ee.Image(0). where(denseClass.select(['dense']).eq(1),7).clip(filteredAOI);
+var OPEN = ee.Image(0). where(openClass.select(['open']).eq(1),8).clip(filteredAOI);
+var DEGRADED = ee.Image(0). where(degradedClass.select(['degraded']).eq(1),9).clip(filteredAOI);
+```
+
+In the code above, two things are worth noting:
+
+1) The `.select()` method will need the name of the output in which to select the value. If the output was created using the Random Forest, its default name will be `'classification'`. The first three classes were created using the classifier. The following classes were created using value thresholds of other datasets. In this case their name defaults to `'constant'`. However, during the process, we used `.rename()` method to rename 'constant' to the name of the class.
+
+2) We are assigning consecutive integer values from 1 to 9 to each individual classes. This way, we can colorize the map using a color palette
+
+A final map can be achieved by adding all these layers together using `.add()`:
+
+```{r eval = FALSE}
+var finalMap = WATER.add(MANGROVES)
+                    .add(SETTLEMENTS)
+                    .add(BARE)
+                    .add(GRASSLAND)
+                    .add(PLANTATION)
+                    .add(DENSE)
+                    .add(OPEN)
+                    .add(DEGRADED);
+```
+
+Finally, using a color palette of your choice, we will add the map to the __Map Editor__:
+
+```{r eval = FALSE}
+var palette = [
+  '006EFA', // Water Bodies
+  'C800FF', // Mangroves and Wetlands
+  'FF0000', // Artificial Surfaces
+  '828282', // Baresoil
+  'A5FF73', // Grasslands
+  'FFAA00', // Woody Crops
+  '287300', // Dense Forests 
+  '73B473', // Open Forests
+  'EBFFBE', // Degraded Forests
+];
+
+Map.addLayer(finalMap, {min: 1, max: 9, palette: palette}, 'Map');
+```
+
+As an add-on, you can add a legend to the __Map Editor__ using the code below:
+
+``` {r eval=FALSE}
+var legend = ui.Panel({
+  style: {
+    position: 'bottom-left',
+    padding: '8px 15px'
+  }
+});
+var legendTitle = ui.Label({
+  value: 'Land cover classes',
+  style: {
+    fontWeight: 'bold',
+    fontSize: '15px',
+    margin: '0 0 4px 0',
+    padding: '0',
+    }
+});
+legend.add(legendTitle);
+var makeRow = function(color, name) {
+      var colorBox = ui.Label({
+        style: {
+          backgroundColor: color,
+          padding: '8px',
+          margin: '0 0 4px 0'
+        }
+      });
+      var description = ui.Label({
+        value: name,
+        style: {margin: '0 0 4px 6px'}
+      });
+      return ui.Panel({
+        widgets: [colorBox, description],
+        layout: ui.Panel.Layout.Flow('horizontal')
+      });
+};
+
+var names = ['Water Bodies', 
+             'Mangroves and Wetlands', 
+             'Artificial Surfaces', 
+             'Bare Soil',
+             'Grasslands',
+             'Woody Crops',             
+             'Dense Forests',
+             'Open Forests',
+             'Degraded Forests',
+];
+
+for (var i = 0; i < 9; i++) {
+  legend.add(makeRow(palette[i], names[i]));
+  }  
+  
+Map.add(legend);
+```
+
+```{r PartIII-FinalMap1,  fig.cap= "Final land cover map for the study area in Liberia. The classes were created individually and composed into a final map.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-FinalMap1.png")
+```
+
+For the following step, we will export this final map using the code below:
+
+```{r eval=FALSE}
+Export.image.toAsset({
+  image: finalMap,
+  description: 'ExportingLCM',
+  assetId: 'CompositedMap',
+  scale: 30,
+  region: filteredAOI,
+  maxPixels:1e13
+});
+```
+
+[Code Checkpoint](https://code.earthengine.google.com/27d0c4d997729dda184e1b83b1d5d3d9){target="_blank"}
+
+__Post Classification II - Map Refinement__
+
+As mentioned in section 2.3.2, a common issue that arises from the pixel-based classification of fine/medium spatial resolution imagery is the “salt-and-pepper” effect. This happens when individual pixels are classified differently from their neighbors, creating speckles of isolated pixels of different classes. In this section, we will focus on a post-classification technique to reduce the salt and pepper effect and edge roughness of the map we have just created.
+
+Opening a [New Code Editor](https://code.earthengine.google.com/){target="_blank"} page, we will add the exported land cover map and add it to the __Map Editor__ using the color palette:
+
+```{r eval = FALSE}
+var landcovermap = ee.Image('users/capacityBuilding/Liberia/CompositedMap');
+
+var palette = [
+  '006EFA', // Water Bodies
+  'C800FF', // Mangroves and Wetlands
+  'FF0000', // Artificial Surfaces
+  '828282', // Baresoil
+  'A5FF73', // Grasslands
+  'FFAA00', // Woody Crops
+  '287300', // Dense Forests 
+  '73B473', // Open Forests
+  'EBFFBE', // Degraded Forests
+];
+
+Map.addLayer(landcovermap, {min: 1, max: 9, palette: palette}, 'Map');
+```
+
+Zooming in, you will notice the “salt-and-pepper” effect:
+
+```{r PartIII-SaltPepper,  fig.cap= "Final land cover map for the study area in Liberia. The the “salt-and-pepper” effect is a common issue that arises from the pixel-based classification of fine/medium spatial resolution imagery.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-SaltPepper.png")
+```
+
+Using the techniques discussed in section 2.3.2, we will remove the salt and pepper effect in three steps:
+
+1) First, we will use the `.connectedPixelCount()` method. This generates an image where each pixel contains the number of 4- or 8-connected neighbors (including itself). 4-connected pixels are neighbors to every pixel that touches one of their edges. These pixels are connected horizontally and vertically.
+
+```{r eval=FALSE}
+var patchsize = landcovermap.connectedPixelCount(4, false);
+```
+
+2) Second, we will use the `.focal_median()` method. This method is a simple sliding-window spatial filter that replaces the center value (or class) in the window with the median of all the pixel values in the window.
+
+```{r eval=FALSE}
+var filtered = landcovermap.focal_median({
+    radius: 1,
+    kernelType: 'square',
+    units: 'pixels',
+});
+```
+
+3) Finally, we will replace isolated pixels in `landcovermap` based on the `patchsize` value of 1: this value means that this pixel have only 1 type (or class) neighbors which, in turn, means that it is surrounded by a single class. We will use the `.where()` and `.eq()` methods. The `.focal_median(1, 'square', 'pixels')` will only achieve the intended final result if you reproject it back to the original scale and projection from the original map. Note that this technique while effective in removing the "salt-and-pepper" effect from the original map, it creates edges that are not in the same resolution and projection as the original map. Therefore, creating fairly rounded boundaries for the classes. This is not ideal as it is usually intended for these maps to keep the same resolution as the original map, as well as to preserve the boundaries between classes. To account for this issue, you can reproject this output back the original scale so it is formed by 30 x 30 meter pixels using `.reproject()`
+
+```{r eval = FALSE}
+var filteredMap =  landcovermap.where(patchsize.eq(1),filtered).reproject(ee.Image(landcovermap.projection()));
+```
+
+Add `filteredMap` to the __Map Editor__:
+
+```{r eval= FALSE}
+Map.addLayer(filteredMap, {min: 1, max: 9, palette: palette}, 'Filtered Map');
+```
+
+```{r PartIII-MapFiltered,  fig.cap= "Final land cover map for the study area in Liberia filtered to remove salt and pepper effect.", echo=FALSE, message=FALSE}
+knitr::include_graphics("images/PartIII-MapFiltered.png")
+```

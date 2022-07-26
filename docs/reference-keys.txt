@@ -124,6 +124,9 @@ fig:PartIII-PlantationClassI
 fig:PartIII-GEDIForests
 fig:PartIII-TreeHeight
 fig:PartIII-Forests
+fig:PartIII-FinalMap1
+fig:PartIII-SaltPepper
+fig:PartIII-MapFiltered
 fig:nameofFigure
 part-1---basics-fundamentals
 programming-and-remote-sensing-basics

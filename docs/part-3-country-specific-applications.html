@@ -24,7 +24,7 @@
 <meta name="author" content="Celio Sousa (celio.h.resendedesousa@nasa.gov) and Miroslav Honzak (mhonzak@conservation.org)" />
 
 
-<meta name="date" content="2022-07-06" />
+<meta name="date" content="2022-07-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -1412,8 +1412,8 @@ Figure 3.44: GEDI-based measurements of Liberia’s forest’s integrity. Canopy
 </p>
 </div>
 <p>We can use the information above to derive <strong>primary/dense</strong>, <strong>secondary/open</strong> and <strong>degraded/sparse</strong> based on height values or canopy cover.</p>
-<p>The <a href="https://glad.umd.edu/dataset/gedi">2019 Potapov’s (University of Maryland) global canopy height dataset</a>{target = &quot;_blank&quot;} offers a 30-m spatial resolution global forest canopy height map and was developed through the integration of the Global Ecosystem Dynamics Investigation (GEDI) lidar forest structure measurements and Landsat analysis-ready data time-series. Our previous study on forest structure in Liberia and this dataset are a good starting point to categorize the tree-cover/forest classes in Liberia.</p>
-<p>First, we will start by importing all the relevant datasets into a <a href="https://code.earthengine.google.com/">new Code Editor</a>{target =&quot;_blank&quot;} and creating their respective masks:</p>
+<p>The <a href="https://glad.umd.edu/dataset/gedi" target="_blank">2019 Potapov’s (University of Maryland) global canopy height dataset</a> offers a 30-m spatial resolution global forest canopy height map and was developed through the integration of the Global Ecosystem Dynamics Investigation (GEDI) lidar forest structure measurements and Landsat analysis-ready data time-series. Our previous study on forest structure in Liberia and this dataset are a good starting point to categorize the tree-cover/forest classes in Liberia.</p>
+<p>First, we will start by importing all the relevant datasets into a <a href="https://code.earthengine.google.com/" target="_blank">new Code Editor</a> and creating their respective masks:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var composite =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/CompositeLiberia2021&#39;</span>);
 var aoi =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/LiberiaCounties&#39;</span>);
 var filterCounties =<span class="st"> </span><span class="kw">ee.Filter.inList</span>(<span class="st">&#39;NAME_1&#39;</span>, [<span class="st">&#39;Bomi&#39;</span>, <span class="st">&#39;Montserrado&#39;</span>,<span class="st">&#39;Margibi&#39;</span>,<span class="st">&#39;GrandBassa&#39;</span>]);
@@ -1434,7 +1434,7 @@ var settlementMask =<span class="st"> </span><span class="kw">ee.Image</span>(<s
 var bareMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">bareClass.select</span>([<span class="st">&#39;bare&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
 var grassMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">grassClass.select</span>([<span class="st">&#39;grass&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);
 var plantationMask =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>). <span class="kw">where</span>(<span class="kw">plantationClass.select</span>([<span class="st">&#39;plantations&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">0</span>)<span class="kw">.clip</span>(filteredAOI);</code></pre></div>
-<p>Next, we will import the <a href="https://glad.umd.edu/dataset/gedi">2019 Potapov’s (University of Maryland) global canopy height dataset</a>{target = &quot;_blank&quot;} available through <code>'users/potapovpeter/GEDI_V27/GEDI_SAFR_v27'</code></p>
+<p>Next, we will import the <a href="https://glad.umd.edu/dataset/gedi" target="_blank">2019 Potapov’s (University of Maryland) global canopy height dataset</a> available through <code>'users/potapovpeter/GEDI_V27/GEDI_SAFR_v27'</code></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var potapovTreeHeight =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/potapovpeter/GEDI_V27/GEDI_SAFR_v27&#39;</span>)<span class="kw">.clip</span>(filteredAOI);</code></pre></div>
 <p>This dataset needs to match the projection we are using for our composite and land cover classes. Thus, we will use <code>.reproject()</code> to adjust for their projection differences.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var treeHeight =<span class="st"> </span><span class="kw">potapovTreeHeight.reproject</span>(<span class="kw">composite.projection</span>());</code></pre></div>
@@ -1455,20 +1455,220 @@ Figure 3.45: 2019 Potapov’s (University of Maryland) global canopy height data
                                  <span class="kw">.updateMask</span>(grassMask)
                                  <span class="kw">.updateMask</span>(plantationMask)</code></pre></div>
 <p>We can now extract potential areas of <strong>primary/dense</strong>, <strong>secondary/open</strong> and <strong>degraded/sparse</strong> forests based on the canopy height thresholds identified in our previous study: primary/dense forests are taller than 20 meters, secondary/open ranging from 10 to 20 meters, and degraded/sparse forests ar shorter than 10 meters:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var denseForest =<span class="st"> </span><span class="kw">TreeHeightMasked.gte</span>(<span class="dv">20</span>);
-var openForest =<span class="st"> </span><span class="kw">TreeHeightMasked.gte</span>(<span class="dv">10</span>)<span class="kw">.and</span>(<span class="kw">TreeHeightMasked.lt</span>(<span class="dv">20</span>));
-var degradedForest =<span class="st"> </span><span class="kw">TreeHeightMasked.lte</span>(<span class="dv">10</span>);
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var denseForest =<span class="st"> </span><span class="kw">TreeHeightMasked.gte</span>(<span class="dv">20</span>)<span class="kw">.rename</span>(<span class="st">&#39;dense&#39;</span>);
+var openForest =<span class="st"> </span><span class="kw">TreeHeightMasked.gte</span>(<span class="dv">10</span>)<span class="kw">.and</span>(<span class="kw">TreeHeightMasked.lt</span>(<span class="dv">20</span>))<span class="kw">.rename</span>(<span class="st">&#39;open&#39;</span>);
+var degradedForest =<span class="st"> </span><span class="kw">TreeHeightMasked.lte</span>(<span class="dv">10</span>)<span class="kw">.rename</span>(<span class="st">&#39;degraded&#39;</span>);
 
 <span class="kw">Map.addLayer</span>(<span class="kw">denseForest.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;287300&#39;</span>},<span class="st">&#39;Potential Mature&#39;</span>);
 <span class="kw">Map.addLayer</span>(<span class="kw">openForest.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;73B473&#39;</span>},<span class="st">&#39;Potential Secondary&#39;</span>);
 <span class="kw">Map.addLayer</span>(<span class="kw">degradedForest.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;EBFFBE&#39;</span>},<span class="st">&#39;Potential Degraded&#39;</span>);</code></pre></div>
 <div class="figure"><span id="fig:PartIII-Forests"></span>
-<img src="images/PartIII-Forests.png" alt="__Primary/dense__, __secondary/open__ and __degraded/sparse__ forests based on the canopy height thresholds." width="854" />
+<img src="images/PartIII-Forests.png" alt="Primary/dense, secondary/open and degraded/sparse forests based on the canopy height thresholds." width="854" />
 <p class="caption">
-Figure 3.46: <strong>Primary/dense</strong>, <strong>secondary/open</strong> and <strong>degraded/sparse</strong> forests based on the canopy height thresholds.
+Figure 3.46: Primary/dense, secondary/open and degraded/sparse forests based on the canopy height thresholds.
 </p>
 </div>
-<p>PartIII-Forests</p>
+<p>Export these classes following the steps we used so far:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Export.image.toAsset</span>({
+  image<span class="op">:</span><span class="st"> </span>denseForest,
+  description<span class="op">:</span><span class="st"> &#39;DenseForest&#39;</span>,
+  assetId<span class="op">:</span><span class="st"> &#39;7-DenseForests&#39;</span>,
+  crs<span class="op">:</span><span class="st">&#39;EPSG:4326&#39;</span>,
+  crsTransform<span class="op">:</span>[<span class="fl">0.0002777777777777778</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">180.0001388888889</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">0.0002777777777777778</span>,<span class="fl">60.00013888888889</span>],
+  region<span class="op">:</span><span class="st"> </span>filteredAOI,
+  maxPixels<span class="op">:</span><span class="fl">1e13</span>,
+  });
+  
+<span class="kw">Export.image.toAsset</span>({
+  image<span class="op">:</span><span class="st"> </span>openForest,
+  description<span class="op">:</span><span class="st"> &#39;OpenForest&#39;</span>,
+  assetId<span class="op">:</span><span class="st"> &#39;8-OpenForests&#39;</span>,
+  crs<span class="op">:</span><span class="st">&#39;EPSG:4326&#39;</span>,
+  crsTransform<span class="op">:</span>[<span class="fl">0.0002777777777777778</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">180.0001388888889</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">0.0002777777777777778</span>,<span class="fl">60.00013888888889</span>],
+  region<span class="op">:</span><span class="st"> </span>filteredAOI,
+  maxPixels<span class="op">:</span><span class="fl">1e13</span>,
+  });
+  
+<span class="kw">Export.image.toAsset</span>({
+  image<span class="op">:</span><span class="st"> </span>degradedForest,
+  description<span class="op">:</span><span class="st"> &#39;DegradedForest&#39;</span>,
+  assetId<span class="op">:</span><span class="st"> &#39;9-DegradedForests&#39;</span>,
+  crs<span class="op">:</span><span class="st">&#39;EPSG:4326&#39;</span>,
+  crsTransform<span class="op">:</span>[<span class="fl">0.0002777777777777778</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">180.0001388888889</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">0.0002777777777777778</span>,<span class="fl">60.00013888888889</span>],
+  region<span class="op">:</span><span class="st"> </span>filteredAOI,
+  maxPixels<span class="op">:</span><span class="fl">1e13</span>,
+  });  </code></pre></div>
+<p><a href="https://code.earthengine.google.com/69b830b8f755a1ddb9294615ebc1661b">Code Checkpoint</a>{target=&quot;_blank&quot;&quot;}</p>
+<p><strong>Post Classification I - Map Composition</strong></p>
+<p>Now that all the individual class maps were created, we can combine them into a final land cover map. We will start by opening a <a href="https://code.earthengine.google.com/" target="_blank">New Code Editor page</a> and adding all the assets we created so far:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var aoi =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Liberia/LiberiaCounties&#39;</span>);
+var filterCounties =<span class="st"> </span><span class="kw">ee.Filter.inList</span>(<span class="st">&#39;NAME_1&#39;</span>, [<span class="st">&#39;Bomi&#39;</span>, <span class="st">&#39;Montserrado&#39;</span>,<span class="st">&#39;Margibi&#39;</span>,<span class="st">&#39;GrandBassa&#39;</span>]);
+var filteredAOI =<span class="st"> </span><span class="kw">aoi.filter</span>(filterCounties);
+
+var waterClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/1-Water&#39;</span>);
+var mangroveClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/2-Mangroves&#39;</span>);
+var settlementClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/3-Settlements&#39;</span>);
+var bareClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/4-Bareareas&#39;</span>);
+var grassClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/5-Grasslands&#39;</span>);
+var plantationClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/6-Plantations&#39;</span>);
+var denseClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/7-DenseForests&#39;</span>);
+var openClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/8-OpenForests&#39;</span>);
+var degradedClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/9-DegradedForests&#39;</span>);</code></pre></div>
+<p>Using the same logic we used to create the masks for masking the composites, we will create each individual class layer and assign a class value to each one of them. First we will create an <code>ee.Image()</code> of zeros where a different value will be assigned where a particular class overlaps it. For example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var WATER =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">0</span>)<span class="kw">.where</span>(<span class="kw">waterClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">1</span>)<span class="kw">.clip</span>(filteredAOI);
+var MANGROVES =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">0</span>). <span class="kw">where</span>(<span class="kw">mangroveClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">2</span>)<span class="kw">.clip</span>(filteredAOI);
+var SETTLEMENTS =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">0</span>). <span class="kw">where</span>(<span class="kw">settlementClass.select</span>([<span class="st">&#39;classification&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">3</span>)<span class="kw">.clip</span>(filteredAOI);
+var BARE =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">0</span>). <span class="kw">where</span>(<span class="kw">bareClass.select</span>([<span class="st">&#39;bare&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">4</span>)<span class="kw">.clip</span>(filteredAOI);
+var GRASSLAND =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">0</span>). <span class="kw">where</span>(<span class="kw">grassClass.select</span>([<span class="st">&#39;grass&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">5</span>)<span class="kw">.clip</span>(filteredAOI);
+var PLANTATION =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">0</span>). <span class="kw">where</span>(<span class="kw">plantationClass.select</span>([<span class="st">&#39;plantations&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">6</span>)<span class="kw">.clip</span>(filteredAOI);
+var DENSE =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">0</span>). <span class="kw">where</span>(<span class="kw">denseClass.select</span>([<span class="st">&#39;dense&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">7</span>)<span class="kw">.clip</span>(filteredAOI);
+var OPEN =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">0</span>). <span class="kw">where</span>(<span class="kw">openClass.select</span>([<span class="st">&#39;open&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">8</span>)<span class="kw">.clip</span>(filteredAOI);
+var DEGRADED =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">0</span>). <span class="kw">where</span>(<span class="kw">degradedClass.select</span>([<span class="st">&#39;degraded&#39;</span>])<span class="kw">.eq</span>(<span class="dv">1</span>),<span class="dv">9</span>)<span class="kw">.clip</span>(filteredAOI);</code></pre></div>
+<p>In the code above, two things are worth noting:</p>
+<ol style="list-style-type: decimal">
+<li><p>The <code>.select()</code> method will need the name of the output in which to select the value. If the output was created using the Random Forest, its default name will be <code>'classification'</code>. The first three classes were created using the classifier. The following classes were created using value thresholds of other datasets. In this case their name defaults to <code>'constant'</code>. However, during the process, we used <code>.rename()</code> method to rename 'constant' to the name of the class.</p></li>
+<li><p>We are assigning consecutive integer values from 1 to 9 to each individual classes. This way, we can colorize the map using a color palette</p></li>
+</ol>
+<p>A final map can be achieved by adding all these layers together using <code>.add()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var finalMap =<span class="st"> </span><span class="kw">WATER.add</span>(MANGROVES)
+                    <span class="kw">.add</span>(SETTLEMENTS)
+                    <span class="kw">.add</span>(BARE)
+                    <span class="kw">.add</span>(GRASSLAND)
+                    <span class="kw">.add</span>(PLANTATION)
+                    <span class="kw">.add</span>(DENSE)
+                    <span class="kw">.add</span>(OPEN)
+                    <span class="kw">.add</span>(DEGRADED);</code></pre></div>
+<p>Finally, using a color palette of your choice, we will add the map to the <strong>Map Editor</strong>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var palette =<span class="st"> </span>[
+  <span class="st">&#39;006EFA&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Water Bodies
+  <span class="st">&#39;C800FF&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Mangroves and Wetlands
+  <span class="st">&#39;FF0000&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Artificial Surfaces
+  <span class="st">&#39;828282&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Baresoil
+  <span class="st">&#39;A5FF73&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Grasslands
+  <span class="st">&#39;FFAA00&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Woody Crops
+  <span class="st">&#39;287300&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Dense Forests 
+  <span class="st">&#39;73B473&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Open Forests
+  <span class="st">&#39;EBFFBE&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Degraded Forests
+];
+
+<span class="kw">Map.addLayer</span>(finalMap, {min<span class="op">:</span><span class="st"> </span><span class="dv">1</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">9</span>, palette<span class="op">:</span><span class="st"> </span>palette}, <span class="st">&#39;Map&#39;</span>);</code></pre></div>
+<p>As an add-on, you can add a legend to the <strong>Map Editor</strong> using the code below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var legend =<span class="st"> </span><span class="kw">ui.Panel</span>({
+  style<span class="op">:</span><span class="st"> </span>{
+    position<span class="op">:</span><span class="st"> &#39;bottom-left&#39;</span>,
+    padding<span class="op">:</span><span class="st"> &#39;8px 15px&#39;</span>
+  }
+});
+var legendTitle =<span class="st"> </span><span class="kw">ui.Label</span>({
+  value<span class="op">:</span><span class="st"> &#39;Land cover classes&#39;</span>,
+  style<span class="op">:</span><span class="st"> </span>{
+    fontWeight<span class="op">:</span><span class="st"> &#39;bold&#39;</span>,
+    fontSize<span class="op">:</span><span class="st"> &#39;15px&#39;</span>,
+    margin<span class="op">:</span><span class="st"> &#39;0 0 4px 0&#39;</span>,
+    padding<span class="op">:</span><span class="st"> &#39;0&#39;</span>,
+    }
+});
+<span class="kw">legend.add</span>(legendTitle);
+var makeRow =<span class="st"> </span><span class="cf">function</span>(color, name) {
+      var colorBox =<span class="st"> </span><span class="kw">ui.Label</span>({
+        style<span class="op">:</span><span class="st"> </span>{
+          backgroundColor<span class="op">:</span><span class="st"> </span>color,
+          padding<span class="op">:</span><span class="st"> &#39;8px&#39;</span>,
+          margin<span class="op">:</span><span class="st"> &#39;0 0 4px 0&#39;</span>
+        }
+      });
+      var description =<span class="st"> </span><span class="kw">ui.Label</span>({
+        value<span class="op">:</span><span class="st"> </span>name,
+        style<span class="op">:</span><span class="st"> </span>{margin<span class="op">:</span><span class="st"> &#39;0 0 4px 6px&#39;</span>}
+      });
+      return <span class="kw">ui.Panel</span>({
+        widgets<span class="op">:</span><span class="st"> </span>[colorBox, description],
+        layout<span class="op">:</span><span class="st"> </span><span class="kw">ui.Panel.Layout.Flow</span>(<span class="st">&#39;horizontal&#39;</span>)
+      });
+};
+
+var names =<span class="st"> </span>[<span class="st">&#39;Water Bodies&#39;</span>, 
+             <span class="st">&#39;Mangroves and Wetlands&#39;</span>, 
+             <span class="st">&#39;Artificial Surfaces&#39;</span>, 
+             <span class="st">&#39;Bare Soil&#39;</span>,
+             <span class="st">&#39;Grasslands&#39;</span>,
+             <span class="st">&#39;Woody Crops&#39;</span>,             
+             <span class="st">&#39;Dense Forests&#39;</span>,
+             <span class="st">&#39;Open Forests&#39;</span>,
+             <span class="st">&#39;Degraded Forests&#39;</span>,
+];
+
+<span class="cf">for</span> (var <span class="dt">i =</span> <span class="dv">0</span>; i <span class="op">&lt;</span><span class="st"> </span><span class="dv">9</span>; i<span class="op">++</span>) {
+  <span class="kw">legend.add</span>(<span class="kw">makeRow</span>(palette[i], names[i]));
+  }  
+  
+<span class="kw">Map.add</span>(legend);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-FinalMap1"></span>
+<img src="images/PartIII-FinalMap1.png" alt="Final land cover map for the study area in Liberia. The classes were created individually and composed into a final map." width="857" />
+<p class="caption">
+Figure 3.47: Final land cover map for the study area in Liberia. The classes were created individually and composed into a final map.
+</p>
+</div>
+<p>For the following step, we will export this final map using the code below:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Export.image.toAsset</span>({
+  image<span class="op">:</span><span class="st"> </span>finalMap,
+  description<span class="op">:</span><span class="st"> &#39;ExportingLCM&#39;</span>,
+  assetId<span class="op">:</span><span class="st"> &#39;CompositedMap&#39;</span>,
+  scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>,
+  region<span class="op">:</span><span class="st"> </span>filteredAOI,
+  maxPixels<span class="op">:</span><span class="fl">1e13</span>
+});</code></pre></div>
+<p><a href="https://code.earthengine.google.com/27d0c4d997729dda184e1b83b1d5d3d9" target="_blank">Code Checkpoint</a></p>
+<p><strong>Post Classification II - Map Refinement</strong></p>
+<p>As mentioned in section 2.3.2, a common issue that arises from the pixel-based classification of fine/medium spatial resolution imagery is the “salt-and-pepper” effect. This happens when individual pixels are classified differently from their neighbors, creating speckles of isolated pixels of different classes. In this section, we will focus on a post-classification technique to reduce the salt and pepper effect and edge roughness of the map we have just created.</p>
+<p>Opening a <a href="https://code.earthengine.google.com/" target="_blank">New Code Editor</a> page, we will add the exported land cover map and add it to the <strong>Map Editor</strong> using the color palette:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var landcovermap =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;users/capacityBuilding/Liberia/CompositedMap&#39;</span>);
+
+var palette =<span class="st"> </span>[
+  <span class="st">&#39;006EFA&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Water Bodies
+  <span class="st">&#39;C800FF&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Mangroves and Wetlands
+  <span class="st">&#39;FF0000&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Artificial Surfaces
+  <span class="st">&#39;828282&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Baresoil
+  <span class="st">&#39;A5FF73&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Grasslands
+  <span class="st">&#39;FFAA00&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Woody Crops
+  <span class="st">&#39;287300&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Dense Forests 
+  <span class="st">&#39;73B473&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Open Forests
+  <span class="st">&#39;EBFFBE&#39;</span>, <span class="op">/</span><span class="er">/</span><span class="st"> </span>Degraded Forests
+];
+
+<span class="kw">Map.addLayer</span>(landcovermap, {min<span class="op">:</span><span class="st"> </span><span class="dv">1</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">9</span>, palette<span class="op">:</span><span class="st"> </span>palette}, <span class="st">&#39;Map&#39;</span>);</code></pre></div>
+<p>Zooming in, you will notice the “salt-and-pepper” effect:</p>
+<div class="figure"><span id="fig:PartIII-SaltPepper"></span>
+<img src="images/PartIII-SaltPepper.png" alt="Final land cover map for the study area in Liberia. The the “salt-and-pepper” effect is a common issue that arises from the pixel-based classification of fine/medium spatial resolution imagery." width="857" />
+<p class="caption">
+Figure 3.48: Final land cover map for the study area in Liberia. The the “salt-and-pepper” effect is a common issue that arises from the pixel-based classification of fine/medium spatial resolution imagery.
+</p>
+</div>
+<p>Using the techniques discussed in section 2.3.2, we will remove the salt and pepper effect in three steps:</p>
+<ol style="list-style-type: decimal">
+<li>First, we will use the <code>.connectedPixelCount()</code> method. This generates an image where each pixel contains the number of 4- or 8-connected neighbors (including itself). 4-connected pixels are neighbors to every pixel that touches one of their edges. These pixels are connected horizontally and vertically.</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var patchsize =<span class="st"> </span><span class="kw">landcovermap.connectedPixelCount</span>(<span class="dv">4</span>, false);</code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>Second, we will use the <code>.focal_median()</code> method. This method is a simple sliding-window spatial filter that replaces the center value (or class) in the window with the median of all the pixel values in the window.</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var filtered =<span class="st"> </span><span class="kw">landcovermap.focal_median</span>({
+    radius<span class="op">:</span><span class="st"> </span><span class="dv">1</span>,
+    kernelType<span class="op">:</span><span class="st"> &#39;square&#39;</span>,
+    units<span class="op">:</span><span class="st"> &#39;pixels&#39;</span>,
+});</code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li>Finally, we will replace isolated pixels in <code>landcovermap</code> based on the <code>patchsize</code> value of 1: this value means that this pixel have only 1 type (or class) neighbors which, in turn, means that it is surrounded by a single class. We will use the <code>.where()</code> and <code>.eq()</code> methods. The <code>.focal_median(1, 'square', 'pixels')</code> will only achieve the intended final result if you reproject it back to the original scale and projection from the original map. Note that this technique while effective in removing the &quot;salt-and-pepper&quot; effect from the original map, it creates edges that are not in the same resolution and projection as the original map. Therefore, creating fairly rounded boundaries for the classes. This is not ideal as it is usually intended for these maps to keep the same resolution as the original map, as well as to preserve the boundaries between classes. To account for this issue, you can reproject this output back the original scale so it is formed by 30 x 30 meter pixels using <code>.reproject()</code></li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var filteredMap =<span class="st">  </span><span class="kw">landcovermap.where</span>(<span class="kw">patchsize.eq</span>(<span class="dv">1</span>),filtered)<span class="kw">.reproject</span>(<span class="kw">ee.Image</span>(<span class="kw">landcovermap.projection</span>()));</code></pre></div>
+<p>Add <code>filteredMap</code> to the <strong>Map Editor</strong>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(filteredMap, {min<span class="op">:</span><span class="st"> </span><span class="dv">1</span>, max<span class="op">:</span><span class="st"> </span><span class="dv">9</span>, palette<span class="op">:</span><span class="st"> </span>palette}, <span class="st">&#39;Filtered Map&#39;</span>);</code></pre></div>
+<div class="figure"><span id="fig:PartIII-MapFiltered"></span>
+<img src="images/PartIII-MapFiltered.png" alt="Final land cover map for the study area in Liberia filtered to remove salt and pepper effect." width="570" />
+<p class="caption">
+Figure 3.49: Final land cover map for the study area in Liberia filtered to remove salt and pepper effect.
+</p>
+</div>
 
 </div>
 </div>
