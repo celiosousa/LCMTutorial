@@ -1,4 +1,4 @@
-# Part 2 - Advanced Google Earth Engine
+# PART 2 - Advanced Google Earth Engine
 
 ## Advanced Image Manipulation: Pre-classification
 

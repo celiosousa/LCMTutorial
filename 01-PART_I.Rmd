@@ -1,4 +1,4 @@
-# Part 1 - Basics & Fundamentals
+# PART 1 - Basics & Fundamentals
 
 ## Programming and Remote Sensing Basics 
 
@@ -594,7 +594,7 @@ If you want to retrieve a particular image from this collection you can simply u
 
 Now that you know how to load and display an image, it's time to apply a computation to it. In the following sections you will learn some examples of computations for a single-band image and multi-band image (band math and vegetation index calculation) and for an image collection.
 
-### Image Math {#imMath}
+### Image Math
 
 * __Single-band image__
 
@@ -691,7 +691,7 @@ The code above is able to regonize operators (+, -, *, /, %, **: Add, Subtract, 
 
 Can you think of how you can calculate the NDVI using the code structure above?
 
-### Compositing and Mosaicking {#Compositing and Mosaicking}
+### Compositing and Mosaicking
 
 Compositing is an example of a computation that can be done to a image collection. In general, _compositing_ refers to the process of combining spatially overlapping images into a single image based on an aggregation function while _mosaicking_ usually refers to the assembly of these images to produce a spatially contiguous one. In Earth Engine, when you composite two scenes that do not overlap completely, the resulting composite will be a composited mosaic: 
 
