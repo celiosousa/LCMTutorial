@@ -22,7 +22,7 @@ var endDay = (year)+'-12-30';
 For the spatial parameters, we can use the *Large Scale International Boundary (LSIB)* dataset and select Guinea’s national border. First, we will load the dataset into an object  called 'countries' using the `ee.FeatureCollection()` object and the feature collection ID 'USDOS/LSIB/2013'. Secondly, we will filter the dataset using `.filterMetadata()` and select Guinea from the list of countries and storing it in `aoi`:
 
 ```{block, type='rmdcomment'}
-Note that you can select a any country border by filtering *'USDOS/LSIB/2013'* dataset by using *.filterMetadata('name' , 'equals', 'NAME OF THE COUNTRY IN CAPITAL LETTERS')*. 
+Note that you can select any country border by filtering *'USDOS/LSIB/2013'* dataset by using *.filterMetadata('name' , 'equals', 'NAME OF THE COUNTRY IN CAPITAL LETTERS')*. 
 ```
 
 Alternatively, you can use any previously uploaded Guinea's boundary datasets available [here.](https://code.earthengine.google.com/16fbfeb335381c203fed98eb81712dda){target="_blank"} Select a dataset from the list, copy its Asset ID and load it with `ee.FeatureCollection` into `aoi`. 
@@ -31,7 +31,7 @@ Alternatively, you can use any previously uploaded Guinea's boundary datasets av
 knitr::include_graphics("images/borders.png")
 ```
 
-In this example, we aim to map of Guinea's mangroves. Therefore, we will chose `prefecures5k` as it emcompasses the entirety of Guinea's coast:
+In this example, we aim to map of Guinea's mangroves. Therefore, we will choose `prefectures5k` as it encompasses the entirety of Guinea's coast:
 
 ```{r eval=FALSE}
 var aoi = ee.FeatureCollection('users/capacityBuilding/Guinea/prefectures5k');
@@ -355,7 +355,7 @@ var samplesgroundtruth = composite.select(bands).sampleRegions({
 });
 ```
 
-Next, we will train a Random Forest classifier using the `samplesAutomatic` as training samples. In this example, we will use 200 trees and 8 predictors tested at each tree node:
+Next, we will train a Random Forest classifier using the `samplesAutomatic` as training samples. In this example, we will use 200 trees and 8 predictors to be tested at each tree node:
 
 ```{r eval=FALSE}
 var RandomForest = ee.Classifier.smileRandomForest(200,8).train({
@@ -1308,7 +1308,7 @@ var compositeMasked = compositemasked.updateMask(bareMask);
 Map.addLayer(compositeMasked, {bands: ['SR_B5', 'SR_B6', 'SR_B4'], min:0.1, max:0.2}, 'Composite Masked Final');
 ```
 
-```{r PartIII-MaskedCompositeIII,  fig.cap= "Masked composite using `waterMask`, `mangroveMask` and `populationMask` and `bareMask` showing areas of higher likelihood to be human settlements.", echo=FALSE, message=FALSE}
+```{r PartIII-MaskedCompositeIII,  fig.cap= "Masked composite using `waterMask`, `mangroveMask` and `populationMask` and `bareMask` showing areas of higher likelihood to be human settlements class.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/PartIII-MaskedCompositeIII.png")
 ```
 
@@ -1522,7 +1522,7 @@ Map.addLayer(disturbance5years.selfMask(), {palette:['2D2424']}, 'Disturbance Al
 knitr::include_graphics("images/PartIII-PlantationS.png")
 ```
 
-For this example, we will consider plantation, every pixel that showed at least 1 year of loss/harvest and at least 1 year of gain/planting in those flags. In other words, both loss/harvest and gain/planting flags. Thus, we will add `lossFlag` and `recoveryFlag`, create an image of 0 and where the sum overlaps this image, populate it with 1. Finally clip it for the area of study (`filteredAOI`):
+For this example, we will consider plantation, every pixel that shows at least 1 year of loss/harvest and at least 1 year of gain/planting in those flags. In other words, both loss/harvest and gain/planting flags. Thus, we will add `lossFlag` and `recoveryFlag`, create an image of 0 and where the sum overlaps this image, populate it with 1. Finally clip it for the area of study (`filteredAOI`):
 
 ``` {r eval= FALSE}
 var plantations = ee.Image(0).where(lossFlag.add(recoveryFlag),1).clip(filteredAOI);
