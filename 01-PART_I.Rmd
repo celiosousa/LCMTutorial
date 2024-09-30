@@ -8,7 +8,7 @@ __A) Definition__
 
 The term *__Remote sensing__* has been variously defined. Some of its early definitions include:
 
-- "the art or science of telling something about an object without touching it." (Fischer et al., 1976)
+- The art or science of telling something about an object without touching it. (Fischer et al., 1976)
 
 - Remote sensing is the acquisition of physical data of an object without touch or contact. (Lintz and Simonett, 1976)
 
