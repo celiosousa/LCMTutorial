@@ -8,7 +8,7 @@ __A) Definition__
 
 The term *__Remote sensing__* has been variously defined. Some of its early definitions include:
 
-- [...] the art or science of telling something about an object without touching it .(Fischer et al., 1976)
+- "the art or science of telling something about an object without touching it." (Fischer et al., 1976)
 
 - Remote sensing is the acquisition of physical data of an object without touch or contact. (Lintz and Simonett, 1976)
 
@@ -28,7 +28,7 @@ knitr::include_graphics("images/BuildingBlocksRemoteSensing.png")
 
 I) Energy Source
 
-The source of the electromagnetic radiation/energy (EMR) is the first requirement of any remote sensing process. The electromagnetic spectrum is used to "classify" the EMR according to to its wavelength:
+The source of the electromagnetic radiation/energy (EMR) is the first requirement of any remote sensing process. The electromagnetic spectrum is used to "classify" the EMR according to its wavelength:
 
 ```{r FigEMS, fig.cap="The Electromagnetic Spectrum", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/EMS copy.png")
@@ -40,11 +40,11 @@ Depending on the source of energy they are using, the different remote sensing s
 knitr::include_graphics("images/PassiveAndActive.png")
 ```
 
-You can also think about these concepts of *active* and *passive* using a handheld photogarphic camera as an example: When photographing a target in the dark, the camera flash will provide the energy necessary to illuminate the target. Therefore, in that case, the camera is an *active* sensor. On the other hand, this same camera will be a *passive* sensor when you are photographing a target or object during the day, when the target being illuminated by sun light and no flash is necessary.
+You can also think about these concepts of *active* and *passive* using a handheld photographic camera as an example: When photographing a target in the dark, the camera flash will provide the energy necessary to illuminate the target. Therefore, in that case, the camera is an *active* sensor. On the other hand, this same camera will be a *passive* sensor when you are photographing a target or object during the day, when the target being illuminated by sun light and no flash is necessary.
 
 II) Interaction with the target/object
 
-The most common medium in between the source and target is the atmosphere. This is where the firt interaction ocurrs. As the EMR travel from its source to the target, it will come in contact with and interact different atmosphere constituents: aerosols, water vapor, solid particles, ect. Secondly, once the EMR makes its way through the atmospherethe to the target, it will interact with it depending on the target properties and energy wavelength. The EMR can have different types of interaction when it encounters matter; whether it is gas, solid or gas: it can be __transmitted__ (that is, it passes through the target), __absorbed__ (that is, the target absorbs the energy usually increasing its temperature as a result), __emitted__ (that is, energy is emitted from all matter at temperatures above the absolute zero of 0 Kelvins), __scattered__ (that is, deflected in every direction) and __reflected__ (that is, energy bounces off the target's surface and its direction is usually a function of target structure and texture). 
+The most common medium in between the source and target is the atmosphere. This is where the first interaction occurs. As the EMR travel from its source to the target, it will come in contact with and interact different atmosphere constituents: aerosols, water vapor, solid particles, etc. Secondly, once the EMR makes its way through the atmospherethe to the target, it will interact with it depending on the target properties and energy wavelength. The EMR can have different types of interaction when it encounters matter; whether it is gas, solid or liquid: it can be __transmitted__ (that is, it passes through the target), __absorbed__ (that is, the target absorbs the energy usually increasing its temperature as a result), __emitted__ (that is, energy is emitted from all matter at temperatures above the absolute zero of 0 Kelvins), __scattered__ (that is, deflected in every direction) and __reflected__ (that is, energy bounces off the target's surface and its direction is usually a function of target structure and texture). 
 
 ```{block, type='caution'}
 Keep in mind: All targets can show different proportions of each of these interactions.
@@ -53,9 +53,9 @@ Keep in mind: All targets can show different proportions of each of these intera
 
 III) Recording of the energy by the sensor
 
-The sensor - often onboard of airplanes or satellites in space - will measure the returning EMR after it has interacted with the target and the atmosphere. This measurement is converted into a digital image with discrete values in units of digital number (DN) for each image pixel. Depending on the sensor, these resulting images will have different characteristiscs (or *__resolutions__*). They are:
+The sensor - often onboard of airplanes or satellites in space - will measure the returning EMR after it has interacted with the target and the atmosphere. This measurement is converted into a digital image with discrete values in units of digital number (DN) for each image pixel. Depending on the sensor, these resulting images will have different characteristics (or *__resolutions__*). They are:
 
-- __Spatial Resolution__: usually known as "pixel size". It refers to the sensor's ability to discriminate different objects/targets. A higher spatial resolution means a smaller pixel size which, in turn, means that smaller objects can be distinguishable as separate targets.
+- __Spatial Resolution__: usually known as pixel size. It refers to the sensor's ability to discriminate different objects/targets. A higher spatial resolution means a smaller pixel size which, in turn, means that smaller objects can be distinguishable as separate targets.
 
 - __Spectral Resolution__: Different sensors will measure the EMR at specific ranges (or wavelengths), usually called *bands*. Thus, the spectral resolution of a sensor usually refers to the number and bandwith of these bands.
 
@@ -83,9 +83,9 @@ This final component of Remote Sensing (V) is achieved when we apply the extract
 __C) Spectral Signatures: A target's spectral fingerprint__
 
 As mentioned before, remote sensing is based on the measurement of reflected (or emitted) radiation from different targets. Objects having different surface features reflect or absorb the sun's radiation in different ways.
-In order to understand and interprete the information extracted from remotely sensed data, you have to first understand the behavior of the target in respect to the electromagnetic spectrum. Each target will show a distinct reflectance pattern as a function of the wavelength - known as *__spectral signature__* (or a spectral fingerprint). This signature will directly (or indirectly) lead to the identification of a target based on its set of values for its reflectance in different spectral ranges:
+In order to understand and interpret the information extracted from remotely sensed data, you have to first understand the behavior of the target in respect to the electromagnetic spectrum. Each target will show a distinct reflectance pattern as a function of the wavelength, known as *__spectral signature__* (or a spectral fingerprint). This signature will directly (or indirectly) lead to the identification of a target based on its set of values for its reflectance in different spectral ranges:
 
-```{r SpectralSignature, fig.cap="Typical spectral signatures of specic land cover types in the visible and infrared region of the electromagnetic spectrum (Source: http://www.seos-project.eu/)", echo=FALSE, message=FALSE}
+```{r SpectralSignature, fig.cap="Typical spectral signatures of specific land cover types in the visible and infrared region of the electromagnetic spectrum (Source: http://www.seos-project.eu/)", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/Spectral Signature.jpg")
 ```
 
@@ -95,7 +95,7 @@ knitr::include_graphics("images/Spectral Signature.jpg")
 
 The spectral signature of *healthy green vegetation* has a small reflectance in the visible portion of the electromagnetic spectrum resulting from the pigments in plant leaves. Most of the light is being used in the photosynthesis process. However, the reflectance increases dramatically in the near infrared. The spectral signature of *soil* is much less variable. Its behavior is affected by soil moisture, texture, surface roughness and they are less dominant than the absorbance features present in vegetation. The *water*'s spectral signature is characterized by a high absorption at near infrared wavelengths range and beyond. Because of this absorption property, water bodies as well as features containing water can easily be detected, located and delineated with remote sensing data.
 
-These differences make it possible to identify different earth surface features or materials by analysing their spectral reflectance patterns or spectral signatures. [add more text]
+These differences make it possible to identify different Earth surface features or materials by analysing their spectral reflectance patterns or spectral signatures. [add more text]
 
 *__References__*
 
@@ -785,4 +785,4 @@ knitr::include_graphics("images/PartI-Clip.png")
 
 ```{block, type='caution'}
 You can only clip an ee.Image() object, __never an image collection!__
-```
+``
