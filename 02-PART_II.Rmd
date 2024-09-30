@@ -188,7 +188,7 @@ So far, we have covered the steps *__a__*, *__b__* and *__c__*.
 
 For this example, let’s classify the 'composite' into four classes: *water*, *agricultural land*, *sand and bare areas* and *urbanization*. The first step is to create the training samples set to use into the Random Forest Model.
 
-__Step 1__ - In the Geometry Imports, click *__+new layer__* and make four sets of geometries, each set will represent samples from the classes 'water', 'cropland', 'sand' and 'urban'.
+__Step 1__ - In the Geometry Imports, click *__+new layer__* and make four sets of geometries, each set will represent samples from the classes 'water', 'cropland', 'sand', and 'urban'.
 
 ```{r my-figGeom,   fig.cap="Geometry sets to hold samples for each of the four classes.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/Geometries.PNG")
