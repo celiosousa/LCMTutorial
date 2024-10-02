@@ -1,6 +1,6 @@
 --- 
 title: "Supervised Land Cover Classification with Google Earth Engine"
-author: "Celio Sousa (celio.h.resendedesousa@nasa.gov) and Miroslav Honzak (mhonzak@conservation.org)"
+author: "Celio Sousa (celio.h.resendedesousa@nasa.gov)"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---

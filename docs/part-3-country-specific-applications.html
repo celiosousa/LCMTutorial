@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 PART 3 - Country-specific Applications | Supervised Land Cover Classification with Google Earth Engine</title>
-  <meta name="description" content="Chapter 3 PART 3 - Country-specific Applications | Supervised Land Cover Classification with Google Earth Engine" />
+  <title>Chapter 2 PART 3 - Country-specific Applications | Supervised Land Cover Classification with Google Earth Engine</title>
+  <meta name="description" content="Chapter 2 PART 3 - Country-specific Applications | Supervised Land Cover Classification with Google Earth Engine" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 3 PART 3 - Country-specific Applications | Supervised Land Cover Classification with Google Earth Engine" />
+  <meta property="og:title" content="Chapter 2 PART 3 - Country-specific Applications | Supervised Land Cover Classification with Google Earth Engine" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 PART 3 - Country-specific Applications | Supervised Land Cover Classification with Google Earth Engine" />
+  <meta name="twitter:title" content="Chapter 2 PART 3 - Country-specific Applications | Supervised Land Cover Classification with Google Earth Engine" />
   
   
   
@@ -24,14 +24,14 @@
 <meta name="author" content="Celio Sousa (celio.h.resendedesousa@nasa.gov) and Miroslav Honzak (mhonzak@conservation.org)" />
 
 
-<meta name="date" content="2022-08-03" />
+<meta name="date" content="2024-10-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="part-2-advanced-google-earth-engine.html"/>
+<link rel="prev" href="part-1-basics-fundamentals.html"/>
 <link rel="next" href="part-4-ecosystem-accounting.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -119,44 +119,39 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#image-and-image-collection-manipulation"><i class="fa fa-check"></i><b>1.2</b> Image and Image Collection Manipulation</a><ul>
 <li class="chapter" data-level="1.2.1" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#image-math"><i class="fa fa-check"></i><b>1.2.1</b> Image Math</a></li>
 <li class="chapter" data-level="1.2.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#compositing-and-mosaicking"><i class="fa fa-check"></i><b>1.2.2</b> Compositing and Mosaicking</a></li>
+<li class="chapter" data-level="1.2.3" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#spectral-indices"><i class="fa fa-check"></i><b>1.2.3</b> Spectral indices</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#supervised-classification-using-random-forest"><i class="fa fa-check"></i><b>1.3</b> Supervised Classification using Random Forest</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2022"><i class="fa fa-check"></i><b>1.3.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2022</a></li>
+<li class="chapter" data-level="1.3.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#example-2-2015---2022-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>1.3.2</b> Example 2: 2015 - 2022 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#post-classification-processing"><i class="fa fa-check"></i><b>1.4</b> Post-classification processing</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#re-classification"><i class="fa fa-check"></i><b>1.4.1</b> Re-classification</a></li>
+<li class="chapter" data-level="1.4.2" data-path="part-1-basics-fundamentals.html"><a href="part-1-basics-fundamentals.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>1.4.2</b> Map spatial smoothing</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html"><i class="fa fa-check"></i><b>2</b> PART 2 - Advanced Google Earth Engine</a><ul>
-<li class="chapter" data-level="2.1" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#advanced-image-manipulation-pre-classification"><i class="fa fa-check"></i><b>2.1</b> Advanced Image Manipulation: Pre-classification</a><ul>
-<li class="chapter" data-level="2.1.1" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#cloud-and-cloud-shadow-masking"><i class="fa fa-check"></i><b>2.1.1</b> Cloud and cloud shadow masking</a></li>
-<li class="chapter" data-level="2.1.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#spectral-indices"><i class="fa fa-check"></i><b>2.1.2</b> Spectral indices</a></li>
+<li class="chapter" data-level="2" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html"><i class="fa fa-check"></i><b>2</b> PART 3 - Country-specific Applications</a><ul>
+<li class="chapter" data-level="2.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#guinea"><i class="fa fa-check"></i><b>2.1</b> Guinea</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#mangrove-mapping-in-guinea-west-africa"><i class="fa fa-check"></i><b>2.1.1</b> Mangrove mapping in Guinea, West Africa</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#supervised-classification-using-random-forest"><i class="fa fa-check"></i><b>2.2</b> Supervised Classification using Random Forest</a><ul>
-<li class="chapter" data-level="2.2.1" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2022"><i class="fa fa-check"></i><b>2.2.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2022</a></li>
-<li class="chapter" data-level="2.2.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#example-2-2015---2022-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>2.2.2</b> Example 2: 2015 - 2022 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
-</ul></li>
-<li class="chapter" data-level="2.3" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#post-classification-processing"><i class="fa fa-check"></i><b>2.3</b> Post-classification processing</a><ul>
-<li class="chapter" data-level="2.3.1" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#re-classification"><i class="fa fa-check"></i><b>2.3.1</b> Re-classification</a></li>
-<li class="chapter" data-level="2.3.2" data-path="part-2-advanced-google-earth-engine.html"><a href="part-2-advanced-google-earth-engine.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>2.3.2</b> Map spatial smoothing</a></li>
+<li class="chapter" data-level="2.2" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#liberia"><i class="fa fa-check"></i><b>2.2</b> Liberia</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#anomaly-based-plantation-detection"><i class="fa fa-check"></i><b>2.2.1</b> Anomaly-based plantation detection</a></li>
+<li class="chapter" data-level="2.2.2" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#class-by-class-land-cover-mapping"><i class="fa fa-check"></i><b>2.2.2</b> Class-by-class land cover mapping</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html"><i class="fa fa-check"></i><b>3</b> PART 3 - Country-specific Applications</a><ul>
-<li class="chapter" data-level="3.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#guinea"><i class="fa fa-check"></i><b>3.1</b> Guinea</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#mangrove-mapping-in-guinea-west-africa"><i class="fa fa-check"></i><b>3.1.1</b> Mangrove mapping in Guinea, West Africa</a></li>
+<li class="chapter" data-level="3" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html"><i class="fa fa-check"></i><b>3</b> Part 4 - Ecosystem Accounting</a><ul>
+<li class="chapter" data-level="3.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#introduction-to-ecosystem-accounting"><i class="fa fa-check"></i><b>3.1</b> Introduction to Ecosystem Accounting</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#essentials"><i class="fa fa-check"></i><b>3.1.1</b> Essentials</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#liberia"><i class="fa fa-check"></i><b>3.2</b> Liberia</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#anomaly-based-plantation-detection"><i class="fa fa-check"></i><b>3.2.1</b> Anomaly-based plantation detection</a></li>
-<li class="chapter" data-level="3.2.2" data-path="part-3-country-specific-applications.html"><a href="part-3-country-specific-applications.html#class-by-class-land-cover-mapping"><i class="fa fa-check"></i><b>3.2.2</b> Class-by-class land cover mapping</a></li>
+<li class="chapter" data-level="3.2" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#ecosystem-extent-account"><i class="fa fa-check"></i><b>3.2</b> Ecosystem Extent Account</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#structure-of-ecosystem-extent-account"><i class="fa fa-check"></i><b>3.2.1</b> Structure of ecosystem extent account</a></li>
+<li class="chapter" data-level="3.2.2" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#examples-and-exercises"><i class="fa fa-check"></i><b>3.2.2</b> Examples and exercises</a></li>
 </ul></li>
+<li class="chapter" data-level="3.3" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#tools-for-compiling-ecosystem-extent-account-tables"><i class="fa fa-check"></i><b>3.3</b> Tools for Compiling Ecosystem Extent Account Tables</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#platforms-for-running-python-scripts"><i class="fa fa-check"></i><b>3.3.1</b> Platforms for running Python scripts</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html"><i class="fa fa-check"></i><b>4</b> Part 4 - Ecosystem Accounting</a><ul>
-<li class="chapter" data-level="4.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#introduction-to-ecosystem-accounting"><i class="fa fa-check"></i><b>4.1</b> Introduction to Ecosystem Accounting</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#essentials"><i class="fa fa-check"></i><b>4.1.1</b> Essentials</a></li>
-</ul></li>
-<li class="chapter" data-level="4.2" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#ecosystem-extent-account"><i class="fa fa-check"></i><b>4.2</b> Ecosystem Extent Account</a><ul>
-<li class="chapter" data-level="4.2.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#structure-of-ecosystem-extent-account"><i class="fa fa-check"></i><b>4.2.1</b> Structure of ecosystem extent account</a></li>
-<li class="chapter" data-level="4.2.2" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#examples-and-exercises"><i class="fa fa-check"></i><b>4.2.2</b> Examples and exercises</a></li>
-</ul></li>
-<li class="chapter" data-level="4.3" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#tools-for-compiling-ecosystem-extent-account-tables"><i class="fa fa-check"></i><b>4.3</b> Tools for Compiling Ecosystem Extent Account Tables</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#platforms-for-running-python-scripts"><i class="fa fa-check"></i><b>4.3.1</b> Platforms for running Python scripts</a></li>
-</ul></li>
-<li class="chapter" data-level="4.4" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#compiling-ecosystem-extent-account-tables"><i class="fa fa-check"></i><b>4.4</b> Compiling Ecosystem Extent Account Tables</a><ul>
-<li class="chapter" data-level="4.4.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#essentials-1"><i class="fa fa-check"></i><b>4.4.1</b> Essentials</a></li>
+<li class="chapter" data-level="3.4" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#compiling-ecosystem-extent-account-tables"><i class="fa fa-check"></i><b>3.4</b> Compiling Ecosystem Extent Account Tables</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="part-4-ecosystem-accounting.html"><a href="part-4-ecosystem-accounting.html#essentials-1"><i class="fa fa-check"></i><b>3.4.1</b> Essentials</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -179,13 +174,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="part-3---country-specific-applications" class="section level1">
-<h1><span class="header-section-number">Chapter 3</span> PART 3 - Country-specific Applications</h1>
+<h1><span class="header-section-number">Chapter 2</span> PART 3 - Country-specific Applications</h1>
 <p>In this part we will explore examples of class-specific classification using previously used functions as well as useful land cover classification-based analysis.</p>
 <div id="guinea" class="section level2">
-<h2><span class="header-section-number">3.1</span> Guinea</h2>
+<h2><span class="header-section-number">2.1</span> Guinea</h2>
 <p>Description of Guinea here</p>
 <div id="mangrove-mapping-in-guinea-west-africa" class="section level3">
-<h3><span class="header-section-number">3.1.1</span> Mangrove mapping in Guinea, West Africa</h3>
+<h3><span class="header-section-number">2.1.1</span> Mangrove mapping in Guinea, West Africa</h3>
 <p>In this example, we will use the codes from the previous parts for mangrove mapping in Guinea, in West Africa. We will also introduce the use of other datasets for masking and sample selection to assist in the classification workflow.</p>
 <p>We will start by <a href="https://code.earthengine.google.com/" target="_blank">opening a new code editor page</a> and by defining the spatial and temporal parameters of the composite you wish to classify, just like the other examples. For the temporal parameters, let’s use an annual 2021 composite:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var year =<span class="st"> </span><span class="dv">2021</span>;
@@ -194,17 +189,17 @@ var endDay =<span class="st"> </span>(year)<span class="op">+</span><span class=
 <p>For the spatial parameters, we can use the <em>Large Scale International Boundary (LSIB)</em> dataset and select Guinea’s national border. First, we will load the dataset into an object called 'countries' using the <code>ee.FeatureCollection()</code> object and the feature collection ID 'USDOS/LSIB/2013'. Secondly, we will filter the dataset using <code>.filterMetadata()</code> and select Guinea from the list of countries and storing it in <code>aoi</code>:</p>
 <div class="rmdcomment">
 <p>
-Note that you can select a any country border by filtering <em>'USDOS/LSIB/2013'</em> dataset by using <em>.filterMetadata('name' , 'equals', 'NAME OF THE COUNTRY IN CAPITAL LETTERS')</em>.
+Note that you can select any country border by filtering <em>'USDOS/LSIB/2013'</em> dataset by using <em>.filterMetadata('name' , 'equals', 'NAME OF THE COUNTRY IN CAPITAL LETTERS')</em>.
 </p>
 </div>
 <p>Alternatively, you can use any previously uploaded Guinea's boundary datasets available <a href="https://code.earthengine.google.com/16fbfeb335381c203fed98eb81712dda" target="_blank">here.</a> Select a dataset from the list, copy its Asset ID and load it with <code>ee.FeatureCollection</code> into <code>aoi</code>.</p>
 <div class="figure"><span id="fig:my-borders"></span>
 <img src="images/borders.png" alt="Examples of Guinea's administrative borders." width="1069" />
 <p class="caption">
-Figure 3.1: Examples of Guinea's administrative borders.
+Figure 2.1: Examples of Guinea's administrative borders.
 </p>
 </div>
-<p>In this example, we aim to map of Guinea's mangroves. Therefore, we will chose <code>prefecures5k</code> as it emcompasses the entirety of Guinea's coast:</p>
+<p>In this example, we aim to map of Guinea's mangroves. Therefore, we will choose <code>prefectures5k</code> as it encompasses the entirety of Guinea's coast:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var aoi =<span class="st"> </span><span class="kw">ee.FeatureCollection</span>(<span class="st">&#39;users/capacityBuilding/Guinea/prefectures5k&#39;</span>);</code></pre></div>
 <div class="caution">
 <p>
@@ -263,7 +258,7 @@ Figure 3.1: Examples of Guinea's administrative borders.
 <div class="figure"><span id="fig:my-mask"></span>
 <img src="images/maskexample.png" alt="Masking procedure. In this figure, the mask was applied to the raster image generating an output image where pixels are visible only where the correspondent mask pixel has non-zero values." width="1164" />
 <p class="caption">
-Figure 3.2: Masking procedure. In this figure, the mask was applied to the raster image generating an output image where pixels are visible only where the correspondent mask pixel has non-zero values.
+Figure 2.2: Masking procedure. In this figure, the mask was applied to the raster image generating an output image where pixels are visible only where the correspondent mask pixel has non-zero values.
 </p>
 </div>
 <p>For this example, we want to create a water mask. Thus, the water mask has to have zeros where there is water and non-zero values for non-water pixels. Consequently, when we apply this mask to a Landsat image, pixels of water will be invisible (transparent) while all the other pixels will remain visible in the composite. For the mask using the JRC Global Water dataset, make sure you are selecting &quot;permanent&quot; water. One way of doing this is by filtering the dataset for water pixels that occurred more than 50% of the time over the 35 years time spam for this dataset. You can be more or less restrictive with the water extent by changing the 50% threshold.</p>
@@ -272,7 +267,7 @@ Figure 3.2: Masking procedure. In this figure, the mask was applied to the raste
 <div class="figure"><span id="fig:my-watermask"></span>
 <img src="images/watermask.png" alt="Global water mask produced with JRC’s Global Surface Water dataset and Guinea's coastal prefectures (`aoi`) in red for reference. You can add this mask to the map editor (and clip for `aoi`) using `Map.addLayer(waterMask.clip(aoi), {}, 'Water Mask')`. Areas in black (0) will be masked in the composite while areas in white (1) will remain." width="1033" />
 <p class="caption">
-Figure 3.3: Global water mask produced with JRC’s Global Surface Water dataset and Guinea's coastal prefectures (<code>aoi</code>) in red for reference. You can add this mask to the map editor (and clip for <code>aoi</code>) using <code>Map.addLayer(waterMask.clip(aoi), {}, 'Water Mask')</code>. Areas in black (0) will be masked in the composite while areas in white (1) will remain.
+Figure 2.3: Global water mask produced with JRC’s Global Surface Water dataset and Guinea's coastal prefectures (<code>aoi</code>) in red for reference. You can add this mask to the map editor (and clip for <code>aoi</code>) using <code>Map.addLayer(waterMask.clip(aoi), {}, 'Water Mask')</code>. Areas in black (0) will be masked in the composite while areas in white (1) will remain.
 </p>
 </div>
 <ul>
@@ -286,7 +281,7 @@ var elevMask =<span class="st"> </span><span class="kw">elevation.lte</span>(<sp
 <div class="figure"><span id="fig:my-elevmask"></span>
 <img src="images/elevmask.PNG" alt="Global elevation (&gt; 25 m) mask produced with the Shuttle Radar Topography Mission dataset and Guinea's coastal prefectures (`aoi`) in red for reference. You can add this mask to the map editor (and clip for `aoi`) using *Map.addLayer(elevMask.clip(aoi), {}, 'Elevation Mask')*. Areas in black (0) will be masked in the composite while areas in white (1) will remain." width="1056" />
 <p class="caption">
-Figure 3.4: Global elevation (&gt; 25 m) mask produced with the Shuttle Radar Topography Mission dataset and Guinea's coastal prefectures (<code>aoi</code>) in red for reference. You can add this mask to the map editor (and clip for <code>aoi</code>) using <em>Map.addLayer(elevMask.clip(aoi), {}, 'Elevation Mask')</em>. Areas in black (0) will be masked in the composite while areas in white (1) will remain.
+Figure 2.4: Global elevation (&gt; 25 m) mask produced with the Shuttle Radar Topography Mission dataset and Guinea's coastal prefectures (<code>aoi</code>) in red for reference. You can add this mask to the map editor (and clip for <code>aoi</code>) using <em>Map.addLayer(elevMask.clip(aoi), {}, 'Elevation Mask')</em>. Areas in black (0) will be masked in the composite while areas in white (1) will remain.
 </p>
 </div>
 <p><a href="https://code.earthengine.google.com/62a8bbb4bef12c7c998dd7fe665a6d66" target="_blank">Code Checkpoint</a></p>
@@ -300,7 +295,7 @@ Figure 3.4: Global elevation (&gt; 25 m) mask produced with the Shuttle Radar To
 <div class="figure"><span id="fig:my-updatemask"></span>
 <img src="images/updatemask.png" alt="Output raster from .`mask()` and `.updateMask()` of a previously masked input raster. `.updateMask()` will only mask areas that have not been masked previously; if `.mask()` is used for a second mask, areas that have been previously invisible (i.e masked) will then assume the values of the mask used." width="1164" />
 <p class="caption">
-Figure 3.5: Output raster from .<code>mask()</code> and <code>.updateMask()</code> of a previously masked input raster. <code>.updateMask()</code> will only mask areas that have not been masked previously; if <code>.mask()</code> is used for a second mask, areas that have been previously invisible (i.e masked) will then assume the values of the mask used.
+Figure 2.5: Output raster from .<code>mask()</code> and <code>.updateMask()</code> of a previously masked input raster. <code>.updateMask()</code> will only mask areas that have not been masked previously; if <code>.mask()</code> is used for a second mask, areas that have been previously invisible (i.e masked) will then assume the values of the mask used.
 </p>
 </div>
 <div class="rmdcomment">
@@ -336,7 +331,7 @@ The code above is just for illustration purposes! Remember to remove the // from
 <div class="figure"><span id="fig:CompositeMaskedGuinea"></span>
 <img src="images/PartIII-CompositeMaskedGuinea.png" alt="Masked composite displayed with an RGB564 composition highlighting mangrove forests in dark red. Notice that areas of open water and higher altitudes were masked as they are not relevant to our example. Unmasked composite was added for comparison purposes: you can take advantage of indenting to turn masks on/off with // comment bars." width="858" />
 <p class="caption">
-Figure 3.6: Masked composite displayed with an RGB564 composition highlighting mangrove forests in dark red. Notice that areas of open water and higher altitudes were masked as they are not relevant to our example. Unmasked composite was added for comparison purposes: you can take advantage of indenting to turn masks on/off with // comment bars.
+Figure 2.6: Masked composite displayed with an RGB564 composition highlighting mangrove forests in dark red. Notice that areas of open water and higher altitudes were masked as they are not relevant to our example. Unmasked composite was added for comparison purposes: you can take advantage of indenting to turn masks on/off with // comment bars.
 </p>
 </div>
 <p><a href="https://code.earthengine.google.com/912be20630ba0aa4c86d0d12b3d76f94" target="_blank">Code Checkpoint</a></p>
@@ -357,7 +352,7 @@ Figure 3.6: Masked composite displayed with an RGB564 composition highlighting m
 <p>As seen in Part 2, to create the mangrove stratification class, we simply create an image with <code>ee.Image(1)</code> and clip it using <code>mangroveDataset</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var mangrove =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">1</span>)<span class="kw">.clip</span>(mangroveDataset);</code></pre></div>
 <ol start="2" style="list-style-type: lower-alpha">
-<li><em>Non-mangroves</em>: Using <code>.where()</code> (See its formula here: <a href="part-2-advanced-google-earth-engine.html#fig:my-where">2.34</a>), we will create an image of zeros where the value two (2) will be added where there is a pixel of any band from the <code>composite</code>:</li>
+<li><em>Non-mangroves</em>: Using <code>.where()</code> (See its formula here: <a href="part-1-basics-fundamentals.html#fig:my-where">1.75</a>), we will create an image of zeros where the value two (2) will be added where there is a pixel of any band from the <code>composite</code>:</li>
 </ol>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var nonmangrove =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">0</span>)<span class="kw">.where</span>(<span class="kw">composite.select</span>(<span class="st">&#39;SR_B1&#39;</span>),<span class="dv">2</span>)<span class="kw">.selfMask</span>();</code></pre></div>
 <div class="starcomment">
@@ -373,7 +368,7 @@ Notice that a new method was used in the code above. The method <code>.selfMask(
 <div class="figure"><span id="fig:my-strata"></span>
 <img src="images/PartIII-StratificationMap.png" alt="Stratification map `strata` showing Global Mangrove Watch's 2016 Mangrove extent (`stratificationClass: 1`) and non-mangrove areas (`stratificationClass: 2`). The `.stratifiedSample()` method will generate a set of random points to each of these classes." width="1027" />
 <p class="caption">
-Figure 3.7: Stratification map <code>strata</code> showing Global Mangrove Watch's 2016 Mangrove extent (<code>stratificationClass: 1</code>) and non-mangrove areas (<code>stratificationClass: 2</code>). The <code>.stratifiedSample()</code> method will generate a set of random points to each of these classes.
+Figure 2.7: Stratification map <code>strata</code> showing Global Mangrove Watch's 2016 Mangrove extent (<code>stratificationClass: 1</code>) and non-mangrove areas (<code>stratificationClass: 2</code>). The <code>.stratifiedSample()</code> method will generate a set of random points to each of these classes.
 </p>
 </div>
 <ul>
@@ -419,7 +414,7 @@ Remember, <strong>these steps are not necessary to the classification workflow</
 <div class="figure"><span id="fig:StratificationSamples"></span>
 <img src="images/PartIII-StratificationSamples.png" alt="Stratified random samples. The `.stratifiedSample()` method generates a set of random points to each of these strata." width="856" />
 <p class="caption">
-Figure 3.8: Stratified random samples. The <code>.stratifiedSample()</code> method generates a set of random points to each of these strata.
+Figure 2.8: Stratified random samples. The <code>.stratifiedSample()</code> method generates a set of random points to each of these strata.
 </p>
 </div>
 <p><a href="https://code.earthengine.google.com/9eebb9a441f2e4e6cff74329e8aa9563" target="_blank">Code Checkpoint</a></p>
@@ -443,7 +438,7 @@ Figure 3.8: Stratified random samples. The <code>.stratifiedSample()</code> meth
   scale<span class="op">:</span><span class="st"> </span><span class="dv">30</span>,
   geometries<span class="op">:</span><span class="st"> </span>true,
 });</code></pre></div>
-<p>Next, we will train a Random Forest classifier using the <code>samplesAutomatic</code> as training samples. In this example, we will use 200 trees and 8 predictors tested at each tree node:</p>
+<p>Next, we will train a Random Forest classifier using the <code>samplesAutomatic</code> as training samples. In this example, we will use 200 trees and 8 predictors to be tested at each tree node:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var RandomForest =<span class="st"> </span><span class="kw">ee.Classifier.smileRandomForest</span>(<span class="dv">200</span>,<span class="dv">8</span>)<span class="kw">.train</span>({
   features<span class="op">:</span><span class="st"> </span>samplesAutomatic, 
   classProperty<span class="op">:</span><span class="st"> &#39;stratificationClass&#39;</span>, 
@@ -461,7 +456,7 @@ var paletteMAP =<span class="st"> </span>[
 <div class="figure"><span id="fig:my-classficationmangrove"></span>
 <img src="images/PartIII-RFMangroveGuinea.png" alt="Random forest classification output produced with automatic sample selection" width="858" />
 <p class="caption">
-Figure 3.9: Random forest classification output produced with automatic sample selection
+Figure 2.9: Random forest classification output produced with automatic sample selection
 </p>
 </div>
 <p><a href="https://code.earthengine.google.com/0a0e15f94c78cb1516c90de46ec1fe10" target="_blank">Code Checkpoint</a></p>
@@ -478,16 +473,16 @@ var testAccuracy =<span class="st"> </span><span class="kw">validation.errorMatr
 <div class="figure"><span id="fig:ValidationGuinea"></span>
 <img src="images/PartIII-ValidationGuinea.png" alt="Validation results for this example. Ground truth data (in this context it refers to independent samples) were used to calculate the overall accuracy and kappa values." width="888" />
 <p class="caption">
-Figure 3.10: Validation results for this example. Ground truth data (in this context it refers to independent samples) were used to calculate the overall accuracy and kappa values.
+Figure 2.10: Validation results for this example. Ground truth data (in this context it refers to independent samples) were used to calculate the overall accuracy and kappa values.
 </p>
 </div>
 </div>
 </div>
 <div id="liberia" class="section level2">
-<h2><span class="header-section-number">3.2</span> Liberia</h2>
+<h2><span class="header-section-number">2.2</span> Liberia</h2>
 <p>In this example, we will use the codes from the previous sections for (a) mapping and detecting individual classes such as plantations; (b) a class by class land cover mapping approach.</p>
 <div id="anomaly-based-plantation-detection" class="section level3">
-<h3><span class="header-section-number">3.2.1</span> Anomaly-based plantation detection</h3>
+<h3><span class="header-section-number">2.2.1</span> Anomaly-based plantation detection</h3>
 <p>Spectral confusion between planted tree crops with native vegetation is a well-known challenge in using moderate resolution optical remote sensing data for mapping plantations. Cultivated land in Liberia primarily consists of woody commodity crops (oil palm and rubber trees). Even with the availability of forest concessions datasets to constrain the classification of these crops, the Random Forest relies on spectral predictors that are almost identical to native vegetation. Aditionally, small scale plantations intermixed with evergreen forest will also add to the challenges of separating these classes. However, areas of plantation usually undergo harvesting cycles, which creates a temporal signature that is different than evergreen natural vegetation: every few years, the spectral signature of these areas will show traces of bare soil due to harvesting and replanting. We can take advantage of this interannual differences by doing an <strong>anomaly analysis</strong>. By definition, anomaly is anything that deviates from what is standard, normal, or expected. Usually, anomalies are calculated by subtracting a long-term average of a variable from the actual value of that variable at a given time. For example, if X = actual value of average NDVI for vegetation in 2020, and Y = long-term average NDVI of vegetation (an average over many years), then the anomaly = X − Y. If the anomaly values are zero (or very close to zero), it means that NDVI remained relatively stable in that period, which indicates that there has not been any significant disturbance in that area. On the other hand, a positive anomaly means that the NDVI signal is greater than its long-term average, which indicates that vegetation has shown growth in that area; similarly, a negative anomaly means that the NDVI signal is weaker than its long-term average, indicating a potential loss in the area.</p>
 <p>This is a very useful tool to detect changes over time. Depending on where and how these changes happen over time, you can then conclude that that area is being planted and harvested.</p>
 <p>Next, we will provide several blocks of code to perform a quick anomaly analysis over Liberia and potentially identifying areas of plantation.</p>
@@ -590,7 +585,7 @@ var ref_end =<span class="st"> &#39;2010-12-31&#39;</span>;</code></pre></div>
 <div class="figure"><span id="fig:PartIII-ReferenceColSize"></span>
 <img src="images/PartIII-ReferenceColSize.png" alt="Number of scenes in the reference collection that will be used to calculate the reference value for the anomaly." width="781" />
 <p class="caption">
-Figure 3.11: Number of scenes in the reference collection that will be used to calculate the reference value for the anomaly.
+Figure 2.11: Number of scenes in the reference collection that will be used to calculate the reference value for the anomaly.
 </p>
 </div>
 <p>We can now calculate the mean value (and other statistics) for the reference collection reference using the <code>.median()</code> and <code>.mean()</code> methods:</p>
@@ -629,7 +624,7 @@ var anomaly =<span class="st"> </span><span class="kw">seriesSum.divide</span>(n
 <div class="figure"><span id="fig:Anomally"></span>
 <img src="images/PartIII-Anomally.png" alt="Normalized Burn Ratio (NBR) index anomaly over Liberia. Areas of negative anomaly are shown in purple/dark blue." width="1194" />
 <p class="caption">
-Figure 3.12: Normalized Burn Ratio (NBR) index anomaly over Liberia. Areas of negative anomaly are shown in purple/dark blue.
+Figure 2.12: Normalized Burn Ratio (NBR) index anomaly over Liberia. Areas of negative anomaly are shown in purple/dark blue.
 </p>
 </div>
 <p>A negative anomaly (in purple in the figure above) means that the NBR signal in 2016 is weaker than its long-term average, indicating a potential loss in the area for that year. Notice that in some areas you can see regular shapes, which means that those losses are potential harvested plantation. On the other hand, positive anomaly (in yellow) will show areas where soil is no longer exposed, giving us an indication of potential areas being replanted.</p>
@@ -682,7 +677,7 @@ var concessions =<span class="st"> </span><span class="kw">rubber.merge</span>(o
 <div class="figure"><span id="fig:PartIII-Anomally2"></span>
 <img src="images/PartIII-Anomally2.png" alt="2016 NBR Anomaly and the oil palm and rubber plantation concessions." width="856" />
 <p class="caption">
-Figure 3.13: 2016 NBR Anomaly and the oil palm and rubber plantation concessions.
+Figure 2.13: 2016 NBR Anomaly and the oil palm and rubber plantation concessions.
 </p>
 </div>
 <p>Note that even before the addition of the concession dataset, we could outline potential areas of plantation based on the anomaly values. Now, overlaying these concessions borders with the anomaly layer, we have strong evidence that those are indeed planted areas.</p>
@@ -708,7 +703,7 @@ var gainanomaly2021 =<span class="st"> </span><span class="kw">nbr20.gt</span>(<
 <div class="figure"><span id="fig:PartIII-AnomallyPlantation"></span>
 <img src="images/PartIII-AnomallyPlantation.png" alt="Areas of losses/harvest and gains/planting based on threshold values of NBR anomaly." width="1321" />
 <p class="caption">
-Figure 3.14: Areas of losses/harvest and gains/planting based on threshold values of NBR anomaly.
+Figure 2.14: Areas of losses/harvest and gains/planting based on threshold values of NBR anomaly.
 </p>
 </div>
 <p>By stacking 2016, 2017, 2018, 2019 and 2020 losses and gains and using the concession datasets as a constraint, we can create a Plantation layer for Liberia. We can construct this layer in a way to include the years where harvest and planting was observed. To do so, we will add the layers together. However, we have to set a flag value to each year. The steps below presents a simplistic way to create this flag:</p>
@@ -748,8 +743,8 @@ var recoveryFlag =<span class="st"> </span><span class="kw">gain16.add</span>(ga
 <hr />
 </div>
 <div id="class-by-class-land-cover-mapping" class="section level3">
-<h3><span class="header-section-number">3.2.2</span> Class-by-class land cover mapping</h3>
-<p>We will start by <a href="https://code.earthengine.google.com/" target="_blank">opening a new code editor page</a> and by defining the spatial and temporal parameters of the composite you wish to classify, just like the other examples. As explained in Part 1, GEE’s cloud screening algorithm based on quality assessment bands (QA) can be applied to remove cloud and cloud shadow contaminated pixels for each of the Landsat scene covering y. This method greatly improves the final composite (See <a href="part-2-advanced-google-earth-engine.html#fig:CompositesMasked">2.2</a>). However, creating an annual <em>completely cloud-free</em> imagery composition for Liberia is a challenging task because of the west African monsoon, which causes constant clouds across the Gulf of Guinea most of the time. The rainy season in Liberia ranges from May to October and it frequently rains in other months, except in the short dry season that runs from December to February/March. Hence, <strong>multi-year composites are necessary in attaining wall-to-wall cloud-free mosaics over Liberia</strong>.</p>
+<h3><span class="header-section-number">2.2.2</span> Class-by-class land cover mapping</h3>
+<p>We will start by <a href="https://code.earthengine.google.com/" target="_blank">opening a new code editor page</a> and by defining the spatial and temporal parameters of the composite you wish to classify, just like the other examples. As explained in Part 1, GEE’s cloud screening algorithm based on quality assessment bands (QA) can be applied to remove cloud and cloud shadow contaminated pixels for each of the Landsat scene covering y. This method greatly improves the final composite (See <a href="part-1-basics-fundamentals.html#fig:CompositesMasked">1.43</a>). However, creating an annual <em>completely cloud-free</em> imagery composition for Liberia is a challenging task because of the west African monsoon, which causes constant clouds across the Gulf of Guinea most of the time. The rainy season in Liberia ranges from May to October and it frequently rains in other months, except in the short dry season that runs from December to February/March. Hence, <strong>multi-year composites are necessary in attaining wall-to-wall cloud-free mosaics over Liberia</strong>.</p>
 <p>In order to ensure that an adequate cloud-free composite is achieved, we will use a composite circa 2021-2022. Then the temporal parameters can be defined as:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var year =<span class="st"> </span><span class="dv">2021</span>;
 var startDay =<span class="st"> </span>(year)<span class="op">+</span><span class="st">&#39;-01-01&#39;</span>;
@@ -769,7 +764,7 @@ var nationalBorder =<span class="st"> </span><span class="kw">countries.filterMe
 <div class="figure"><span id="fig:LiberiaBorder"></span>
 <img src="images/PartIII-LiberiaBorder.png" alt="Liberia border extracted from the *Large Scale International Boundary (LSIB)* dataset." width="857" />
 <p class="caption">
-Figure 3.15: Liberia border extracted from the <em>Large Scale International Boundary (LSIB)</em> dataset.
+Figure 2.15: Liberia border extracted from the <em>Large Scale International Boundary (LSIB)</em> dataset.
 </p>
 </div>
 <p>Alternatively, you can import your own border shapefile to your assets using the <strong>NEW</strong> button in the <strong>Assets</strong> tab. (See Earth Engine's <a href="https://developers.google.com/earth-engine/guides/image_upload" target="_blank">Importing Raster Data</a> for instructions on uploading an image to your assets or <a href="https://developers.google.com/earth-engine/guides/table_upload" target="_blank">Importing Table/Shapefile Data</a> for more details).</p>
@@ -777,7 +772,7 @@ Figure 3.15: Liberia border extracted from the <em>Large Scale International Bou
 <div class="figure"><span id="fig:ImportingShapefile"></span>
 <img src="images/PartIII-ImportingShapefile.png" alt="Importing shapefiles to your assets." width="340" />
 <p class="caption">
-Figure 3.16: Importing shapefiles to your assets.
+Figure 2.16: Importing shapefiles to your assets.
 </p>
 </div>
 <p>Once the upload is completed, the imported dataset can be accessed in the <strong>Assets</strong> tab. We will import it to the script using its 'ID' and add to the map editor:</p>
@@ -786,14 +781,14 @@ Figure 3.16: Importing shapefiles to your assets.
 <div class="figure"><span id="fig:Counties"></span>
 <img src="images/PartIII-Counties.png" alt="`aoi` and its multiple features (counties)" width="856" />
 <p class="caption">
-Figure 3.17: <code>aoi</code> and its multiple features (counties)
+Figure 2.17: <code>aoi</code> and its multiple features (counties)
 </p>
 </div>
 <p>In this particular case, this dataset includes multiple features (or polygons) with several properties for each feature. One of them is called 'NAME_1', which includes the names of each county in Liberia:</p>
 <div class="figure"><span id="fig:AssetDetail"></span>
 <img src="images/PartIII-AssetDetail.png" alt="Asset information. This imported dataset includes multiple features." width="886" />
 <p class="caption">
-Figure 3.18: Asset information. This imported dataset includes multiple features.
+Figure 2.18: Asset information. This imported dataset includes multiple features.
 </p>
 </div>
 <p>You can also print <code>aoi</code> to the <strong>Console</strong> tab:</p>
@@ -801,7 +796,7 @@ Figure 3.18: Asset information. This imported dataset includes multiple features
 <div class="figure"><span id="fig:FCProperties"></span>
 <img src="images/PartIII-FCProperties.png" alt="Feature collection information printed to the console. This imported dataset includes multiple features." width="683" />
 <p class="caption">
-Figure 3.19: Feature collection information printed to the console. This imported dataset includes multiple features.
+Figure 2.19: Feature collection information printed to the console. This imported dataset includes multiple features.
 </p>
 </div>
 <p>This type of metadata can be used to filter a feature collection. The <code>ee.Filter.inList()</code> method is very helpful when you want to filter multiple properties at once. First, we will create an object called 'filterCounties' with a list of 4 of the 15 counties in Liberia. In this example, we selected the counties of Bomi, Montserrado, Margibi and Grand Bassa. Finally, we use <code>filter()</code> to filter <code>aoi</code> for the list of counties provided in <code>filterCounties</code>:</p>
@@ -811,7 +806,7 @@ var filteredAOI =<span class="st"> </span><span class="kw">aoi.filter</span>(fil
 <div class="figure"><span id="fig:FilteredCounties"></span>
 <img src="images/PartIII-FilteredCounties.png" alt="The `aoi` feature collection filtered by metadata. Here, a filter to select the counties of Bomi, Montserrado, Margibi and Grand Bassa was used. " width="856" />
 <p class="caption">
-Figure 3.20: The <code>aoi</code> feature collection filtered by metadata. Here, a filter to select the counties of Bomi, Montserrado, Margibi and Grand Bassa was used.
+Figure 2.20: The <code>aoi</code> feature collection filtered by metadata. Here, a filter to select the counties of Bomi, Montserrado, Margibi and Grand Bassa was used.
 </p>
 </div>
 <p>Now that both temporal and spatial parameters are defined, As auxiliary functions for cloud masking and spectral index calculation, we will use the same functions provided in PART 2:</p>
@@ -872,7 +867,7 @@ Figure 3.20: The <code>aoi</code> feature collection filtered by metadata. Here,
 <div class="figure"><span id="fig:LiberiaComposite"></span>
 <img src="images/PartIII-LiberiaComposite.png" alt="A RGB564 composition of `composite`. " width="856" />
 <p class="caption">
-Figure 3.21: A RGB564 composition of <code>composite</code>.
+Figure 2.21: A RGB564 composition of <code>composite</code>.
 </p>
 </div>
 <p>Finally, we can export this composite as an asset. This will save you some time in the next steps where we will be using this same composite for classifying multiple land cover. For this example, we will use the <code>Export.image.toAsset()</code> as follows:</p>
@@ -888,7 +883,7 @@ Figure 3.21: A RGB564 composition of <code>composite</code>.
 <div class="figure"><span id="fig:PartIII-CompositeExport"></span>
 <img src="images/PartIII-CompositeExport.png" alt="Exporting the composite as an asset. " width="580" />
 <p class="caption">
-Figure 3.22: Exporting the composite as an asset.
+Figure 2.22: Exporting the composite as an asset.
 </p>
 </div>
 <p><a href="https://code.earthengine.google.com/714db6d9b8c8d00fd4473ac627b7cf3b" target="_blank">Code Checkpoint</a></p>
@@ -897,19 +892,19 @@ Figure 3.22: Exporting the composite as an asset.
 <div class="figure"><span id="fig:ClassificationApproach"></span>
 <img src="images/PartIII-ClassByClassApproach.png" alt="A class by class classification approach. " width="900" />
 <p class="caption">
-Figure 3.23: A class by class classification approach.
+Figure 2.23: A class by class classification approach.
 </p>
 </div>
 <p>So, far we have covered a multi-class classification approach. This is the most common way to perform a classification of multiple classes: feed the classifier all the samples from the different classes and post-process the outputs. However, we can include a pre-classification step to isolate the class of interest and then perform the classification for that particular land cover. Later, we will mask this class from the composite in order to exclude those pixels from the classification process and potentially avoid comission and omission errors. Why is this relevant/important? - Answer: Pixel-based classification may generate a large number of misclassified pixels (the &quot;salt-and-pepper effect&quot;) due to the spectral diversity within the same land cover type and spectral confusion between land cover types. For that, a spectral signature analysis can be performed for identifying potential spectral bands and reflectance-based spectral indices thresholds for differentiating between two classes: the land cover class being mapped and the remaining land cover classes merged as a single class called “Other”.</p>
 <p><strong><em>Water bodies</em></strong></p>
-<p>Water bodies are usually the easiest class to start with. Not many other land cover classes will have a similar spectral signature. Therefore, it is good practice to start with classes that are easily classifiable. As mentioned previously, we will use a pre-classification step to isolate the class of interest and then perform the classification for that particular land cover. We can do that by using a Masking Phase (Se Figure <a href="part-3-country-specific-applications.html#fig:ClassificationApproach">3.23</a>). In this phase, we use a band/ index threshold analysis to create a mask that will remove most pixels that are unlikely to be the class of interest - in this particular case, water bodies. In this example we will use the Modified Normalized Difference Water Index (MNDWI) that was calculated and added as a separate band to the <code>composite</code> using the <code>addIndices</code> function. This index will usually have mostly positive values for wet areas and negative values for other land cover classes. Therefore we can creat a 'wetMask' using a value thresold:</p>
+<p>Water bodies are usually the easiest class to start with. Not many other land cover classes will have a similar spectral signature. Therefore, it is good practice to start with classes that are easily classifiable. As mentioned previously, we will use a pre-classification step to isolate the class of interest and then perform the classification for that particular land cover. We can do that by using a Masking Phase (Se Figure <a href="part-3-country-specific-applications.html#fig:ClassificationApproach">2.23</a>). In this phase, we use a band/ index threshold analysis to create a mask that will remove most pixels that are unlikely to be the class of interest - in this particular case, water bodies. In this example we will use the Modified Normalized Difference Water Index (MNDWI) that was calculated and added as a separate band to the <code>composite</code> using the <code>addIndices</code> function. This index will usually have mostly positive values for wet areas and negative values for other land cover classes. Therefore we can creat a 'wetMask' using a value thresold:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var wetMask =<span class="st"> </span><span class="kw">composite.select</span>(<span class="st">&#39;MNDWI&#39;</span>)<span class="kw">.gte</span>(<span class="op">-</span><span class="fl">0.1</span>)<span class="kw">.clip</span>(filteredAOI);</code></pre></div>
 <p>The code above is selecting the pixels from the band &quot;MNDWI&quot; from <code>composite</code> that has values that are equal or greater than -0.1. Automatically, <code>wetMask</code> will be an image of ones (1) where the pixels meet the criteria above (MNDWI values greater than -0.1) and zeros (0) everywhere else. You can add <code>wetMask</code> to the map to check how constrictive your threshold values are:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Map.addLayer</span>(<span class="kw">wetMask.selfMask</span>(), {palette<span class="op">:</span><span class="st">&#39;blue&#39;</span>}, <span class="st">&#39;WetMask&#39;</span>);</code></pre></div>
 <div class="figure"><span id="fig:PartIII-Watermask"></span>
 <img src="images/PartIII-Watermask.png" alt="A mask created based on the MNDWI values that are equal or greater than -0.1. " width="568" />
 <p class="caption">
-Figure 3.24: A mask created based on the MNDWI values that are equal or greater than -0.1.
+Figure 2.24: A mask created based on the MNDWI values that are equal or greater than -0.1.
 </p>
 </div>
 <p>Note that this mask includes all the water pixels (in black as seen in the RGB 564 color composition) plus other areas that area not open water bodies but include some level of wetness to them (usually mangroves and wetlands). The objective of this phase <em><strong>IS NOT</strong></em> to remove <em><strong>ALL</strong></em> pixels that are not water; rather, is to remove <em><strong>MOST</strong></em> pixels that are not water. You can think of this as a classification process that preceeds the actual random forest classification. Instead of having to classify the entire composite into two classes, this way you can reduce the number of pixels going into the Random Forest Classification, speeding up the process. Also, this process already eliminated pixels that are unlikely to be water, reducing even further the chances of missclassification.</p>
@@ -919,14 +914,14 @@ Figure 3.24: A mask created based on the MNDWI values that are equal or greater 
 <div class="figure"><span id="fig:PartIII-MaskedComposite"></span>
 <img src="images/PartIII-MaskedComposite.png" alt="`composite` masked using `wetMask`. " width="853" />
 <p class="caption">
-Figure 3.25: <code>composite</code> masked using <code>wetMask</code>.
+Figure 2.25: <code>composite</code> masked using <code>wetMask</code>.
 </p>
 </div>
 <p>This is the resulting Landsat composite that will be used in this first classification iteration! The next steps should be familiar to you: * Selecting training samples - here we will create the two geometries to hold the 'water' and 'other' samples. Remember to set a property called 'landcover':</p>
 <div class="figure"><span id="fig:PartIII-WaterSamples"></span>
 <img src="images/PartIII-WaterSamples.png" alt=" Geometry imports to hold the training samples. " width="1166" />
 <p class="caption">
-Figure 3.26:  Geometry imports to hold the training samples.
+Figure 2.26:  Geometry imports to hold the training samples.
 </p>
 </div>
 <p><a href="https://code.earthengine.google.com/4a32727cbaefeb2d4f60037073884618" target="_blank">Code Checkpoint</a></p>
@@ -976,7 +971,7 @@ var paletteMAP =<span class="st"> </span>[
 <div class="figure"><span id="fig:PartIII-WaterClass"></span>
 <img src="images/PartIII-WaterClass.png" alt=" Classification output. " width="862" />
 <p class="caption">
-Figure 3.27:  Classification output.
+Figure 2.27:  Classification output.
 </p>
 </div>
 <p>Finally, we will save this output to our Assets folder using the <code>Export.image.toAsset()</code>:</p>
@@ -1008,7 +1003,7 @@ var waterClass =<span class="st"> </span><span class="kw">ee.Image</span>(<span 
 <span class="kw">Map.addLayer</span>(<span class="kw">waterMask.selfMask</span>(), {palette<span class="op">:</span>[<span class="st">&#39;yellow&#39;</span>]}, <span class="st">&#39;Water Mask&#39;</span>);</code></pre></div>
 <p>Note that the value provided within <code>eq()</code> needs to match the value of your class.</p>
 <ol start="2" style="list-style-type: upper-alpha">
-<li>Mask II - Elevation (See <a href="part-3-country-specific-applications.html#fig:my-elevmask">3.4</a>)</li>
+<li>Mask II - Elevation (See <a href="part-3-country-specific-applications.html#fig:my-elevmask">2.4</a>)</li>
 </ol>
 <p>For the elevation mask, we will take advantage of the Shuttle Radar Topography Mission's elevation data available on GEE. We will use an elevation cut off of 25 meters: the composite will be masked where pixels have values &gt; 25 m of elevation:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var elevation =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="st">&#39;USGS/SRTMGL1_003&#39;</span>)<span class="kw">.select</span>(<span class="st">&#39;elevation&#39;</span>);
@@ -1023,7 +1018,7 @@ var elevationMask =<span class="st"> </span><span class="kw">elevation.lte</span
 <div class="figure"><span id="fig:PartIII-MASKS"></span>
 <img src="images/PartIII-MASKS.png" alt="When applying these three masks to the composite, pixels will only remain where the three masks overlap." width="854" />
 <p class="caption">
-Figure 3.28: When applying these three masks to the composite, pixels will only remain where the three masks overlap.
+Figure 2.28: When applying these three masks to the composite, pixels will only remain where the three masks overlap.
 </p>
 </div>
 <p>Finally, we will apply these masks to the <code>composite</code> using <code>.mask()</code> for the first mask and <code>.updateMask()</code> for the others:</p>
@@ -1036,14 +1031,14 @@ Figure 3.28: When applying these three masks to the composite, pixels will only 
 <div class="figure"><span id="fig:PartIII-CompositeMaskedII"></span>
 <img src="images/PartIII-CompositeMaskedII.png" alt="Masked composite." width="866" />
 <p class="caption">
-Figure 3.29: Masked composite.
+Figure 2.29: Masked composite.
 </p>
 </div>
 <p>Next, we will repeat the sampling selection and classification. As a tip for selection accurate samples, mangroves will be in a darker shade of red/orange in this RGB 564 color composition while other vegetative classes (e.g. evergreen forests) will have a lighter red/orange shade. Make sure to take advantage of the high resolution imagery using the <strong>Satellite</strong> button:</p>
 <div class="figure"><span id="fig:PartIII-Mangrove"></span>
 <img src="images/PartIII-Mangrove.png" alt="Mangroves and other vegetation classes in Liberia." width="862" />
 <p class="caption">
-Figure 3.30: Mangroves and other vegetation classes in Liberia.
+Figure 2.30: Mangroves and other vegetation classes in Liberia.
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var classes =<span class="st"> </span><span class="kw">Mangrove.merge</span>(Other);
@@ -1086,7 +1081,7 @@ var paletteMAP =<span class="st"> </span>[
 <div class="figure"><span id="fig:PartIII-Mangroves"></span>
 <img src="images/PartIII-Mangroves.png" alt="Classification output." width="862" />
 <p class="caption">
-Figure 3.31: Classification output.
+Figure 2.31: Classification output.
 </p>
 </div>
 <p>Finally, we will export the classification:</p>
@@ -1119,7 +1114,7 @@ var mangroveClass =<span class="st"> </span><span class="kw">ee.Image</span>(<sp
 <div class="figure"><span id="fig:PartIII-Pop"></span>
 <img src="images/PartIII-Pop.png" alt="Ancillary datasets for classification of human settlements in Liberia. The population density and small settlement locations is helpful to constrain the classification in certain areas and help reduce misclassification errors with spectrally similar classes such as bare soil." width="1458" />
 <p class="caption">
-Figure 3.32: Ancillary datasets for classification of human settlements in Liberia. The population density and small settlement locations is helpful to constrain the classification in certain areas and help reduce misclassification errors with spectrally similar classes such as bare soil.
+Figure 2.32: Ancillary datasets for classification of human settlements in Liberia. The population density and small settlement locations is helpful to constrain the classification in certain areas and help reduce misclassification errors with spectrally similar classes such as bare soil.
 </p>
 </div>
 <p>Similarly to the previous classification, we will create the masks based on these datasets to apply to the composite:</p>
@@ -1137,7 +1132,7 @@ var mangroveMask =<span class="st"> </span><span class="kw">ee.Image</span>(<spa
 <div class="figure"><span id="fig:PartIII-PopMask"></span>
 <img src="images/PartIII-PopMask.png" alt="Population mask created by selecting areas that have more than 100 people/pixel. Once this mask is applied, areas with less than 100 people per pixel will be masked." width="858" />
 <p class="caption">
-Figure 3.33: Population mask created by selecting areas that have more than 100 people/pixel. Once this mask is applied, areas with less than 100 people per pixel will be masked.
+Figure 2.33: Population mask created by selecting areas that have more than 100 people/pixel. Once this mask is applied, areas with less than 100 people per pixel will be masked.
 </p>
 </div>
 <p>Next, we will use <code>settlements</code>. As you may have noticed, <code>settlements</code> contains the location of each small human settlement based on the 2007 census. We can then create a buffer of a certain size around each of these locations to create areas of likelihood for human settlements. We will first create a function to apply a buffer of a 1000 meters around the feature and then map it to <code>settlements</code> using <code>.map()</code> method:</p>
@@ -1149,7 +1144,7 @@ var setLocation =<span class="st"> </span><span class="kw">settlements.map</span
 <div class="figure"><span id="fig:PartIII-SetBuffer"></span>
 <img src="images/PartIII-SetBuffer.png" alt="1000 m buffer around each settlement location." width="856" />
 <p class="caption">
-Figure 3.34: 1000 m buffer around each settlement location.
+Figure 2.34: 1000 m buffer around each settlement location.
 </p>
 </div>
 <p>Now, we can merge them into a final mask by creating an <code>ee.Image()</code> of 1 and clip it using the buffered locations, the <code>.clip()</code> method and add it to <code>popMask</code> using <code>.add()</code>:</p>
@@ -1163,7 +1158,7 @@ Note that the code above used <code>.unmask()</code> after <code>.clip()</code>.
 <div class="figure"><span id="fig:PartIII-PopMaskFinal"></span>
 <img src="images/PartIII-PopMaskFinal.png" alt="Final population Mask." width="858" />
 <p class="caption">
-Figure 3.35: Final population Mask.
+Figure 2.35: Final population Mask.
 </p>
 </div>
 <p>Finally, we will apply these masks to the composite:</p>
@@ -1175,7 +1170,7 @@ Figure 3.35: Final population Mask.
 <div class="figure"><span id="fig:PartIII-MaskedCompositeII"></span>
 <img src="images/PartIII-MaskedCompositeII.png" alt="Masked composite using `waterMask`, `mangroveMask` and `populationMask`." width="856" />
 <p class="caption">
-Figure 3.36: Masked composite using <code>waterMask</code>, <code>mangroveMask</code> and <code>populationMask</code>.
+Figure 2.36: Masked composite using <code>waterMask</code>, <code>mangroveMask</code> and <code>populationMask</code>.
 </p>
 </div>
 <ol start="3" style="list-style-type: upper-alpha">
@@ -1186,9 +1181,9 @@ Figure 3.36: Masked composite using <code>waterMask</code>, <code>mangroveMask</
 var compositeMasked =<span class="st"> </span><span class="kw">compositemasked.updateMask</span>(bareMask);
 <span class="kw">Map.addLayer</span>(compositeMasked, {bands<span class="op">:</span><span class="st"> </span>[<span class="st">&#39;SR_B5&#39;</span>, <span class="st">&#39;SR_B6&#39;</span>, <span class="st">&#39;SR_B4&#39;</span>], min<span class="op">:</span><span class="fl">0.1</span>, max<span class="op">:</span><span class="fl">0.2</span>}, <span class="st">&#39;Composite Masked Final&#39;</span>);</code></pre></div>
 <div class="figure"><span id="fig:PartIII-MaskedCompositeIII"></span>
-<img src="images/PartIII-MaskedCompositeIII.png" alt="Masked composite using `waterMask`, `mangroveMask` and `populationMask` and `bareMask` showing areas of higher likelihood to be human settlements." width="859" />
+<img src="images/PartIII-MaskedCompositeIII.png" alt="Masked composite using `waterMask`, `mangroveMask` and `populationMask` and `bareMask` showing areas of higher likelihood to be human settlements class." width="859" />
 <p class="caption">
-Figure 3.37: Masked composite using <code>waterMask</code>, <code>mangroveMask</code> and <code>populationMask</code> and <code>bareMask</code> showing areas of higher likelihood to be human settlements.
+Figure 2.37: Masked composite using <code>waterMask</code>, <code>mangroveMask</code> and <code>populationMask</code> and <code>bareMask</code> showing areas of higher likelihood to be human settlements class.
 </p>
 </div>
 <p><a href="https://code.earthengine.google.com/d60cf84c3a0e870b51c7c9f469c96139" target="_blank">Code Checkpoint</a></p>
@@ -1233,7 +1228,7 @@ var paletteMAP =<span class="st"> </span>[
 <div class="figure"><span id="fig:PartIII-Settlements"></span>
 <img src="images/PartIII-Settlements.png" alt="Classification Output." width="856" />
 <p class="caption">
-Figure 3.38: Classification Output.
+Figure 2.38: Classification Output.
 </p>
 </div>
 <p><a href="https://code.earthengine.google.com/6c955c227802dd65606864f4792392b7" target="_blank">Code Checkpoint</a></p>
@@ -1242,7 +1237,7 @@ Figure 3.38: Classification Output.
 <div class="figure"><span id="fig:PartIII-Grasslands"></span>
 <img src="images/PartIII-Grasslands.png" alt="The Normalized Burn Ratio and Grasslands. Areas with little to no vegetation cover is shown in black." width="857" />
 <p class="caption">
-Figure 3.39: The Normalized Burn Ratio and Grasslands. Areas with little to no vegetation cover is shown in black.
+Figure 2.39: The Normalized Burn Ratio and Grasslands. Areas with little to no vegetation cover is shown in black.
 </p>
 </div>
 <p>First, we will start importing the same assets as before and the classes we have so far: water bodies, mangroves and human settlements:</p>
@@ -1285,7 +1280,7 @@ You can check the average value of pixels within a region by using <code>ee.Redu
 <div class="figure"><span id="fig:PartIII-GrasslandsandBare"></span>
 <img src="images/PartIII-GrasslandsandBare.png" alt="Extracting the herbaceous vegetation/grass and bare areas using NBR thresholds." width="1452" />
 <p class="caption">
-Figure 3.40: Extracting the herbaceous vegetation/grass and bare areas using NBR thresholds.
+Figure 2.40: Extracting the herbaceous vegetation/grass and bare areas using NBR thresholds.
 </p>
 </div>
 <p>Finally, we will export these classes to the assets following the same code as before:</p>
@@ -1312,7 +1307,7 @@ Figure 3.40: Extracting the herbaceous vegetation/grass and bare areas using NBR
 <div class="figure"><span id="fig:PartIII-Concessions"></span>
 <img src="images/PartIII-Concessions.png" alt="Rubber (red) and Oil Palm (green) concessions in Liberia. The spectral signature of these woody crops are identical with those of natural vegetation making it very challenging to classify." width="856" />
 <p class="caption">
-Figure 3.41: Rubber (red) and Oil Palm (green) concessions in Liberia. The spectral signature of these woody crops are identical with those of natural vegetation making it very challenging to classify.
+Figure 2.41: Rubber (red) and Oil Palm (green) concessions in Liberia. The spectral signature of these woody crops are identical with those of natural vegetation making it very challenging to classify.
 </p>
 </div>
 <p>As seen in the previous section (3.2.1), areas of plantation usually undergo harvesting cycles, which creates a temporal signature that is different than evergreen natural vegetation. We took the advantage of this interannual differences by doing an anomaly analysis and creating losses/harvest and gains/planting flag layers.</p>
@@ -1352,16 +1347,16 @@ var disturbance5years =<span class="st"> </span><span class="kw">lossFlag.eq</sp
 <div class="figure"><span id="fig:PartIII-PlantationS"></span>
 <img src="images/PartIII-PlantationS.png" alt="The loss flag (in white) and selected flag values." width="858" />
 <p class="caption">
-Figure 3.42: The loss flag (in white) and selected flag values.
+Figure 2.42: The loss flag (in white) and selected flag values.
 </p>
 </div>
-<p>For this example, we will consider plantation, every pixel that showed at least 1 year of loss/harvest and at least 1 year of gain/planting in those flags. In other words, both loss/harvest and gain/planting flags. Thus, we will add <code>lossFlag</code> and <code>recoveryFlag</code>, create an image of 0 and where the sum overlaps this image, populate it with 1. Finally clip it for the area of study (<code>filteredAOI</code>):</p>
+<p>For this example, we will consider plantation, every pixel that shows at least 1 year of loss/harvest and at least 1 year of gain/planting in those flags. In other words, both loss/harvest and gain/planting flags. Thus, we will add <code>lossFlag</code> and <code>recoveryFlag</code>, create an image of 0 and where the sum overlaps this image, populate it with 1. Finally clip it for the area of study (<code>filteredAOI</code>):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">var plantations =<span class="st"> </span><span class="kw">ee.Image</span>(<span class="dv">0</span>)<span class="kw">.where</span>(<span class="kw">lossFlag.add</span>(recoveryFlag),<span class="dv">1</span>)<span class="kw">.clip</span>(filteredAOI);
 <span class="kw">Map.addLayer</span>(<span class="kw">plantations.selfMask</span>(), {palette<span class="op">:</span>[<span class="st">&#39;green&#39;</span>]}, <span class="st">&#39;Plantation&#39;</span>);</code></pre></div>
 <div class="figure"><span id="fig:PartIII-PlantationClassI"></span>
 <img src="images/PartIII-PlantationClassI.png" alt="Plantation class derived from the `lossFlag` and `recoveryFlag`" width="1313" />
 <p class="caption">
-Figure 3.43: Plantation class derived from the <code>lossFlag</code> and <code>recoveryFlag</code>
+Figure 2.43: Plantation class derived from the <code>lossFlag</code> and <code>recoveryFlag</code>
 </p>
 </div>
 <p><em><strong>One last step remains to finalize the plantation class layer</strong></em>: Remember that every other class prior to this one was created from a classified Landsat composite that was masked each time using the previous class. Therefore, we need to mask <code>plantations</code> so it matches with how it would have been if it were created with the Landsat composite. Similarly to the previous classes, we will add the class assets, and use them to create masks for <code>plantations</code>:</p>
@@ -1408,7 +1403,7 @@ It is a good practice to use <code>.rename()</code> to give a name to the image 
 <div class="figure"><span id="fig:PartIII-GEDIForests"></span>
 <img src="images/PartIII-GEDI%20Forests.png" alt="GEDI-based measurements of Liberia’s forest’s integrity. Canopy height (in meters) and canopy cover (in %) was extracted from each GEDI footprint within dense tree-covered areas (a), open tree-covered areas (b), mixed vegetation (c) and all other classes (d). The summary statistics for the canopy cover and canopy height values for each class (and all other classes) is also shown (SD = standard deviation; N = count; SE = standard error of the mean)." width="1294" />
 <p class="caption">
-Figure 3.44: GEDI-based measurements of Liberia’s forest’s integrity. Canopy height (in meters) and canopy cover (in %) was extracted from each GEDI footprint within dense tree-covered areas (a), open tree-covered areas (b), mixed vegetation (c) and all other classes (d). The summary statistics for the canopy cover and canopy height values for each class (and all other classes) is also shown (SD = standard deviation; N = count; SE = standard error of the mean).
+Figure 2.44: GEDI-based measurements of Liberia’s forest’s integrity. Canopy height (in meters) and canopy cover (in %) was extracted from each GEDI footprint within dense tree-covered areas (a), open tree-covered areas (b), mixed vegetation (c) and all other classes (d). The summary statistics for the canopy cover and canopy height values for each class (and all other classes) is also shown (SD = standard deviation; N = count; SE = standard error of the mean).
 </p>
 </div>
 <p>We can use the information above to derive <strong>primary/dense</strong>, <strong>secondary/open</strong> and <strong>degraded/sparse</strong> based on height values or canopy cover.</p>
@@ -1444,7 +1439,7 @@ var plantationMask =<span class="st"> </span><span class="kw">ee.Image</span>(<s
 <div class="figure"><span id="fig:PartIII-TreeHeight"></span>
 <img src="images/PartIII-TreeHeight.png" alt="2019 Potapov’s (University of Maryland) global canopy height dataset over the study region in Liberia. Tree heights values straches from low (white) to high (dark blue)." width="850" />
 <p class="caption">
-Figure 3.45: 2019 Potapov’s (University of Maryland) global canopy height dataset over the study region in Liberia. Tree heights values straches from low (white) to high (dark blue).
+Figure 2.45: 2019 Potapov’s (University of Maryland) global canopy height dataset over the study region in Liberia. Tree heights values straches from low (white) to high (dark blue).
 </p>
 </div>
 <p>Similarly to what was done to the plantation class, we need to mask this dataset for the classes that we already have:</p>
@@ -1465,7 +1460,7 @@ var degradedForest =<span class="st"> </span><span class="kw">TreeHeightMasked.l
 <div class="figure"><span id="fig:PartIII-Forests"></span>
 <img src="images/PartIII-Forests.png" alt="Primary/dense, secondary/open and degraded/sparse forests based on the canopy height thresholds." width="854" />
 <p class="caption">
-Figure 3.46: Primary/dense, secondary/open and degraded/sparse forests based on the canopy height thresholds.
+Figure 2.46: Primary/dense, secondary/open and degraded/sparse forests based on the canopy height thresholds.
 </p>
 </div>
 <p>Export these classes following the steps we used so far:</p>
@@ -1606,7 +1601,7 @@ var names =<span class="st"> </span>[<span class="st">&#39;Water Bodies&#39;</sp
 <div class="figure"><span id="fig:PartIII-FinalMap1"></span>
 <img src="images/PartIII-FinalMap1.png" alt="Final land cover map for the study area in Liberia. The classes were created individually and composed into a final map." width="857" />
 <p class="caption">
-Figure 3.47: Final land cover map for the study area in Liberia. The classes were created individually and composed into a final map.
+Figure 2.47: Final land cover map for the study area in Liberia. The classes were created individually and composed into a final map.
 </p>
 </div>
 <p>For the following step, we will export this final map using the code below:</p>
@@ -1641,7 +1636,7 @@ var palette =<span class="st"> </span>[
 <div class="figure"><span id="fig:PartIII-SaltPepper"></span>
 <img src="images/PartIII-SaltPepper.png" alt="Final land cover map for the study area in Liberia. The the “salt-and-pepper” effect is a common issue that arises from the pixel-based classification of fine/medium spatial resolution imagery." width="857" />
 <p class="caption">
-Figure 3.48: Final land cover map for the study area in Liberia. The the “salt-and-pepper” effect is a common issue that arises from the pixel-based classification of fine/medium spatial resolution imagery.
+Figure 2.48: Final land cover map for the study area in Liberia. The the “salt-and-pepper” effect is a common issue that arises from the pixel-based classification of fine/medium spatial resolution imagery.
 </p>
 </div>
 <p>Using the techniques discussed in section 2.3.2, we will remove the salt and pepper effect in three steps:</p>
@@ -1666,7 +1661,7 @@ Figure 3.48: Final land cover map for the study area in Liberia. The the “salt
 <div class="figure"><span id="fig:PartIII-MapFiltered"></span>
 <img src="images/PartIII-MapFiltered.png" alt="Final land cover map for the study area in Liberia filtered to remove salt and pepper effect." width="570" />
 <p class="caption">
-Figure 3.49: Final land cover map for the study area in Liberia filtered to remove salt and pepper effect.
+Figure 2.49: Final land cover map for the study area in Liberia filtered to remove salt and pepper effect.
 </p>
 </div>
 
@@ -1678,7 +1673,7 @@ Figure 3.49: Final land cover map for the study area in Liberia filtered to remo
           </div>
         </div>
       </div>
-<a href="part-2-advanced-google-earth-engine.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="part-1-basics-fundamentals.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="part-4-ecosystem-accounting.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
