@@ -785,4 +785,5 @@ knitr::include_graphics("images/PartI-Clip.png")
 
 ```{block, type='caution'}
 You can only clip an ee.Image() object, __never an image collection!__
-``
+```
+

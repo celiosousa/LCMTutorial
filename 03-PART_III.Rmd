@@ -4,8 +4,6 @@ In this part we will explore examples of class-specific classification using pre
 
 ## Guinea
 
-Description of Guinea here
-
 ### Mangrove mapping in Guinea, West Africa
 
 In this example, we will use the codes from the previous parts for mangrove mapping in Guinea, in West Africa. We will also introduce the use of other datasets for masking and sample selection to assist in the classification workflow.
