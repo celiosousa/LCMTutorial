@@ -6,7 +6,7 @@ In this section we will provide functions and lines of code to assist the user t
 
 ### Cloud and cloud shadow masking
 
-This sub-section demonstrates a way of masking clouds and cloud shadow pixels from Landsat 8 Surface Reflectance Collection 2 data based on file metadata. You may have noticed when exploring Landsat images in the __Console__ tab that these images have a band called `QA_PIXEL` or *Quality Assessment* band. Briefly, this band contains values that represent bit-packed combinations of surface, atmospheric, and sensor conditions that can affect the overall usefulness of a given pixel. One of the many bits represented in this band is *cloud* (bit 3) and *cloud shadow* (bit 4):
+This sub-section demonstrates one way of masking clouds and cloud shadow pixels from Landsat 8 Surface Reflectance Collection 2 data based on file metadata. You may have noticed when exploring Landsat images in the __Console__ tab that these images have a band called `QA_PIXEL` or *Quality Assessment* band. Briefly, this band contains values that represent bit-packed combinations of surface, atmospheric, and sensor conditions that can affect the overall usefulness of a given pixel. One of the many bits represented in this band is *cloud* (bit 3) and *cloud shadow* (bit 4):
 
 ```{r QA, fig.cap="Landsat's Quality Assessment (QA) band.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/PartII-QABand.png")
