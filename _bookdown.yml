@@ -5,4 +5,11 @@ edit: https://github.com/celiosousa/LCMTutorial/edit/master/%s
 view: https://github.com/celiosousa/LCMTutorial/blob/master/%s
 language:
   ui:
-    chapter_name: "Chapter "
+    chapter_name: "Chapter"
+
+rmd_files:
+  - index.Rmd
+  - PART_I.Rmd
+  - PART_II.Rmd
+  - PART_III.Rmd
+  - PART_IV.Rmd
