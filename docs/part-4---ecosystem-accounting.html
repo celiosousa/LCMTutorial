@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter4 Part 4 - Ecosystem Accounting | Supervised Land Cover Classification with Google Earth Engine</title>
+  <meta name="description" content="Chapter4 Part 4 - Ecosystem Accounting | Supervised Land Cover Classification with Google Earth Engine" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter4 Part 4 - Ecosystem Accounting | Supervised Land Cover Classification with Google Earth Engine" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter4 Part 4 - Ecosystem Accounting | Supervised Land Cover Classification with Google Earth Engine" />
+  
+  
+  
+
+<meta name="author" content="Celio Sousa (celio.h.resendedesousa@nasa.gov)" />
+
+
+<meta name="date" content="2024-10-14" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="part-3---country-specific-applications.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Classification Tutorial</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction and overview</a></li>
+<li class="chapter" data-level="1" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html"><i class="fa fa-check"></i><b>1</b> PART 1 - Basics &amp; Fundamentals</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#programming-and-remote-sensing-basics"><i class="fa fa-check"></i><b>1.1</b> Programming and Remote Sensing Basics</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#remote-sensing-language"><i class="fa fa-check"></i><b>1.1.1</b> Remote Sensing Language</a></li>
+<li class="chapter" data-level="1.1.2" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#google-earth-engines-application-programming-interface-api-and-java-script"><i class="fa fa-check"></i><b>1.1.2</b> Google Earth Engine’s Application Programming Interface (API) and Java Script</a></li>
+<li class="chapter" data-level="1.1.3" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#exploring-image-and-image-collection"><i class="fa fa-check"></i><b>1.1.3</b> Exploring Image and Image Collection</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#image-and-image-collection-manipulation"><i class="fa fa-check"></i><b>1.2</b> Image and Image Collection Manipulation</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#image-math"><i class="fa fa-check"></i><b>1.2.1</b> Image Math</a></li>
+<li class="chapter" data-level="1.2.2" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#compositing-and-mosaicking"><i class="fa fa-check"></i><b>1.2.2</b> Compositing and Mosaicking</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html"><i class="fa fa-check"></i><b>2</b> PART 2 - Advanced Google Earth Engine</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#advanced-image-manipulation-pre-classification"><i class="fa fa-check"></i><b>2.1</b> Advanced Image Manipulation: Pre-classification</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#cloud-and-cloud-shadow-masking"><i class="fa fa-check"></i><b>2.1.1</b> Cloud and cloud shadow masking</a></li>
+<li class="chapter" data-level="2.1.2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#spectral-indices"><i class="fa fa-check"></i><b>2.1.2</b> Spectral indices</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#supervised-classification-using-random-forest"><i class="fa fa-check"></i><b>2.2</b> Supervised Classification using Random Forest</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2022"><i class="fa fa-check"></i><b>2.2.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2022</a></li>
+<li class="chapter" data-level="2.2.2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#example-2-2015---2022-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>2.2.2</b> Example 2: 2015 - 2022 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#post-classification-processing"><i class="fa fa-check"></i><b>2.3</b> Post-classification processing</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#re-classification"><i class="fa fa-check"></i><b>2.3.1</b> Re-classification</a></li>
+<li class="chapter" data-level="2.3.2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>2.3.2</b> Map spatial smoothing</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html"><i class="fa fa-check"></i><b>3</b> PART 3 - Country-specific Applications</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#guinea"><i class="fa fa-check"></i><b>3.1</b> Guinea</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#mangrove-mapping-in-guinea-west-africa"><i class="fa fa-check"></i><b>3.1.1</b> Mangrove mapping in Guinea, West Africa</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#liberia"><i class="fa fa-check"></i><b>3.2</b> Liberia</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#anomaly-based-plantation-detection"><i class="fa fa-check"></i><b>3.2.1</b> Anomaly-based plantation detection</a></li>
+<li class="chapter" data-level="3.2.2" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#class-by-class-land-cover-mapping"><i class="fa fa-check"></i><b>3.2.2</b> Class-by-class land cover mapping</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html"><i class="fa fa-check"></i><b>4</b> Part 4 - Ecosystem Accounting</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#introduction-to-ecosystem-accounting"><i class="fa fa-check"></i><b>4.1</b> Introduction to Ecosystem Accounting</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#essentials"><i class="fa fa-check"></i><b>4.1.1</b> Essentials</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#ecosystem-extent-account"><i class="fa fa-check"></i><b>4.2</b> Ecosystem Extent Account</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#structure-of-ecosystem-extent-account"><i class="fa fa-check"></i><b>4.2.1</b> Structure of ecosystem extent account</a></li>
+<li class="chapter" data-level="4.2.2" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#examples-and-exercises"><i class="fa fa-check"></i><b>4.2.2</b> Examples and exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#tools-for-compiling-ecosystem-extent-account-tables"><i class="fa fa-check"></i><b>4.3</b> Tools for Compiling Ecosystem Extent Account Tables</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#platforms-for-running-python-scripts"><i class="fa fa-check"></i><b>4.3.1</b> Platforms for running Python scripts</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#compiling-ecosystem-extent-account-tables"><i class="fa fa-check"></i><b>4.4</b> Compiling Ecosystem Extent Account Tables</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#essentials-1"><i class="fa fa-check"></i><b>4.4.1</b> Essentials</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Supervised Land Cover Classification with Google Earth Engine</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="part-4---ecosystem-accounting" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter4</span> Part 4 - Ecosystem Accounting<a href="part-4---ecosystem-accounting.html#part-4---ecosystem-accounting" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-to-ecosystem-accounting" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Introduction to Ecosystem Accounting<a href="part-4---ecosystem-accounting.html#introduction-to-ecosystem-accounting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this module we will learn about the <a href="https://seea.un.org/ecosystem-accounting">System of Environmental Economic Accounting–Ecosystem Accounting (SEEA EA)</a> – the accounting standard developed for ecosystem accounting. It is a shortened version of a course developed by the United Nations Statistical Division focusing on ecosystem extent accounts. The full course can be accessed at the <a href="https://learning.officialstatistics.org/course/view.php?id=78">UN Global Learning Platform</a>.</p>
+<div id="essentials" class="section level3 hasAnchor" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Essentials<a href="part-4---ecosystem-accounting.html#essentials" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>A) What is the SEEA EA?</strong></p>
+<p>SEEA EA is the international statistical standard for organizing data about ecosystems, measuring ecosystem services, tracking changes in ecosystem assets, and linking this information to economic and other human activity. It was adopted by the UN Statistical Commission in March 2021.</p>
+<p>The aim of the SEEA EA is to systematically record data on the stocks and flows related to ecosystems. It provides a framework for measuring ecosystem services, extent and condition, valuing ecosystem services and assets and linking this information to the economy. The SEEA EA is comprehensive and covers all terrestrial, freshwater, marine and subterranean ecosystems.</p>
+<p>The SEEA is primarily intended to support national level policy decision making, but implementation can be flexible and modular. For example, ecosystem accounts can be used to support decision making for individual administrative areas such as counties and districts, and for environmentally defined areas such as water catchments, protected areas and coastal zones.</p>
+<p><strong>B) Ecosystem accounts</strong></p>
+<p>The SEEA EA consists of a system of integrated, internally consistent series of accounts that cover different dimensions of how an ecosystem can be described and measured:</p>
+<div class="figure"><span style="display:block;" id="fig:nameofFigure"></span>
+<img src="images/EcosystemAccounts.png" alt="Components of ecosystem accounting."  />
+<p class="caption">
+Figure 4.1: Components of ecosystem accounting.
+</p>
+</div>
+<p><strong>C) Ecosystem assets</strong></p>
+<p>The primary spatial units for ecosystem accounting are ecosystem assets. Ecosystem assets are contiguous spaces of a specific ecosystem type characterized by a distinct set of biotic and abiotic components and their interactions:</p>
+<p>&lt;Figure&gt;</p>
+<p>Information about ecosystem assets includes their extent, condition, and services they provide. This information may be expressed in physical and/or monetary units.</p>
+<p><strong>D) Ecosystem types</strong></p>
+<p>For the purpose of accounting, all ecosystem assets need to be classified into ecosystem types. It is recommended that existing national ecosystem classifications schemes be used wherever possible. However, cross-referencing of national classifications with the <a href="chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://portals.iucn.org/library/sites/library/files/documents/2020-037-En.pdf">IUCN Global Ecosystem Typology (IUCN GET)</a> will enable accounts to be compared between countries.</p>
+<p>&lt;Figure&gt;</p>
+<p>The IUCN GET comprises six hierarchical levels ranging from broad classes that differentiate the functional properties of ecosystems to finer levels of ecosystem types that will be relevant in national and sub-national scales. It is recommended that compilation of ecosystem accounts at the national level should take place for ecosystem functional groups (level 3) or even finer classification reflecting data availability and policy demands.</p>
+<p>&lt;Figure&gt;</p>
+<p><strong>E) Ecosystem extent</strong></p>
+<p>Ecosystem extent is the size of an ecosystem asset. It is usually measured in terms of area but may also be measured in terms of length or volume in case of rivers and lakes. In practice, basic spatial units (BSU) – geometrical constructs representing a small spatial area – are used for measuring the size of ecosystem assets. For example we use grid cells (pixels) from a satellite image or other BSU shapes such as polygons, lines or points. The size of BSU is smaller or equal in size to any ecosystem asset.</p>
+<p>&lt;Figure&gt;</p>
+<p><strong>F) Ecosystem extent account</strong></p>
+<p>Ecosystem extent accounts represent a common starting point for ecosystem accounting by providing information about the area, composition of, and changes in, ecosystem types within an ecosystem accounting area (EAA). At the national level, The EAA extends to cover all terrestrial, freshwater and marine ecosystems within the country’s boarders and its marine exclusive economic zone (EEZ). In practice, EAAs may be smaller in geographical size covering just terrestrial or marine realm or a sub-national region such as a coastal zone or a protected area.</p>
+</div>
+</div>
+<div id="ecosystem-extent-account" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Ecosystem Extent Account<a href="part-4---ecosystem-accounting.html#ecosystem-extent-account" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this section we will learn about the basic structure of ecosystem extent accounts. The compilation process will be demonstrated on simple examples followed by practical exercises.</p>
+<div id="structure-of-ecosystem-extent-account" class="section level3 hasAnchor" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Structure of ecosystem extent account<a href="part-4---ecosystem-accounting.html#structure-of-ecosystem-extent-account" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>A) Ecosystem extent (units of area) – Table 1</strong></p>
+<p><strong>B) Ecosystem type change matrix – Table 2</strong></p>
+</div>
+<div id="examples-and-exercises" class="section level3 hasAnchor" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Examples and exercises<a href="part-4---ecosystem-accounting.html#examples-and-exercises" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>A) Ecosystem extent (units of area) – Table 1</strong></p>
+<p><strong>B) Ecosystem type change matrix – Table 2</strong></p>
+</div>
+</div>
+<div id="tools-for-compiling-ecosystem-extent-account-tables" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Tools for Compiling Ecosystem Extent Account Tables<a href="part-4---ecosystem-accounting.html#tools-for-compiling-ecosystem-extent-account-tables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This section demonstrates the process of deriving ecosystem extent account tables using Python scripts developed to run within Google Earth Engine Python Colab and Jupyter Notebook with ArcGIS libraries.</p>
+<div id="platforms-for-running-python-scripts" class="section level3 hasAnchor" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Platforms for running Python scripts<a href="part-4---ecosystem-accounting.html#platforms-for-running-python-scripts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>A) GEE Python Colab</strong></p>
+<p><a href="https://colab.research.google.com/github/google/earthengine-api/blob/master/python/examples/ipynb/ee-api-colab-setup.ipynb">Google Earth Engine Application Programming Interface (API) Colab</a>, or “Colaboratory” is a web-based interactive development environment that allows you to write and execute Python in your browser with zero configuration required, and an access to graphics processing units (GPU) free of charge.</p>
+<p><strong>B) Jupyter Notebook</strong></p>
+<p><a href="https://jupyter.org/">Jupyter Notebook</a> is the latest web-based interactive development environment for notebooks, code, and data. Its flexible interface allows users to configure and arrange workflows in data science, scientific computing, computational journalism, and machine learning. It was designed to work with a large number of libraries including those developed for ArcGIS.</p>
+</div>
+</div>
+<div id="compiling-ecosystem-extent-account-tables" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> Compiling Ecosystem Extent Account Tables<a href="part-4---ecosystem-accounting.html#compiling-ecosystem-extent-account-tables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This section explores the use of Microsoft Excel to do basic data analytics using information from ecosystem extent accounts.</p>
+<div id="essentials-1" class="section level3 hasAnchor" number="4.4.1">
+<h3><span class="header-section-number">4.4.1</span> Essentials<a href="part-4---ecosystem-accounting.html#essentials-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>A) Macros</strong> If you have tasks in Microsoft Excel that you do repeatedly, you can record a macro to automate those tasks. A macro is an action or a set of actions that you can run as many times as you want. When you create a macro, you are recording your mouse clicks and keystrokes.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="part-3---country-specific-applications.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/celiosousa/LCMTutorial/edit/master/04-PART_IV.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/celiosousa/LCMTutorial/blob/master/04-PART_IV.Rmd",
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

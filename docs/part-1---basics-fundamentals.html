@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter1 PART 1 - Basics &amp; Fundamentals | Supervised Land Cover Classification with Google Earth Engine</title>
+  <meta name="description" content="Chapter1 PART 1 - Basics &amp; Fundamentals | Supervised Land Cover Classification with Google Earth Engine" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter1 PART 1 - Basics &amp; Fundamentals | Supervised Land Cover Classification with Google Earth Engine" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter1 PART 1 - Basics &amp; Fundamentals | Supervised Land Cover Classification with Google Earth Engine" />
+  
+  
+  
+
+<meta name="author" content="Celio Sousa (celio.h.resendedesousa@nasa.gov)" />
+
+
+<meta name="date" content="2024-10-14" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="part-2---advanced-google-earth-engine.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Classification Tutorial</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction and overview</a></li>
+<li class="chapter" data-level="1" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html"><i class="fa fa-check"></i><b>1</b> PART 1 - Basics &amp; Fundamentals</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#programming-and-remote-sensing-basics"><i class="fa fa-check"></i><b>1.1</b> Programming and Remote Sensing Basics</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#remote-sensing-language"><i class="fa fa-check"></i><b>1.1.1</b> Remote Sensing Language</a></li>
+<li class="chapter" data-level="1.1.2" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#google-earth-engines-application-programming-interface-api-and-java-script"><i class="fa fa-check"></i><b>1.1.2</b> Google Earth Engine’s Application Programming Interface (API) and Java Script</a></li>
+<li class="chapter" data-level="1.1.3" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#exploring-image-and-image-collection"><i class="fa fa-check"></i><b>1.1.3</b> Exploring Image and Image Collection</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#image-and-image-collection-manipulation"><i class="fa fa-check"></i><b>1.2</b> Image and Image Collection Manipulation</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#image-math"><i class="fa fa-check"></i><b>1.2.1</b> Image Math</a></li>
+<li class="chapter" data-level="1.2.2" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#compositing-and-mosaicking"><i class="fa fa-check"></i><b>1.2.2</b> Compositing and Mosaicking</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html"><i class="fa fa-check"></i><b>2</b> PART 2 - Advanced Google Earth Engine</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#advanced-image-manipulation-pre-classification"><i class="fa fa-check"></i><b>2.1</b> Advanced Image Manipulation: Pre-classification</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#cloud-and-cloud-shadow-masking"><i class="fa fa-check"></i><b>2.1.1</b> Cloud and cloud shadow masking</a></li>
+<li class="chapter" data-level="2.1.2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#spectral-indices"><i class="fa fa-check"></i><b>2.1.2</b> Spectral indices</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#supervised-classification-using-random-forest"><i class="fa fa-check"></i><b>2.2</b> Supervised Classification using Random Forest</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2022"><i class="fa fa-check"></i><b>2.2.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2022</a></li>
+<li class="chapter" data-level="2.2.2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#example-2-2015---2022-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>2.2.2</b> Example 2: 2015 - 2022 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#post-classification-processing"><i class="fa fa-check"></i><b>2.3</b> Post-classification processing</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#re-classification"><i class="fa fa-check"></i><b>2.3.1</b> Re-classification</a></li>
+<li class="chapter" data-level="2.3.2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>2.3.2</b> Map spatial smoothing</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html"><i class="fa fa-check"></i><b>3</b> PART 3 - Country-specific Applications</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#guinea"><i class="fa fa-check"></i><b>3.1</b> Guinea</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#mangrove-mapping-in-guinea-west-africa"><i class="fa fa-check"></i><b>3.1.1</b> Mangrove mapping in Guinea, West Africa</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#liberia"><i class="fa fa-check"></i><b>3.2</b> Liberia</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#anomaly-based-plantation-detection"><i class="fa fa-check"></i><b>3.2.1</b> Anomaly-based plantation detection</a></li>
+<li class="chapter" data-level="3.2.2" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#class-by-class-land-cover-mapping"><i class="fa fa-check"></i><b>3.2.2</b> Class-by-class land cover mapping</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html"><i class="fa fa-check"></i><b>4</b> Part 4 - Ecosystem Accounting</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#introduction-to-ecosystem-accounting"><i class="fa fa-check"></i><b>4.1</b> Introduction to Ecosystem Accounting</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#essentials"><i class="fa fa-check"></i><b>4.1.1</b> Essentials</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#ecosystem-extent-account"><i class="fa fa-check"></i><b>4.2</b> Ecosystem Extent Account</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#structure-of-ecosystem-extent-account"><i class="fa fa-check"></i><b>4.2.1</b> Structure of ecosystem extent account</a></li>
+<li class="chapter" data-level="4.2.2" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#examples-and-exercises"><i class="fa fa-check"></i><b>4.2.2</b> Examples and exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#tools-for-compiling-ecosystem-extent-account-tables"><i class="fa fa-check"></i><b>4.3</b> Tools for Compiling Ecosystem Extent Account Tables</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#platforms-for-running-python-scripts"><i class="fa fa-check"></i><b>4.3.1</b> Platforms for running Python scripts</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#compiling-ecosystem-extent-account-tables"><i class="fa fa-check"></i><b>4.4</b> Compiling Ecosystem Extent Account Tables</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#essentials-1"><i class="fa fa-check"></i><b>4.4.1</b> Essentials</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Supervised Land Cover Classification with Google Earth Engine</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="part-1---basics-fundamentals" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter1</span> PART 1 - Basics &amp; Fundamentals<a href="part-1---basics-fundamentals.html#part-1---basics-fundamentals" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="programming-and-remote-sensing-basics" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Programming and Remote Sensing Basics<a href="part-1---basics-fundamentals.html#programming-and-remote-sensing-basics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="remote-sensing-language" class="section level3 hasAnchor" number="1.1.1">
+<h3><span class="header-section-number">1.1.1</span> Remote Sensing Language<a href="part-1---basics-fundamentals.html#remote-sensing-language" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>A) Definition</strong></p>
+<p>The term <em><strong>Remote sensing</strong></em> has been variously defined. Some of its early definitions include:</p>
+<ul>
+<li><p>The art or science of telling something about an object without touching it. (Fischer et al., 1976)</p></li>
+<li><p>Remote sensing is the acquisition of physical data of an object without touch or contact. (Lintz and Simonett, 1976)</p></li>
+<li><p>Remote sensing is the observation of a target by a device separated from it by some distance. (Barrett and Curtis, 1976)</p></li>
+<li><p>The term <em>remote sensing</em> in its broadest sense means “reconnaissance at a distance.” (Colwell, 1966)</p></li>
+</ul>
+<p>Thus, in the context of this training, we can define <em>Remote Sensing</em> as the science of acquiring information about a given target, object or phenomenon on the surface of the Earth by sensors on-board various platforms orbiting our planet.</p>
+<p><strong>B) Building blocks of remote sensing</strong></p>
+<p>Although the many different methods for collection, processing and interpretation of remotely sense data can vary widely, they will always have the following essential components:</p>
+<div class="figure"><span style="display:block;" id="fig:FigBuildingBlocks"></span>
+<img src="images/BuildingBlocksRemoteSensing.png" alt="Basic components of a remote sensing system."  />
+<p class="caption">
+Figure 1.1: Basic components of a remote sensing system.
+</p>
+</div>
+<ol style="list-style-type: upper-roman">
+<li>Energy Source</li>
+</ol>
+<p>The source of the electromagnetic radiation/energy (EMR) is the first requirement of any remote sensing process. The electromagnetic spectrum is used to “classify” the EMR according to its wavelength:</p>
+<div class="figure"><span style="display:block;" id="fig:FigEMS"></span>
+<img src="images/EMS%20copy.png" alt="The Electromagnetic Spectrum"  />
+<p class="caption">
+Figure 1.2: The Electromagnetic Spectrum
+</p>
+</div>
+<p>Depending on the source of energy they are using, the different remote sensing systems can be classified as <em><strong>active</strong></em> or <em><strong>passive</strong></em>. <em>Active</em> sensors will produce its own source of energy for the illumination of the target. They will emit the energy toward the target being investigated and the energy reflected by this target is detected and measured by the sensor. Usually, these sensors operate in the microwave range of the electromagnetic spectrum. On the other hand, <em>passive</em> sensors only measures the energy that is naturally available, usually from the sun. These sensors can only be used to detect the energy being reflected during the time when the sun is illuminating the Earth. These sensors usually measure energy from the optical range (visible, near infrared, short-wave infrared and thermal infrared).</p>
+<div class="figure"><span style="display:block;" id="fig:PassiveAndActive"></span>
+<img src="images/PassiveAndActive.png" alt="Remote sensing can be classified as Passive or Active based on the source of energy."  />
+<p class="caption">
+Figure 1.3: Remote sensing can be classified as Passive or Active based on the source of energy.
+</p>
+</div>
+<p>You can also think about these concepts of <em>active</em> and <em>passive</em> using a handheld photographic camera as an example: When photographing a target in the dark, the camera flash will provide the energy necessary to illuminate the target. Therefore, in that case, the camera is an <em>active</em> sensor. On the other hand, this same camera will be a <em>passive</em> sensor when you are photographing a target or object during the day, when the target being illuminated by sun light and no flash is necessary.</p>
+<ol start="2" style="list-style-type: upper-roman">
+<li>Interaction with the target/object</li>
+</ol>
+<p>The most common medium in between the source and target is the atmosphere. This is where the first interaction occurs. As the EMR travel from its source to the target, it will come in contact with and interact different atmosphere constituents: aerosols, water vapor, solid particles, etc. Secondly, once the EMR makes its way through the atmospherethe to the target, it will interact with it depending on the target properties and energy wavelength. The EMR can have different types of interaction when it encounters matter; whether it is gas, solid or liquid: it can be <strong>transmitted</strong> (that is, it passes through the target), <strong>absorbed</strong> (that is, the target absorbs the energy usually increasing its temperature as a result), <strong>emitted</strong> (that is, energy is emitted from all matter at temperatures above the absolute zero of 0 Kelvins), <strong>scattered</strong> (that is, deflected in every direction) and <strong>reflected</strong> (that is, energy bounces off the target’s surface and its direction is usually a function of target structure and texture).</p>
+<div class="caution">
+<p>
+Keep in mind: All targets can show different proportions of each of
+these interactions.
+</p>
+</div>
+<ol start="3" style="list-style-type: upper-roman">
+<li>Recording of the energy by the sensor</li>
+</ol>
+<p>The sensor - often onboard of airplanes or satellites in space - will measure the returning EMR after it has interacted with the target and the atmosphere. This measurement is converted into a digital image with discrete values in units of digital number (DN) for each image pixel. Depending on the sensor, these resulting images will have different characteristics (or <em><strong>resolutions</strong></em>). They are:</p>
+<ul>
+<li><p><strong>Spatial Resolution</strong>: usually known as pixel size. It refers to the sensor’s ability to discriminate different objects/targets. A higher spatial resolution means a smaller pixel size which, in turn, means that smaller objects can be distinguishable as separate targets.</p></li>
+<li><p><strong>Spectral Resolution</strong>: Different sensors will measure the EMR at specific ranges (or wavelengths), usually called <em>bands</em>. Thus, the spectral resolution of a sensor usually refers to the number and bandwith of these bands.</p></li>
+<li><p><strong>Radiometric Resolution</strong>: Usually measured in <em>bits</em>, it refers to the sensor’s ability to detect the smallest change in the spectral reflectance among different targets. For example, a 8-bit image will have 256 levels of brightness while a 16-bit image has 65,536 levels of brightness.</p></li>
+<li><p><strong>Temporal resolution</strong> (sensors onboard satellites): is the time required for the satellite to collect two images at the same geographic location on Earth. Higher temporal resolution means less time for revisiting the same location. However, temporal resolution is usually inverselly proportional to spatial resolution: The larger the pixel size, the larger area the sensor will cover which means less time until the next revisit.</p></li>
+</ul>
+<ol start="4" style="list-style-type: upper-roman">
+<li>Transmission, Reception, and Processing</li>
+</ol>
+<p>The EMR recorded by the sensor is transmitted in an electronic form to a receiving station on Earth where the data is processed and stored.</p>
+<ol start="22" style="list-style-type: upper-alpha">
+<li>Analysis and Interpretation (we are here!)</li>
+</ol>
+<p>This is where this training is focused on! The EMR was transformed into a digital dataset where we can use specialized instruments/hardware/software to extract information about the target observed. This extraction is often done through <em><strong>image processing</strong></em> (or digital image processing), which is the process which makes an image interpretable for a given use. There are many methods of image processing, but these are the most common ones:</p>
+<ul>
+<li><p><strong>Image correction</strong>: The digital image recorded by the sensor on a satellite (or aircraft) may contain errors related to the geometry and brightness values of the pixels. For example, a geometrical correction, also called <em><strong>geo-referencing</strong></em>, is a procedure where the content of image will be assigned a spatial coordinate system (for example, geographical latitude and longitude).</p></li>
+<li><p><strong>Image enhancement</strong>: This is related to modification of an image, by changing the pixel brightness values, to improve its visual aspects so that the actual analysis of images will be easier, faster and more reliable.</p></li>
+<li><p><strong>Image classification</strong>: The overall goal of this method is to categorize all pixels in an image into themes (or <em><strong>land cover classes</strong></em>). This resulting map with its limited number of classes can be more readily and sucessfully interpreted compared to the raw image and it is often use for planning purposes. There are supervised and unsupervised methods for classification of an image: A <em><strong>supervised classification</strong></em> (human-guided) is based on the idea that a user can select sample pixels in an image that are representative of specific classes and then direct the image processing software to use these training sites as references for the classification of all other pixels in the image. These samples are selected based on the knowledge of the user. On the other hand, an <em><strong>unsupervised classification</strong></em> (computer/software-guided) is where the output classes are based on the software’s ability to determine which pixels are related, using several different models and techniques.</p></li>
+</ul>
+<p>This final component of Remote Sensing (V) is achieved when we apply the extracted information to solve a particular problem.</p>
+<p><strong>C) Spectral Signatures: A target’s spectral fingerprint</strong></p>
+<p>As mentioned before, remote sensing is based on the measurement of reflected (or emitted) radiation from different targets. Objects having different surface features reflect or absorb the sun’s radiation in different ways.
+In order to understand and interpret the information extracted from remotely sensed data, you have to first understand the behavior of the target in respect to the electromagnetic spectrum. Each target will show a distinct reflectance pattern as a function of the wavelength, known as <em><strong>spectral signature</strong></em> (or a spectral fingerprint). This signature will directly (or indirectly) lead to the identification of a target based on its set of values for its reflectance in different spectral ranges:</p>
+<div class="figure"><span style="display:block;" id="fig:SpectralSignature"></span>
+<img src="images/Spectral%20Signature.jpg" alt="Typical spectral signatures of specific land cover types in the visible and infrared region of the electromagnetic spectrum (Source: http://www.seos-project.eu/)"  />
+<p class="caption">
+Figure 1.4: Typical spectral signatures of specific land cover types in the visible and infrared region of the electromagnetic spectrum (Source: <a href="http://www.seos-project.eu/" class="uri">http://www.seos-project.eu/</a>)
+</p>
+</div>
+<div class="rmdcomment">
+<p>
+<em><strong>Reflectance</strong></em> is the ratio of the amount of
+light leaving a target to the amount of light striking the target. It
+has no units.
+</p>
+</div>
+<p>The spectral signature of <em>healthy green vegetation</em> has a small reflectance in the visible portion of the electromagnetic spectrum resulting from the pigments in plant leaves. Most of the light is being used in the photosynthesis process. However, the reflectance increases dramatically in the near infrared. The spectral signature of <em>soil</em> is much less variable. Its behavior is affected by soil moisture, texture, surface roughness and they are less dominant than the absorbance features present in vegetation. The <em>water</em>’s spectral signature is characterized by a high absorption at near infrared wavelengths range and beyond. Because of this absorption property, water bodies as well as features containing water can easily be detected, located and delineated with remote sensing data.</p>
+<p>These differences make it possible to identify different Earth surface features or materials by analysing their spectral reflectance patterns or spectral signatures. [add more text]</p>
+<p><em><strong>References</strong></em></p>
+<p>Fischer, W. A., W.R. Hemphill and A. Kover. 1976. Progress in Remote Sensing. <em>Photogrametria</em>, Vol. 32, pp. 33-72</p>
+<p>Lintz, J. and D. S. Simonett. 1976. <em>Remote Sensing of Environment</em>. Reading, MA: Addison-Wesley. 694 pp.</p>
+<p>Barrett, E. C. and C. F. Curtis. 1976. <em>Introduction to Environmental Remote Sensing</em>. New York: Macmillian, 472 pp.</p>
+<p>Colwell, R. N. 1966. Uses and Limitations of Multispectral Remote Sensing. In <em>Proceedings of the Fourth Symposium on Remote Sensing of Environment</em>. Ann Arbor: Institute of Science and Technology, University of Michigan, pp. 71-100.</p>
+</div>
+<div id="google-earth-engines-application-programming-interface-api-and-java-script" class="section level3 hasAnchor" number="1.1.2">
+<h3><span class="header-section-number">1.1.2</span> Google Earth Engine’s Application Programming Interface (API) and Java Script<a href="part-1---basics-fundamentals.html#google-earth-engines-application-programming-interface-api-and-java-script" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Google Earth Engine is a cloud-based platform for scientific data analysis and remote sensing data processing. It provides a large catalog of ready-to-use, cloud-hosted datasets. One of Earth Engine’s key features is the ability to handle computationally demading processing and analysis very fast by distributing them across a large number of servers. The ability to efficiently use the cloud-hosted datasets and computation is enabled by the Earth Engine API.</p>
+<p>An API is a way to communicate with Google Earth Engine servers. It allows you to specify what computation or command you would like to do, and then to receive the results back from the servers. The API is designed so that users do not need to worry about how the computation is distributed across a cluster of machines and the results are assembled. Users of the API simply specify what needs to be done. This greatly simplifies the code by hiding the implementation detail from the users. It also makes Earth Engine simpler for users who are not too familiar with writing code.</p>
+<p><strong>JavaScript API and Introduction to the Code Editor</strong></p>
+<p>The Earth Engine platform comes with a web-based Code Editor that allows you to start using the Earth Engine JavaScript API without any installation. It also provides additional functionality to display your results on a map, save your scripts, access documentation, manage tasks, and more. It has a one-click mechanism to share your code with other users—allowing for easy reproducibility and collaboration. In addition, the JavaScript API comes with a user interface library, which allows you to create charts and web-based applications with little effort.</p>
+<p>The Code Editor is an integrated development environment for the Earth Engine JavaScript API. It offers an easy way to type, debug, run, and manage code. Once you have successfully registered for a Google Earth Engine account, you can visit <a href="https://code.earthengine.google.com/" class="uri">https://code.earthengine.google.com/</a> to open the Code Editor. When you first visit the Code Editor, you will see a screen such as the one shown below:</p>
+<div class="figure"><span style="display:block;" id="fig:CodeEditor"></span>
+<img src="images/PartI-CodeEditor.PNG" alt="Earth Engine Code Editor"  />
+<p class="caption">
+Figure 1.5: Earth Engine Code Editor
+</p>
+</div>
+<p>The Code Editor allows you to type JavaScript code and execute it. When you are first learning a new language and getting used to a new programming environment, it is customary to make a program to display your name or the words “Hello World.” This is a fun way to start coding that shows you how to give input to the program and how to execute it. It also shows where the program displays the output. Doing this in JavaScript is quite simple. Copy the following code into the center panel:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="part-1---basics-fundamentals.html#cb1-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&#39;Hello World&#39;</span>);</span></code></pre></div>
+<p>The line of code above uses the JavaScript <code>print()</code> function to print the text “Hello World” to the screen. Once you enter the code, click the <strong>Run</strong> button. The output will be displayed on the upper right-hand panel under the <strong>Console</strong> tab:</p>
+<div class="figure"><span style="display:block;" id="fig:PrintRun"></span>
+<img src="images/PartI-PrintRun.PNG" alt="Running code with GEE"  />
+<p class="caption">
+Figure 1.6: Running code with GEE
+</p>
+</div>
+<p>You now know where to type your code, how to run it, and where to look for the output. You just wrote your first Earth Engine script and may want to save it. Click the <strong>Save</strong> button to save a script:</p>
+<div class="figure"><span style="display:block;" id="fig:Save"></span>
+<img src="images/PartI-Save.png" alt="Saving a script"  />
+<p class="caption">
+Figure 1.7: Saving a script
+</p>
+</div>
+<p>If this is your first time using the Code Editor, you will be prompted to create a home folder. This is a folder in the cloud where all your code will be saved:</p>
+<div class="figure"><span style="display:block;" id="fig:SaveII"></span>
+<img src="images/PartI-SaveII.png" alt="Your first home folder"  />
+<p class="caption">
+Figure 1.8: Your first home folder
+</p>
+</div>
+<div class="caution">
+<p>
+You can pick a name of your choice, but remember that <strong>it
+cannot be changed and will permanently be associated with your
+account</strong>.
+</p>
+</div>
+<p>Once youre home folder is created, you will be prompted to create a <em>new repository</em>. A repository is a like a folder where you can save your scripts. You can also share entire repositories with other users. Your account can have multiple repositories and each one can hold multiple code scripts. Start by creating a repository:</p>
+<div class="figure"><span style="display:block;" id="fig:Repository"></span>
+<img src="images/PartI-Repository.png" alt="Your first repository"  />
+<p class="caption">
+Figure 1.9: Your first repository
+</p>
+</div>
+<p>Finally, you will be able to save your script inside the newly created repository. Enter a name of your choice and click <strong>OK</strong>:</p>
+<div class="caution">
+<p>
+Spaces are not allowed when naming scripts!
+</p>
+</div>
+<div class="figure"><span style="display:block;" id="fig:SaveIII"></span>
+<img src="images/PartI-SaveIII.png" alt="Saving a script file"  />
+<p class="caption">
+Figure 1.10: Saving a script file
+</p>
+</div>
+<p>Once the script is saved, it will appear in the script manager panel. The scripts are saved in the cloud and will always be available to you when you open the Code Editor.</p>
+<div class="figure"><span style="display:block;" id="fig:Saved"></span>
+<img src="images/PartI-Saved.png" alt="Your first script in your repository"  />
+<p class="caption">
+Figure 1.11: Your first script in your repository
+</p>
+</div>
+<p><strong>JavaScript Basics: Data types</strong></p>
+<p>Javascript is the language you will use to construct and set up your commands and analysis. This section covers the basics of the Java Script sintax and some basic data structures. In the following sections, more JavaScript code will be presented. Throughout this document, code will be presented with a distinct colored font and with shaded background. As you encounter code, copy and paste it into the Code Editor and click <strong>Run</strong>.</p>
+<p><em><strong><em>A) Variables</em></strong></em></p>
+<p>In a programming language, variables are used to store data values. In JavaScript, a variable is defined using the <code>var</code> keyword followed by the name of the variable. For instance, create a <code>var</code> named <code>city</code> that contain the text string <code>'Monrovia'</code>. Text strings in the code must be always in quotes. Google Earth Engine allows you to use single <code>'</code> or double <code>"</code> quotes, as long as they match in the beginning and end of the text string. We also usually end each statement on scripts with a semicolon <code>;</code>, although Earth Engine’s code editor does not require it. A ‘i’ will be shown in the line of the code where a semicolon is missing:</p>
+<div class="figure"><span style="display:block;" id="fig:Semicolon"></span>
+<img src="images/PartI-Semicolon.png" alt="Even though they are not a requirement, Google Earth Engine indicates that a semicolon is missing in the statement. You can hover the mouse cursor over the icon to reveal its meaning."  />
+<p class="caption">
+Figure 1.12: Even though they are not a requirement, Google Earth Engine indicates that a semicolon is missing in the statement. You can hover the mouse cursor over the icon to reveal its meaning.
+</p>
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="part-1---basics-fundamentals.html#cb2-1" tabindex="-1"></a>var city <span class="ot">=</span> <span class="st">&#39;Monrovia&#39;</span>;</span></code></pre></div>
+<p>If you <code>print</code> the variable <code>city</code>, you will get the string stored in the variable (Monrovia) printed in the <strong>Console</strong>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="part-1---basics-fundamentals.html#cb3-1" tabindex="-1"></a><span class="fu">print</span>(city);</span></code></pre></div>
+<p>When you use quotations, the variable is automatically assigned the type <em>string</em>. You can also assign numbers to variables. For example, create the variables <code>population</code> and <code>area</code> and assing a number as their value. When assigning numbers, you do not use commas <code>,</code> for thousand separators. You do, however, use <code>.</code> for decimals:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="part-1---basics-fundamentals.html#cb4-1" tabindex="-1"></a>var population <span class="ot">=</span> <span class="dv">939524</span>;</span>
+<span id="cb4-2"><a href="part-1---basics-fundamentals.html#cb4-2" tabindex="-1"></a>var area <span class="ot">=</span> <span class="fl">194.25</span>;</span></code></pre></div>
+<p>Print those variables to the <strong>Console</strong>. You can also add text to describe the variables printed in the <strong>Console</strong>. Simply add a text string within the <code>print</code> function along with the variable being printed separated with <code>,</code>. Use the code below as example:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="part-1---basics-fundamentals.html#cb5-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&#39;Number of people in Monrovia:&#39;</span>, population);</span>
+<span id="cb5-2"><a href="part-1---basics-fundamentals.html#cb5-2" tabindex="-1"></a><span class="fu">print</span>(area, <span class="st">&#39;km squared&#39;</span>);</span></code></pre></div>
+<p><em><strong><em>B) Lists</em></strong></em></p>
+<p>In the previous examples, we created variables holding a single value (text or number). JavaScript provides a data structure called a <em>list</em> that can be used When you want to store multiple values in a single variable. You can create lists using square brackets <code>[]</code> and adding multiple values separated by <code>,</code>. Create a variable called <code>listofcities</code>, add values to it and print it to the <strong>Console</strong>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="part-1---basics-fundamentals.html#cb6-1" tabindex="-1"></a>var listofcities <span class="ot">=</span> [<span class="st">&#39;Monrovia&#39;</span>, <span class="st">&#39;Gbarnga&#39;</span>,<span class="st">&#39;Kakata&#39;</span>, <span class="st">&#39;Bensonville&#39;</span>];</span>
+<span id="cb6-2"><a href="part-1---basics-fundamentals.html#cb6-2" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&#39;Largest cities in Liberia&#39;</span>, listofcities);</span></code></pre></div>
+<p>Looking at the output in the <strong>Console</strong>, you will see <code>listofcities</code> with an expander arrow (▹) next to it. Expand the list by clicking on the arrow to show its content. You will notice that along with the items on the list, there will be a number next to each value you added. <strong>This is the index of each item</strong>. It allows you to refer to each item in the list using a numeric value that indicates its position in the list. This is useful when you want to extract a particular item from a list object.</p>
+<div class="figure"><span style="display:block;" id="fig:List"></span>
+<img src="images/PartI-List.png" alt="A JavaScript List."  />
+<p class="caption">
+Figure 1.13: A JavaScript List.
+</p>
+</div>
+<p><em><strong><em>C) Objects and Dictionaries</em></strong></em></p>
+<p>While useful to hold multiple values, <em>lists</em> are not appropriate to hold more structured data. JavaScript allows you to store ‘key-value’ information in <em>objects</em> or <em>dictionaries</em>. In this type of data structure, you can refer to a value by its key rather than its position - like in <em>lists</em>. You can create objects using curly braces <code>{}</code>. Use the code below as an example of an object:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="part-1---basics-fundamentals.html#cb7-1" tabindex="-1"></a>var cityData <span class="ot">=</span> {<span class="st">&#39;city&#39;</span><span class="sc">:</span> <span class="st">&#39;Monrovia&#39;</span>, <span class="st">&#39;population&#39;</span><span class="sc">:</span> <span class="dv">939524</span>, <span class="st">&#39;area&#39;</span><span class="sc">:</span> <span class="fl">194.25</span>, <span class="st">&#39;coordinates&#39;</span><span class="sc">:</span> [<span class="sc">-</span><span class="fl">10.790</span>, <span class="fl">6.315</span>]};</span></code></pre></div>
+<p>There are a few important things about the syntax of the code above: As objects tend to hold several keys and values, it can be difficult to read the code if it is written on a continuous string. To improve readability you can use multiple lines instead:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="part-1---basics-fundamentals.html#cb8-1" tabindex="-1"></a>var cityData <span class="ot">=</span> {</span>
+<span id="cb8-2"><a href="part-1---basics-fundamentals.html#cb8-2" tabindex="-1"></a>  <span class="st">&#39;city&#39;</span><span class="sc">:</span> <span class="st">&#39;Monrovia&#39;</span>,</span>
+<span id="cb8-3"><a href="part-1---basics-fundamentals.html#cb8-3" tabindex="-1"></a>  <span class="st">&#39;population&#39;</span><span class="sc">:</span> <span class="dv">939524</span>,</span>
+<span id="cb8-4"><a href="part-1---basics-fundamentals.html#cb8-4" tabindex="-1"></a>  <span class="st">&#39;area&#39;</span><span class="sc">:</span> <span class="fl">194.25</span>,</span>
+<span id="cb8-5"><a href="part-1---basics-fundamentals.html#cb8-5" tabindex="-1"></a>  <span class="st">&#39;coordinates&#39;</span><span class="sc">:</span> [<span class="sc">-</span><span class="fl">10.790</span>, <span class="fl">6.315</span>]</span>
+<span id="cb8-6"><a href="part-1---basics-fundamentals.html#cb8-6" tabindex="-1"></a>};</span></code></pre></div>
+<p>Note how each key-value pair is on a different line. It is much easier to organize your key-value information this way. Additionally, the code can be more easily read.
+Second, note that the object above can holds multiple types of types of values (string and numbers) and structure (list)!</p>
+<p>If you print <code>cityData</code> to the <strong>Console</strong>, you can see that instead of a numeric index, each value will be identified by its <em>key</em>.</p>
+<div class="figure"><span style="display:block;" id="fig:Dictionary"></span>
+<img src="images/PartI-Dictionary.png" alt="A JavaScript Object."  />
+<p class="caption">
+Figure 1.14: A JavaScript Object.
+</p>
+</div>
+<p>This key can also be used to retrieve the value of an item within an object or dictionary. If you want to retrieve a particular key from a dictionary, simply use <code>['key']</code>. For example, if you want to retrieve the population value from this object and print it individually to the <strong>Console</strong>, you can use a code like this:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="part-1---basics-fundamentals.html#cb9-1" tabindex="-1"></a><span class="fu">print</span>(cityData[<span class="st">&#39;population&#39;</span>]);</span></code></pre></div>
+<p>The same logic can be applied to <em>lists</em>. Always remember that lists have numeric index. Therefore, when retrieving itens from a list, use the number of its position on the list:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="part-1---basics-fundamentals.html#cb10-1" tabindex="-1"></a><span class="fu">print</span>(listofcities[<span class="st">&#39;2&#39;</span>]);</span></code></pre></div>
+<p><em><strong><em>D) Functions</em></strong></em></p>
+<p>Functions are often used to group a set of operations and used to repeat the same operation with different set of parameters without having to rewrite the code for every iteration. In other words, you can call a function with different parameters to generate different outputs without changing the code.
+Functions are defined using <code>function()</code>. They often take parameters which tell the function what to do. These parameters go inside the parentheses <code>()</code>.
+Below is an example of a function named <code>SumFunction</code> to calculate the sum of two numbers: <code>fistValue</code> and <code>secondValue</code>. The var <code>sum</code> adds those two parameters and <code>return</code> is used to generate the output of that operation</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="part-1---basics-fundamentals.html#cb11-1" tabindex="-1"></a><span class="cf">function</span> <span class="fu">SumFunction</span> (firstValue, secondValue) {</span>
+<span id="cb11-2"><a href="part-1---basics-fundamentals.html#cb11-2" tabindex="-1"></a>  var sum <span class="ot">=</span> firstValue <span class="sc">+</span> secondValue;</span>
+<span id="cb11-3"><a href="part-1---basics-fundamentals.html#cb11-3" tabindex="-1"></a>  return sum;</span>
+<span id="cb11-4"><a href="part-1---basics-fundamentals.html#cb11-4" tabindex="-1"></a>}</span></code></pre></div>
+<p>Note that if you run the code above, nothing happens. This is just a function and it needs to be given the parameters. For example, if you need to add 37 to 584 using this function and print the result into the <strong>Console</strong>, you can use the code below:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="part-1---basics-fundamentals.html#cb12-1" tabindex="-1"></a>var result <span class="ot">=</span> <span class="fu">SumFunction</span>(<span class="dv">37</span>,<span class="dv">584</span>);</span>
+<span id="cb12-2"><a href="part-1---basics-fundamentals.html#cb12-2" tabindex="-1"></a><span class="fu">print</span>(result);</span></code></pre></div>
+<p>When you call <code>SumFunction</code>, it will always perform the operation <code>sum</code> with watever two parameters you define in <code>()</code>.
+As mentioned, you can perform several operations at once using functions. For example, you can add other operations in the function above and return
+a list or a dictionary with the results:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="part-1---basics-fundamentals.html#cb13-1" tabindex="-1"></a><span class="cf">function</span> <span class="fu">MathFunction</span> (firstValue, secondValue) {</span>
+<span id="cb13-2"><a href="part-1---basics-fundamentals.html#cb13-2" tabindex="-1"></a>  var sum <span class="ot">=</span> firstValue <span class="sc">+</span> secondValue;</span>
+<span id="cb13-3"><a href="part-1---basics-fundamentals.html#cb13-3" tabindex="-1"></a>  var sub <span class="ot">=</span> firstValue <span class="sc">-</span> secondValue;</span>
+<span id="cb13-4"><a href="part-1---basics-fundamentals.html#cb13-4" tabindex="-1"></a>  var fraction <span class="ot">=</span> firstValue <span class="sc">/</span> secondValue;</span>
+<span id="cb13-5"><a href="part-1---basics-fundamentals.html#cb13-5" tabindex="-1"></a>  return {<span class="st">&#39;Result Sum&#39;</span><span class="sc">:</span>sum, <span class="st">&#39;Result Substraction&#39;</span><span class="sc">:</span>sub, <span class="st">&#39;Result Division&#39;</span><span class="sc">:</span> fraction};</span>
+<span id="cb13-6"><a href="part-1---basics-fundamentals.html#cb13-6" tabindex="-1"></a>}</span></code></pre></div>
+<p>Using <code>MathFunction</code> with a pair of parameters (<code>firstValue</code> and <code>SecondValue</code>) will return an object with the results of each operation:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="part-1---basics-fundamentals.html#cb14-1" tabindex="-1"></a>var results <span class="ot">=</span> <span class="fu">MathFunction</span>(<span class="dv">500</span>,<span class="dv">5</span>);</span>
+<span id="cb14-2"><a href="part-1---basics-fundamentals.html#cb14-2" tabindex="-1"></a><span class="fu">print</span>(results);</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:Results"></span>
+<img src="images/PartI-Results.png" alt="Printed results of MathFunction."  />
+<p class="caption">
+Figure 1.15: Printed results of MathFunction.
+</p>
+</div>
+<p><strong>Earth Engine Containers and Objects</strong></p>
+<p>So far, you learned the different data structure/types you can use within Google Earth Engine. However, if you want to do any computation with the data stored in these different types of structure, you will have to use an Earth Engine container. The <code>ee</code> package is used for formulating requests to Earth Engine. In other words, <code>ee</code> (prefix for Earth Engine) allows you to request Earth Engine servers to perform a certain computation to an variable or object. Each <code>ee</code> object has many different <em>methods</em>. You can think of <em>methods</em> as the many different things and computations that can be done for an specific object. In the Code Editor, you can switch to the <strong>Docs</strong> tab to see the API functions grouped by object types.</p>
+<div class="figure"><span style="display:block;" id="fig:Docs"></span>
+<img src="images/PartI-DocsTab.png" alt="List of available objects in the Docs tab of GEE API."  />
+<p class="caption">
+Figure 1.16: List of available objects in the Docs tab of GEE API.
+</p>
+</div>
+<p>Below are some examples to ilustrate the concept behind an Earth Engine object:</p>
+<p><em><strong>A) Strings</strong></em></p>
+<p>You can put strings into a <code>ee.String</code> object to be sent to Earth Engine. Using an object/container allows you to do manipulate them in many different ways. For example, <code>ee.String</code> has the:
+* <code>toLowerCase()</code> method. This method will convert any string in a <code>ee.String</code> object to lower case;
+* <code>length()</code> method. This method will count the characters in your string;
+* <code>cat()</code> method. This method will concatenate two strings into one;
+* and many others! Make sure to check the <strong>Docs</strong> tab for all the available methods for a given object.</p>
+<p>The code below uses some of the methods of <code>ee.String</code> as an example:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="part-1---basics-fundamentals.html#cb15-1" tabindex="-1"></a>var string <span class="ot">=</span> <span class="fu">ee.String</span>(<span class="st">&#39;HELLO EVERYONE, &#39;</span>);</span>
+<span id="cb15-2"><a href="part-1---basics-fundamentals.html#cb15-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">string.toLowerCase</span>());</span>
+<span id="cb15-3"><a href="part-1---basics-fundamentals.html#cb15-3" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">string.length</span>());</span>
+<span id="cb15-4"><a href="part-1---basics-fundamentals.html#cb15-4" tabindex="-1"></a>var string2 <span class="ot">=</span> <span class="fu">ee.String</span>(<span class="st">&#39;nice to meet you&#39;</span>);</span>
+<span id="cb15-5"><a href="part-1---basics-fundamentals.html#cb15-5" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">string.cat</span>(string2));</span></code></pre></div>
+<p>In your console tab you will see that the ‘HELLO EVERYONE,’ string is now all in lower case. You will also see that <code>.length()</code> returned 16 as the number of characters for that string.</p>
+<p>Consider the code below:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="part-1---basics-fundamentals.html#cb16-1" tabindex="-1"></a>var string <span class="ot">=</span> <span class="st">&#39;HELLO EVERYONE&#39;</span>;</span>
+<span id="cb16-2"><a href="part-1---basics-fundamentals.html#cb16-2" tabindex="-1"></a>var string2 <span class="ot">=</span> <span class="st">&#39;nice to meet you&#39;</span>;</span>
+<span id="cb16-3"><a href="part-1---basics-fundamentals.html#cb16-3" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">string.cat</span>(string2));</span></code></pre></div>
+<p>If you try to use a method on a non <code>ee</code> object, you will get an error.</p>
+<div class="figure"><span style="display:block;" id="fig:Error"></span>
+<img src="images/PartI-Error.png" alt="Trying to use a method on non-ee.Object will return an error"  />
+<p class="caption">
+Figure 1.17: Trying to use a method on non-ee.Object will return an error
+</p>
+</div>
+<p><em><strong>B) Numbers</strong></em></p>
+<p><code>ee.Number</code> is just another example of an object from that list. Similarly to <code>ee.String</code>, it will have many methods to be used with. For example, <code>.add()</code>, <code>.subtract()</code>, <code>.divide()</code> and <code>.multiply ()</code> will perform these operations on <code>ee.Number</code> objects. Make sure to consult the <strong>Docs</strong> tab for all the different methods for each object.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="part-1---basics-fundamentals.html#cb17-1" tabindex="-1"></a>var value1 <span class="ot">=</span> <span class="fu">ee.Number</span>(<span class="dv">100</span>);</span>
+<span id="cb17-2"><a href="part-1---basics-fundamentals.html#cb17-2" tabindex="-1"></a>var value2 <span class="ot">=</span> <span class="fu">ee.Number</span>(<span class="dv">2</span>);</span>
+<span id="cb17-3"><a href="part-1---basics-fundamentals.html#cb17-3" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">value1.add</span>(value2));</span>
+<span id="cb17-4"><a href="part-1---basics-fundamentals.html#cb17-4" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">value1.subtract</span>(value2));</span>
+<span id="cb17-5"><a href="part-1---basics-fundamentals.html#cb17-5" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">value1.divide</span>(value2));</span>
+<span id="cb17-6"><a href="part-1---basics-fundamentals.html#cb17-6" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">value1.multiply</span>(value2));</span>
+<span id="cb17-7"><a href="part-1---basics-fundamentals.html#cb17-7" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">value1.log10</span>());</span></code></pre></div>
+<p><em><strong>B) Lists</strong></em></p>
+<p>You can also make a JavaScript list into an <code>ee.List</code> on Earth Engine server by simply casting your list into the container. There are many other useful methods to use when you have an <code>ee.List</code>. For instance, instead of making a JavaScript list by typing each value, you can use <code>ee.List.sequence()</code> to construct a list. This method will take many arguments, such as the value of the start of the list, the value at the end of the list, steps (increment) and count. Consider the examples below:</p>
+<ul>
+<li>Making a list with numbers from 0 to 10:</li>
+</ul>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="part-1---basics-fundamentals.html#cb18-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&#39;List 1&#39;</span>, <span class="fu">ee.List.sequence</span>(<span class="dv">0</span>,<span class="dv">10</span>))</span></code></pre></div>
+<ul>
+<li>Making a list from 0 to 10 with increments of 2:</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="part-1---basics-fundamentals.html#cb19-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&#39;List 2&#39;</span>, <span class="fu">ee.List.sequence</span>(<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">2</span>))</span></code></pre></div>
+<div class="rmdcomment">
+<p>
+<strong>Remember</strong>: A <code>var string = ‘text’</code> is a
+JavaScript string that does not allow computations. A
+<code>var string = ee.String(‘text’)</code> is an Earth Engine object
+that allows computations!
+</p>
+</div>
+</div>
+<div id="exploring-image-and-image-collection" class="section level3 hasAnchor" number="1.1.3">
+<h3><span class="header-section-number">1.1.3</span> Exploring Image and Image Collection<a href="part-1---basics-fundamentals.html#exploring-image-and-image-collection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Now that you learned the basics of JavaScript and Earth Engine objects, you have the tools at your disposal to start using the Earth Engine API to build scripts for remote sensing analysis. In this section, we explore satellite imagery, which are one of GEE’s core capabilities!</p>
+<p><em><strong>A) Single band image</strong></em></p>
+<p>The first thing you need to know is that when working with images in Earth Engine, you will have to use an <code>ee.Image()</code> container. The argument provided to the constructor is the string ID of an image in the Earth Engine data catalog. (Remember to always see the <strong>Docs</strong> tab for a full list of arguments to this container). To retrieve an image ID, you can search in the Earth Engine catalog using the search tool at the top of the Code Editor:</p>
+<div class="figure"><span style="display:block;" id="fig:Search"></span>
+<img src="images/PartI-Search.png" alt="You can browse through Earth Engine's data catalog with the search tool"  />
+<p class="caption">
+Figure 1.18: You can browse through Earth Engine’s data catalog with the search tool
+</p>
+</div>
+<p>For example, try typing ‘elevation’ into the search field and note that a list of rasters is returned:</p>
+<div class="figure"><span style="display:block;" id="fig:SearchII"></span>
+<img src="images/PartI-SearchII.png" alt="Typing in the search field. Google Earth Engine will show all datasets available with that criteria."  />
+<p class="caption">
+Figure 1.19: Typing in the search field. Google Earth Engine will show all datasets available with that criteria.
+</p>
+</div>
+<p>Click in any of the dataset entries to see more information about that dataset. From the list above, explore the dataset ‘SRTM Digital Elevation Data Version 4’. You can also find more information about this dataset on the tabs on the top right side of the dataset description screen. On the left side of the dataset description screen, you can find the Image ID, which is what we use with the <code>ee.Image()</code>. Alternatively, you can use the <strong>Import</strong> button on the dataset description. Using the <strong>Import</strong> button, a variable is automatically created in a special section, named ‘Imports’, at the top of your script. You can rename the variable by clicking on its name in the imports section.</p>
+<div class="figure"><span style="display:block;" id="fig:DataInfo"></span>
+<img src="images/PartI-DataInfo.png" alt="Data description"  />
+<p class="caption">
+Figure 1.20: Data description
+</p>
+</div>
+<p>Copy the image ID from the screen above and add it to a <code>var</code> elevationImage with the <code>ee.Image()</code> container as shown below:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="part-1---basics-fundamentals.html#cb20-1" tabindex="-1"></a>var elevationImage <span class="ot">=</span> <span class="fu">ee.Image</span>(<span class="st">&#39;CGIAR/SRTM90_V4&#39;</span>);</span></code></pre></div>
+<p>You can also retrieve the metadata about this image by using <code>print()</code>. In the <strong>Console</strong>, click the expander arrows to show the information. You will discover that the SRTM image has one band called ‘elevation’.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="part-1---basics-fundamentals.html#cb21-1" tabindex="-1"></a><span class="fu">print</span>(elevationImage);</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:ImageInfo"></span>
+<img src="images/PartI-ImageInfo.png" alt="Image description using `print()`"  />
+<p class="caption">
+Figure 1.21: Image description using <code>print()</code>
+</p>
+</div>
+<p>To display the image in the Map Editor, use the <code>Map</code> object’s <code>.addLayer()</code> method. When you add an image to a map using <code>Map.addLayer()</code>, Earth Engine needs to determine how to map the values in the image band(s) to colors on the display. If a single-band image is added to a map - which is our case- by default Earth Engine displays the band in grayscale, where the minimum value is assigned to black, and the maximum value is assigned to white. If you don’t specify what the minimum and maximum should be, Earth Engine will use default values.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="part-1---basics-fundamentals.html#cb22-1" tabindex="-1"></a><span class="fu">Map.addLayer</span>(elevationImage);</span></code></pre></div>
+<p><em>Do not worry! You can make it look better with custom visualization parameters!</em></p>
+<p>To change the way the data are stretched, you can provide another parameter to the <code>Map.addLayer()</code> call. Specifically, the second parameter, <code>visParams</code>, lets you specify the minimum and maximum values to display. One way of gauging the range of values of an image is by activating the <strong>Inspector</strong> tab and click around on the map. You will be able to see the value of that band for this dataset at that particular location:</p>
+<div class="figure"><span style="display:block;" id="fig:Inspector"></span>
+<img src="images/PartI-Inspector.png" alt="Inspector tab. Click in the image and the inspector tab will display the data for that point"  />
+<p class="caption">
+Figure 1.22: Inspector tab. Click in the image and the inspector tab will display the data for that point
+</p>
+</div>
+<p>Click around the area of Liberia to have a sense of the range of values for this dataset. Suppose that, through further investigation, you determine that the best range of values to display elevation data in Liberia is [0,1000]. To display the data using this range, you can use a dictionary containing two keys: <code>min</code> and <code>max</code> and their respective values <code>0</code> and <code>1000</code>. A third parameter for <code>Map.addLayer()</code> is the name of the layer that is displayed in the Layer manager. Thus your code should be looking like the one below:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="part-1---basics-fundamentals.html#cb23-1" tabindex="-1"></a><span class="fu">Map.addLayer</span>(elevationImage, {min<span class="sc">:</span><span class="dv">0</span>, max<span class="sc">:</span><span class="dv">1000</span>}, <span class="st">&#39;Custom Visualization&#39;</span>);</span></code></pre></div>
+<p>Run the code and you will see something like:</p>
+<div class="figure"><span style="display:block;" id="fig:ImageVis"></span>
+<img src="images/PartI-VisLayer.png" alt="Custom Visualization for the SRTM data based on range of values."  />
+<p class="caption">
+Figure 1.23: Custom Visualization for the SRTM data based on range of values.
+</p>
+</div>
+<p>You can further improve your image display by using a color palette. Palettes let you set the color scheme for single-band images. A palette is a comma delimited <em>list</em> of color strings which are linearly interpolated between the maximum and minimum values in the visualization parameters.</p>
+<p>To display this elevation band using a color palette, add a <code>palette</code> property to the <code>visParams</code> dictionary:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="part-1---basics-fundamentals.html#cb24-1" tabindex="-1"></a><span class="fu">Map.addLayer</span>(elevationImage, {min<span class="sc">:</span><span class="dv">0</span>, max<span class="sc">:</span><span class="dv">1000</span>,palette<span class="sc">:</span> [<span class="st">&#39;green&#39;</span>, <span class="st">&#39;yellow&#39;</span>, <span class="st">&#39;red&#39;</span>]}, <span class="st">&#39;Custom Visualization - Color&#39;</span>);</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:ImageVisColor"></span>
+<img src="images/PartI-VisLayerColor.png" alt="Custom Visualization for the SRTM data based on range of values and color palette."  />
+<p class="caption">
+Figure 1.24: Custom Visualization for the SRTM data based on range of values and color palette.
+</p>
+</div>
+<p>In the next section, you’ll learn how to display multi-band imagery.</p>
+<p><em><strong>B) Multi band image</strong></em></p>
+<p>To ilustrate the concepts and codes in this section, we will use a Landsat 8 image from April 2022 over Cairo, Egypt. Landsat is a set of multispectral satellites developed by the NASA (National Aeronautics and Space Administration of USA), since the early 1970’s. Landsat images are very used for environmental research. These images have from 8 to 11 spectral bands (spectral resolution), with pixels of 30x30 meters (spatial resolution) and with a revisit time of 16 days (temporal resolution).</p>
+<p>Copy and paste the code below into the Code Editor:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="part-1---basics-fundamentals.html#cb25-1" tabindex="-1"></a>var ImageL8 <span class="ot">=</span> <span class="fu">ee.Image</span>(<span class="st">&#39;LANDSAT/LC08/C02/T1_L2/LC08_176039_20220406&#39;</span>);</span></code></pre></div>
+<p>As learned before, the code above is casting a Landsat 8 image into an <code>ee.Image</code> container using its ID into a <code>var</code> called ‘ImageL8’. By clicking <strong>Run</strong>, Earth Engine will retrieve this image from its Landsat image catalog. You will not yet see any output.</p>
+<p>As you learned, you can retrieve additional information about this image by using <code>print()</code>.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="part-1---basics-fundamentals.html#cb26-1" tabindex="-1"></a><span class="fu">print</span>(ImageL8)</span></code></pre></div>
+<p>In the Console panel, you may need to click the expander arrows to show the information. You should be able to read that this image consists of 19 different bands (index 0 to 18). Each band will have 4 properties: <em>name</em>, <em>data type</em> (as in if the value is an integer, float, ect.), <em>projection</em> and <em>dimensions</em> (in rows and columns of pixels). For this example, simply note the first property of the first band:</p>
+<div class="figure"><span style="display:block;" id="fig:L8Image"></span>
+<img src="images/PartI-L8Image.png" alt="Landsat 8 image metadata."  />
+<p class="caption">
+Figure 1.25: Landsat 8 image metadata.
+</p>
+</div>
+<p>A satellite sensor like Landsat 8 measures the EMR in different portions of the electromagnetic spectrum. Six out of seven first bands in our image (“SR_B2” through “SR_B7”) contain measurements for six different portions of the spectrum:</p>
+<div class="figure"><span style="display:block;" id="fig:L8bands"></span>
+<img src="images/PartI-L8Bands.png" alt="Landsat 8 bands. Source: https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites"  />
+<p class="caption">
+Figure 1.26: Landsat 8 bands. Source: <a href="https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites" class="uri">https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites</a>
+</p>
+</div>
+<p>Now, let’s visualize <code>ImageL8</code>. First, make sure your map is somewhere near Cairo, Egypt. To do this, click and drag the map towards Cairo, Egypt. (You can also jump there by typing “Cairo” into the <strong>Search panel</strong> at the top of the Code Editor). Add <code>ImageL8</code> to the Map as a <em>layer</em> using the code below:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="part-1---basics-fundamentals.html#cb27-1" tabindex="-1"></a><span class="fu">Map.addLayer</span>(ImageL8);</span></code></pre></div>
+<p>You probably see a gray image with not a lot of details. From the previous section you learned that <code>Map.addLayer</code> take many parameters. One of them is the <code>visParams</code>, which lets you specify the minimum and maximum values to display. Similarly to the previous section, you can use the <strong>Inspector</strong> tab to investigate the range of values for each location for each of <code>ImageL8</code>’s band. Now, specify a range of values to be displayed. Follow the code example below:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="part-1---basics-fundamentals.html#cb28-1" tabindex="-1"></a><span class="fu">Map.addLayer</span>(ImageL8, {min<span class="sc">:</span><span class="dv">8000</span>, max<span class="sc">:</span><span class="dv">20000</span>}, <span class="st">&#39;My First Image&#39;</span>);</span></code></pre></div>
+<p>You should see something like this:</p>
+<div class="figure"><span style="display:block;" id="fig:L8FalseColor"></span>
+<img src="images/PartI-L8FalseColor.png" alt="Landsat 8 image in false color ."  />
+<p class="caption">
+Figure 1.27: Landsat 8 image in false color .
+</p>
+</div>
+<p>By default, if you do not specify the bands to be displayed within the <code>visParams</code>, Earth Engine will display the first three bands, each band on each RGB (red, green, blue) channel of your monitor screen. In other words, Earth Engine is displaying ‘SR_B1’ (Landsat 8’s coastal aerosol band) in the red channel, ‘SR_B2’ (Landsat 8’s blue band) in the green channel and ’SR_B3 (Landsat 8’s green band). This is a case of a <em>false color</em> display, when spectral bands do not match the RGB channels in your screen. <em>False color</em> displays have many advantages and they will be explored later in the tutorial.</p>
+<p>For a <em>real color</em> display, you will need to define the bands within <code>visParams</code> to match the RGB channels:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="part-1---basics-fundamentals.html#cb29-1" tabindex="-1"></a><span class="fu">Map.addLayer</span>(ImageL8, {bands<span class="sc">:</span> [<span class="st">&#39;SR_B4&#39;</span>, <span class="st">&#39;SR_B3&#39;</span>, <span class="st">&#39;SR_B2&#39;</span>], min<span class="sc">:</span><span class="dv">8000</span>, max<span class="sc">:</span><span class="dv">20000</span>}, <span class="st">&#39;Real color&#39;</span>);</span></code></pre></div>
+<p>In the code above, <code>visParams</code> contains a list (<code>bands</code>) with the names of the <code>ImageL8</code>’s bands to be displayed in the RGB channels of your screen. This band set up tells Earth Engine to display the red band in the red channel, the green band in the green channel and the blue band in blue channel. We call this composition a <em>RGB 432</em> or <em>Real color</em> composition. You should see an image like this when running the code above:</p>
+<div class="figure"><span style="display:block;" id="fig:L8RealColor"></span>
+<img src="images/PartI-L8Real.png" alt="Landsat 8 image displayed with a real color composition."  />
+<p class="caption">
+Figure 1.28: Landsat 8 image displayed with a real color composition.
+</p>
+</div>
+<p>You can easily change these values and settings within <code>visParams</code> by using the Layer setting option in the Map editor. You can find it by hovering your cursor over the Layer List (upper right corner of the Map editor, next to the <em>Map</em> and <em>Satellite</em> buttons) and clicking the <em>gear</em> icon of the layer:</p>
+<div class="figure"><span style="display:block;" id="fig:L8LayerSetting"></span>
+<img src="images/PartI-L8LayerSetting.png" alt="Layer settings window."  />
+<p class="caption">
+Figure 1.29: Layer settings window.
+</p>
+</div>
+<p>Once you chose your settings, click <strong>Apply</strong>. Earth Engine will automatically apply the new settings and display the layer. Try using different band combinations and range values to see how the image changes. Different color compositions will highlight different features in the image based on their spectral signatures!</p>
+<p><em><strong>C) Image collections</strong></em></p>
+<p>An image collection refers to a set of Earth Engine images. For example, the collection of all Landsat 8 images! In this case, you will use <code>ee.ImageCollection()</code> instead of <code>ee.Image()</code> to retrieve a particular image collection . Like the SRTM image or the Landsat image you have been working with, image collections also have an ID. Similarly to the single images, you can discover the ID of an image collection by searching the Earth Engine data catalog from the Code Editor.</p>
+<p>Start by loading the Landsat 8 image collection into a <code>var</code> called ’collection using the <code>ee.ImageCollection</code> container. Then try to print this collection to the <strong>Console</strong>:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="part-1---basics-fundamentals.html#cb30-1" tabindex="-1"></a>var collection <span class="ot">=</span> <span class="fu">ee.ImageCollection</span>(<span class="st">&#39;LANDSAT/LC08/C02/T1_L2&#39;</span>);</span>
+<span id="cb30-2"><a href="part-1---basics-fundamentals.html#cb30-2" tabindex="-1"></a><span class="fu">print</span>(collection);</span></code></pre></div>
+<p>You will notice that you will get an error when trying to print <code>collection</code> to the <strong>Console</strong>:</p>
+<div class="figure"><span style="display:block;" id="fig:L8Error"></span>
+<img src="images/PartI-ErrorCollection.png" alt="Trying to print an image collection without any filter."  />
+<p class="caption">
+Figure 1.30: Trying to print an image collection without any filter.
+</p>
+</div>
+<p>It’s worth noting that this collection represents every Landsat 8 scene collected, all over the Earth. Thus, Earth Engine is not able to print the information for every scene all over the globe since 2013 (when Landsat 8 started collecting data). In this case we need to filter this collection.
+Exploring the <strong>Docs</strong> tab of the Code Editor to learn more about <code>ee.ImageCollection</code>, you will notice the methods <code>filterBounds()</code> and <code>filterDate()</code>. These are shortcut methods on a bigger <code>filter()</code> method. In this case, <code>filterBounds()</code> filters a collection by intersection with geometry (or a location) while <code>filterDate()</code> filters a collection by a date range, expressed as strings.</p>
+<p><strong>Location Filter</strong>: To filter <code>collection</code> to images that cover a particular location, first define your area of interest with the geometry drawing tools. To create geometries, use the geometry drawing tools in the upper left corner of the map display.</p>
+<div class="figure"><span style="display:block;" id="fig:Tools"></span>
+<img src="images/PartI-GeometryTool.png" alt="The Geometry tools."  />
+<p class="caption">
+Figure 1.31: The Geometry tools.
+</p>
+</div>
+<p>For drawing points, use the place mark icon, for drawing lines, use the line icon, for drawing polygons, use the polygon icon, for drawing rectangles, use the rectangle icon. Using any of the drawing tools will automatically create a new geometry layer and add an import for that layer to the Imports section (top of the script). Once you finish drawing the geometry, click <strong>Exit</strong>. To rename the geometries that are imported to your script, click the settings icon next to it (or rename it directly in the Imports section).The geometry layer settings tool will be displayed in a dialog where you can change the geometry name.</p>
+<p>Use the point mark and create a point geometry named ‘aoi’ (area of interest) in a location of your interest. For this example, we will use a point mark location over Cairo, Egypt. Use the figure below as a guide: 1) Click on the point mark geometry; 2) Place it in your location of interest, and; 3) rename it ‘aoi’.</p>
+<div class="figure"><span style="display:block;" id="fig:point"></span>
+<img src="images/PartI-PointGeometry.png" alt="Creating a point geometry."  />
+<p class="caption">
+Figure 1.32: Creating a point geometry.
+</p>
+</div>
+<p><strong>Date filter</strong>: Now that you have a location, create two variables <code>startDate</code> and <code>endDate</code> containing a data range expressed as strings.
+Use a date range of your choice. Dates are expressed as ‘YYYY-MM-DD’ in Earth Engine. For this example, we will use the first four months of 2022:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="part-1---basics-fundamentals.html#cb31-1" tabindex="-1"></a>var startDate <span class="ot">=</span> <span class="st">&#39;2022-01-01&#39;</span>;</span>
+<span id="cb31-2"><a href="part-1---basics-fundamentals.html#cb31-2" tabindex="-1"></a>var endDate <span class="ot">=</span> <span class="st">&#39;2022-04-30&#39;</span>;</span></code></pre></div>
+<p>Now that you have both filters for location and date range, you are ready to filter your image collection using <code>filterBounds()</code> and <code>filterDates()</code>:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="part-1---basics-fundamentals.html#cb32-1" tabindex="-1"></a>var collectionFiltered <span class="ot">=</span> <span class="fu">collection.filterBounds</span>(aoi)<span class="fu">.filterDate</span>(startDate,endDate);</span>
+<span id="cb32-2"><a href="part-1---basics-fundamentals.html#cb32-2" tabindex="-1"></a><span class="fu">print</span>(collectionFiltered);</span></code></pre></div>
+<p>When printing <code>collectionFiltered</code> to the <strong>Console</strong> you will notice that now Earth Engine was able to retrieve the information of every Landsat scene based on your filters. Using the date range and the location filters from this example, there are the 13 images in the <code>collectionFiltered</code> for Cairo from January to April, 2022:</p>
+<div class="figure"><span style="display:block;" id="fig:Collection"></span>
+<img src="images/PartI-Collection.png" alt="Filtered collection."  />
+<p class="caption">
+Figure 1.33: Filtered collection.
+</p>
+</div>
+<p>If you want to retrieve a particular image from this collection you can simply use <code>ee.Image()</code> and the image ID printed in the <strong>Console</strong> tab!</p>
+</div>
+</div>
+<div id="image-and-image-collection-manipulation" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Image and Image Collection Manipulation<a href="part-1---basics-fundamentals.html#image-and-image-collection-manipulation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Now that you know how to load and display an image, it’s time to apply a computation to it. In the following sections you will learn some examples of computations for a single-band image and multi-band image (band math and vegetation index calculation) and for an image collection.</p>
+<div id="image-math" class="section level3 hasAnchor" number="1.2.1">
+<h3><span class="header-section-number">1.2.1</span> Image Math<a href="part-1---basics-fundamentals.html#image-math" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Single-band image</strong></li>
+</ul>
+<p>Considering our previous example, we will use the SRTM single-band image <code>elevationImage</code> and create a ‘slope’ image. Briefly, you calculate the slope by dividing the difference between the elevations of two points by the distance between them, then multiply the quotient by 100. The difference in elevation between points is called the rise. The distance between the points is called the run. Thus, percent slope equals (rise / run) x 100. Intuitively, you can think of doing this calculation manually by applying <code>.divide()</code> and <code>.multiply()</code>. However, as you will learn with this material, Google Earth Engine has specific methods within <code>ee</code> objects to perform computations such as slope, for example.
+Simply, you can create an the ‘slope’ image with the <code>slope</code> method of the <code>ee.Terrain</code> package:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="part-1---basics-fundamentals.html#cb33-1" tabindex="-1"></a>var slope <span class="ot">=</span> <span class="fu">ee.Terrain.slope</span>(elevationImage);</span></code></pre></div>
+<p>Note that <code>elevationImage</code> was provided as an argument to the slope method! Add <code>slope</code> to the map and find Mount Nimba, in Liberia. Use a <code>min</code> and <code>max</code> values to reflect a resonable range of % slope.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="part-1---basics-fundamentals.html#cb34-1" tabindex="-1"></a><span class="fu">Map.addLayer</span>(slope, {min<span class="sc">:</span> <span class="dv">0</span>, max <span class="sc">:</span><span class="dv">50</span>}, <span class="st">&#39;Slope&#39;</span>);</span></code></pre></div>
+<p>Explore the slope image around Mount Nimba, in Liberia. It should look like the figure below:</p>
+<div class="figure"><span style="display:block;" id="fig:Slope"></span>
+<img src="images/PartI-Slope.png" alt="Slope image calculated with the `.slope()` method of the `ee.Terrain` package. Mount Nimba in Liberia is shown in white."  />
+<p class="caption">
+Figure 1.34: Slope image calculated with the <code>.slope()</code> method of the <code>ee.Terrain</code> package. Mount Nimba in Liberia is shown in white.
+</p>
+</div>
+<p>As mentioned before, there are also methods in the <code>ee.Image</code> container that can be invoked on an image object. We call it <em>band math</em> when you do mathematical operations with image bands. Still considering the previous example, suppose you are interested in further processing the slope image into an aspect image and then perform some trigonometric operations on it. Aspect, in this case, refers to the orientation of a slope, measured clockwise in degrees, from 0 to 360. Similarly to <code>.slope()</code>, <code>.aspect()</code> is also an method from <code>ee.Terrain</code>.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="part-1---basics-fundamentals.html#cb35-1" tabindex="-1"></a>var aspect <span class="ot">=</span> <span class="fu">ee.Terrain.aspect</span>(elevationImage);</span></code></pre></div>
+<p>Now, convert the image <code>aspect</code> into radians then calculate its sin:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="part-1---basics-fundamentals.html#cb36-1" tabindex="-1"></a>var sinImage <span class="ot">=</span> <span class="fu">aspect.divide</span>(<span class="dv">180</span>)<span class="fu">.multiply</span>(Math.PI)<span class="fu">.sin</span>()</span></code></pre></div>
+<p>It is worth noting that the code above chained multiple methods. This way, you can perform complex mathematical operations. In other words, the code above is simply dividing the aspect by 180 (using the <code>.divide()</code> method), multiplying (with <code>.multiply()</code>) the result of that by π (that can be retrieved using <code>Math.PI</code>), and finally taking the sin (with <code>.sin()</code>). The result should look something like the figure below:</p>
+<div class="figure"><span style="display:block;" id="fig:Sin"></span>
+<img src="images/PartI-Sin.png" alt="Aspect image calculated with the `.aspect()` method of the `ee.Terrain` package. The resulting SIN image from aspect reveals Mount Nimba in greater detail."  />
+<p class="caption">
+Figure 1.35: Aspect image calculated with the <code>.aspect()</code> method of the <code>ee.Terrain</code> package. The resulting SIN image from aspect reveals Mount Nimba in greater detail.
+</p>
+</div>
+<ul>
+<li><strong>Band math with multi-band image</strong></li>
+</ul>
+<p>As mentioned previously, you can do mathematical operations with bands from a given image. One of the most common examples of band math with remote sensing imagery is the calculation of <em>spectral indices</em>. A <em>spectral index</em> is a mathematical equation that is applied on the various spectral bands of an image per pixel, with the objective of highlighting pixels showing the relative abundance or lack of the feature of interest. There are several categories of spectral indices that have been developed, using a variety of spectral bands to highlight different phenomena, such as water, snow, soil and vegetation. For example, <em>Vegetation Indices</em> (VIs) are combinations of surface reflectance at two or more wavelengths designed to highlight a particular property of vegetation.</p>
+<p><em>A) NDVI</em></p>
+<p>The most used index in this category is the <strong>Normalized Difference Vegetation Index (NDVI)</strong>, which provides an indication of abundance of live green vegetation (or abundance of chlorophyll). The pigment in plant leaves, chlorophyll, strongly absorbs visible light (from 0.4 to 0.7 µm) for use in photosynthesis. The cell structure of the leaves, on the other hand, strongly reflects near-infrared light (from 0.7 to 1.1 µm) (See Figure <a href="part-1---basics-fundamentals.html#fig:SpectralSignature">1.4</a>). Thus, NDVI is calculated by comparing the different reflectance values of the red and near-infrared bands (normalized such that the minimum value is -1.0, and the maximum is +1.0).</p>
+<p>Bringing this concept to the context of a Landsat 8 image, we can produce an NDVI image by computing the normalized difference between its bands 5 (near-infrared) and 4 (red) (See Figure <a href="part-1---basics-fundamentals.html#fig:L8bands">1.26</a>).</p>
+<p>For this example, we will use <code>ImageL8</code> created in the previous sections to create a NDVI image. We can use the method <code>.select()</code> on a <code>ee.Image</code> object to select any given band. The <code>.select()</code> method will take a string as an argument for the band name you want to select. Then we can use the mathematical operators to perform a normalized difference using these bands:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="part-1---basics-fundamentals.html#cb37-1" tabindex="-1"></a>var nirBand <span class="ot">=</span> <span class="fu">ImageL8.select</span>(<span class="st">&#39;SR_B5&#39;</span>);</span>
+<span id="cb37-2"><a href="part-1---basics-fundamentals.html#cb37-2" tabindex="-1"></a>var redBand <span class="ot">=</span> <span class="fu">ImageL8.select</span>(<span class="st">&#39;SR_B4&#39;</span>);</span>
+<span id="cb37-3"><a href="part-1---basics-fundamentals.html#cb37-3" tabindex="-1"></a>var NDVI <span class="ot">=</span> <span class="fu">nirBand.subtract</span>(redBand)<span class="fu">.divide</span>(<span class="fu">nirBand.add</span>(redBand));</span></code></pre></div>
+<p>There is another way of doing the same calculation from the code above. As we seen previously, Earth Engine usually have methods for widely used operations and computations with remote sensing data. In this case, the normalized difference operation is available as a shortcut method <code>.normalizedDifference()</code> for a <code>ee.Image()</code> object. It take as an argument a list with the names of the bands you wish to calculate the normalized difference with. Thus, <code>NDVI</code> can be rewritten as:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="part-1---basics-fundamentals.html#cb38-1" tabindex="-1"></a>var NDVI <span class="ot">=</span> <span class="fu">ImageL8.normalizedDifference</span>([<span class="st">&#39;SR_B5&#39;</span>, <span class="st">&#39;SR_B4&#39;</span>])</span></code></pre></div>
+<p>You can then visualize this NDVI image by adding it to the Map Editor. Add it to the map and use the <strong>Inspector</strong> tab to investigate the range of values of NDVI around Cairo:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="part-1---basics-fundamentals.html#cb39-1" tabindex="-1"></a><span class="fu">Map.addLayer</span>(NDVI, {min<span class="sc">:</span> <span class="dv">0</span>, max<span class="sc">:</span> <span class="fl">0.3</span>, palette<span class="sc">:</span> [<span class="st">&#39;a6611a&#39;</span>, <span class="st">&#39;f5f5f5&#39;</span>, <span class="st">&#39;4dac26&#39;</span>]}, <span class="st">&#39;NDVI Image&#39;</span>);</span></code></pre></div>
+<p>You should see something like this:</p>
+<div class="figure"><span style="display:block;" id="fig:NDVI"></span>
+<img src="images/PartI-NDVI.png" alt="NDVI Image highlighting the agricultural area in the Nile Delta. With the visualization parameters provided above, higher values of NDVI (that is, higher content of chlorophyll in live green leaves) is shown in green. "  />
+<p class="caption">
+Figure 1.36: NDVI Image highlighting the agricultural area in the Nile Delta. With the visualization parameters provided above, higher values of NDVI (that is, higher content of chlorophyll in live green leaves) is shown in green.
+</p>
+</div>
+<p><em>A) EVI</em></p>
+<p>EVI, or <strong>Enhanced Vegetation Index</strong>, is similar to NDVI and can be used to quantify vegetation greenness. However, EVI corrects for some atmospheric conditions and canopy background noise and <em>is more sensitive in areas with dense vegetation</em> where NDVI usually saturates. It incorporates an “L” value to adjust for canopy background, “C” values as coefficients for atmospheric resistance, and values from the blue band (B):</p>
+<p><strong>EVI = 2.5 * ((Near-infrared - Red) / (Near-infrared + C1 * Red – C2 * Blue + L))</strong>, where C1, C2 and L are usually 6, 7.5 and 1, respectively.</p>
+<p>You can see that an expression like this can become hard to be expressed using mathematical operators such as the ones used to calculate a normalized difference. To implement more complex mathematical expressions, consider using the <code>.expression()</code> method for a <code>ee.Image</code> object. the first argument to <code>.expression()</code> is the textual representation (string) of the math operation, the second argument is a dictionary where the <em>keys</em> are variable names used in the expression and the <em>values</em> are the image bands to be used in the operation. Using the same <code>ImageL8</code> as an example, EVI would be defined as:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="part-1---basics-fundamentals.html#cb40-1" tabindex="-1"></a>var EVI <span class="ot">=</span> <span class="fu">ImageL8.expression</span>(</span>
+<span id="cb40-2"><a href="part-1---basics-fundamentals.html#cb40-2" tabindex="-1"></a>    <span class="st">&#39;2.5 * ((NIR - RED) / (NIR + 6 * RED - 7.5 * BLUE + 1))&#39;</span>, {</span>
+<span id="cb40-3"><a href="part-1---basics-fundamentals.html#cb40-3" tabindex="-1"></a>      <span class="st">&#39;NIR&#39;</span><span class="sc">:</span> <span class="fu">ImageL8.select</span>(<span class="st">&#39;SR_B5&#39;</span>),</span>
+<span id="cb40-4"><a href="part-1---basics-fundamentals.html#cb40-4" tabindex="-1"></a>      <span class="st">&#39;RED&#39;</span><span class="sc">:</span> <span class="fu">ImageL8.select</span>(<span class="st">&#39;SR_B4&#39;</span>),</span>
+<span id="cb40-5"><a href="part-1---basics-fundamentals.html#cb40-5" tabindex="-1"></a>      <span class="st">&#39;BLUE&#39;</span><span class="sc">:</span> <span class="fu">ImageL8.select</span>(<span class="st">&#39;SR_B2&#39;</span>)</span>
+<span id="cb40-6"><a href="part-1---basics-fundamentals.html#cb40-6" tabindex="-1"></a>});</span></code></pre></div>
+<p>The code above is able to regonize operators (+, -, *, /, %, **: Add, Subtract, Multiply, Divide, Modulus, Exponent) and the numbers; everything else is defined as keys in the dictionary.</p>
+<p>Can you think of how you can calculate the NDVI using the code structure above?</p>
+</div>
+<div id="compositing-and-mosaicking" class="section level3 hasAnchor" number="1.2.2">
+<h3><span class="header-section-number">1.2.2</span> Compositing and Mosaicking<a href="part-1---basics-fundamentals.html#compositing-and-mosaicking" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Compositing is an example of a computation that can be done to a image collection. In general, <em>compositing</em> refers to the process of combining spatially overlapping images into a single image based on an aggregation function while <em>mosaicking</em> usually refers to the assembly of these images to produce a spatially contiguous one. In Earth Engine, when you composite two scenes that do not overlap completely, the resulting composite will be a composited mosaic:</p>
+<div class="figure"><span style="display:block;" id="fig:Composite"></span>
+<img src="images/PartI-Composite.png" alt="Compositing images in Earth Engine. When applying a compositing function to scenes that do not overlap completely (B), the resulting composite will be a spatially contiguous image."  />
+<p class="caption">
+Figure 1.37: Compositing images in Earth Engine. When applying a compositing function to scenes that do not overlap completely (B), the resulting composite will be a spatially contiguous image.
+</p>
+</div>
+<p>Thefore, in the context of Earth Engine these terms are used interchangeably. We illustrate these concepts with the examples below.</p>
+<ul>
+<li><strong>Example 1: Compositing the same scene (100% overlap)</strong></li>
+</ul>
+<p>In this example, we will use <code>collectionFiltered</code> (a Landsat 8 image collection filtered for Cairo from January to April 2022. <em>See</em> <a href="part-1---basics-fundamentals.html#fig:Collection">1.33</a>). There are several aggregation functions that can be used to composite an image collection, most notably <code>.max()</code> for a maximum value composite and <code>.mendian()</code> for a median value composite. All these functions will aggregate the values on a per-pixel, per-band basis. In other words, <code>.max()</code> will select the maximum value of a given pixel for each image band to create the final composite while <code>.median()</code> will calculate the median value of each band for this pixel.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="part-1---basics-fundamentals.html#cb41-1" tabindex="-1"></a>var compositeMax <span class="ot">=</span> <span class="fu">collectionFiltered.max</span>();</span>
+<span id="cb41-2"><a href="part-1---basics-fundamentals.html#cb41-2" tabindex="-1"></a>var compositeMedian <span class="ot">=</span> <span class="fu">collectionFiltered.median</span>();</span></code></pre></div>
+<div class="rmdcomment">
+<p>
+If you print these composites to the <strong>Console</strong> you
+will notice that they are a 19-band single image and no longer a
+collection with 13 images with 19 bands each!
+</p>
+</div>
+<p>Add these composites to the Map Editor to investigate their differences:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="part-1---basics-fundamentals.html#cb42-1" tabindex="-1"></a><span class="fu">Map.addLayer</span>(compositeMax, {bands<span class="sc">:</span> [<span class="st">&#39;SR_B4&#39;</span>, <span class="st">&#39;SR_B3&#39;</span>, <span class="st">&#39;SR_B2&#39;</span>], min<span class="sc">:</span><span class="dv">8000</span>, max<span class="sc">:</span><span class="dv">30000</span>}, <span class="st">&#39;Composite Max&#39;</span>);</span>
+<span id="cb42-2"><a href="part-1---basics-fundamentals.html#cb42-2" tabindex="-1"></a><span class="fu">Map.addLayer</span>(compositeMedian, {bands<span class="sc">:</span> [<span class="st">&#39;SR_B4&#39;</span>, <span class="st">&#39;SR_B3&#39;</span>, <span class="st">&#39;SR_B2&#39;</span>], min<span class="sc">:</span><span class="dv">8000</span>, max<span class="sc">:</span><span class="dv">30000</span>}, <span class="st">&#39;Composite Median&#39;</span>);</span></code></pre></div>
+<p><em>Question</em>: What is the most evident difference between these composites?</p>
+<p><strong>Answer</strong>: The max value composite is mostly covered by clouds. Clouds and snow are very reflective and will always have high reflectance values for the regions of the electromagnetic spectrum covered by the Landsat spectral bands. Therefore, a maximum value composite will likely highlight these features - which is not desireable in most cases.</p>
+<div class="figure"><span style="display:block;" id="fig:Composites"></span>
+<img src="images/PartI-Composites.png" alt="Maximum and median value composites. Clouds are evident in the maximum value composite due to their high reflectance values."  />
+<p class="caption">
+Figure 1.38: Maximum and median value composites. Clouds are evident in the maximum value composite due to their high reflectance values.
+</p>
+</div>
+<div class="rmdcomment">
+<p>
+Although there are different methods for compositing, the median
+composite method is the state of the art in Google Earth Engine and has
+been applied to a multitude of studies using multitemporal remote
+sensing data.
+</p>
+</div>
+<ul>
+<li><strong>Example 2: Compositing (mosaicking) different scenes</strong></li>
+</ul>
+<p>Consider the need to composite (mosaic) four different Landsat scenes at different locations. For that we will edit the location parameter from <code>.filterBounds()</code> to include extra Landsat scenes from different locations. Use the information from figures <a href="part-1---basics-fundamentals.html#fig:Tools">1.31</a> and <a href="part-1---basics-fundamentals.html#fig:point">1.32</a> to create a geometry covering a larger area. Remember that <code>.filterBounds()</code> will filter an image collection to all the scenes that intercept the boundaries of a geometry, whether it is a line, point mark or polygon.
+Rename this as ‘aoi2’. For this example, we will use the polygon tool to draw a large polygon over a large area in Egypt.</p>
+<div class="figure"><span style="display:block;" id="fig:aoi2"></span>
+<img src="images/PartI-aoi2.png" alt="Area of interest (aoi) for filtering image collection."  />
+<p class="caption">
+Figure 1.39: Area of interest (aoi) for filtering image collection.
+</p>
+</div>
+<p>We will use this geometry to filter <code>collection</code> to this new spatial filter <code>aoi2</code>:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="part-1---basics-fundamentals.html#cb43-1" tabindex="-1"></a>var collectionFiltered2 <span class="ot">=</span> <span class="fu">collection.filterBounds</span>(aoi2)<span class="fu">.filterDate</span>(startDate,endDate);</span>
+<span id="cb43-2"><a href="part-1---basics-fundamentals.html#cb43-2" tabindex="-1"></a><span class="fu">print</span>(collectionFiltered2);</span></code></pre></div>
+<div class="rmdcomment">
+<p>
+Note that if you print <code>collectionFiltered2</code> to the
+<strong>Console</strong> you will notice that it includes more images
+than when we filtered for a single location using a point geometry.
+</p>
+</div>
+<p>Using the same compositing functions described earlier in this section, we will composite this new collection to two new composites. Also, we will use the <code>.mosaic()</code> method as a comparison. This method composites overlapping images according to their order in the collection (last on top):</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="part-1---basics-fundamentals.html#cb44-1" tabindex="-1"></a>var compositeMax2 <span class="ot">=</span> <span class="fu">collectionFiltered2.max</span>();</span>
+<span id="cb44-2"><a href="part-1---basics-fundamentals.html#cb44-2" tabindex="-1"></a>var compositeMedian2 <span class="ot">=</span> <span class="fu">collectionFiltered2.median</span>();</span>
+<span id="cb44-3"><a href="part-1---basics-fundamentals.html#cb44-3" tabindex="-1"></a>var mosaic <span class="ot">=</span> <span class="fu">collectionFiltered2.mosaic</span>();</span>
+<span id="cb44-4"><a href="part-1---basics-fundamentals.html#cb44-4" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="part-1---basics-fundamentals.html#cb44-5" tabindex="-1"></a><span class="fu">Map.addLayer</span>(compositeMax2, {bands<span class="sc">:</span> [<span class="st">&#39;SR_B4&#39;</span>, <span class="st">&#39;SR_B3&#39;</span>, <span class="st">&#39;SR_B2&#39;</span>], min<span class="sc">:</span><span class="dv">8000</span>, max<span class="sc">:</span><span class="dv">30000</span>}, <span class="st">&#39;Composite Max 2&#39;</span>);</span>
+<span id="cb44-6"><a href="part-1---basics-fundamentals.html#cb44-6" tabindex="-1"></a><span class="fu">Map.addLayer</span>(compositeMedian2, {bands<span class="sc">:</span> [<span class="st">&#39;SR_B4&#39;</span>, <span class="st">&#39;SR_B3&#39;</span>, <span class="st">&#39;SR_B2&#39;</span>], min<span class="sc">:</span><span class="dv">8000</span>, max<span class="sc">:</span><span class="dv">30000</span>}, <span class="st">&#39;Composite Median 2&#39;</span>);</span>
+<span id="cb44-7"><a href="part-1---basics-fundamentals.html#cb44-7" tabindex="-1"></a><span class="fu">Map.addLayer</span>(mosaic, {bands<span class="sc">:</span> [<span class="st">&#39;SR_B4&#39;</span>, <span class="st">&#39;SR_B3&#39;</span>, <span class="st">&#39;SR_B2&#39;</span>], min<span class="sc">:</span><span class="dv">8000</span>, max<span class="sc">:</span><span class="dv">30000</span>}, <span class="st">&#39;Mosaic&#39;</span>);</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:mosaics"></span>
+<img src="images/PartI-Mosaics.png" alt="Composites of an image collection filtered by the bounds of `aoi2`."  />
+<p class="caption">
+Figure 1.40: Composites of an image collection filtered by the bounds of <code>aoi2</code>.
+</p>
+</div>
+<p>Whether you are compositing using an aggregation function or mosaicking with <code>.mosaic()</code> the result will be similar in respect to the output type (i.e. an ee.Image object) and spatial extent. Thus, explaining why compositing and mosaicking are used interchangeably in Earth Engine.</p>
+<p>Suppose you are only interested in the composite within the bounds of your area of interest. The method <code>.clip()</code> of an <code>ee.Image()</code> allows you to clip (or cut) any image to the shape of a geometry. We will use <code>compositeMedian2</code> and <code>aoi2</code> as an example:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="part-1---basics-fundamentals.html#cb45-1" tabindex="-1"></a>var compositeClipped <span class="ot">=</span> <span class="fu">compositeMedian2.clip</span>(aoi2);</span>
+<span id="cb45-2"><a href="part-1---basics-fundamentals.html#cb45-2" tabindex="-1"></a><span class="fu">Map.addLayer</span>(compositeClipped, {bands<span class="sc">:</span> [<span class="st">&#39;SR_B4&#39;</span>, <span class="st">&#39;SR_B3&#39;</span>, <span class="st">&#39;SR_B2&#39;</span>], min<span class="sc">:</span><span class="dv">8000</span>, max<span class="sc">:</span><span class="dv">30000</span>}, <span class="st">&#39;Composite Median 2 clipped&#39;</span>);</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:clip"></span>
+<img src="images/PartI-Clip.png" alt="Median composite clipped by the extent of `aoi2`."  />
+<p class="caption">
+Figure 1.41: Median composite clipped by the extent of <code>aoi2</code>.
+</p>
+</div>
+<div class="caution">
+<p>
+You can only clip an ee.Image() object, <strong>never an image
+collection!</strong>
+</p>
+</div>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="part-2---advanced-google-earth-engine.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/celiosousa/LCMTutorial/edit/master/01-PART_I.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/celiosousa/LCMTutorial/blob/master/01-PART_I.Rmd",
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
