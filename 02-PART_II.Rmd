@@ -55,7 +55,7 @@ Map.addLayer(compositeMax, {bands: ['SR_B4', 'SR_B3', 'SR_B2'], min:0, max:0.25}
 knitr::include_graphics("images/PartII-CompositesMasked.png")
 ```
 
-As mentioned in the previous chapter, a maximum value composite will likely highlight clouds as they are very reflective. However, by removing the cloud pixels from the images based on the Quality Assessment band information, the resulting maximum value composite greatly improves.
+As mentioned in the previous chapter, a maximum value composite will likely highlight clouds as they are very reflective. However, by removing the cloud pixels from the images based on the Quality Assessment (QA) band information, the resulting maximum value composite greatly improves.
 
 ### Spectral indices
 
