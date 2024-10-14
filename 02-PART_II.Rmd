@@ -2,7 +2,7 @@
 
 ## Advanced Image Manipulation: Pre-classification
 
-In this section we will provide functions and lines of code to assist the user to prepare, process and analyze Landsat 8 surface reflectance data for classification purposes.
+In this section we will provide functions and lines of code to assist the user to prepare, process and analyze Landsat 8 surface reflectance data for land cover classification purposes.
 
 ### Cloud and cloud shadow masking
 
