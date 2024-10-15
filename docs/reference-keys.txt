@@ -137,6 +137,9 @@ exploring-image-and-image-collection
 image-and-image-collection-manipulation
 image-math
 compositing-and-mosaicking
+part-2---advanced-google-earth-engine
+advanced-image-manipulation-pre-classification
+cloud-and-cloud-shadow-masking
 spectral-indices
 supervised-classification-using-random-forest
 example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2022

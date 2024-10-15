@@ -4,27 +4,26 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Page not found | Supervised Classification with Google Earth Engine</title>
-  <meta name="description" content="Page not found | Supervised Classification with Google Earth Engine" />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <title>Page not found | Supervised Land Cover Classification with Google Earth Engine</title>
+  <meta name="description" content="Page not found | Supervised Land Cover Classification with Google Earth Engine" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Page not found | Supervised Classification with Google Earth Engine" />
+  <meta property="og:title" content="Page not found | Supervised Land Cover Classification with Google Earth Engine" />
   <meta property="og:type" content="book" />
-  
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Page not found | Supervised Classification with Google Earth Engine" />
+  <meta name="twitter:title" content="Page not found | Supervised Land Cover Classification with Google Earth Engine" />
   
   
   
 
-<meta name="author" content="Celio Sousa" />
+<meta name="author" content="Celio Sousa (celio.h.resendedesousa@nasa.gov)" />
 
 
-<meta name="date" content="2021-12-27" />
+<meta name="date" content="2024-10-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +32,6 @@
   
 
 
-<script src="libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,8 +49,9 @@
 
 
 
-<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -93,7 +92,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -106,7 +105,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -120,6 +119,10 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -137,40 +140,69 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Classification Tutorial</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction and overview</a></li>
-<li class="chapter" data-level="2" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html"><i class="fa fa-check"></i><b>2</b> Auxiliary functions</a>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction and overview</a></li>
+<li class="chapter" data-level="1" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html"><i class="fa fa-check"></i><b>1</b> PART 1 - Basics &amp; Fundamentals</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#cloud-and-cloud-shadow-masking"><i class="fa fa-check"></i><b>2.1</b> Cloud and cloud shadow masking</a></li>
-<li class="chapter" data-level="2.2" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#spectral-indices"><i class="fa fa-check"></i><b>2.2</b> Spectral indices</a></li>
-<li class="chapter" data-level="2.3" data-path="auxiliary-functions.html"><a href="auxiliary-functions.html#compositing"><i class="fa fa-check"></i><b>2.3</b> Compositing</a></li>
+<li class="chapter" data-level="1.1" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#programming-and-remote-sensing-basics"><i class="fa fa-check"></i><b>1.1</b> Programming and Remote Sensing Basics</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#remote-sensing-language"><i class="fa fa-check"></i><b>1.1.1</b> Remote Sensing Language</a></li>
+<li class="chapter" data-level="1.1.2" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#google-earth-engines-application-programming-interface-api-and-java-script"><i class="fa fa-check"></i><b>1.1.2</b> Google Earth Engine’s Application Programming Interface (API) and Java Script</a></li>
+<li class="chapter" data-level="1.1.3" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#exploring-image-and-image-collection"><i class="fa fa-check"></i><b>1.1.3</b> Exploring Image and Image Collection</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html"><i class="fa fa-check"></i><b>3</b> Supervised classification of Landsat 8 OLI imagery</a>
+<li class="chapter" data-level="1.2" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#image-and-image-collection-manipulation"><i class="fa fa-check"></i><b>1.2</b> Image and Image Collection Manipulation</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2020"><i class="fa fa-check"></i><b>3.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2020</a>
-<ul>
-<li class="chapter" data-level="3.1.1" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#temporal-and-spatial-parameters-for-compositing"><i class="fa fa-check"></i><b>3.1.1</b> Temporal and spatial parameters for compositing</a></li>
-<li class="chapter" data-level="3.1.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#landsat-8-pre-classification-steps"><i class="fa fa-check"></i><b>3.1.2</b> Landsat 8 Pre-classification steps</a></li>
-<li class="chapter" data-level="3.1.3" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#supervised-classification-with-random-forest"><i class="fa fa-check"></i><b>3.1.3</b> Supervised Classification with Random Forest</a></li>
+<li class="chapter" data-level="1.2.1" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#image-math"><i class="fa fa-check"></i><b>1.2.1</b> Image Math</a></li>
+<li class="chapter" data-level="1.2.2" data-path="part-1---basics-fundamentals.html"><a href="part-1---basics-fundamentals.html#compositing-and-mosaicking"><i class="fa fa-check"></i><b>1.2.2</b> Compositing and Mosaicking</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="supervised-classification-of-landsat-8-oli-imagery.html"><a href="supervised-classification-of-landsat-8-oli-imagery.html#example-2-2000---2020-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>3.2</b> Example 2: 2000 - 2020 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="post-classification-processing.html"><a href="post-classification-processing.html"><i class="fa fa-check"></i><b>4</b> Post-classification processing</a>
+<li class="chapter" data-level="2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html"><i class="fa fa-check"></i><b>2</b> PART 2 - Advanced Google Earth Engine</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="post-classification-processing.html"><a href="post-classification-processing.html#re-classification"><i class="fa fa-check"></i><b>4.1</b> Re-classification</a>
+<li class="chapter" data-level="2.1" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#advanced-image-manipulation-pre-classification"><i class="fa fa-check"></i><b>2.1</b> Advanced Image Manipulation: Pre-classification</a>
 <ul>
-<li class="chapter" data-level="4.1.1" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-1"><i class="fa fa-check"></i><b>4.1.1</b> Scenario 1</a></li>
-<li class="chapter" data-level="4.1.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-2"><i class="fa fa-check"></i><b>4.1.2</b> Scenario 2</a></li>
-<li class="chapter" data-level="4.1.3" data-path="post-classification-processing.html"><a href="post-classification-processing.html#scenario-3"><i class="fa fa-check"></i><b>4.1.3</b> Scenario 3</a></li>
+<li class="chapter" data-level="2.1.1" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#cloud-and-cloud-shadow-masking"><i class="fa fa-check"></i><b>2.1.1</b> Cloud and cloud shadow masking</a></li>
+<li class="chapter" data-level="2.1.2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#spectral-indices"><i class="fa fa-check"></i><b>2.1.2</b> Spectral indices</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="post-classification-processing.html"><a href="post-classification-processing.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>4.2</b> Map spatial smoothing</a></li>
+<li class="chapter" data-level="2.2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#supervised-classification-using-random-forest"><i class="fa fa-check"></i><b>2.2</b> Supervised Classification using Random Forest</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#example-1-land-cover-classification-of-greater-cairo-and-giza-area-egypt---year-2022"><i class="fa fa-check"></i><b>2.2.1</b> Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2022</a></li>
+<li class="chapter" data-level="2.2.2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#example-2-2015---2022-map-to-map-change-of-greater-cairo-and-giza-area-egypt"><i class="fa fa-check"></i><b>2.2.2</b> Example 2: 2015 - 2022 Map-to-Map change of greater Cairo and Giza area, Egypt</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html"><i class="fa fa-check"></i><b>5</b> Country-specific analyses</a>
+<li class="chapter" data-level="2.3" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#post-classification-processing"><i class="fa fa-check"></i><b>2.3</b> Post-classification processing</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#mangrove-mapping-in-guinea---west-africa"><i class="fa fa-check"></i><b>5.1</b> Mangrove mapping in Guinea - West Africa</a>
+<li class="chapter" data-level="2.3.1" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#re-classification"><i class="fa fa-check"></i><b>2.3.1</b> Re-classification</a></li>
+<li class="chapter" data-level="2.3.2" data-path="part-2---advanced-google-earth-engine.html"><a href="part-2---advanced-google-earth-engine.html#map-spatial-smoothing"><i class="fa fa-check"></i><b>2.3.2</b> Map spatial smoothing</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html"><i class="fa fa-check"></i><b>3</b> PART 3 - Country-specific Applications</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#masking"><i class="fa fa-check"></i><b>5.1.1</b> Masking</a></li>
-<li class="chapter" data-level="5.1.2" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#landsat-8-image-collection-and-cloud-free-mosaic"><i class="fa fa-check"></i><b>5.1.2</b> Landsat 8 Image Collection and Cloud-free Mosaic</a></li>
-<li class="chapter" data-level="5.1.3" data-path="country-specific-analyses.html"><a href="country-specific-analyses.html#supervised-classification-with-random-forest-1"><i class="fa fa-check"></i><b>5.1.3</b> Supervised Classification with Random Forest</a></li>
+<li class="chapter" data-level="3.1" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#guinea"><i class="fa fa-check"></i><b>3.1</b> Guinea</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#mangrove-mapping-in-guinea-west-africa"><i class="fa fa-check"></i><b>3.1.1</b> Mangrove mapping in Guinea, West Africa</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#liberia"><i class="fa fa-check"></i><b>3.2</b> Liberia</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#anomaly-based-plantation-detection"><i class="fa fa-check"></i><b>3.2.1</b> Anomaly-based plantation detection</a></li>
+<li class="chapter" data-level="3.2.2" data-path="part-3---country-specific-applications.html"><a href="part-3---country-specific-applications.html#class-by-class-land-cover-mapping"><i class="fa fa-check"></i><b>3.2.2</b> Class-by-class land cover mapping</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html"><i class="fa fa-check"></i><b>4</b> Part 4 - Ecosystem Accounting</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#introduction-to-ecosystem-accounting"><i class="fa fa-check"></i><b>4.1</b> Introduction to Ecosystem Accounting</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#essentials"><i class="fa fa-check"></i><b>4.1.1</b> Essentials</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#ecosystem-extent-account"><i class="fa fa-check"></i><b>4.2</b> Ecosystem Extent Account</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#structure-of-ecosystem-extent-account"><i class="fa fa-check"></i><b>4.2.1</b> Structure of ecosystem extent account</a></li>
+<li class="chapter" data-level="4.2.2" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#examples-and-exercises"><i class="fa fa-check"></i><b>4.2.2</b> Examples and exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#tools-for-compiling-ecosystem-extent-account-tables"><i class="fa fa-check"></i><b>4.3</b> Tools for Compiling Ecosystem Extent Account Tables</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#platforms-for-running-python-scripts"><i class="fa fa-check"></i><b>4.3.1</b> Platforms for running Python scripts</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#compiling-ecosystem-extent-account-tables"><i class="fa fa-check"></i><b>4.4</b> Compiling Ecosystem Extent Account Tables</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="part-4---ecosystem-accounting.html"><a href="part-4---ecosystem-accounting.html#essentials-1"><i class="fa fa-check"></i><b>4.4.1</b> Essentials</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -184,7 +216,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Supervised Classification with Google Earth Engine</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Supervised Land Cover Classification with Google Earth Engine</a>
           </h1>
         </div>
 
