@@ -279,7 +279,7 @@ print('Testing n =', testing.aggregate_count('landcover'));
 If a feature collection do not have a property defined, you can still count its feature by using `'.all'` as an argument for `.aggregate_count()`.
 ```
 
-Using the split value above, roughtly 80% of the features in `samples` will be `training` and 20% will be in `testing`:
+Using the split value above, roughly 80% of the features in `samples` will be `training` and 20% will be in `testing`:
 
 ```{r my-fig39,   fig.cap="Sample sets size for this example. Note that the number will vary based on the number of geometries (polygons and points) and the sample split value.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/Figure39.PNG")
@@ -498,7 +498,7 @@ geometries: true
 
 Once the points are placed, they will inherit the class label (pixel value) from `Cairo2015` (`'before'`):
 
-We can add the samples to the map using `Map.addLayer()`. To colorize geometries, you use  the `color` paramenter instead of `palette`:
+We can add the samples to the map using `Map.addLayer()`. To colorize geometries, you use  the `color` parameter instead of `palette`:
 
 ```{r eval=FALSE}
 Map.addLayer(samples, {color:'black'}, 'Stratified samples');
@@ -673,7 +673,7 @@ knitr::include_graphics("images/CairoV1.png")
 
 *__Scenario 2__
 
-A new version of the `Cairo2022` map where *__Sand and bare areas (pixel value = 2)__* and *__Built-up and Urban Areas (pixel value = 3)__* are merged into a new class called *__Barren land and Articicial Surfaces (pixel value = 2)__*. Note that this new class can assume any value when merging, as long as both classes have the same value: 
+A new version of the `Cairo2022` map where *__Sand and bare areas (pixel value = 2)__* and *__Built-up and Urban Areas (pixel value = 3)__* are merged into a new class called *__Barren land and Artificial Surfaces (pixel value = 2)__*. Note that this new class can assume any value when merging, as long as both classes have the same value: 
 
 ```{r my-remap3,  fig.cap="Sand and bare areas merging with Built-up and Urban area into a new class value (2). New classes can assume any value when merging, as long as these values are the same for both classes.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/remap3.png")
@@ -702,7 +702,7 @@ knitr::include_graphics("images/CairoV2.png")
 *__Scenario 2__
 
 A new version of the `Cairo2022` map where only a portion of it is remapped to a given class.
-This scenario is one of the most commonly used post-classification procedure where the goal is to remap specific areas to fix for classification errors. To ilustrate, we will consider the following example:
+This scenario is one of the most commonly used post-classification procedure where the goal is to remap specific areas to fix for classification errors. To illustrate, we will consider the following example:
 
 *Upon close inspection, the `Cairo2022` map showed some cropland/cultivated areas within zones of dense urbanization of New Cairo City. A team on the ground went to the area and confirmed that is indeed dense urbanization and no agricultural land was found in that area. Therefore, that portion of the map needs to be rectified in order to reflect the actual land cover. In this case, the `.where()` method of an `ee.Image()` object is used. This function performs conditional replacement of values, following the formula `input.where(test,value)`. For each pixel in each band of `input`, if the corresponding pixel in `test` is nonzero, Google Earth Engine will output the corresponding pixel in `value`, otherwise it will output the `input` pixel. Translating this function to this example, `input` is the land cover map in which we aim to perform the reclassification - in this case `Cairo2020`; `test` is the area or region of the map `value` will take place, and; `value` is the correct classification that will be included in the final map:*
 
@@ -780,7 +780,7 @@ knitr::include_graphics("images/cairosmooth1b.png")
 ```
 
 ```{block, type='caution'}
-__IMPORTANT:__ The `.focal_median(1, 'square', 'pixels')`* and `.focal_median(30, 'square', 'meters')` will only achieve the intended final result if you reproject it back to the original scale and projection from the original map. Note that this technique while effective in removing the "salt-and-pepper" effect from the original map, it creates edges that are not in the same resolution and projection as the original map. Therefore, creating fairly rounded boundaries for the classes. This is not ideal as it is usually intended for these maps to keep the same resolution as the original map, as well as to preserve the boundaries between classes. To account for this issue, you can reproject this output back the original scale so it is formed by 30 x 30 meter pixels. To do that, simply use `.reproject(projection.atScale(scale))` within the `.focal_median` filter. The `.reproject` function will take two arguments: projection and scale. You can extract this information from the original map with `.projection()` and `.nominalScale()`:
+__IMPORTANT:__ The `.focal_median(1, 'square', 'pixels')`* and `.focal_median(30, 'square', 'meters')` will only achieve the intended final result if you reproject it back to the original scale and projection from the original map. Note that this technique while effective in removing the "salt-and-pepper" effect from the original map, it creates edges that are not in the same resolution and projection as the original map. Therefore, creating fairly rounded boundaries for the classes. This is not ideal as it is usually intended for these maps to keep the same resolution as the original map, as well as to preserve the boundaries between classes. To account for this issue, you can re-project this output back the original scale so it is formed by 30 x 30 meter pixels. To do that, simply use `.reproject(projection.atScale(scale))` within the `.focal_median` filter. The `.reproject` function will take two arguments: projection and scale. You can extract this information from the original map with `.projection()` and `.nominalScale()`:
 ```
 
 ```{r eval=FALSE}
