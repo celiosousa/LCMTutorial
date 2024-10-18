@@ -412,7 +412,7 @@ Copy the image ID from the screen above and add it to a `var` elevationImage wit
 var elevationImage = ee.Image('CGIAR/SRTM90_V4');
 ```
 
-You can also retrieve the metadata about this image by using `print()`. In the __Console__, click the expander arrows to show the information. You will discover that the SRTM image has one band called 'elevation'.
+You can also retrieve the metadata about this image by using `print()`. In the __Console__, click the expand arrows to show the information. You will discover that the SRTM image has one band called 'elevation'.
 
 ```{r eval= FALSE}
 print(elevationImage);
