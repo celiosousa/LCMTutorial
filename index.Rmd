@@ -1,3 +1,7 @@
+```{=latex}
+\usepackage{amsthm}
+\newtheorem{caution}{Caution}
+```
 --- 
 title: "Supervised Land Cover Classification with Google Earth Engine"
 author: "Celio Sousa (celio.h.resendedesousa@nasa.gov)"
