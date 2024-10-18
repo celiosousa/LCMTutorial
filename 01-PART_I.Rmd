@@ -57,11 +57,11 @@ The sensor - often onboard of airplanes or satellites in space - will measure th
 
 - __Spatial Resolution__: usually known as pixel size. It refers to the sensor's ability to discriminate different objects/targets. A higher spatial resolution means a smaller pixel size which, in turn, means that smaller objects can be distinguishable as separate targets.
 
-- __Spectral Resolution__: Different sensors will measure the EMR at specific ranges (or wavelengths), usually called *bands*. Thus, the spectral resolution of a sensor usually refers to the number and bandwith of these bands.
+- __Spectral Resolution__: Different sensors will measure the EMR at specific ranges (or wavelengths), usually called *bands*. Thus, the spectral resolution of a sensor usually refers to the number and bandwidth of these bands.
 
 - __Radiometric Resolution__: Usually measured in *bits*, it refers to the sensor's ability to detect the smallest change in the spectral reflectance among different targets. For example, a 8-bit image will have 256 levels of brightness while a 16-bit image has 65,536 levels of brightness.
 
-- __Temporal resolution__ (sensors onboard satellites): is the time required for the satellite to collect two images at the same geographic location on Earth. Higher temporal resolution means less time for revisiting the same location. However, temporal resolution is usually inverselly proportional to spatial resolution: The larger the pixel size, the larger area the sensor will cover which means less time until the next revisit.
+- __Temporal resolution__ (sensors on-board satellites): is the time required for the satellite to collect two images at the same geographic location on Earth. Higher temporal resolution means less time for revisiting the same location. However, temporal resolution is usually inversely proportional to spatial resolution: The larger the pixel size, the larger area the sensor will cover which means less time until the next revisit.
 
 
 IV) Transmission, Reception, and Processing
@@ -195,7 +195,7 @@ If you `print` the variable `city`, you will get the string stored in the variab
 print(city);
 ```
 
-When you use quotations, the variable is automatically assigned the type *string*. You can also assign numbers to variables. For example, create the variables `population` and `area` and assing a number as their value. When assigning numbers, you do not use commas `,` for thousand separators. You do, however, use `.` for decimals:
+When you use quotations, the variable is automatically assigned the type *string*. You can also assign numbers to variables. For example, create the variables `population` and `area` and assign a number as their value. When assigning numbers, you do not use commas `,` for thousand separators. You do, however, use `.` for decimals:
 
 ```{r eval=FALSE}
 var population = 939524;
@@ -218,7 +218,7 @@ var listofcities = ['Monrovia', 'Gbarnga','Kakata', 'Bensonville'];
 print('Largest cities in Liberia', listofcities);
 ```
 
-Looking at the output in the __Console__, you will see `listofcities` with an expander arrow (▹) next to it. Expand the list by clicking on the arrow to show its content. You will notice that along with the items on the list, there will be a number next to each value you added. __This is the index of each item__. It allows you to refer to each item in the list using a numeric value that indicates its position in the list. This is useful when you want to extract a particular item from a list object.
+Looking at the output in the __Console__, you will see `listofcities` with an expand arrow (▹) next to it. Expand the list by clicking on the arrow to show its content. You will notice that along with the items on the list, there will be a number next to each value you added. __This is the index of each item__. It allows you to refer to each item in the list using a numeric value that indicates its position in the list. This is useful when you want to extract a particular item from a list object.
 
 ```{r List, fig.cap="A JavaScript List.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/PartI-List.png")
@@ -316,7 +316,7 @@ So far, you learned the different data structure/types you can use within Google
 knitr::include_graphics("images/PartI-DocsTab.png")
 ```
 
-Below are some examples to ilustrate the concept behind an Earth Engine object:
+Below are some examples to illustrate the concept behind an Earth Engine object:
 
 *__A) Strings__*
 
@@ -480,7 +480,7 @@ As you learned, you can retrieve additional information about this image by usin
 print(ImageL8)
 ```
 
-In the Console panel, you may need to click the expander arrows to show the information. You should be able to read that this image consists of 19 different bands (index 0 to 18). Each band will have 4 properties: *name*, *data type* (as in if the value is an integer, float, ect.), *projection* and *dimensions* (in rows and columns of pixels). For this example, simply note the first property of the first band:
+In the Console panel, you may need to click the expand arrows to show the information. You should be able to read that this image consists of 19 different bands (index 0 to 18). Each band will have 4 properties: *name*, *data type* (as in if the value is an integer, float, etc.), *projection* and *dimensions* (in rows and columns of pixels). For this example, simply note the first property of the first band:
 
 ```{r L8Image, fig.cap="Landsat 8 image metadata.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/PartI-L8Image.png")
