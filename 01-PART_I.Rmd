@@ -70,7 +70,7 @@ The EMR recorded by the sensor is transmitted in an electronic form to a receivi
 
 V) Analysis and Interpretation (we are here!)
 
-This is where this training is focused on! The EMR was transformed into a digital dataset where we can use specialized instruments/hardware/software to extract information about the target observed. This extraction is often done through *__image processing__* (or digital image processing), which is the process which makes an image interpretable for a given use. There are many methods of image processing, but these are the most common ones:
+This is where this training is focused on! The EMR was transformed into a digital dataset where we can use specialized instruments/hardware/software to extract information about the target observed. This extraction is often done through *__image processing__* (or digital image processing), which is the process which makes an image 'interpretable' for a given use. There are many methods of image processing, but these are the most common ones:
 
 - __Image correction__: The digital image recorded by the sensor on a satellite (or aircraft) may contain errors related to the geometry and brightness values of the pixels. For example, a geometrical correction, also called *__geo-referencing__*, is a procedure where the content of image will be assigned a spatial coordinate system (for example, geographical latitude and longitude).
 

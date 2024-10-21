@@ -2,17 +2,17 @@
 
 ## Advanced Image Manipulation: Pre-classification
 
-In this section we will provide functions and lines of code to assist the user to prepare, process and analyze Landsat 8 surface reflectance data for land cover classification purposes.
+In this section we will provide functions and lines of code to assist the user in preparing, processing, and analyzing Landsat 8 surface reflectance data for land cover classification purposes.
 
 ### Cloud and cloud shadow masking
 
-This sub-section demonstrates one way of masking clouds and cloud shadow pixels from Landsat 8 Surface Reflectance Collection 2 data based on file metadata. You may have noticed when exploring Landsat images in the __Console__ tab that these images have a band called `QA_PIXEL` or *Quality Assessment* band. Briefly, this band contains values that represent bit-packed combinations of surface, atmospheric, and sensor conditions that can affect the overall usefulness of a given pixel. One of the many bits represented in this band is *cloud* (bit 3) and *cloud shadow* (bit 4):
+This sub-section demonstrates one way of masking clouds and cloud shadow pixels from Landsat 8 Surface Reflectance Collection 2 data based on on metadata within the file. You may notice when exploring Landsat images in the __Console__ tab that these images have a band called `QA_PIXEL` or *Quality Assessment* band. Briefly, this band contains values that represent bit-packed combinations of surface, atmospheric, and sensor conditions that can affect the overall usefulness of a given pixel. One of the many bits represented in this band is *cloud* (bit 3) and *cloud shadow* (bit 4):
 
 ```{r QA, fig.cap="Landsat's Quality Assessment (QA) band.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/PartII-QABand.png")
 ```
 
-In essence, these values indicate which pixels might be affected by surface conditions such as cloud contamination. Therefore, this band can be used to construct filters to mask (or remove) pixels flagged as 'affected' by that condition. Here, we will provide a function for masking clouds and cloud shadow from Landsat 8 images based on the information stored in the *Quality Assessment* band. This function was created based on the documentation available for Landsat 8. Values for pixel bit and pixel band were found [*here.*](https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1-level-1-quality-assessment-band?qt-science_support_page_related_con=0#qt-science_support_page_related_con){target="_blank"}
+In essence, these values indicate which pixels might be affected by surface conditions such as cloud contamination. Therefore, this band can be used to construct filters to mask (or remove) pixels flagged as 'affected' by that condition. Here, we will provide a function for masking clouds and cloud shadow from Landsat 8 images based on the information stored in the *Quality Assessment* band. This function was created based on the documentation available for Landsat 8. Values for pixel bits and pixel bands can be found [*here.*](https://www.usgs.gov/core-science-systems/nli/landsat/landsat-collection-1-level-1-quality-assessment-band?qt-science_support_page_related_con=0#qt-science_support_page_related_con){target="_blank"}
 
 The cloud masking function is as follows:
 
@@ -27,7 +27,7 @@ function maskClouds(image) {
 }
 ```
 
-Do not worry about the new methods within this function. What you need to know is that this function was constructed in a way that we are selecting the `QA_PIXEL` band from the Landsat image and creating a mask where only pixels flagged to 0 (indicating clear conditions) for bits 3 and 4 will be included; The function will return `image` - in this case the Landsat 8 image - masked for pixels that are not flagged 0 for bits 3 and 4. The `.divide()` was used simply to scale the band values to [0,1] and `.select()` to only select the spectral bands from Landsat (SR_B1-9). These steps are not necessary for the cloud masking to work! However, we can add these extra steps to further improve our image collection.
+You don’t need to worry about the new methods in this function. What you need to know is that this function was constructed in a way that we are selecting the `QA_PIXEL` band from the Landsat image and creating a mask where only pixels flagged as 0 (indicating clear conditions) for bits 3 and 4 will be included; The function will return `image` - in this case the Landsat 8 image - masked for pixels that are not flagged as 0 for bits 3 and 4. The `.divide()` was used simply to scale the band values to [0,1] and `.select()` to only select the spectral bands from Landsat (SR_B1-9). These steps are not necessary for the cloud masking to work! However, we can add these steps to further refine our image collection.
 
 
 Now, to apply a function to every image in an image collection, we use the `.map()` method from the `ee.ImageCollection()` object. You can refer to the __Docs__ tab for more information on the methods available for `ee.ImageCollection()`. The only argument to `map()` is a function which takes one single parameter: an `ee.Image()`. Using `.map(maskClouds)` over an image collection will result in a collection where every image is masked for clouds and cloud shadows. 
@@ -154,7 +154,7 @@ You can test this classifier and its accuracy using a testing sample set. A test
 knitr::include_graphics("images/PartII-RFTesting.png")
 ```
 
-You can then classify unlabeled samples using the trained classfier. The final classification of a sample is based upon the majority of the votes of the trees in the ensemble:
+You can then classify unlabeled samples using the trained classifier. The final classification of a sample is based upon the majority of the votes of the trees in the ensemble:
 
 ```{r RFClass, fig.cap="The trained RF classifier is used to classify an unlabeled fruit sample. In this case, the majority of the votes (2 out of 3) was BANANA. Therefore, the final classification of this sample is BANANA.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/PartII-RFClass.png")
@@ -186,7 +186,7 @@ So far, we have covered the steps *__a__*, *__b__* and *__c__*.
 
 * __Training sample selection__
 
-For this example, let’s classify the 'composite' into four classes: *water*, *agricultural land*, *sand and bare areas* and *urbanization*. The first step is to create the training samples set to use into the Random Forest Model.
+For this example, let us classify the 'composite' into four classes: *water*, *agricultural land*, *sand and bare areas* and *urbanization*. The first step is to create the training samples set to use into the Random Forest Model.
 
 __Step 1__ - In the Geometry Imports, click *__+new layer__* and make four sets of geometries, each set will represent samples from the classes 'water', 'cropland', 'sand', and 'urban'.
 
@@ -220,7 +220,7 @@ knitr::include_graphics("images/Nile.PNG")
 
 ```{block, type='starcomment'}
 Once you finish selecting samples, click the *__Exit__* button on the polygon editor dialogue box . 
-Repeat the process for each of the other class. Make sure you select samples that are representative of each land cover class by selecting points and polygons of homogenous pixels.
+Repeat the process for each of the other classes. Make sure you select samples that are representative of each land cover class by selecting points and polygons of homogeneous pixels.
 ```
 
 
@@ -315,7 +315,7 @@ print('Validation error matrix RF: ', testAccuracy);
 print('Validation overall accuracy RF in %: ', testAccuracy.accuracy().multiply(100));
 ```
 
-As explained earlier, the trained classifier can be used to classify the `compositeMedian`. Google Earth Engine will run each pixel through each of the 200 trees in the classifier and assing it the label which had the majority of votes among all the tree:
+As explained earlier, the trained classifier can be used to classify the `compositeMedian`. Google Earth Engine will run each pixel through each of the 200 trees in the classifier and assing it the label which received the majority of votes among all the trees:
 
 ```{r eval=FALSE}
 var classification = compositeMedian.select(bands).classify(classifier);
@@ -369,7 +369,7 @@ We will export `classification` with the `Export.image.toAsset()` method. This m
 
 * `region`: the region or area of your `image` you want to export. It takes a geometry/ feature collection;
 
-* `maxPixels`: This is somewhat important argument. In order to avoid memory errors, the Earth Engine detault is 1x10e8 pixels. If you do not define your max pixels and your exports exceeds the default, you will get an error.  
+* `maxPixels`: This is somewhat important argument. In order to avoid memory errors, the Earth Engine default is 1x10e8 pixels. If you do not define your max pixels and your exports exceeds the default, you will get an error.  
 
 We will create a geometry 'region' to encompass the entire classified scene in order to export the entire area. The code below will export the classification:
 
@@ -473,7 +473,7 @@ var stackedClassifications = Cairo2018.rename('later').addBands(Cairo2000.rename
 ```
 
 Next, we will create a testing sample set with 1000 points for each class using a stratified random sampling design.
-In this sampling design each class has the same weight. Therefore, the same number of points will be placed in each class, regardless of its relative extent. This is important to consider as some classes may have very small area extent to be captured by a random sampling design. In this example, water bodies is relatively small compared to the other three land cover classes. Thus, a stratified sampling design will ensure that this class will have the same number of points. We can used `.stratifiedSample()` method. This method takes  a dictionary with several parameters such as:
+In this sampling design each class has the same weight. Therefore, the same number of points will be placed in each class, regardless of its relative extent. This is important to consider as some classes may have very small area extent to be captured by a random sampling design. In this example, water bodies is relatively small compared to the other three land cover classes. Thus, a stratified sampling design will ensure that this class will have the same number of points. We can use the `.stratifiedSample()` method. This method takes  a dictionary with several parameters such as:
 
 * `numPoints`: Number of points you want to select by each class;
 
@@ -538,7 +538,7 @@ var class2022 = Cairo2022.select(['classification']).eq(1);
 var change = class2022.subtract(class2015);
 ```
 
-By default, the new objects `class2015` and `class2022` will have values of 1 where the `'classification'` has the label equals (`.eq`) to 1 (agriculture) in the land cover map. __This will be the case regardless of the label value__. By using the `.select()` and `.eq()`, the new image object will default to value of 1 where that condition was met. Thus, the object `change` will have values of `-1`, `0` and `1`, that represents loss/conversion, no change and gains, respectively: 
+By default, the new objects `class2015` and `class2022` will have values of 1 where the `'classification'` has the label equals (`.eq`) to 1 (agriculture) in the land cover map. __This will happen regardless of the label value__. By using the `.select()` and `.eq()`, the new image object will default to value of 1 where that condition was met. Thus, the object `change` will have values of `-1`, `0` and `1`, that represents loss/conversion, no change and gains, respectively: 
 
 * `-1` = No crops in 2022 - crops in 2015 (0 - 1 = -1);
 
@@ -617,16 +617,16 @@ So far you have learned the basics of creating a classification output using a m
 
 ### Re-classification
 
-Classification outputs often times will need some degree of correction or adjustment. Some of these corrections and adjustments include, for example, the Correction for missclassification erros in specific areas and changing class labels (pixel values) or class order. In this section we will explore the function `remap()`. This function maps from input values to output values, represented by two parallel lists: one includes the original number of classes and their value; the other represents which class (or classes) is being remapped and what it is being remapped to. 
-To ilustrate this concept, consider the following example:
+Classification outputs often times will need some degree of correction or adjustment. Some of these corrections and adjustments include, for example, the Correction for misclassification errors in specific areas and changing class labels (pixel values) or class order. In this section we will explore the function `remap()`. This function maps from input values to output values, represented by two parallel lists: one includes the original number of classes and their value; the other represents which class (or classes) is being remapped and what it is being remapped to. 
+To illustrate this concept, consider the following example:
 
-- The previously produced land cover maps include four classes: Water (pixel value = 0), Cropland / Cultivated Areas (pixel value = 1), Sand and bare areas (pixel value = 2) and Built-up and Urban Areas (pixel value = 3) (List 1). If any of these class values needs to be changed, the new value for that class is placed in the *List 2*, in the position of the class that needs changing (Figure 1).
+- The previously produced land cover maps include four classes: Water (pixel value = 0), Cropland / Cultivated Areas (pixel value = 1), Sand and bare areas (pixel value = 2) and Built-up and Urban Areas (pixel value = 3) (List 1). If any of these class values need to be changed, the new value for that class is placed in the *List 2*, in the position of the class that needs changing (Figure 1).
 
 ```{r my-remap,  fig.cap="The `remap` function for the land cover classification of the Greater Cairo. ", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/remap.png")
 ```
 
-To test this function, start by [opening a new code editor page](https://code.earthengine.google.com/){target="_blank"} and importing one of the classification assets you used [in the previous section][Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2022]. In this example, we will importe the latest land cover map from the year 2022 as a variable called 'Cairo2022' and we will add it to the map editor using the same color scheme from `paletteMAP` used in the previous section:
+To test this function, start by [opening a new code editor page](https://code.earthengine.google.com/){target="_blank"} and importing one of the classification assets you used [in the previous section][Example 1: Land cover classification of Greater Cairo and Giza area, Egypt - Year 2022]. In this example, we will import the latest land cover map from the year 2022 as a variable called 'Cairo2022' and we will add it to the map editor using the same color scheme from `paletteMAP` used in the previous section:
 
 ```{r eval=FALSE}
 var Cairo2022 = ee.Image("users/capacityBuilding/Cairo2022");
@@ -710,7 +710,7 @@ This scenario is one of the most commonly used post-classification procedure whe
 knitr::include_graphics("images/WhereFunction.png")
 ```
 
-In your own version of `Cairo2022` map, create an new geometry over an area of your interest and name it `aoi`: 
+In your own version of `Cairo2022` map, create a new geometry over an area of your interest and name it `aoi`: 
 
 ```{r my-regionwhere,  fig.cap="A geometry over an area of `Cairo2020` highlighting cultivated areas next to urbanization.", echo=FALSE, message=FALSE}
 knitr::include_graphics("images/RegionWhere.png")
@@ -788,7 +788,7 @@ var projection = Cairo2022.projection();
 var scale = projection.nominalScale();
 ```
 
-Then, we re-aply the `.focal_median()` filter with `.reproject(projection.atScale(scale))`:
+Then, we reapply the `.focal_median()` filter with `.reproject(projection.atScale(scale))`:
 
 ```{r eval=FALSE}
 var newCairo30 = Cairo2022.focal_median(1,'square', 'pixels')
@@ -805,4 +805,4 @@ knitr::include_graphics("images/cairosmooth2.png")
 Note that even though the boundaries of the classes are smoother, they are formed by the 30 x 30 meter pixels. 
 Usually, a `radius` of 1 (3x3 square window) removes most of the salt-and-pepper effect, smoothens the boundaries in between classes while preserving the overall shape of the classes.
 
-Access the full scrip for this section [here.](https://code.earthengine.google.com/c1151eecd2e21f2ae43aa37cf1fd80d2){target="_blank"}
+Access the full script for this section [here.](https://code.earthengine.google.com/c1151eecd2e21f2ae43aa37cf1fd80d2){target="_blank"}
